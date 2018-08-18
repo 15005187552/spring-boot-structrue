@@ -1,0 +1,6 @@
+group 'com.ljwm'
+version '1.0-SNAPSHOT'
+
+wrapper {
+  distributionUrl = "http://fs.1322.com/gradle/distributions/gradle-3.5-bin.zip"
+}
