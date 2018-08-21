@@ -1,0 +1,6 @@
+server:
+  port: 7001
+spring:
+  profiles:
+    active: dev,devLocal
+    include: base,common

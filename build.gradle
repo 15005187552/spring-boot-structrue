@@ -1,6 +1,36 @@
-group 'com.ljwm'
-version '1.0-SNAPSHOT'
-
 wrapper {
   distributionUrl = "http://fs.1322.com/gradle/distributions/gradle-3.5-bin.zip"
+}
+
+buildscript {
+  ext {
+    springBootVersion = "1.5.15.RELEASE"
+  }
+  repositories {
+    mavenLocal()
+    maven { url "http://maven.1322.com/nexus/content/groups/public/" }
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+  }
+}
+
+allprojects {
+  group 'com.ljwm'
+  version '1.0-SNAPSHOT'
+
+  repositories {
+    mavenLocal()
+    maven { url "http://maven.1322.com/nexus/content/groups/public/" }
+  }
+}
+
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'org.springframework.boot'
+
+  sourceCompatibility = 1.8
+  tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+  }
 }

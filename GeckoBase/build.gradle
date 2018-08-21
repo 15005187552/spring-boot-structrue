@@ -1,0 +1,5 @@
+
+dependencies {
+  compile('com.ljwm:BootBase:1.5.2-RELEASE')
+  testCompile('junit:junit:4.12')
+}

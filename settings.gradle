@@ -1,2 +1,6 @@
 rootProject.name = 'GeckoServer'
+include 'GeckoBase'
+include 'GeckoClientServer'
+include 'GeckoProviderServer'
+include 'GeckoAdminServer'
 
