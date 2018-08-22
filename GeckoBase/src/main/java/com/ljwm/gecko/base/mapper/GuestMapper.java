@@ -2,6 +2,8 @@ package com.ljwm.gecko.base.mapper;
 
 import com.ljwm.gecko.base.entity.Guest;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * <p>
@@ -9,8 +11,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author yuzhou
- * @since 2018-08-21
+ * @since 2018-08-22
  */
 public interface GuestMapper extends BaseMapper<Guest> {
 
+  @Select("SELECT * FROM `t_guest` WHERE `GUEST_ID`=#{guestId}")
+  @ResultMap("BaseResultMap")
+  Guest findByGuestId(String guestId);
 }

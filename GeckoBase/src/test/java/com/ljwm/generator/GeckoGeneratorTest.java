@@ -26,7 +26,8 @@ public class GeckoGeneratorTest {
         .password("admin")
         .created(true)    // 第一次建类用创建
         .idType(IdType.AUTO)
-        .tables(new String[]{"t_guest"})
+        .tables(new String[]{
+          "t_member","t_member_account","t_member_password"})
         .build()
     );
   }

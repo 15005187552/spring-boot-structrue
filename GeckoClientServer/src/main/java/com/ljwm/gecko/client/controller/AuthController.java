@@ -2,10 +2,15 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.base.enums.UserSource;
+import com.ljwm.gecko.client.model.dto.GuestForm;
+import com.ljwm.gecko.client.service.AuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,10 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "权限登录 API")
 public class AuthController extends BaseController {
 
-  @GetMapping("guest")
+  @Autowired
+  private AuthService authService;
+
+  @PostMapping("guest")
   @ApiOperation("请求以游客身份访问")
-  public Result guest() {
-    return success();
+  public Result guest(GuestForm guestForm) {
+    return success(authService.loginAsGuest(guestForm));
   }
 
   @GetMapping("me")

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.MemberAccountMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.MemberAccount">
+        <id column="ID" property="id" />
+        <result column="USERNAME" property="username" />
+        <result column="TYPE" property="type" />
+        <result column="MEMBER_ID" property="memberId" />
+        <result column="PASSWORD_ID" property="passwordId" />
+        <result column="EXT_INFO" property="extInfo" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`USERNAME`          ,`TYPE`          ,`MEMBER_ID`          ,`PASSWORD_ID`          ,`EXT_INFO`
+    </sql>
+
+</mapper>
