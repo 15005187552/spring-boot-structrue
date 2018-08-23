@@ -1,0 +1,6 @@
+server:
+  port: 7003
+spring:
+  profiles:
+    active: dev,devLocal
+    include: base,gecko,common

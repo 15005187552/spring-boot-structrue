@@ -1,3 +1,8 @@
 dependencies {
+  compile(project(':GeckoBase'))
 
+  // 开发环境热部署支持
+  compile('org.springframework.boot:spring-boot-devtools')
+
+  compile("mysql:mysql-connector-java:8.0.11")
 }
