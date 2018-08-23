@@ -23,6 +23,7 @@ public class JwtUser implements IJwtAndSecurityAble {
 
   public static final String ROLE_GUEST = "ROLE_GUEST";
   public static final String ROLE_MEMBER = "ROLE_MEMBER";
+  public static final String HAS_MEMEBER_ROLE = "hasRole('ROLE_MEMBER')";
 
   public JwtUser(Guest guest) {
     this.guest = guest;

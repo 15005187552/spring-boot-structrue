@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,7 @@ public class AuthController extends BaseController {
     return success(authService.loginAsGuest(guestForm));
   }
 
-  @PreAuthorize("hasRole('" +  JwtUser.ROLE_MEMBER +"')")
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @GetMapping("me")
   @ApiOperation("当前用户信息")
   public Result me() {
