@@ -3,14 +3,14 @@ package com.ljwm.gecko.base.enums;
 import lombok.Getter;
 
 /**
- * 登录类型
+ * 企业类型
  * Created by yuzhou on 2018/8/21.
  */
 @Getter
 public enum CompanyType {
-  GUEST(-1, "游客"),
-  MOBILE(0, "手机号"),
-  WX_APP(1, "微信小程序")
+  COMPANY(0, "企业"),
+  PUBLIC(1, "事业单位"),
+  SOCIAL(2, "社会团体")
   ;
 
   private Integer code;

@@ -1,24 +1,34 @@
 /*
- Navicat Premium Data Transfer
+Navicat MySQL Data Transfer
 
- Source Server         : mac_mysql
- Source Server Type    : MySQL
- Source Server Version : 50621
- Source Host           : 127.0.0.1
- Source Database       : geckodb
+Source Server         : janiffy
+Source Server Version : 50556
+Source Host           : localhost:3306
+Source Database       : geckodb
 
- Target Server Type    : MySQL
- Target Server Version : 50621
- File Encoding         : utf-8
+Target Server Type    : MYSQL
+Target Server Version : 50556
+File Encoding         : 65001
 
- Date: 08/23/2018 17:06:52 PM
+Date: 2018-08-23 20:24:44
 */
 
-SET NAMES utf8;
-SET FOREIGN_KEY_CHECKS = 0;
+SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
---  Table structure for `t_admin`
+-- Table structure for t_add_special
+-- ----------------------------
+DROP TABLE IF EXISTS `t_add_special`;
+CREATE TABLE `t_add_special` (
+  `ID` int(20) NOT NULL COMMENT '专项附加扣除分类',
+  `NAME` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '分类名称',
+  `SORT` varchar(2) CHARACTER SET utf8 DEFAULT NULL COMMENT '排序',
+  `DESCRIPTION` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '描述',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for t_admin
 -- ----------------------------
 DROP TABLE IF EXISTS `t_admin`;
 CREATE TABLE `t_admin` (
@@ -27,7 +37,7 @@ CREATE TABLE `t_admin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台管理用户表';
 
 -- ----------------------------
---  Table structure for `t_company`
+-- Table structure for t_company
 -- ----------------------------
 DROP TABLE IF EXISTS `t_company`;
 CREATE TABLE `t_company` (
@@ -52,7 +62,7 @@ CREATE TABLE `t_company` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='入驻企业表';
 
 -- ----------------------------
---  Table structure for `t_company_user`
+-- Table structure for t_company_user
 -- ----------------------------
 DROP TABLE IF EXISTS `t_company_user`;
 CREATE TABLE `t_company_user` (
@@ -67,7 +77,7 @@ CREATE TABLE `t_company_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='企业员工表';
 
 -- ----------------------------
---  Table structure for `t_guest`
+-- Table structure for t_guest
 -- ----------------------------
 DROP TABLE IF EXISTS `t_guest`;
 CREATE TABLE `t_guest` (
@@ -82,7 +92,22 @@ CREATE TABLE `t_guest` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='游客表';
 
 -- ----------------------------
---  Table structure for `t_location`
+-- Table structure for t_income_type
+-- ----------------------------
+DROP TABLE IF EXISTS `t_income_type`;
+CREATE TABLE `t_income_type` (
+  `ID` int(20) NOT NULL COMMENT '类别ID',
+  `NAME` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '分类名称',
+  `SORT` varchar(2) CHARACTER SET utf8 DEFAULT NULL COMMENT '排序',
+  `IS_NEED_ENTER` int(1) DEFAULT NULL COMMENT '是否前台输入 0-不需要 1-需要',
+  `P_ID` int(20) DEFAULT NULL COMMENT '父分类ID',
+  `CLASS_DESCRI` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '分类描述',
+  `LEVEL` int(2) DEFAULT NULL COMMENT '级别 0-一级 1-二级',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for t_location
 -- ----------------------------
 DROP TABLE IF EXISTS `t_location`;
 CREATE TABLE `t_location` (
@@ -95,7 +120,7 @@ CREATE TABLE `t_location` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='中国行政区划表';
 
 -- ----------------------------
---  Table structure for `t_member`
+-- Table structure for t_member
 -- ----------------------------
 DROP TABLE IF EXISTS `t_member`;
 CREATE TABLE `t_member` (
@@ -108,7 +133,7 @@ CREATE TABLE `t_member` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员表';
 
 -- ----------------------------
---  Table structure for `t_member_account`
+-- Table structure for t_member_account
 -- ----------------------------
 DROP TABLE IF EXISTS `t_member_account`;
 CREATE TABLE `t_member_account` (
@@ -122,7 +147,7 @@ CREATE TABLE `t_member_account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员账号表';
 
 -- ----------------------------
---  Table structure for `t_member_password`
+-- Table structure for t_member_password
 -- ----------------------------
 DROP TABLE IF EXISTS `t_member_password`;
 CREATE TABLE `t_member_password` (
@@ -134,7 +159,7 @@ CREATE TABLE `t_member_password` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='账号密码表';
 
 -- ----------------------------
---  Table structure for `t_mobile_code`
+-- Table structure for t_mobile_code
 -- ----------------------------
 DROP TABLE IF EXISTS `t_mobile_code`;
 CREATE TABLE `t_mobile_code` (
@@ -147,7 +172,47 @@ CREATE TABLE `t_mobile_code` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='手机验证码表';
 
 -- ----------------------------
---  Table structure for `t_paper`
+-- Table structure for t_natural_person
+-- ----------------------------
+DROP TABLE IF EXISTS `t_natural_person`;
+CREATE TABLE `t_natural_person` (
+  `MEMBER_ID` int(20) NOT NULL COMMENT '会员ID',
+  `COUNTRY` int(1) DEFAULT NULL COMMENT '国籍 0-中国大陆 1-港澳台 2-外籍',
+  `NAME` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '姓名',
+  `CERTIFICATE` int(1) DEFAULT NULL COMMENT '证件类型 0-身份证号 1-港澳台证件号 3-外籍证件号',
+  `CERT_NUM` int(50) DEFAULT NULL COMMENT '证件号',
+  `CERT_POS_PATH` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '证件照正面',
+  `CERT_OPPO_PATH` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '证件照反面',
+  `DISABLITY_NUM` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '残疾人证件号',
+  `DISABLITY_PATH` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '残疾证件路径',
+  `MATRTYR_NUM` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '烈属证件号',
+  `MATRTYR_PATH` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '烈属证件路径',
+  `OLD_NUM` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '孤老证件号',
+  `OLD_PATH` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '孤老路径',
+  `PROFESSOR_NUM` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '专家学者证件号',
+  `PROFESSOR_PATH` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '专家学者证件路径',
+  `ACADEMIC_NUM` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '院士证件号',
+  `ACADEMIC_PATH` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '院士证件路径',
+  `SOCIAL_SECU` int(1) DEFAULT NULL COMMENT '社保属性 0-公司代缴 1-个人缴纳',
+  `CREAT_TIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`MEMBER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for t_other_reduce
+-- ----------------------------
+DROP TABLE IF EXISTS `t_other_reduce`;
+CREATE TABLE `t_other_reduce` (
+  `ID` int(20) NOT NULL COMMENT '其它扣除减免分类',
+  `NAME` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '分类名称',
+  `SORT` varchar(2) CHARACTER SET utf8 DEFAULT NULL COMMENT '排序',
+  `DESCRIPTION` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '描述',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for t_paper
 -- ----------------------------
 DROP TABLE IF EXISTS `t_paper`;
 CREATE TABLE `t_paper` (
@@ -161,7 +226,7 @@ CREATE TABLE `t_paper` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='服务商证件类型表';
 
 -- ----------------------------
---  Table structure for `t_provider`
+-- Table structure for t_provider
 -- ----------------------------
 DROP TABLE IF EXISTS `t_provider`;
 CREATE TABLE `t_provider` (
@@ -184,7 +249,7 @@ CREATE TABLE `t_provider` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='服务商表';
 
 -- ----------------------------
---  Table structure for `t_provider_paper`
+-- Table structure for t_provider_paper
 -- ----------------------------
 DROP TABLE IF EXISTS `t_provider_paper`;
 CREATE TABLE `t_provider_paper` (
@@ -198,7 +263,7 @@ CREATE TABLE `t_provider_paper` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='服务商证书表';
 
 -- ----------------------------
---  Table structure for `t_provider_service`
+-- Table structure for t_provider_service
 -- ----------------------------
 DROP TABLE IF EXISTS `t_provider_service`;
 CREATE TABLE `t_provider_service` (
@@ -210,7 +275,7 @@ CREATE TABLE `t_provider_service` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='服务商关联服务分类表';
 
 -- ----------------------------
---  Table structure for `t_provider_user`
+-- Table structure for t_provider_user
 -- ----------------------------
 DROP TABLE IF EXISTS `t_provider_user`;
 CREATE TABLE `t_provider_user` (
@@ -223,7 +288,7 @@ CREATE TABLE `t_provider_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='服务商员工表';
 
 -- ----------------------------
---  Table structure for `t_service`
+-- Table structure for t_service
 -- ----------------------------
 DROP TABLE IF EXISTS `t_service`;
 CREATE TABLE `t_service` (
@@ -235,4 +300,92 @@ CREATE TABLE `t_service` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='服务分类表';
 
-SET FOREIGN_KEY_CHECKS = 1;
+-- ----------------------------
+-- Table structure for t_special_deduction
+-- ----------------------------
+DROP TABLE IF EXISTS `t_special_deduction`;
+CREATE TABLE `t_special_deduction` (
+  `ID` int(20) NOT NULL COMMENT '专项扣除分类',
+  `NAME` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '分类名称',
+  `SORT` varchar(2) CHARACTER SET utf8 DEFAULT NULL COMMENT '排序',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for t_tax
+-- ----------------------------
+DROP TABLE IF EXISTS `t_tax`;
+CREATE TABLE `t_tax` (
+  `ID` int(20) NOT NULL COMMENT '报税',
+  `MEMBER_ID` int(20) DEFAULT NULL COMMENT '会员ID',
+  `DECLARE_TYPE` varchar(1) CHARACTER SET utf8 DEFAULT NULL COMMENT '申报类型 0-月报 1-年报',
+  `DECLARE_TIME` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '申报时段',
+  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for t_tax_income
+-- ----------------------------
+DROP TABLE IF EXISTS `t_tax_income`;
+CREATE TABLE `t_tax_income` (
+  `ID` int(20) NOT NULL COMMENT '报税数据收入',
+  `TAX_ID` int(20) DEFAULT NULL COMMENT '报税数据ID',
+  `INCOME_TYPE_ID` int(20) DEFAULT NULL COMMENT '收入分类ID',
+  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `UPDATER` varchar(20) CHARACTER SET utf8 DEFAULT NULL COMMENT '更新人',
+  `INCOME` varchar(20) CHARACTER SET utf8 DEFAULT NULL COMMENT '收入金额',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for t_tax_other_reduce
+-- ----------------------------
+DROP TABLE IF EXISTS `t_tax_other_reduce`;
+CREATE TABLE `t_tax_other_reduce` (
+  `ID` int(20) NOT NULL COMMENT '报税数据其它扣除减免',
+  `TAX_ID` int(20) DEFAULT NULL COMMENT '报税数据ID',
+  `OTHER_REDUCE_ID` int(20) DEFAULT NULL COMMENT '其它扣除减免分类ID',
+  `TAX_MONEY` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '个人缴纳金额',
+  `TAX_DOC_PATH` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '缴纳证明路径',
+  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `UPDATER` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for t_tax_special
+-- ----------------------------
+DROP TABLE IF EXISTS `t_tax_special`;
+CREATE TABLE `t_tax_special` (
+  `ID` int(20) NOT NULL COMMENT '报税数据专项扣除表',
+  `TAX_ID` int(20) DEFAULT NULL COMMENT '报税数据ID',
+  `SPECIAL_DEDU_ID` int(20) DEFAULT NULL COMMENT '专项扣除分类ID',
+  `PERSONAL_MONEY` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '个人缴纳金额',
+  `COMPANY_MONEY` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '单位纳税金额',
+  `PERSONAL_PERCENT` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '个人缴纳比例',
+  `COMPANY_PERCENT` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '单位缴纳比例',
+  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `UPDATER` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for t_tax_special_add
+-- ----------------------------
+DROP TABLE IF EXISTS `t_tax_special_add`;
+CREATE TABLE `t_tax_special_add` (
+  `ID` int(20) NOT NULL COMMENT '报税数据专项附加扣除',
+  `TAX_ID` int(20) DEFAULT NULL COMMENT '报税数据ID',
+  `SPECIAL_ADD_ID` int(20) DEFAULT NULL COMMENT '专项附加扣除分类ID',
+  `TAX_MONEY` varchar(20) CHARACTER SET utf8 DEFAULT NULL COMMENT '个人缴纳金额',
+  `TAX_DOC_PATH` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '缴纳证明附件路径',
+  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `UPDATER` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
