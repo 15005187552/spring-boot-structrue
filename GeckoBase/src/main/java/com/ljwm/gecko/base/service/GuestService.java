@@ -17,6 +17,7 @@ import java.util.Date;
  */
 @Slf4j
 @Service
+@SuppressWarnings("all")
 public class GuestService {
 
   @Autowired

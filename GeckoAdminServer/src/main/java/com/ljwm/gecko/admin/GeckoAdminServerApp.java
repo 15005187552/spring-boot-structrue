@@ -12,11 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * Gecko 后台启动类
  */
-@SpringBootApplication(scanBasePackages = {
-  "com.ljwm.bootbase.*",
-  "com.ljwm.gecko.base.*",
-  "com.ljwm.gecko.admin.*"
-})
+@SpringBootApplication(scanBasePackages =  "com.ljwm")
 @MapperScan(value = {
   "com.ljwm.gecko.base.mapper*",
   "com.ljwm.bootbase.mapper*"

@@ -1,5 +1,5 @@
 
 dependencies {
-  compile('com.ljwm:BootBase:1.5.2-RELEASE')
+  compile('com.ljwm:BootBase:1.5.5-RELEASE')
   testCompile('junit:junit:4.12')
 }

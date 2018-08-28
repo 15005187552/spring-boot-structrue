@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.AdminMapper">
+
+  <!-- 通用查询映射结果 -->
+  <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Admin">
+    <id column="ID" property="id"/>
+    <result column="USERNAME" property="username"/>
+    <result column="PASSWORD" property="password"/>
+    <result column="NICK_NAME" property="nickName"/>
+    <result column="CREATE_TIME" property="createTime"/>
+    <result column="UPDATE_TIME" property="updateTime"/>
+    <result column="DISABLED" property="disabled"/>
+  </resultMap>
+
+  <!-- 通用查询结果列 -->
+  <sql id="Base_Column_List">
+          `ID`          ,`USERNAME`          ,`PASSWORD`          ,`NICK_NAME`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`DISABLED`
+    </sql>
+
+  <resultMap id="AdminDto" type="com.ljwm.gecko.base.model.dto.AdminDto" extends="BaseResultMap">
+    <collection property="roles" column="ID" select="com.ljwm.gecko.base.mapper.RoleMapper.findByUserId"/>
+  </resultMap>
+
+  <resultMap id="AdminVo" type="com.ljwm.gecko.base.model.vo.AdminVo" extends="BaseResultMap">
+  </resultMap>
+
+  <select id="find" resultMap="AdminVo" parameterType="java.util.Map">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM `t_admin`
+    <where>
+      <if test="text != null and text != ''">
+        AND (
+        `USERNAME` LIKE CONCAT('%',#{text},'%')
+        OR `NICK_NAME` LIKE CONCAT('%',#{text},'%')
+        )
+      </if>
+      <if test="disabled != null and disabled != ''">
+        AND (
+        `DISABLED`=#{disabled}
+        )
+      </if>
+    </where>
+    ORDER BY `UPDATE_TIME`
+    <if test="asc">
+      ASC
+    </if>
+    <if test="!asc">
+      DESC
+    </if>
+  </select>
+</mapper>
