@@ -5,6 +5,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.dto.SqlFactory;
 import com.ljwm.bootbase.enums.ResultEnum;
@@ -14,12 +15,16 @@ import com.ljwm.bootbase.security.JwtKit;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.admin.model.bean.Dict;
 import com.ljwm.gecko.admin.model.form.LoginForm;
+import com.ljwm.gecko.admin.model.form.RoleQuery;
 import com.ljwm.gecko.admin.model.form.RoleSaveForm;
 import com.ljwm.gecko.admin.security.JwtUser;
+import com.ljwm.gecko.base.entity.Function;
 import com.ljwm.gecko.base.entity.Role;
+import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.FunctionMapper;
 import com.ljwm.gecko.base.mapper.RoleMapper;
 import com.ljwm.gecko.base.model.vo.ResultMe;
+import com.ljwm.gecko.base.model.vo.RoleVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,10 +33,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -83,6 +85,7 @@ public class AuthService {
 
   /**
    * 保存角色
+   *
    * @param roleSaveForm
    * @return
    */
@@ -92,10 +95,10 @@ public class AuthService {
     //1.获取角色对象
     if (StrUtil.isNotBlank(roleSaveForm.getId().toString()))
       role = roleMapper.selectById(roleSaveForm.getId());
-    else
+    if (role == null)
       role = new Role();
     //2.设置新参数并保存
-    role.setId(StrUtil.isBlank(roleSaveForm.getId())? RandomUtil.simpleUUID(): roleSaveForm.getId())
+    role.setId(StrUtil.isBlank(roleSaveForm.getId()) ? RandomUtil.simpleUUID() : roleSaveForm.getId())
       .setRoleName(roleSaveForm.getRoleName());
     commonService.insertOrUpdate(role, roleMapper);
     //3.更新角色绑定菜单（权限）
@@ -106,6 +109,7 @@ public class AuthService {
 
   /**
    * 更新菜单（权限）
+   *
    * @param roleId
    * @param functionIds
    */
@@ -142,7 +146,7 @@ public class AuthService {
       .map(upToken -> authenticationManager.authenticate(upToken))
       .map(authentication -> {
         if (!authentication.isAuthenticated())
-          throw new LogicException(ResultEnum.BAD_CREDENTIALS,"登陆失败");
+          throw new LogicException(ResultEnum.BAD_CREDENTIALS, "登陆失败");
         SecurityContextHolder.getContext().setAuthentication(authentication);
         log.debug("登陆成功, 为该用户创建Token: {} ", loginForm);
         return (JwtUser) authentication.getPrincipal();
@@ -169,5 +173,53 @@ public class AuthService {
         .setNickName(user.getAdmin().getNickName())
       )
       .get();
+  }
+
+  /**
+   * 角色分页查询
+   *
+   * @param query
+   * @return
+   */
+  public Page<RoleVo> findRole(RoleQuery query) {
+    return commonService.find(query, (p, q) -> roleMapper.find(p, query.getText(), query.getDisabled(), query.getAsc()));
+  }
+
+  /**
+   * 获取角色
+   *
+   * @return
+   */
+  public List<Role> getRole() {
+    return roleMapper.selectList(null);
+  }
+
+  public void roleDisabled(String id) {
+    Role role = roleIsExist(id);
+    role.setDisabled(Objects.equals(role.getDisabled(), DisabledEnum.ENABLED.getCode()) ?
+      DisabledEnum.DISABLED.getCode() :
+      DisabledEnum.ENABLED.getCode());
+    commonService.insertOrUpdate(role, roleMapper);
+  }
+
+  public void roleDelete(String id) {
+    Role role = roleIsExist(id);
+    roleMapper.deleteById(role);
+    commonMapper.deleteJoinTable(
+      Kv.by(SqlFactory.TABLE, "t_role_function")
+        .set(SqlFactory.AK, "ROLE_ID")
+        .set(SqlFactory.AK_VALUE, id)
+    );
+    commonMapper.deleteJoinTable(
+      Kv.by(SqlFactory.TABLE, "t_admin_role")
+        .set(SqlFactory.AK, "ROLE_ID")
+        .set(SqlFactory.AK_VALUE, id)
+    );
+  }
+
+  private Role roleIsExist(String id) {
+    Role role = roleMapper.selectById(id);
+    if (role == null) throw new LogicException(ResultEnum.DATA_ERROR, "id为" + id + "的角色不存在");
+    return role;
   }
 }

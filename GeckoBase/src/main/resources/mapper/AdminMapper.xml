@@ -23,9 +23,10 @@
   </resultMap>
 
   <resultMap id="AdminVo" type="com.ljwm.gecko.base.model.vo.AdminVo" extends="BaseResultMap">
+    <collection property="roles" column="ID" select="com.ljwm.gecko.base.mapper.RoleMapper.findBaseByUserId"/>
   </resultMap>
 
-  <select id="find" resultMap="AdminVo" parameterType="java.util.Map">
+  <select id="find" resultMap="AdminVo" >
     SELECT
     <include refid="Base_Column_List"/>
     FROM `t_admin`

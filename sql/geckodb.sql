@@ -28,13 +28,6 @@ CREATE TABLE `t_add_special` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='专项附加扣除分类表';
 
 -- ----------------------------
--- Table structure for t_admin
--- ----------------------------
-DROP TABLE IF EXISTS `t_admin`;
-CREATE TABLE `t_admin` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台管理用户表';
 
 -- ----------------------------
 -- Table structure for t_advertisement
@@ -76,6 +69,8 @@ CREATE TABLE `t_city_item` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='各城市缴纳项目扣除项表';
 
 -- ----------------------------
+=======
+>>>>>>> Stashed changes
 -- Table structure for t_company
 -- ----------------------------
 DROP TABLE IF EXISTS `t_company`;

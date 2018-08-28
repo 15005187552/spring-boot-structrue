@@ -6,17 +6,18 @@ import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.admin.model.form.AdminQuery;
 import com.ljwm.gecko.admin.model.form.AdminSaveForm;
 import com.ljwm.gecko.admin.service.UserService;
+import com.ljwm.gecko.base.entity.Admin;
 import com.ljwm.gecko.base.model.vo.AdminVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("user")
+@SuppressWarnings("all")
 @Api(tags = "用户管理 API")
 public class UserController extends BaseController {
 
@@ -31,10 +32,30 @@ public class UserController extends BaseController {
     return success(userService.saveAdmin(form));
   }
 
-//
-//  @PostMapping("findAdmin")
-//  @ApiOperation("分页查询后管用户")
-//  public Result<Page<AdminVo>>  findAdmin(@RequestBody AdminQuery adminQuery) {
-//    return success(userService.findAdmin(adminQuery));
-//  }
+
+  @PostMapping("findAdmin")
+  @ApiOperation("分页查询后管用户")
+  public Result<Page<AdminVo>> findAdmin(@RequestBody AdminQuery adminQuery) {
+    return success(userService.findAdmin(adminQuery));
+  }
+
+  @GetMapping("getAdmin")
+  @ApiOperation("获取后管用户")
+  public Result<List<Admin>> getAdmin() {
+    return success(userService.getAdmin());
+  }
+
+  @GetMapping("adminDisabled")
+  @ApiOperation("角色 禁用/启用")
+  public Result adminDisabled(@RequestParam String id){
+    userService.adminDisabled(id);
+    return success();
+  }
+
+  @GetMapping("adminDelete")
+  @ApiOperation("后管用户 删除")
+  public Result adminDelete(@RequestParam String id){
+    userService.adminDelete(id);
+    return success();
+  }
 }

@@ -5,6 +5,8 @@ import com.ljwm.gecko.base.entity.Admin;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ljwm.gecko.base.model.dto.AdminDto;
 import com.ljwm.gecko.base.model.vo.AdminVo;
+import org.apache.ibatis.annotations.Arg;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 
@@ -29,7 +31,6 @@ public interface AdminMapper extends BaseMapper<Admin> {
   @ResultMap("BaseResultMap")
   Admin logins(String username);
 
-  List<AdminVo> find(Page<AdminVo> page, Map map);
+  List<AdminVo> find(Page<AdminVo> page, @Param("disabled") Integer disabled, @Param("text") String text,@Param("asc") Boolean asc);
 
-  List<AdminVo> find( Map map);
 }

@@ -29,7 +29,7 @@
 
 
   <resultMap id="FunctionTree" type="com.ljwm.gecko.base.model.vo.FunctionTree" extends="BaseResultMap">
-    <collection property="children" column="id"
+    <collection property="children" column="ID"
                 select="com.ljwm.gecko.base.mapper.FunctionMapper.findChildrenTreeByParentId"/>
   </resultMap>
 
@@ -43,7 +43,7 @@
       OR `TITLE` LIKE CONCAT('%',#{text},'%')
       OR `URL` LIKE CONCAT('%',#{text},'%')
       OR (
-      `ID` IN (SELECT `PARENT` FROM `t_menu` WHERE
+      `ID` IN (SELECT `PARENT_ID` FROM `t_function` WHERE
       `NAME` LIKE CONCAT('%',#{text},'%')
       OR `TITLE` LIKE CONCAT('%',#{text},'%')
       OR `URL` LIKE CONCAT('%',#{text},'%'))

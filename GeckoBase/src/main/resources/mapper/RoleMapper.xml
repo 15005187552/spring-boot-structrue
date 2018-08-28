@@ -2,19 +2,48 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljwm.gecko.base.mapper.RoleMapper">
 
-  <!-- 通用查询映射结果 -->
-  <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Role">
-    <id column="ID" property="id"/>
-    <result column="ROLE_NAME" property="roleName"/>
-    <result column="DISABLED" property="disabled"/>
-  </resultMap>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Role">
+        <id column="ID" property="id" />
+        <result column="ROLE_NAME" property="roleName" />
+        <result column="DISABLED" property="disabled" />
+    </resultMap>
 
-  <!-- 通用查询结果列 -->
-  <sql id="Base_Column_List">
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
           `ID`          ,`ROLE_NAME`          ,`DISABLED`
     </sql>
 
   <resultMap id="RoleDto" type="com.ljwm.gecko.base.model.dto.RoleDto" extends="BaseResultMap">
     <collection property="functions" column="ID" select="com.ljwm.gecko.base.mapper.FunctionMapper.findByRoleId"/>
   </resultMap>
+
+  <resultMap id="RoleVo" type="com.ljwm.gecko.base.model.vo.RoleVo" extends="BaseResultMap">
+    <collection property="functions" column="ID" select="com.ljwm.gecko.base.mapper.FunctionMapper.findBaseByRoleId"/>
+  </resultMap>
+
+  <select id="find" resultMap="RoleVo" >
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM `t_role`
+    <where>
+      <if test="text != null and text != ''">
+        AND (
+        `ROLE_NAME` LIKE CONCAT('%',#{text},'%')
+        )
+      </if>
+      <if test="disabled != null and disabled != ''">
+        AND (
+        `DISABLED`=#{disabled}
+        )
+      </if>
+    </where>
+    ORDER BY `ID`
+    <if test="asc">
+      ASC
+    </if>
+    <if test="!asc">
+      DESC
+    </if>
+  </select>
 </mapper>

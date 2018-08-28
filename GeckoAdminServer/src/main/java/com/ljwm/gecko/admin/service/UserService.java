@@ -1,9 +1,7 @@
 package com.ljwm.gecko.admin.service;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
@@ -18,23 +16,23 @@ import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.admin.model.bean.Dict;
 import com.ljwm.gecko.admin.model.form.AdminQuery;
 import com.ljwm.gecko.admin.model.form.AdminSaveForm;
-import com.ljwm.gecko.admin.model.vo.AdminVo;
 import com.ljwm.gecko.base.entity.Admin;
-import com.ljwm.gecko.base.entity.Role;
+import com.ljwm.gecko.base.entity.Function;
+import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.AdminMapper;
 import com.ljwm.gecko.base.mapper.RoleMapper;
-import com.ljwm.gecko.base.model.dto.AdminDto;
+import com.ljwm.gecko.base.model.vo.AdminVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
@@ -90,6 +88,7 @@ public class UserService {
       admin = adminMapper.selectById(adminSaveForm.getId());
     if (admin == null)
       admin = new Admin();
+    if (StrUtil.isBlank(adminSaveForm.getPassword())) adminSaveForm.setPassword(dict.getInitPassword());
     //2.设置新参数并插入数据库
     admin.setPassword(SecureUtil.md5(SecureUtil.md5(adminSaveForm.getPassword()) + adminSaveForm.getUsername()))
       .setId(StrUtil.isBlank(adminSaveForm.getId()) ? RandomUtil.simpleUUID() : adminSaveForm.getId())
@@ -127,12 +126,41 @@ public class UserService {
 
   /**
    * 查询后管用户
+   *
    * @param adminQuery
    * @return
    */
   public Page<AdminVo> findAdmin(AdminQuery adminQuery) {
-    Page page = new Page(adminQuery.getPage().getCurrent(),adminQuery.getPage().getSize());
-    adminMapper.find(page,Kv.by("disabled",0));
-    return commonService.find(adminQuery, (p, q) -> adminMapper.find(p, BeanUtil.beanToMap(adminQuery)));
+    Page page = new Page(adminQuery.getPage().getCurrent(), adminQuery.getPage().getSize());
+//    adminMapper.find(page, 0, "admin");
+    return commonService.find(adminQuery, (p, q) -> adminMapper.find(p, adminQuery.getDisabled(), adminQuery.getText(), adminQuery.getAsc()));
+  }
+
+  public List<Admin> getAdmin() {
+    return adminMapper.selectList(null);
+  }
+
+  public void adminDisabled(String id) {
+    Admin admin = adminIsExist(id);
+    admin.setDisabled(Objects.equals(admin.getDisabled(), DisabledEnum.ENABLED.getCode()) ?
+      DisabledEnum.DISABLED.getCode() :
+      DisabledEnum.ENABLED.getCode());
+    commonService.insertOrUpdate(admin, adminMapper);
+  }
+
+  public void adminDelete(String id) {
+    Admin admin = adminIsExist(id);
+    adminMapper.deleteById(admin);
+    commonMapper.deleteJoinTable(
+      Kv.by(SqlFactory.TABLE, "t_admin_role")
+        .set(SqlFactory.AK, "ADMIN_ID")
+        .set(SqlFactory.AK_VALUE, id)
+    );
+  }
+
+  private Admin adminIsExist(String id) {
+    Admin admin = adminMapper.selectById(id);
+    if (admin == null) throw new LogicException(ResultEnum.DATA_ERROR, "id为" + id + "的后管用户不存在");
+    return admin;
   }
 }

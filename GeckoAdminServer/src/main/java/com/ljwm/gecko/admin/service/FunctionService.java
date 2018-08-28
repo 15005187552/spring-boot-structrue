@@ -1,12 +1,21 @@
 package com.ljwm.gecko.admin.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.ljwm.bootbase.dto.Kv;
+import com.ljwm.bootbase.dto.SqlFactory;
+import com.ljwm.bootbase.enums.ResultEnum;
+import com.ljwm.bootbase.exception.LogicException;
+import com.ljwm.bootbase.mapper.CommonMapper;
 import com.ljwm.bootbase.service.CommonService;
+import com.ljwm.gecko.admin.enums.DeleteEnum;
 import com.ljwm.gecko.admin.model.bean.Dict;
 import com.ljwm.gecko.admin.model.form.FunctionSaveForm;
 import com.ljwm.gecko.base.entity.Function;
+import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.FunctionMapper;
+import com.ljwm.gecko.base.model.dto.FunctionDto;
 import com.ljwm.gecko.base.model.vo.FunctionTree;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +23,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * 菜单 服务  现在只适用于二级菜单
+ */
 @Slf4j
 @Service
 @SuppressWarnings("all")
@@ -22,6 +35,9 @@ public class FunctionService {
 
   @Autowired
   private Dict dict;
+
+  @Autowired
+  private CommonMapper commonMapper;
 
   @Autowired
   private CommonService commonService;
@@ -34,7 +50,7 @@ public class FunctionService {
     for (String menu : dict.getBuiltInMenu()) {
       String[] menuInfos = menu.split(":");
       Function function = new Function()
-        .setParentId(Integer.valueOf(menuInfos[6]))
+        .setParentId(menuInfos[6])
         .setId(menuInfos[0])
         .setName(menuInfos[1])
         .setTitle(menuInfos[2])
@@ -63,5 +79,52 @@ public class FunctionService {
 
     commonService.insertOrUpdate(function, functionMapper);
     return function;
+  }
+
+  public List<Function> getFunction() {
+    return functionMapper.selectList(null);
+  }
+
+  public void funDisabled(String id) {
+    FunctionDto functionDto = funIsExist(id);
+    Boolean flag = Objects.equals(functionDto.getDisabled(), DisabledEnum.ENABLED.getCode());
+    if (flag && CollectionUtil.isNotEmpty(functionDto.getChildren()))
+      functionDto.getChildren().forEach(item -> {
+        item.setDisabled(DisabledEnum.DISABLED.getCode());
+        commonService.insertOrUpdate(item, functionMapper);
+      });
+    functionDto.setDisabled(flag ?
+      DisabledEnum.DISABLED.getCode() :
+      DisabledEnum.ENABLED.getCode());
+    commonService.insertOrUpdate(functionDto, functionMapper);
+  }
+
+  public void funDelete(String id, Boolean type) {
+    FunctionDto functionDto = funIsExist(id);
+
+    if (Objects.equals(type, DeleteEnum.NORMAL.getInfo())) relationExist(functionDto);
+    else {
+      if (CollectionUtil.isNotEmpty(functionDto.getChildren()))
+        functionDto.getChildren().forEach(item -> functionMapper.deleteById(item));
+      commonMapper.deleteJoinTable(
+        Kv.by(SqlFactory.TABLE, "t_role_function")
+          .set(SqlFactory.AK, "FUNCTION_ID")
+          .set(SqlFactory.AK_VALUE, id)
+      );
+    }
+    functionMapper.deleteById(functionDto);
+  }
+
+  private FunctionDto funIsExist(String id) {
+    FunctionDto function = functionMapper.findDtoById(id);
+    if (function == null) throw new LogicException(ResultEnum.DATA_ERROR, "id为" + id + "的菜单不存在");
+    return function;
+  }
+
+  public void relationExist(FunctionDto functionDto) {
+    if (functionMapper.relationExist(functionDto.getId()) > 0)
+      throw new LogicException(ResultEnum.DATA_ERROR, "id为" + functionDto.getId() + "的菜单有角色关联");
+    if (CollectionUtil.isNotEmpty(functionDto.getChildren()))
+      throw new LogicException(ResultEnum.DATA_ERROR, "id为" + functionDto.getId() + "的菜单有子菜单");
   }
 }

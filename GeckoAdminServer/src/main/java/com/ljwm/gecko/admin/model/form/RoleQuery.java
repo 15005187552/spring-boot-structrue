@@ -3,11 +3,9 @@ package com.ljwm.gecko.admin.model.form;
 import com.ljwm.bootbase.dto.CommonQuery;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 @Data
-@Accessors(chain = true)
-public class AdminQuery extends CommonQuery {
+public class RoleQuery extends CommonQuery {
 
   @ApiModelProperty("0 查看启用 1 查看禁用，  不传值全部")
   private Integer disabled;
