@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50556
 File Encoding         : 65001
 
-Date: 2018-08-28 13:46:53
+Date: 2018-08-28 16:54:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -35,6 +35,45 @@ CREATE TABLE `t_admin` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台管理用户表';
+
+-- ----------------------------
+-- Table structure for t_advertisement
+-- ----------------------------
+DROP TABLE IF EXISTS `t_advertisement`;
+CREATE TABLE `t_advertisement` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '广告ID',
+  `PATH` varchar(255) DEFAULT NULL COMMENT '图片路径',
+  `URL_PATH` varchar(255) DEFAULT NULL COMMENT '跳转路径',
+  `EQUIP_TYPE` int(1) DEFAULT NULL COMMENT '设备类型 对应枚举类型',
+  `SORT` int(2) DEFAULT NULL COMMENT '排序',
+  `DISABLED` int(1) DEFAULT NULL COMMENT '是否禁用 0-没有禁用 1-禁用',
+  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `CREATER_ID` bigint(20) DEFAULT NULL COMMENT '创建人ID',
+  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `UPDATER_ID` bigint(20) DEFAULT NULL COMMENT '更新人ID',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='广告数据表';
+
+-- ----------------------------
+-- Table structure for t_city_item
+-- ----------------------------
+DROP TABLE IF EXISTS `t_city_item`;
+CREATE TABLE `t_city_item` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '项目ID',
+  `ITEM_TYPE` varchar(50) DEFAULT NULL COMMENT '项目类型',
+  `REGION_CODE` int(6) DEFAULT NULL COMMENT '地区code',
+  `UPPER_LIMIT` varchar(255) DEFAULT NULL COMMENT '上限',
+  `LOWER_LIMIT` varchar(255) DEFAULT NULL COMMENT '下限',
+  `COMPANY_PER` varchar(255) DEFAULT NULL COMMENT '单位比例',
+  `PERSON_PER` varchar(255) DEFAULT NULL COMMENT '个人比例',
+  `PER_TYPE` varchar(255) DEFAULT NULL COMMENT '比例类型 0-百分比 1-金额',
+  `SORT` varchar(255) DEFAULT NULL COMMENT '排序',
+  `CREAT_TIME` datetime DEFAULT NULL,
+  `CREATOR` bigint(20) DEFAULT NULL,
+  `UPDATE_TIME` datetime DEFAULT NULL,
+  `UPDATER_ID` bigint(20) DEFAULT NULL COMMENT '更新人ID',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='各城市缴纳项目扣除项表';
 
 -- ----------------------------
 -- Table structure for t_company
@@ -227,6 +266,18 @@ CREATE TABLE `t_paper` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='服务商证件类型表';
 
 -- ----------------------------
+-- Table structure for t_policy_amount
+-- ----------------------------
+DROP TABLE IF EXISTS `t_policy_amount`;
+CREATE TABLE `t_policy_amount` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '数据ID',
+  `USER_ID` int(11) DEFAULT NULL COMMENT '用户ID',
+  `PRE_POLICY` varchar(255) DEFAULT NULL COMMENT '政策前税额',
+  `POST_POLICY` varchar(255) DEFAULT NULL COMMENT '政策后税额',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='政策前后纳税金额表';
+
+-- ----------------------------
 -- Table structure for t_provider
 -- ----------------------------
 DROP TABLE IF EXISTS `t_provider`;
@@ -336,7 +387,7 @@ CREATE TABLE `t_tax_income` (
   `INCOME_TYPE_ID` bigint(20) DEFAULT NULL COMMENT '收入分类ID',
   `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
   `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
-  `UPDATER` varchar(20) DEFAULT NULL COMMENT '更新人',
+  `UPDATER_ID` bigint(20) DEFAULT NULL COMMENT '更新人ID',
   `INCOME` varchar(20) DEFAULT NULL COMMENT '收入金额',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报税数据收入表';
@@ -353,7 +404,7 @@ CREATE TABLE `t_tax_other_reduce` (
   `TAX_DOC_PATH` varchar(255) DEFAULT NULL COMMENT '缴纳证明路径',
   `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
   `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
-  `UPDATER` varchar(255) DEFAULT NULL COMMENT '更新人',
+  `UPDATER_ID` bigint(20) DEFAULT NULL COMMENT '更新人ID',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报税数据其它扣除减免表';
 
@@ -371,7 +422,7 @@ CREATE TABLE `t_tax_special` (
   `COMPANY_PERCENT` varchar(255) DEFAULT NULL COMMENT '单位缴纳比例',
   `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
   `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
-  `UPDATER` varchar(255) DEFAULT NULL COMMENT '更新人',
+  `UPDATER_ID` bigint(20) DEFAULT NULL COMMENT '更新人ID',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报税数据专项扣除表';
 
@@ -387,6 +438,6 @@ CREATE TABLE `t_tax_special_add` (
   `TAX_DOC_PATH` varchar(255) DEFAULT NULL COMMENT '缴纳证明附件路径',
   `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
   `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
-  `UPDATER` varchar(255) DEFAULT NULL COMMENT '更新人',
+  `UPDATER_ID` bigint(20) DEFAULT NULL COMMENT '更新人ID',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报税数据专项附加扣除表';

@@ -42,7 +42,6 @@ public class LocationController {
       BufferedReader br = new BufferedReader(new FileReader(file));//构造一个BufferedReader类来读取文件
       String s = null;
       while ((s = br.readLine()) != null) {//使用readLine方法，一次读一行
-        //result.append(System.lineSeparator()+s);
         String[] str = s.split("\"");
         Location location = new Location();
         location.setCode(Integer.valueOf(str[1]));
