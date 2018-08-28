@@ -1,0 +1,6 @@
+server:
+  port: 1227
+spring:
+  profiles:
+    active: dev,devLocal
+    include: base,gecko,common

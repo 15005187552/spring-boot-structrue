@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.enums;
 
+import com.ljwm.gecko.base.listener.CommonEnum;
 import lombok.Getter;
 
 /**
@@ -7,7 +8,7 @@ import lombok.Getter;
  * Created by yuzhou on 2018/8/21.
  */
 @Getter
-public enum CompanyType {
+public enum CompanyType implements CommonEnum {
   COMPANY(0, "企业"),
   PUBLIC(1, "事业单位"),
   SOCIAL(2, "社会团体")

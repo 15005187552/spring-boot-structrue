@@ -1,10 +1,14 @@
 package com.ljwm.gecko.base.enums;
 
+import com.ljwm.gecko.base.listener.CommonEnum;
+import lombok.Getter;
+
 /**
  * @author Janiffy
  * @date 2018/8/23 18:43
  */
-public enum SocialInsuranceType {
+@Getter
+public enum SocialInsuranceType implements CommonEnum {
   COMPANY(0, "公司代缴"),
   PERSONAL(1, "个人缴纳")
   ;
@@ -17,16 +21,4 @@ public enum SocialInsuranceType {
     this.name = name;
   }
 
-  public static SocialInsuranceType codeOf(Integer code) {
-    for(SocialInsuranceType socialInsuranceType : SocialInsuranceType.values()) {
-      if (socialInsuranceType.code.equals(code)) {
-        return socialInsuranceType;
-      }
-    }
-    return null;
-  }
-
-  public static SocialInsuranceType codeOf(String code) {
-    return codeOf(Integer.valueOf(code));
-  }
 }

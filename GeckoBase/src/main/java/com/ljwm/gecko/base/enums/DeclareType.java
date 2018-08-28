@@ -1,10 +1,14 @@
 package com.ljwm.gecko.base.enums;
 
+import com.ljwm.gecko.base.listener.CommonEnum;
+import lombok.Getter;
+
 /**
  * @author Janiffy
  * @date 2018/8/23 19:43
  */
-public enum DeclareType {
+@Getter
+public enum DeclareType implements CommonEnum {
   MONTH(0, "月报"),
   YEAR(1, "年报")
   ;
@@ -18,16 +22,4 @@ public enum DeclareType {
     this.name = name;
   }
 
-  public static DeclareType codeOf(Integer code) {
-    for(DeclareType declareType : DeclareType.values()) {
-      if (declareType.code.equals(code)) {
-        return declareType;
-      }
-    }
-    return null;
-  }
-
-  public static DeclareType codeOf(String code) {
-    return codeOf(Integer.valueOf(code));
-  }
 }

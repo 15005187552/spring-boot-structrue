@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50556
 File Encoding         : 65001
 
-Date: 2018-08-23 20:24:44
+Date: 2018-08-28 12:53:59
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,12 +20,12 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `t_add_special`;
 CREATE TABLE `t_add_special` (
-  `ID` int(20) NOT NULL COMMENT '专项附加扣除分类',
-  `NAME` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '分类名称',
-  `SORT` varchar(2) CHARACTER SET utf8 DEFAULT NULL COMMENT '排序',
-  `DESCRIPTION` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '描述',
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '专项附加扣除分类',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '分类名称',
+  `SORT` varchar(2) DEFAULT NULL COMMENT '排序',
+  `DESCRIPTION` varchar(255) DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='专项附加扣除分类表';
 
 -- ----------------------------
 -- Table structure for t_admin
@@ -96,15 +96,15 @@ CREATE TABLE `t_guest` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_income_type`;
 CREATE TABLE `t_income_type` (
-  `ID` int(20) NOT NULL COMMENT '类别ID',
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '类别ID',
   `NAME` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '分类名称',
   `SORT` varchar(2) CHARACTER SET utf8 DEFAULT NULL COMMENT '排序',
   `IS_NEED_ENTER` int(1) DEFAULT NULL COMMENT '是否前台输入 0-不需要 1-需要',
-  `P_ID` int(20) DEFAULT NULL COMMENT '父分类ID',
+  `P_ID` bigint(20) DEFAULT NULL COMMENT '父分类ID',
   `CLASS_DESCRI` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '分类描述',
   `LEVEL` int(2) DEFAULT NULL COMMENT '级别 0-一级 1-二级',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='收入类型表';
 
 -- ----------------------------
 -- Table structure for t_location
@@ -176,7 +176,7 @@ CREATE TABLE `t_mobile_code` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_natural_person`;
 CREATE TABLE `t_natural_person` (
-  `MEMBER_ID` int(20) NOT NULL COMMENT '会员ID',
+  `MEMBER_ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '会员ID',
   `COUNTRY` int(1) DEFAULT NULL COMMENT '国籍 0-中国大陆 1-港澳台 2-外籍',
   `NAME` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '姓名',
   `CERTIFICATE` int(1) DEFAULT NULL COMMENT '证件类型 0-身份证号 1-港澳台证件号 3-外籍证件号',
@@ -197,19 +197,19 @@ CREATE TABLE `t_natural_person` (
   `CREAT_TIME` datetime DEFAULT NULL COMMENT '创建时间',
   `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`MEMBER_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='自然人纳税基本信息表';
 
 -- ----------------------------
 -- Table structure for t_other_reduce
 -- ----------------------------
 DROP TABLE IF EXISTS `t_other_reduce`;
 CREATE TABLE `t_other_reduce` (
-  `ID` int(20) NOT NULL COMMENT '其它扣除减免分类',
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '其它扣除减免分类',
   `NAME` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '分类名称',
   `SORT` varchar(2) CHARACTER SET utf8 DEFAULT NULL COMMENT '排序',
   `DESCRIPTION` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='其它扣除减免分类表';
 
 -- ----------------------------
 -- Table structure for t_paper
@@ -305,65 +305,65 @@ CREATE TABLE `t_service` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_special_deduction`;
 CREATE TABLE `t_special_deduction` (
-  `ID` int(20) NOT NULL COMMENT '专项扣除分类',
-  `NAME` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '分类名称',
-  `SORT` varchar(2) CHARACTER SET utf8 DEFAULT NULL COMMENT '排序',
+  `ID` bigint(20) NOT NULL COMMENT '专项扣除分类',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '分类名称',
+  `SORT` varchar(2) DEFAULT NULL COMMENT '排序',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
 
 -- ----------------------------
 -- Table structure for t_tax
 -- ----------------------------
 DROP TABLE IF EXISTS `t_tax`;
 CREATE TABLE `t_tax` (
-  `ID` int(20) NOT NULL COMMENT '报税',
-  `MEMBER_ID` int(20) DEFAULT NULL COMMENT '会员ID',
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '报税',
+  `MEMBER_ID` bigint(20) DEFAULT NULL COMMENT '会员ID',
   `DECLARE_TYPE` varchar(1) CHARACTER SET utf8 DEFAULT NULL COMMENT '申报类型 0-月报 1-年报',
   `DECLARE_TIME` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '申报时段',
   `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
   `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报税数据主表';
 
 -- ----------------------------
 -- Table structure for t_tax_income
 -- ----------------------------
 DROP TABLE IF EXISTS `t_tax_income`;
 CREATE TABLE `t_tax_income` (
-  `ID` int(20) NOT NULL COMMENT '报税数据收入',
-  `TAX_ID` int(20) DEFAULT NULL COMMENT '报税数据ID',
-  `INCOME_TYPE_ID` int(20) DEFAULT NULL COMMENT '收入分类ID',
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '报税数据收入',
+  `TAX_ID` bigint(20) DEFAULT NULL COMMENT '报税数据ID',
+  `INCOME_TYPE_ID` bigint(20) DEFAULT NULL COMMENT '收入分类ID',
   `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
   `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
   `UPDATER` varchar(20) CHARACTER SET utf8 DEFAULT NULL COMMENT '更新人',
   `INCOME` varchar(20) CHARACTER SET utf8 DEFAULT NULL COMMENT '收入金额',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报税数据收入表';
 
 -- ----------------------------
 -- Table structure for t_tax_other_reduce
 -- ----------------------------
 DROP TABLE IF EXISTS `t_tax_other_reduce`;
 CREATE TABLE `t_tax_other_reduce` (
-  `ID` int(20) NOT NULL COMMENT '报税数据其它扣除减免',
-  `TAX_ID` int(20) DEFAULT NULL COMMENT '报税数据ID',
-  `OTHER_REDUCE_ID` int(20) DEFAULT NULL COMMENT '其它扣除减免分类ID',
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '报税数据其它扣除减免',
+  `TAX_ID` bigint(20) DEFAULT NULL COMMENT '报税数据ID',
+  `OTHER_REDUCE_ID` bigint(20) DEFAULT NULL COMMENT '其它扣除减免分类ID',
   `TAX_MONEY` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '个人缴纳金额',
   `TAX_DOC_PATH` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '缴纳证明路径',
   `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
   `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
   `UPDATER` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报税数据其它扣除减免表';
 
 -- ----------------------------
 -- Table structure for t_tax_special
 -- ----------------------------
 DROP TABLE IF EXISTS `t_tax_special`;
 CREATE TABLE `t_tax_special` (
-  `ID` int(20) NOT NULL COMMENT '报税数据专项扣除表',
-  `TAX_ID` int(20) DEFAULT NULL COMMENT '报税数据ID',
-  `SPECIAL_DEDU_ID` int(20) DEFAULT NULL COMMENT '专项扣除分类ID',
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '报税数据专项扣除表',
+  `TAX_ID` bigint(20) DEFAULT NULL COMMENT '报税数据ID',
+  `SPECIAL_DEDU_ID` bigint(20) DEFAULT NULL COMMENT '专项扣除分类ID',
   `PERSONAL_MONEY` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '个人缴纳金额',
   `COMPANY_MONEY` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '单位纳税金额',
   `PERSONAL_PERCENT` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '个人缴纳比例',
@@ -372,20 +372,20 @@ CREATE TABLE `t_tax_special` (
   `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
   `UPDATER` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报税数据专项扣除表';
 
 -- ----------------------------
 -- Table structure for t_tax_special_add
 -- ----------------------------
 DROP TABLE IF EXISTS `t_tax_special_add`;
 CREATE TABLE `t_tax_special_add` (
-  `ID` int(20) NOT NULL COMMENT '报税数据专项附加扣除',
-  `TAX_ID` int(20) DEFAULT NULL COMMENT '报税数据ID',
-  `SPECIAL_ADD_ID` int(20) DEFAULT NULL COMMENT '专项附加扣除分类ID',
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '报税数据专项附加扣除',
+  `TAX_ID` bigint(20) DEFAULT NULL COMMENT '报税数据ID',
+  `SPECIAL_ADD_ID` bigint(20) DEFAULT NULL COMMENT '专项附加扣除分类ID',
   `TAX_MONEY` varchar(20) CHARACTER SET utf8 DEFAULT NULL COMMENT '个人缴纳金额',
   `TAX_DOC_PATH` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '缴纳证明附件路径',
   `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
   `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
   `UPDATER` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报税数据专项附加扣除表';

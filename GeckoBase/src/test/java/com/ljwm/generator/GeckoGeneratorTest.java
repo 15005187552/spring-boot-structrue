@@ -23,11 +23,11 @@ public class GeckoGeneratorTest {
         .prefix("t_")             // 前缀t_
         .url("jdbc:mysql://127.0.0.1:3306/geckodb?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8")
         .username("root")
-        .password("admin")
+        .password("janiffy")
         .created(true)    // 第一次建类用创建
         .idType(IdType.AUTO)
         .tables(new String[]{
-          "t_member","t_member_account","t_member_password"})
+          "t_location"})
         .build()
     );
   }
