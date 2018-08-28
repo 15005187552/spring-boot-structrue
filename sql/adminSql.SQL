@@ -12,98 +12,66 @@ MySQL - 5.7.20-log : Database - geckodb
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`geckodb` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-USE `geckodb`;
-
 /*Table structure for table `t_admin` */
 
 DROP TABLE IF EXISTS `t_admin`;
 
 CREATE TABLE `t_admin` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ID` varchar(50) NOT NULL,
   `USERNAME` varchar(50) DEFAULT NULL COMMENT '用户名',
   `PASSWORD` varchar(65) DEFAULT NULL COMMENT '密码',
+  `NICK_NAME` varchar(50) DEFAULT NULL COMMENT '别称',
   `CREATE_TIME` datetime DEFAULT NULL,
   `UPDATE_TIME` datetime DEFAULT NULL COMMENT '修改时间',
-  `DISABLED` tinyint(2) DEFAULT NULL COMMENT '启用禁用标示',
+  `DISABLED` tinyint(2) DEFAULT '0' COMMENT '启用禁用标示',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台管理用户表';
-
-/*Data for the table `t_admin` */
-
-LOCK TABLES `t_admin` WRITE;
-
-UNLOCK TABLES;
 
 /*Table structure for table `t_admin_role` */
 
 DROP TABLE IF EXISTS `t_admin_role`;
 
 CREATE TABLE `t_admin_role` (
-  `ROLE_ID` int(11) DEFAULT NULL,
-  `ADMIN_ID` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ROLE_ID` varchar(50) NOT NULL,
+  `ADMIN_ID` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色关联表';
 
-/*Data for the table `t_admin_role` */
+/*Table structure for table `t_function` */
 
-LOCK TABLES `t_admin_role` WRITE;
+DROP TABLE IF EXISTS `t_function`;
 
-UNLOCK TABLES;
-
-/*Table structure for table `t_funtion` */
-
-DROP TABLE IF EXISTS `t_funtion`;
-
-CREATE TABLE `t_funtion` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
+CREATE TABLE `t_function` (
+  `ID` varchar(50) NOT NULL COMMENT '菜单ID',
   `PARENT_ID` int(1) DEFAULT NULL COMMENT '父节点ID',
-  `NAME` varchar(100) DEFAULT NULL COMMENT '名称',
+  `NAME` varchar(100) NOT NULL COMMENT '名称',
+  `TITLE` varchar(100) DEFAULT NULL COMMENT '标头',
+  `DESCRIPTION` varchar(255) DEFAULT NULL COMMENT '描述',
   `ICON` varchar(100) DEFAULT NULL COMMENT '图标路径',
-  `url` varchar(100) DEFAULT NULL COMMENT '链接页面',
-  `SM1` varchar(200) DEFAULT NULL COMMENT '菜单说明1',
-  `SM2` varchar(200) DEFAULT NULL COMMENT '菜单说明2',
-  `SM3` varchar(200) DEFAULT NULL COMMENT '菜单说明3',
-  `SORT` int(11) DEFAULT NULL COMMENT '排序',
+  `URL` varchar(100) DEFAULT NULL COMMENT '链接页面',
+  `SORT` int(11) DEFAULT '1' COMMENT '排序',
+  `DISABLED` tinyint(1) DEFAULT '0' COMMENT '启用禁用标识 0启用',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `t_funtion` */
-
-LOCK TABLES `t_funtion` WRITE;
-
-UNLOCK TABLES;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限表';
 
 /*Table structure for table `t_role` */
 
 DROP TABLE IF EXISTS `t_role`;
 
 CREATE TABLE `t_role` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ID` varchar(50) NOT NULL,
   `ROLE_NAME` varchar(55) DEFAULT NULL,
+  `DISABLED` tinyint(1) DEFAULT '0' COMMENT '启用禁用表示 0启用',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `t_role` */
-
-LOCK TABLES `t_role` WRITE;
-
-UNLOCK TABLES;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色表';
 
 /*Table structure for table `t_role_function` */
 
 DROP TABLE IF EXISTS `t_role_function`;
 
 CREATE TABLE `t_role_function` (
-  `ROLE_ID` int(11) DEFAULT NULL COMMENT '角色ID',
-  `FUNCTION_ID` int(11) DEFAULT NULL COMMENT '菜单ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `t_role_function` */
-
-LOCK TABLES `t_role_function` WRITE;
-
-UNLOCK TABLES;
+  `ROLE_ID` varchar(50) NOT NULL COMMENT '角色ID',
+  `FUNCTION_ID` varchar(50) NOT NULL COMMENT '菜单ID'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色权限关联表';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
