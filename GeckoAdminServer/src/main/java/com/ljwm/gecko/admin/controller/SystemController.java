@@ -51,16 +51,16 @@ public class SystemController extends BaseController {
     return success(authService.getRole());
   }
 
-  @GetMapping("roleDisabled")
+  @GetMapping("roleDisabled/{id}")
   @ApiOperation("角色 禁用/启用")
-  public Result roleDisabled(@RequestParam String id) {
+  public Result roleDisabled(@PathVariable String id) {
     authService.roleDisabled(id);
     return success();
   }
 
-  @GetMapping("roleDelete")
+  @GetMapping("roleDelete/{id}")
   @ApiOperation("角色 删除")
-  public Result roleDelete(@RequestParam String id) {
+  public Result roleDelete(@PathVariable String id) {
     authService.roleDelete(id, DeleteEnum.NORMAL.getInfo());
     return success();
   }
@@ -91,16 +91,16 @@ public class SystemController extends BaseController {
     return success();
   }
 
-  @GetMapping("funDelete")
+  @GetMapping("funDelete/{id}")
   @ApiOperation("菜单 删除")
-  public Result funDelete(@RequestParam String id) {
+  public Result funDelete(@PathVariable String id) {
     functionService.funDelete(id, DeleteEnum.NORMAL.getInfo());
     return success();
   }
 
-  @GetMapping("funForceDelete")
+  @GetMapping("funForceDelete/{id}")
   @ApiOperation("菜单 强制删除")
-  public Result funForceDelete(@RequestParam String id) {
+  public Result funForceDelete(@PathVariable String id) {
     functionService.funDelete(id, DeleteEnum.FORCE.getInfo());
     return success();
   }
