@@ -53,8 +53,8 @@ public class IncomeType implements Serializable {
     private Long pId;
 
     @ApiModelProperty(value = "分类描述")
-    @TableField("`CLASS_DESCRI`")
-    private String classDescri;
+    @TableField("`CLASS_DESC`")
+    private String classDesc;
 
     @ApiModelProperty(value = "级别 0-一级 1-二级")
     @TableField("`LEVEL`")
@@ -71,7 +71,7 @@ public class IncomeType implements Serializable {
 
     public static final String P_ID = "`P_ID`";
 
-    public static final String CLASS_DESCRI = "`CLASS_DESCRI`";
+    public static final String CLASS_DESC = "`CLASS_DESC`";
 
     public static final String LEVEL = "`LEVEL`";
 
