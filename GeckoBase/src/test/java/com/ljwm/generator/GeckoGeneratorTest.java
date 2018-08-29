@@ -27,7 +27,7 @@ public class GeckoGeneratorTest {
         .created(true)    // 第一次建类用创建
         .idType(IdType.AUTO)
         .tables(new String[]{
-          "t_income_type","t_special_deduction","t_add_special","t_other_reduce"})
+          "t_income_type"})
         .build()
     );
   }
