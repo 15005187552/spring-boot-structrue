@@ -21,13 +21,13 @@ public class GeckoGeneratorTest {
         .basePackage("com.ljwm.gecko.base")
         .path(PathKit.getProjectPath())
         .prefix("t_")             // 前缀t_
-        .url("jdbc:mysql://127.0.0.1:3306/geckodb?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8")
+        .url("jdbc:mysql://127.0.0.1:3306/geckdb?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8")
         .username("root")
         .password("janiffy")
         .created(true)    // 第一次建类用创建
         .idType(IdType.AUTO)
         .tables(new String[]{
-          "t_location"})
+          "t_mobile_code"})
         .build()
     );
   }

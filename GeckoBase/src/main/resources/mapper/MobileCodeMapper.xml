@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.MobileCodeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.MobileCode">
+        <id column="ID" property="id" />
+        <result column="CODE" property="code" />
+        <result column="MOBILE" property="mobile" />
+        <result column="FROM_IP" property="fromIp" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="DAY_INDEX" property="dayIndex" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`CODE`          ,`MOBILE`          ,`FROM_IP`          ,`CREATE_TIME`          ,`DAY_INDEX`
+    </sql>
+
+</mapper>

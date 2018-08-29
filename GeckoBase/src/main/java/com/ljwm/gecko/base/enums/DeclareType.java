@@ -12,7 +12,6 @@ public enum DeclareType implements CommonEnum {
   MONTH(0, "月报"),
   YEAR(1, "年报")
   ;
-  ;
 
   private Integer code;
   private String name;

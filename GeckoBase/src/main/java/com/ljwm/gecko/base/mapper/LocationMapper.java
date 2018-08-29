@@ -1,7 +1,7 @@
 package com.ljwm.gecko.base.mapper;
 
-import com.ljwm.gecko.base.entity.Location;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ljwm.gecko.base.entity.Location;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;

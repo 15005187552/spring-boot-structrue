@@ -1,5 +1,6 @@
 package com.ljwm.gecko.provider.controller;
 
+import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.entity.Location;
 import com.ljwm.gecko.base.service.LocationService;
@@ -18,8 +19,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import static com.ljwm.bootbase.dto.Result.success;
-
 /**
  * @author Janiffy
  * @date 2018/8/24 9:49
@@ -28,7 +27,7 @@ import static com.ljwm.bootbase.dto.Result.success;
 @RestController
 @RequestMapping("/location")
 @Api(tags = "地理位置 API")
-public class LocationController {
+public class LocationController extends BaseController {
 
   @Autowired
   LocationService locationService;

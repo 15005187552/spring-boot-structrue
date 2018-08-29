@@ -16,5 +16,8 @@ public enum CertificateType implements CommonEnum {
   private String name;
 
   CertificateType(Integer code, String name) {
+    this.code = code;
+    this.name = name;
   }
+
 }

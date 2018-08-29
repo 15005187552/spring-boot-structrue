@@ -1,5 +1,6 @@
 package com.ljwm.gecko.provider.controller;
 
+import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.service.EnumService;
 import io.swagger.annotations.Api;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/enum")
 @Api(tags = "枚举数据 API")
-public class EnumController {
+public class EnumController extends BaseController {
   @Autowired
   EnumService enumService;
 

@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.service;
 
+import com.ljwm.gecko.base.dao.LocationDao;
 import com.ljwm.gecko.base.entity.Location;
 import com.ljwm.gecko.base.mapper.LocationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,23 +15,18 @@ import java.util.List;
 @Service
 public class LocationService {
   @Autowired
-  LocationMapper locationMapper;
+  LocationDao locationDao;
 
   public void insertOrUpdate(Location location) {
-    Location findLocation = locationMapper.findByCode(location.getCode());
-    if(findLocation != null){
-      locationMapper.updateById(location);
-    }else {
-      locationMapper.insert(location);
-    }
-
+    locationDao.insertOrUpdate(location);
   }
 
+
   public List<Location> getProvince() {
-    return locationMapper.selectProvinceByLevel();
+    return locationDao.selectProvinceByLevel();
   }
 
   public List<Location> getCityOrArea(Integer code) {
-    return locationMapper.selectByCode(code);
+    return locationDao.selectByCode(code);
   }
 }
