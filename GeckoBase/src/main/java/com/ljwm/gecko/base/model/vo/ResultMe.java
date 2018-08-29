@@ -1,5 +1,9 @@
 package com.ljwm.gecko.base.model.vo;
 
+import com.ljwm.gecko.base.entity.Function;
+import com.ljwm.gecko.base.entity.Role;
+import com.ljwm.gecko.base.model.bean.FunctionTree;
+import com.ljwm.gecko.base.model.dto.FunctionDto;
 import com.ljwm.gecko.base.model.dto.RoleDto;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -22,5 +26,7 @@ public class ResultMe {
 
   private String nickName;
 
-//  private List<RoleDto> roles;
+  private List<Role> roles;
+
+  private List<FunctionTree> functions;
 }

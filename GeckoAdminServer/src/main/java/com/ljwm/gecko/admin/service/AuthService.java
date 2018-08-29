@@ -25,7 +25,9 @@ import com.ljwm.gecko.base.entity.Role;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.FunctionMapper;
 import com.ljwm.gecko.base.mapper.RoleMapper;
+import com.ljwm.gecko.base.model.bean.FunctionTree;
 import com.ljwm.gecko.base.model.dto.FunctionDto;
+import com.ljwm.gecko.base.model.dto.RoleDto;
 import com.ljwm.gecko.base.model.vo.ResultMe;
 import com.ljwm.gecko.base.model.vo.RoleVo;
 import lombok.extern.slf4j.Slf4j;
@@ -172,13 +174,14 @@ public class AuthService {
   }
 
   public ResultMe me(JwtUser jwtUser) {
-
     return Optional
       .ofNullable(jwtUser)
       .map(user -> new ResultMe()
         .setId(user.getId())
+        .setRoles(user.getAdmin().getRoles().stream().collect(Collectors.toList()))
         .setUserName(user.getAdmin().getUsername())
         .setNickName(user.getAdmin().getNickName())
+        .setFunctions(FunctionTree.createByRoles(user.getAdmin().getRoles()))
       )
       .get();
   }

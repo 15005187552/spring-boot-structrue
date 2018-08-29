@@ -59,7 +59,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
       .createByRoles(admin.getRoles())
       .stream()
       .map(FunctionTree::getChildren)
-      .map(functionTrees -> functionTrees.stream().map(FunctionTree::getName).map(SimpleGrantedAuthority::new).collect(Collectors.toList()))
+      .map(functionTrees -> functionTrees.stream().map(FunctionTree::getTitle).map(SimpleGrantedAuthority::new).collect(Collectors.toList()))
       .collect(ArrayList::new, ArrayList::addAll, ArrayList::addAll);
   }
 
