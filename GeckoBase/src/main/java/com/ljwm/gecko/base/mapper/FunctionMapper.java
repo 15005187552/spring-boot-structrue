@@ -32,7 +32,7 @@ public interface FunctionMapper extends BaseMapper<Function> {
 
   @Select("SELECT * FROM `t_function` WHERE `ID`=#{id}")
   @ResultMap("FunctionDto")
-  FunctionDto findDtoById(@Param("ID") String id);
+  FunctionDto findDtoById(@Param("id") String id);
 
   @Select("SELECT * FROM `t_function` WHERE `PARENT_ID`=#{id}")
   @ResultMap("BaseResultMap")

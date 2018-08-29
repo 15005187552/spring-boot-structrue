@@ -2,6 +2,7 @@ package com.ljwm.gecko.admin.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.dto.SqlFactory;
@@ -45,6 +46,9 @@ public class FunctionService {
   @Autowired
   private FunctionMapper functionMapper;
 
+  @Autowired
+  private FunctionService functionService;
+
   @Transactional
   public void init() {
     for (String menu : dict.getBuiltInMenu()) {
@@ -68,14 +72,17 @@ public class FunctionService {
   }
 
 
+  @Transactional
   public Function saveFunction(FunctionSaveForm form) {
     Function function = null;
     if (StrUtil.isBlank(form.getId()))
       function = functionMapper.selectById(form.getId());
-    else
+    if (function == null)
       function = new Function();
 
     BeanUtil.copyProperties(form, function);
+
+    function.setId(StrUtil.isBlank(form.getId()) ? RandomUtil.simpleUUID() : form.getId());
 
     commonService.insertOrUpdate(function, functionMapper);
     return function;
@@ -85,6 +92,7 @@ public class FunctionService {
     return functionMapper.selectList(null);
   }
 
+  @Transactional
   public void funDisabled(String id) {
     FunctionDto functionDto = funIsExist(id);
     Boolean flag = Objects.equals(functionDto.getDisabled(), DisabledEnum.ENABLED.getCode());
@@ -99,20 +107,23 @@ public class FunctionService {
     commonService.insertOrUpdate(functionDto, functionMapper);
   }
 
+  @Transactional
   public void funDelete(String id, Boolean type) {
     FunctionDto functionDto = funIsExist(id);
-
     if (Objects.equals(type, DeleteEnum.NORMAL.getInfo())) relationExist(functionDto);
-    else {
-      if (CollectionUtil.isNotEmpty(functionDto.getChildren()))
-        functionDto.getChildren().forEach(item -> functionMapper.deleteById(item));
-      commonMapper.deleteJoinTable(
-        Kv.by(SqlFactory.TABLE, "t_role_function")
-          .set(SqlFactory.AK, "FUNCTION_ID")
-          .set(SqlFactory.AK_VALUE, id)
-      );
-    }
+    else functionService.deleteRelation(functionDto);
     functionMapper.deleteById(functionDto);
+  }
+
+  @Transactional
+  public void deleteRelation(FunctionDto functionDto) {
+    if (CollectionUtil.isNotEmpty(functionDto.getChildren()))
+      functionDto.getChildren().forEach(item -> functionMapper.deleteById(item));
+    commonMapper.deleteJoinTable(
+      Kv.by(SqlFactory.TABLE, "t_role_function")
+        .set(SqlFactory.AK, "FUNCTION_ID")
+        .set(SqlFactory.AK_VALUE, functionDto.getId())
+    );
   }
 
   private FunctionDto funIsExist(String id) {
@@ -122,9 +133,9 @@ public class FunctionService {
   }
 
   public void relationExist(FunctionDto functionDto) {
-    if (functionMapper.relationExist(functionDto.getId()) > 0)
-      throw new LogicException(ResultEnum.DATA_ERROR, "id为" + functionDto.getId() + "的菜单有角色关联");
     if (CollectionUtil.isNotEmpty(functionDto.getChildren()))
       throw new LogicException(ResultEnum.DATA_ERROR, "id为" + functionDto.getId() + "的菜单有子菜单");
+    if (functionMapper.relationExist(functionDto.getId()) > 0)
+      throw new LogicException(ResultEnum.DATA_ERROR, "id为" + functionDto.getId() + "的菜单有角色关联");
   }
 }

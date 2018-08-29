@@ -13,5 +13,7 @@ public class RoleSaveForm {
 
   private String roleName;
 
+  private String roleDesc;
+
   private List<Integer> functionIds;
 }

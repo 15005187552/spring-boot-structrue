@@ -7,6 +7,7 @@ import com.ljwm.gecko.base.model.dto.RoleDto;
 import com.ljwm.gecko.base.model.vo.RoleVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -32,4 +33,12 @@ public interface RoleMapper extends BaseMapper<Role> {
   List<RoleVo> find(Page<RoleVo> page,@Param("text") String text,@Param("disabled") Integer disabled,@Param("asc") Boolean asc);
 
   List<RoleVo> find(@Param("text") String text,@Param("disabled") Integer disabled);
+
+  @Select("SELECT count(*) FROM `t_admin_role` WHERE `ROLE_ID` = #{id}")
+  @ResultType(value = java.lang.Integer.class)
+  Integer relationExist(@Param("id") String id);
+
+  @Select("SELECT count(*) FROM `t_role_function` WHERE `ROLE_ID` = #{id}")
+  @ResultType(value = java.lang.Integer.class)
+  Integer relationFunExist(@Param("id") String id);
 }

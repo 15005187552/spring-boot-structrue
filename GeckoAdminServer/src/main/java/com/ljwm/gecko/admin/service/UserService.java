@@ -73,7 +73,7 @@ public class UserService {
 
     AdminSaveForm admin = new AdminSaveForm()
       .setRoleIds(Arrays.stream(roles).map(Integer::new).collect(Collectors.toList()))
-      .setPassword(SecureUtil.md5(SecureUtil.md5(password) + username))
+      .setPassword(password)
       .setId(id)
       .setUsername(username);
     userService.saveAdmin(admin);
@@ -140,6 +140,7 @@ public class UserService {
     return adminMapper.selectList(null);
   }
 
+  @Transactional
   public void adminDisabled(String id) {
     Admin admin = adminIsExist(id);
     admin.setDisabled(Objects.equals(admin.getDisabled(), DisabledEnum.ENABLED.getCode()) ?
@@ -148,6 +149,7 @@ public class UserService {
     commonService.insertOrUpdate(admin, adminMapper);
   }
 
+  @Transactional
   public void adminDelete(String id) {
     Admin admin = adminIsExist(id);
     adminMapper.deleteById(admin);

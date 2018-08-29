@@ -53,17 +53,18 @@ public class SystemController extends BaseController {
 
   @GetMapping("roleDisabled")
   @ApiOperation("角色 禁用/启用")
-  public Result roleDisabled(@RequestParam String id){
+  public Result roleDisabled(@RequestParam String id) {
     authService.roleDisabled(id);
     return success();
   }
 
   @GetMapping("roleDelete")
   @ApiOperation("角色 删除")
-  public Result roleDelete(@RequestParam String id){
-    authService.roleDelete(id);
+  public Result roleDelete(@RequestParam String id) {
+    authService.roleDelete(id, DeleteEnum.NORMAL.getInfo());
     return success();
   }
+
   // ================== 权限
   @PostMapping("saveFunction")
   @ApiOperation("保存菜单")
@@ -85,27 +86,22 @@ public class SystemController extends BaseController {
 
   @GetMapping("funDisabled")
   @ApiOperation("菜单 禁用/启用")
-  public Result funDisabled(@RequestParam String id){
+  public Result funDisabled(@RequestParam String id) {
     functionService.funDisabled(id);
     return success();
   }
 
   @GetMapping("funDelete")
   @ApiOperation("菜单 删除")
-  public Result funDelete(@RequestParam String id){
+  public Result funDelete(@RequestParam String id) {
     functionService.funDelete(id, DeleteEnum.NORMAL.getInfo());
     return success();
   }
 
   @GetMapping("funForceDelete")
   @ApiOperation("菜单 强制删除")
-  public Result funForceDelete(@RequestParam String id){
+  public Result funForceDelete(@RequestParam String id) {
     functionService.funDelete(id, DeleteEnum.FORCE.getInfo());
-    return success();
-  }
-  @GetMapping("relationExist")
-  @ApiOperation("菜单 强制删除")
-  public Result relationExist(@RequestParam String id){
     return success();
   }
 }

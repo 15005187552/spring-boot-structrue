@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author xixil
- * @since 2018-08-28
+ * @since 2018-08-29
  */
 @Data
 @SuppressWarnings("ALL")
@@ -33,8 +33,14 @@ public class Role implements Serializable {
 
     @TableId(value = "`ID`", type = IdType.INPUT)
     private String id;
+
+    @ApiModelProperty(value = "角色名称")
     @TableField("`ROLE_NAME`")
     private String roleName;
+
+    @ApiModelProperty(value = "角色描述")
+    @TableField("`ROLE_DESC`")
+    private String roleDesc;
 
     @ApiModelProperty(value = "启用禁用表示 0启用")
     @TableField("`DISABLED`")
@@ -44,6 +50,8 @@ public class Role implements Serializable {
     public static final String ID = "`ID`";
 
     public static final String ROLE_NAME = "`ROLE_NAME`";
+
+    public static final String ROLE_DESC = "`ROLE_DESC`";
 
     public static final String DISABLED = "`DISABLED`";
 

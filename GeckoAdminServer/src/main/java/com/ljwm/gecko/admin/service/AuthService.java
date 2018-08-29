@@ -13,6 +13,7 @@ import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.mapper.CommonMapper;
 import com.ljwm.bootbase.security.JwtKit;
 import com.ljwm.bootbase.service.CommonService;
+import com.ljwm.gecko.admin.enums.DeleteEnum;
 import com.ljwm.gecko.admin.model.bean.Dict;
 import com.ljwm.gecko.admin.model.form.LoginForm;
 import com.ljwm.gecko.admin.model.form.RoleQuery;
@@ -23,6 +24,7 @@ import com.ljwm.gecko.base.entity.Role;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.FunctionMapper;
 import com.ljwm.gecko.base.mapper.RoleMapper;
+import com.ljwm.gecko.base.model.dto.FunctionDto;
 import com.ljwm.gecko.base.model.vo.ResultMe;
 import com.ljwm.gecko.base.model.vo.RoleVo;
 import lombok.extern.slf4j.Slf4j;
@@ -99,7 +101,8 @@ public class AuthService {
       role = new Role();
     //2.设置新参数并保存
     role.setId(StrUtil.isBlank(roleSaveForm.getId()) ? RandomUtil.simpleUUID() : roleSaveForm.getId())
-      .setRoleName(roleSaveForm.getRoleName());
+      .setRoleName(roleSaveForm.getRoleName())
+      .setRoleDesc(roleSaveForm.getRoleDesc());
     commonService.insertOrUpdate(role, roleMapper);
     //3.更新角色绑定菜单（权限）
     if (CollectionUtil.isNotEmpty(roleSaveForm.getFunctionIds()))
@@ -142,7 +145,7 @@ public class AuthService {
   private JwtUser validate(LoginForm loginForm) {
     return Optional
       .ofNullable(loginForm)
-      .map(form -> new UsernamePasswordAuthenticationToken(form.getUsername(), SecureUtil.md5(SecureUtil.md5(form.getPassword()) + form.getUsername())))
+      .map(form -> new UsernamePasswordAuthenticationToken(form.getUsername(), form.getPassword()))
       .map(upToken -> authenticationManager.authenticate(upToken))
       .map(authentication -> {
         if (!authentication.isAuthenticated())
@@ -194,6 +197,7 @@ public class AuthService {
     return roleMapper.selectList(null);
   }
 
+  @Transactional
   public void roleDisabled(String id) {
     Role role = roleIsExist(id);
     role.setDisabled(Objects.equals(role.getDisabled(), DisabledEnum.ENABLED.getCode()) ?
@@ -202,9 +206,18 @@ public class AuthService {
     commonService.insertOrUpdate(role, roleMapper);
   }
 
-  public void roleDelete(String id) {
+  @Transactional
+  public void roleDelete(String id, Boolean type) {
     Role role = roleIsExist(id);
+    if (Objects.equals(type, DeleteEnum.NORMAL.getInfo()))
+      relationExist(role);
+    else
+      authService.deleteRelation(role.getId());
     roleMapper.deleteById(role);
+  }
+
+  @Transactional
+  public void deleteRelation(String id) {
     commonMapper.deleteJoinTable(
       Kv.by(SqlFactory.TABLE, "t_role_function")
         .set(SqlFactory.AK, "ROLE_ID")
@@ -221,5 +234,12 @@ public class AuthService {
     Role role = roleMapper.selectById(id);
     if (role == null) throw new LogicException(ResultEnum.DATA_ERROR, "id为" + id + "的角色不存在");
     return role;
+  }
+
+  public void relationExist(Role role) {
+    if (roleMapper.relationExist(role.getId()) > 0)
+      throw new LogicException(ResultEnum.DATA_ERROR, "id为" + role.getId() + "的角色有用户关联");
+    if (roleMapper.relationFunExist(role.getId()) > 0)
+      throw new LogicException(ResultEnum.DATA_ERROR, "id为" + role.getId() + "的角色有菜单关联");
   }
 }
