@@ -47,4 +47,6 @@ public interface FunctionMapper extends BaseMapper<Function> {
   @Select("SELECT count(*) FROM `t_role_function` WHERE `FUNCTION_ID` = #{id}")
   @ResultType(value = java.lang.Integer.class)
   Integer relationExist(@Param("id") String id);
+
+  Boolean deleteAble(String id);
 }

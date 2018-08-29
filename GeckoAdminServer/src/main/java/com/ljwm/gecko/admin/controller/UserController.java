@@ -45,12 +45,12 @@ public class UserController extends BaseController {
     return success(userService.getAdmin());
   }
 
-  @GetMapping("adminDisabled")
-  @ApiOperation("角色 禁用/启用")
-  public Result adminDisabled(@RequestParam String id){
-    userService.adminDisabled(id);
-    return success();
-  }
+//  @GetMapping("adminDisabled")
+//  @ApiOperation("后管用户 禁用/启用")
+//  public Result adminDisabled(@RequestParam String id){
+//    userService.adminDisabled(id);
+//    return success();
+//  }
 
   @GetMapping("adminDelete")
   @ApiOperation("后管用户 删除")

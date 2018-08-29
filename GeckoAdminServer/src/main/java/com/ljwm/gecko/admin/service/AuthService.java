@@ -105,7 +105,6 @@ public class AuthService {
       .setRoleDesc(roleSaveForm.getRoleDesc());
     commonService.insertOrUpdate(role, roleMapper);
     //3.更新角色绑定菜单（权限）
-    if (CollectionUtil.isNotEmpty(roleSaveForm.getFunctionIds()))
       authService.updateFunction(role.getId(), roleSaveForm.getFunctionIds());
     return role;
   }
@@ -118,7 +117,7 @@ public class AuthService {
    */
   public void updateFunction(String roleId, List<Integer> functionIds) {
     if (CollectionUtil.isEmpty(functionMapper.selectBatchIds(functionIds)))
-      throw new LogicException(ResultEnum.DATA_ERROR, "角色ID为" + functionIds.toArray().toString() + "不存在");
+      throw new LogicException(ResultEnum.DATA_ERROR, "菜单不存在");
 
     // 1. 删除该用户在旧的角色中的排布
     commonMapper.deleteJoinTable(
@@ -210,7 +209,7 @@ public class AuthService {
   public void roleDelete(String id, Boolean type) {
     Role role = roleIsExist(id);
     if (Objects.equals(type, DeleteEnum.NORMAL.getInfo()))
-      relationExist(role);
+      authService.relationExist(role);
     else
       authService.deleteRelation(role.getId());
     roleMapper.deleteById(role);
@@ -236,10 +235,14 @@ public class AuthService {
     return role;
   }
 
+  @Transactional
   public void relationExist(Role role) {
     if (roleMapper.relationExist(role.getId()) > 0)
       throw new LogicException(ResultEnum.DATA_ERROR, "id为" + role.getId() + "的角色有用户关联");
-    if (roleMapper.relationFunExist(role.getId()) > 0)
-      throw new LogicException(ResultEnum.DATA_ERROR, "id为" + role.getId() + "的角色有菜单关联");
+    commonMapper.deleteJoinTable(
+      Kv.by(SqlFactory.TABLE, "t_role_function")
+        .set(SqlFactory.AK, "ROLE_ID")
+        .set(SqlFactory.AK_VALUE, role.getId())
+    );
   }
 }

@@ -41,4 +41,6 @@ public interface RoleMapper extends BaseMapper<Role> {
   @Select("SELECT count(*) FROM `t_role_function` WHERE `ROLE_ID` = #{id}")
   @ResultType(value = java.lang.Integer.class)
   Integer relationFunExist(@Param("id") String id);
+
+  Boolean deleteAble(String id);
 }

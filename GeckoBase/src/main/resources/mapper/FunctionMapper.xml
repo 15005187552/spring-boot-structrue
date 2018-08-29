@@ -12,12 +12,13 @@
         <result column="ICON" property="icon" />
         <result column="URL" property="url" />
         <result column="SORT" property="sort" />
+        <result column="IS_SHOW" property="isShow" />
         <result column="DISABLED" property="disabled" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`PARENT_ID`          ,`NAME`          ,`TITLE`          ,`DESCRIPTION`          ,`ICON`          ,`URL`          ,`SORT`          ,`DISABLED`
+          `ID`          ,`PARENT_ID`          ,`NAME`          ,`TITLE`          ,`DESCRIPTION`          ,`ICON`          ,`URL`          ,`SORT`          ,`IS_SHOW`          ,`DISABLED`
     </sql>
 
 
@@ -27,8 +28,14 @@
                 select="com.ljwm.gecko.base.mapper.FunctionMapper.findChildrenByFunctionId"/>
   </resultMap>
 
+  <resultMap id="FunctionVo" type="com.ljwm.gecko.base.model.vo.FunctionVo" extends="BaseResultMap">
+    <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.FunctionMapper.deleteAble"/>
+    <collection property="children" column="ID"
+                select="com.ljwm.gecko.base.mapper.FunctionMapper.findChildrenTreeByParentId"/>
+  </resultMap>
 
   <resultMap id="FunctionTree" type="com.ljwm.gecko.base.model.vo.FunctionTree" extends="BaseResultMap">
+    <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.FunctionMapper.deleteAble"/>
     <collection property="children" column="ID"
                 select="com.ljwm.gecko.base.mapper.FunctionMapper.findChildrenTreeByParentId"/>
   </resultMap>
@@ -50,5 +57,16 @@
       )
       )
     </if>
+  </select>
+
+  <select id="deleteAble" parameterType="java.lang.String" resultType="java.lang.Boolean">
+    <![CDATA[
+        SELECT IF(CONVERT(GROUP_CONCAT(`res` SEPARATOR ''),SIGNED)>=1,0,1) AS res
+        FROM (
+            SELECT IF(COUNT(`ID`)>=1,1,0) AS res FROM `t_function` WHERE `ID` IN (SELECT DISTINCT(PARENT_ID) FROM `t_function` WHERE `PARENT_ID` IS NOT NULL) AND `ID`=#{id}
+            UNION
+            SELECT IF(COUNT(`FUNCTION_ID`)>=1,1,0) AS res FROM `t_role_function` WHERE `FUNCTION_ID`=#{id}
+            ) AS temp
+    ]]>
   </select>
 </mapper>
