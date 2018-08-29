@@ -60,7 +60,7 @@ public class SystemController extends BaseController {
 
   @GetMapping("roleDelete/{id}")
   @ApiOperation("角色 删除")
-  public Result roleDelete(@PathVariable String id) {
+  public Result roleDelete(@PathVariable Long id) {
     authService.roleDelete(id, DeleteEnum.NORMAL.getInfo());
     return success();
   }
@@ -93,14 +93,14 @@ public class SystemController extends BaseController {
 
   @GetMapping("funDelete/{id}")
   @ApiOperation("菜单 删除")
-  public Result funDelete(@PathVariable String id) {
+  public Result funDelete(@PathVariable Long id) {
     functionService.funDelete(id, DeleteEnum.NORMAL.getInfo());
     return success();
   }
 
   @GetMapping("funForceDelete/{id}")
   @ApiOperation("菜单 强制删除")
-  public Result funForceDelete(@PathVariable String id) {
+  public Result funForceDelete(@PathVariable Long id) {
     functionService.funDelete(id, DeleteEnum.FORCE.getInfo());
     return success();
   }

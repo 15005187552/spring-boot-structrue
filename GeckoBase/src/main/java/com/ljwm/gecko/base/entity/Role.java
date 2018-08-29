@@ -31,8 +31,8 @@ public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "`ID`", type = IdType.INPUT)
-    private String id;
+    @TableId(value = "`ID`", type = IdType.AUTO)
+    private Long id;
 
     @ApiModelProperty(value = "角色名称")
     @TableField("`ROLE_NAME`")
@@ -42,7 +42,7 @@ public class Role implements Serializable {
     @TableField("`ROLE_DESC`")
     private String roleDesc;
 
-    @ApiModelProperty(value = "启用禁用表示 0启用")
+    @ApiModelProperty(value = "是否能够删除")
     @TableField("`DISABLED`")
     private Integer disabled;
 

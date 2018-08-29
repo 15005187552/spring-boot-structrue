@@ -1,20 +1,18 @@
 package com.ljwm.gecko.base.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ljwm.gecko.base.entity.Function;
 import com.ljwm.gecko.base.entity.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ljwm.gecko.base.model.dto.RoleDto;
 import com.ljwm.gecko.base.model.vo.RoleVo;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.ResultType;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author xixil
@@ -24,23 +22,23 @@ public interface RoleMapper extends BaseMapper<Role> {
 
   @Select("  SELECT r.* FROM `t_role` r LEFT JOIN `t_admin_role` ar ON ar.`ROLE_ID`=r.`ID` WHERE ar.`ADMIN_ID`=#{id}")
   @ResultMap("RoleDto")
-  List<RoleDto> findByUserId(@Param("ID") String id);
+  List<RoleDto> findByUserId(@Param("ID") Long id);
 
   @Select("  SELECT r.* FROM `t_role` r LEFT JOIN `t_admin_role` ar ON ar.`ROLE_ID`=r.`ID` WHERE ar.`ADMIN_ID`=#{id}")
   @ResultMap("BaseResultMap")
-  List<Role> findBaseByUserId(@Param("ID") String id);
+  List<Role> findBaseByUserId(@Param("ID") Long id);
 
-  List<RoleVo> find(Page<RoleVo> page,@Param("text") String text,@Param("disabled") Integer disabled,@Param("asc") Boolean asc);
+  List<RoleVo> find(Page<RoleVo> page, @Param("text") String text, @Param("disabled") Integer disabled, @Param("asc") Boolean asc);
 
-  List<RoleVo> find(@Param("text") String text,@Param("disabled") Integer disabled);
+  List<RoleVo> find(@Param("text") String text, @Param("disabled") Integer disabled);
 
   @Select("SELECT count(*) FROM `t_admin_role` WHERE `ROLE_ID` = #{id}")
   @ResultType(value = java.lang.Integer.class)
-  Integer relationExist(@Param("id") String id);
+  Integer relationExist(@Param("id") Long id);
 
-  @Select("SELECT count(*) FROM `t_role_function` WHERE `ROLE_ID` = #{id}")
-  @ResultType(value = java.lang.Integer.class)
-  Integer relationFunExist(@Param("id") String id);
+  Boolean deleteAble(Long id);
 
-  Boolean deleteAble(String id);
+  @Insert("INSERT INTO `t_role` ( `ID`,`ROLE_NAME`) VALUES ( #{id},#{roleName})")
+  @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "ID")
+  Integer insertAll(Role role);
 }

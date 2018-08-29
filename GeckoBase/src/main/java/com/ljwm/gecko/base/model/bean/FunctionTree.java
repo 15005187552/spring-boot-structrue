@@ -37,7 +37,8 @@ public class FunctionTree {
   private List<FunctionTree> children;
 
   public FunctionTree(Function function) {
-    this.setId(function.getId())
+    this
+//      .setId(function.getId())
       .setIcon(function.getIcon())
       .setName(function.getName())
       .setUrl(function.getUrl())
@@ -67,7 +68,7 @@ public class FunctionTree {
   }
 
   public static List<FunctionTree> createByRoles(List<RoleDto> roles) {
-    LinkedHashMap<String, FunctionDto> ret = new LinkedHashMap<>();
+    LinkedHashMap<Long, FunctionDto> ret = new LinkedHashMap<>();
     roles.forEach(role -> role.getFunctions().forEach(function -> ret.put(function.getId(), function)));
     List<FunctionDto> has = ret.values().stream().sorted((f1, f2) -> (f1.getSort() - f2.getSort())).collect(Collectors.toCollection(LinkedList::new));
     return has

@@ -33,12 +33,12 @@ public class Function implements Serializable {
 
 
     @ApiModelProperty(value = "菜单ID")
-    @TableId(value = "`ID`", type = IdType.INPUT)
-    private String id;
+    @TableId(value = "`ID`", type = IdType.AUTO)
+    private Long id;
 
     @ApiModelProperty(value = "父节点ID")
     @TableField("`PARENT_ID`")
-    private String parentId;
+    private Long parentId;
 
     @ApiModelProperty(value = "名称")
     @TableField("`NAME`")

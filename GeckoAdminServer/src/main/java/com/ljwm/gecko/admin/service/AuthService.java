@@ -5,6 +5,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.baomidou.mybatisplus.core.toolkit.sql.SqlHelper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.dto.SqlFactory;
@@ -79,8 +80,8 @@ public class AuthService {
 
       authService.saveRole(new RoleSaveForm()
         .setFunctionIds(Arrays.stream(functions).map(Integer::new).collect(Collectors.toList()))
+        .setId(Long.valueOf(id))
         .setRoleName(name)
-        .setId(id)
       );
     }
   }
@@ -100,11 +101,14 @@ public class AuthService {
     if (role == null)
       role = new Role();
     //2.设置新参数并保存
-    role.setId(StrUtil.isBlank(roleSaveForm.getId()) ? RandomUtil.simpleUUID() : roleSaveForm.getId())
+    role.setId(roleSaveForm.getId())
       .setRoleName(roleSaveForm.getRoleName())
       .setRoleDesc(roleSaveForm.getRoleDesc());
-    commonService.insertOrUpdate(role, roleMapper);
+//    commonService.insertOrUpdate(role, roleMapper);
+    if (!SqlHelper.retBool(roleMapper.updateById(role)))
+      roleMapper.insertAll(role);
     //3.更新角色绑定菜单（权限）
+    if (CollectionUtil.isNotEmpty(roleSaveForm.getFunctionIds()))
       authService.updateFunction(role.getId(), roleSaveForm.getFunctionIds());
     return role;
   }
@@ -115,7 +119,7 @@ public class AuthService {
    * @param roleId
    * @param functionIds
    */
-  public void updateFunction(String roleId, List<Integer> functionIds) {
+  public void updateFunction(Long roleId, List<Integer> functionIds) {
     if (CollectionUtil.isEmpty(functionMapper.selectBatchIds(functionIds)))
       throw new LogicException(ResultEnum.DATA_ERROR, "菜单不存在");
 
@@ -197,7 +201,7 @@ public class AuthService {
   }
 
   @Transactional
-  public void roleDisabled(String id) {
+  public void roleDisabled(Long id) {
     Role role = roleIsExist(id);
     role.setDisabled(Objects.equals(role.getDisabled(), DisabledEnum.ENABLED.getCode()) ?
       DisabledEnum.DISABLED.getCode() :
@@ -206,7 +210,7 @@ public class AuthService {
   }
 
   @Transactional
-  public void roleDelete(String id, Boolean type) {
+  public void roleDelete(Long id, Boolean type) {
     Role role = roleIsExist(id);
     if (Objects.equals(type, DeleteEnum.NORMAL.getInfo()))
       authService.relationExist(role);
@@ -216,7 +220,7 @@ public class AuthService {
   }
 
   @Transactional
-  public void deleteRelation(String id) {
+  public void deleteRelation(Long id) {
     commonMapper.deleteJoinTable(
       Kv.by(SqlFactory.TABLE, "t_role_function")
         .set(SqlFactory.AK, "ROLE_ID")
@@ -229,7 +233,7 @@ public class AuthService {
     );
   }
 
-  private Role roleIsExist(String id) {
+  private Role roleIsExist(Long id) {
     Role role = roleMapper.selectById(id);
     if (role == null) throw new LogicException(ResultEnum.DATA_ERROR, "id为" + id + "的角色不存在");
     return role;

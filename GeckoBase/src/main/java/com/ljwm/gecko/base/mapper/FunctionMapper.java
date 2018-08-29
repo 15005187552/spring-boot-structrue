@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author xixil
@@ -20,33 +20,37 @@ public interface FunctionMapper extends BaseMapper<Function> {
 
   @Select("  SELECT f.* FROM `t_function` f LEFT JOIN `t_role_function` rf ON rf.`FUNCTION_ID`=f.`ID` WHERE rf.`ROLE_ID`=#{id}")
   @ResultMap("FunctionDto")
-  List<FunctionDto> findByRoleId(@Param("ID") String id);
+  List<FunctionDto> findByRoleId(@Param("ID") Long id);
 
   @Select("  SELECT f.* FROM `t_function` f LEFT JOIN `t_role_function` rf ON rf.`FUNCTION_ID`=f.`ID` WHERE rf.`ROLE_ID`=#{id}")
   @ResultMap("BaseResultMap")
-  List<Function> findBaseByRoleId(@Param("ID") String id);
+  List<Function> findBaseByRoleId(@Param("ID") Long id);
 
   @Select("SELECT * FROM `t_function` WHERE `ID`=#{id}")
   @ResultMap("BaseResultMap")
-  Function findById(@Param("ID") String id);
+  Function findById(@Param("ID") Long id);
 
   @Select("SELECT * FROM `t_function` WHERE `ID`=#{id}")
   @ResultMap("FunctionDto")
-  FunctionDto findDtoById(@Param("id") String id);
+  FunctionDto findDtoById(@Param("id") Long id);
 
   @Select("SELECT * FROM `t_function` WHERE `PARENT_ID`=#{id}")
   @ResultMap("BaseResultMap")
-  List<Function> findChildrenByFunctionId(@Param("id") String id);
+  List<Function> findChildrenByFunctionId(@Param("id") Long id);
 
   List<FunctionTree> tree(@Param("text") String text);
 
   @Select("SELECT * FROM `t_function` WHERE `PARENT_ID` = #{id}")
   @ResultMap("FunctionTree")
-  List<FunctionTree> findChildrenTreeByParentId(@Param("ID") String id);
+  List<FunctionTree> findChildrenTreeByParentId(@Param("ID") Long id);
 
   @Select("SELECT count(*) FROM `t_role_function` WHERE `FUNCTION_ID` = #{id}")
   @ResultType(value = java.lang.Integer.class)
-  Integer relationExist(@Param("id") String id);
+  Integer relationExist(@Param("id") Long id);
 
-  Boolean deleteAble(String id);
+  Boolean deleteAble(Long id);
+
+  @Insert("INSERT INTO `t_function` ( `ID`,`PARENT_ID`,`NAME`,`TITLE`,`DESCRIPTION`,`ICON`,`URL` ) VALUES ( #{id},#{parentId},#{name},#{title},#{description},#{icon},#{url} )")
+  @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "ID")
+  Integer insertAll(Function function);
 }

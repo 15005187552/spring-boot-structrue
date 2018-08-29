@@ -9,7 +9,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class RoleSaveForm {
 
-  private String id;
+  private Long id;
 
   private String roleName;
 
