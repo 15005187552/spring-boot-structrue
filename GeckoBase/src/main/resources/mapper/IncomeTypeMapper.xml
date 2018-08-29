@@ -21,7 +21,7 @@
 
     <resultMap id="incomeTypeVO" type="com.ljwm.gecko.base.model.vo.IncomeTypeVO" extends="BaseResultMap">
       <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.IncomeTypeMapper.deleteAble"/>
-      <collection property="children" column="P_ID"
+      <collection property="children" column="ID"
                   select="com.ljwm.gecko.base.mapper.IncomeTypeMapper.children"/>
     </resultMap>
 

@@ -13,5 +13,36 @@
     <sql id="Base_Column_List">
           `ID`          ,`NAME`          ,`SORT`
     </sql>
+    <resultMap id="specialDeductionVO" type="com.ljwm.gecko.base.model.vo.SpecialDeductionVO" extends="BaseResultMap">
+      <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.SpecialDeductionMapper.deleteAble"/>
+    </resultMap>
+
+    <select id="find" resultMap="specialDeductionVO">
+      select
+      <include refid="Base_Column_List"/>
+      from t_special_deduction
+    </select>
+
+  <select id="deleteAble" parameterType="java.lang.Long" resultType="java.lang.Boolean">
+    <![CDATA[
+          SELECT IF(CONVERT(GROUP_CONCAT(`res` SEPARATOR ''),SIGNED)>=1,0,1) AS res
+          FROM (
+              SELECT IF(COUNT(`ID`)>=1,1,0) AS res FROM `t_tax_special` WHERE `SPECIAL_DEDU_ID`=#{id} AND `SPECIAL_DEDU_ID` IS NOT NULL
+              ) AS temp
+          ]]>
+  </select>
+
+  <select id="findPage" parameterType="map" resultMap="specialDeductionVO">
+    select
+    <include refid="Base_Column_List"/>
+    from t_special_deduction
+    <if test="params != null">
+      <if test="params.text != null and params.text != ''">
+        AND `NAME` LIKE CONCAT('%',#{params.text},'%')
+      </if>
+    </if>
+    ORDER BY `SORT`
+  </select>
+
 
 </mapper>

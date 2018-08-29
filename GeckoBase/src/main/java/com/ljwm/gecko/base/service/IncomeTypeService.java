@@ -11,6 +11,7 @@ import com.ljwm.gecko.base.model.vo.IncomeTypeVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class IncomeTypeService {
     return incomeTypeMapper.find();
   }
 
+  @Transactional
   public void delete(Long id){
     if (!incomeTypeMapper.deleteAble(id)){
       throw new LogicException(ResultEnum.DATA_ERROR,"节点已使用,无法删除");
@@ -33,6 +35,7 @@ public class IncomeTypeService {
     incomeTypeMapper.deleteById(id);
   }
 
+  @Transactional
   public IncomeTypeSimpleVO save(IncomeTypeDto incomeTypeDto){
     return Optional
       .ofNullable(incomeTypeDto)
