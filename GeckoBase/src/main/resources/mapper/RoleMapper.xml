@@ -20,6 +20,7 @@
   </resultMap>
 
   <resultMap id="RoleVo" type="com.ljwm.gecko.base.model.vo.RoleVo" extends="BaseResultMap">
+    <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.RoleMapper.deleteAble"/>
     <collection property="functions" column="ID" select="com.ljwm.gecko.base.mapper.FunctionMapper.findBaseByRoleId"/>
   </resultMap>
 
@@ -46,5 +47,14 @@
     <if test="!asc">
       DESC
     </if>
+  </select>
+
+  <select id="deleteAble" resultType="java.lang.Boolean" parameterType="java.lang.String">
+    <![CDATA[
+        SELECT IF(CONVERT(GROUP_CONCAT(`res` SEPARATOR ''),SIGNED)>=1,0,1) AS res
+        FROM (
+            SELECT IF(COUNT(`ROLE_ID`)>=1,1,0) AS res FROM `t_admin_role` WHERE `ROLE_ID`=#{id} AND `ROLE_ID` IS NOT NULL
+            ) AS temp
+        ]]>
   </select>
 </mapper>

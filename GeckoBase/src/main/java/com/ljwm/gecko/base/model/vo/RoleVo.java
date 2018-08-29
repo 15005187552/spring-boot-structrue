@@ -10,5 +10,7 @@ import java.util.List;
 @Data
 public class RoleVo extends Role {
 
+  private Boolean deleteAble;
+
   private List<Function> functions;
 }

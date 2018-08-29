@@ -51,12 +51,12 @@ public class SystemController extends BaseController {
     return success(authService.getRole());
   }
 
-  @GetMapping("roleDisabled/{id}")
-  @ApiOperation("角色 禁用/启用")
-  public Result roleDisabled(@PathVariable String id) {
-    authService.roleDisabled(id);
-    return success();
-  }
+//  @GetMapping("roleDisabled/{id}")
+//  @ApiOperation("角色 禁用/启用")
+//  public Result roleDisabled(@PathVariable String id) {
+//    authService.roleDisabled(id);
+//    return success();
+//  }
 
   @GetMapping("roleDelete/{id}")
   @ApiOperation("角色 删除")
@@ -84,12 +84,12 @@ public class SystemController extends BaseController {
     return success(functionService.getFunction());
   }
 
-  @GetMapping("funDisabled")
-  @ApiOperation("菜单 禁用/启用")
-  public Result funDisabled(@RequestParam String id) {
-    functionService.funDisabled(id);
-    return success();
-  }
+//  @GetMapping("funDisabled")
+//  @ApiOperation("菜单 禁用/启用")
+//  public Result funDisabled(@RequestParam String id) {
+//    functionService.funDisabled(id);
+//    return success();
+//  }
 
   @GetMapping("funDelete/{id}")
   @ApiOperation("菜单 删除")

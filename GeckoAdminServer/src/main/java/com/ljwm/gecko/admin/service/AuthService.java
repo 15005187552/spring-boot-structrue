@@ -105,7 +105,6 @@ public class AuthService {
       .setRoleDesc(roleSaveForm.getRoleDesc());
     commonService.insertOrUpdate(role, roleMapper);
     //3.更新角色绑定菜单（权限）
-    if (CollectionUtil.isNotEmpty(roleSaveForm.getFunctionIds()))
       authService.updateFunction(role.getId(), roleSaveForm.getFunctionIds());
     return role;
   }

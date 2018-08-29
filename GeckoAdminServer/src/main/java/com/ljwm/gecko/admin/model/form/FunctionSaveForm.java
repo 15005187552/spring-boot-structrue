@@ -20,4 +20,6 @@ public class FunctionSaveForm {
   private String url;
 
   private String sort;
+
+  private Integer isShow;
 }
