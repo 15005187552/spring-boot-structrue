@@ -17,17 +17,17 @@ public class GeckoGeneratorTest {
     MyGenerator.build(
       GeneratorConfig
         .builder()
-        .authorName("yuzhou")  // 设置作者
+        .authorName("Levis")  // 设置作者
         .basePackage("com.ljwm.gecko.base")
         .path(PathKit.getProjectPath())
         .prefix("t_")             // 前缀t_
-        .url("jdbc:mysql://127.0.0.1:3306/geckodb?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8")
+        .url("jdbc:mysql://192.168.8.208:3306/geckodb?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8")
         .username("root")
-        .password("janiffy")
+        .password("root")
         .created(true)    // 第一次建类用创建
         .idType(IdType.AUTO)
         .tables(new String[]{
-          "t_location"})
+          "t_income_type","t_special_deduction","t_add_special","t_other_reduce"})
         .build()
     );
   }
