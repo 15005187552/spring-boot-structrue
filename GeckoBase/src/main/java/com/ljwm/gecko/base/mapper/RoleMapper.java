@@ -9,6 +9,7 @@ import com.ljwm.gecko.base.model.vo.RoleVo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -28,7 +29,7 @@ public interface RoleMapper extends BaseMapper<Role> {
   @ResultMap("BaseResultMap")
   List<Role> findBaseByUserId(@Param("ID") Long id);
 
-  List<RoleVo> find(Page<RoleVo> page, @Param("text") String text, @Param("disabled") Integer disabled, @Param("asc") Boolean asc);
+  List<RoleVo> find(Page<RoleVo> page,@Param("param") Map map);
 
   List<RoleVo> find(@Param("text") String text, @Param("disabled") Integer disabled);
 

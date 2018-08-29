@@ -15,4 +15,27 @@
           `ID`          ,`NAME`          ,`SORT`          ,`DESCRIPTION`
     </sql>
 
+  <resultMap id="OtherReduceVo" type="com.ljwm.gecko.base.model.vo.OtherReduceVo" extends="BaseResultMap">
+  </resultMap>
+
+  <select id="find" resultMap="OtherReduceVo" parameterType="java.util.Map">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM `t_other_reduce`
+    <where>
+      <if test="param.text != null and param.text != ''">
+        AND (
+        `NAME` LIKE CONCAT('%',#{param.text},'%')
+        OR `DESCRIPTION` LIKE  CONCAT('%',#{text},'%')
+        )
+      </if>
+    </where>
+    ORDER BY `SORT`
+    <if test="param.asc">
+      ASC
+    </if>
+    <if test="!param.asc">
+      DESC
+    </if>
+  </select>
 </mapper>

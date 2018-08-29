@@ -24,27 +24,27 @@
     <collection property="functions" column="ID" select="com.ljwm.gecko.base.mapper.FunctionMapper.findBaseByRoleId"/>
   </resultMap>
 
-  <select id="find" resultMap="RoleVo" >
+  <select id="find" resultMap="RoleVo"  parameterType="java.util.HashMap" >
     SELECT
     <include refid="Base_Column_List"/>
     FROM `t_role`
     <where>
-      <if test="text != null and text != ''">
+      <if test="param.text != null and param.text != ''">
         AND (
-        `ROLE_NAME` LIKE CONCAT('%',#{text},'%')
+        `ROLE_NAME` LIKE CONCAT('%',#{param.text},'%')
         )
       </if>
-      <if test="disabled != null and disabled != ''">
+      <if test="param.disabled != null and param.disabled != ''">
         AND (
-        `DISABLED`=#{disabled}
+        `DISABLED`=#{param.disabled}
         )
       </if>
     </where>
     ORDER BY `ID`
-    <if test="asc">
+    <if test="param.asc">
       ASC
     </if>
-    <if test="!asc">
+    <if test="!param.asc">
       DESC
     </if>
   </select>

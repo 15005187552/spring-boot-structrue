@@ -6,10 +6,12 @@ import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.model.dto.IncomeTypeDto;
 import com.ljwm.gecko.base.model.dto.SpecialDeductionDto;
 import com.ljwm.gecko.base.model.dto.SpecialDeductionQueryDto;
+import com.ljwm.gecko.base.model.form.OtherReduceQuery;
 import com.ljwm.gecko.base.model.vo.IncomeTypeSimpleVO;
 import com.ljwm.gecko.base.model.vo.IncomeTypeVO;
 import com.ljwm.gecko.base.model.vo.SpecialDeductionVO;
 import com.ljwm.gecko.base.service.IncomeTypeService;
+import com.ljwm.gecko.base.service.OtherReduceService;
 import com.ljwm.gecko.base.service.SpecialDeductionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +30,9 @@ public class ReportDataController extends BaseController {
 
   @Autowired
   private SpecialDeductionService specialDeductionService;
+
+  @Autowired
+  private OtherReduceService otherReduceService;
 
   @GetMapping("findIncomeType")
   @ApiOperation(value = "查询收入类型列表")
@@ -65,4 +70,11 @@ public class ReportDataController extends BaseController {
   public Result<Page<SpecialDeductionVO>> findSpecialDeductionPage(@RequestBody SpecialDeductionQueryDto specialDeductionQueryDto){
     return success(specialDeductionService.findPage(specialDeductionQueryDto));
   }
+
+  @PostMapping("findOtherReduce")
+  @ApiOperation(value = "分页查询其他扣除")
+  public Result findOtherReduce(@RequestBody OtherReduceQuery query){
+    return success(otherReduceService.find(query));
+  }
+
 }

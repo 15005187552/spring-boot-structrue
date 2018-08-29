@@ -1,5 +1,6 @@
 package com.ljwm.gecko.admin.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.ReUtil;
@@ -193,7 +194,9 @@ public class AuthService {
    * @return
    */
   public Page<RoleVo> findRole(RoleQuery query) {
-    return commonService.find(query, (p, q) -> roleMapper.find(p, query.getText(), query.getDisabled(), query.getAsc()));
+
+    return commonService.find(query,
+      (p, q) -> roleMapper.find(p, BeanUtil.beanToMap(query)));
   }
 
   /**
