@@ -9,7 +9,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class AdminSaveForm {
 
-  private String id;
+  private Long id;
 
   private String username;
 

@@ -6,6 +6,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.baomidou.mybatisplus.core.toolkit.sql.SqlHelper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.dto.SqlFactory;
@@ -74,7 +75,7 @@ public class UserService {
     AdminSaveForm admin = new AdminSaveForm()
       .setRoleIds(Arrays.stream(roles).map(Integer::new).collect(Collectors.toList()))
       .setPassword(password)
-      .setId(id)
+      .setId(Long.valueOf(id))
       .setUsername(username);
     userService.saveAdmin(admin);
   }
@@ -91,12 +92,15 @@ public class UserService {
     if (StrUtil.isBlank(adminSaveForm.getPassword())) adminSaveForm.setPassword(dict.getInitPassword());
     //2.设置新参数并插入数据库
     admin.setPassword(SecureUtil.md5(SecureUtil.md5(adminSaveForm.getPassword()) + adminSaveForm.getUsername()))
-      .setId(StrUtil.isBlank(adminSaveForm.getId()) ? RandomUtil.simpleUUID() : adminSaveForm.getId())
+      .setId( adminSaveForm.getId())
       .setUsername(adminSaveForm.getUsername())
       .setNickName(adminSaveForm.getNickName())
       .setUpdateTime(DateUtil.date())
       .setCreateTime(DateUtil.date());
-    commonService.insertOrUpdate(admin, adminMapper);
+    if (Objects.isNull(adminSaveForm.getId()))
+      adminMapper.insert(admin);
+    else if (!SqlHelper.retBool(adminMapper.updateById(admin)))
+      adminMapper.insertAll(admin);
     //3.更新用户角色
     if (CollectionUtil.isNotEmpty(adminSaveForm.getRoleIds()))
       userService.updateRoles(admin.getId(), adminSaveForm.getRoleIds());
@@ -104,7 +108,7 @@ public class UserService {
   }
 
   @Transactional
-  public void updateRoles(String adminId, List<Integer> roleIds) {
+  public void updateRoles(Long adminId, List<Integer> roleIds) {
     if (CollectionUtil.isEmpty(roleMapper.selectBatchIds(roleIds)))
       throw new LogicException(ResultEnum.DATA_ERROR, "角色ID为" + roleIds.toArray().toString() + "不存在");
 

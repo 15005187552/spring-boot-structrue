@@ -50,7 +50,7 @@ public interface FunctionMapper extends BaseMapper<Function> {
 
   Boolean deleteAble(Long id);
 
-  @Insert("INSERT INTO `t_function` ( `ID`,`PARENT_ID`,`NAME`,`TITLE`,`DESCRIPTION`,`ICON`,`URL` ) VALUES ( #{id},#{parentId},#{name},#{title},#{description},#{icon},#{url} )")
+  @Insert("INSERT INTO `t_function` ( `ID`,`PARENT_ID`,`NAME`,`TITLE`,`DESCRIPTION`,`ICON`,`URL`,`SORT`,`IS_SHOW`,`DISABLED` ) VALUES ( #{id},#{parentId},#{name},#{title},#{description},#{icon},#{url},#{sort},#{isShow},#{disabled} )")
   @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "ID")
   Integer insertAll(Function function);
 }

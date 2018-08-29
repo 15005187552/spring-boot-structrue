@@ -38,7 +38,7 @@ public interface RoleMapper extends BaseMapper<Role> {
 
   Boolean deleteAble(Long id);
 
-  @Insert("INSERT INTO `t_role` ( `ID`,`ROLE_NAME`) VALUES ( #{id},#{roleName})")
+  @Insert("INSERT INTO `t_role` ( `ID`,`ROLE_NAME`,`ROLE_DESC`,`DISABLED`) VALUES ( #{id},#{roleName},#{roleDesc},#{disabled})")
   @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "ID")
   Integer insertAll(Role role);
 }

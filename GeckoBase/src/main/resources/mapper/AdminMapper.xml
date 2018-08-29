@@ -2,19 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljwm.gecko.base.mapper.AdminMapper">
 
-  <!-- 通用查询映射结果 -->
-  <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Admin">
-    <id column="ID" property="id"/>
-    <result column="USERNAME" property="username"/>
-    <result column="PASSWORD" property="password"/>
-    <result column="NICK_NAME" property="nickName"/>
-    <result column="CREATE_TIME" property="createTime"/>
-    <result column="UPDATE_TIME" property="updateTime"/>
-    <result column="DISABLED" property="disabled"/>
-  </resultMap>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Admin">
+        <id column="ID" property="id" />
+        <result column="USERNAME" property="username" />
+        <result column="PASSWORD" property="password" />
+        <result column="NICK_NAME" property="nickName" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="DISABLED" property="disabled" />
+    </resultMap>
 
-  <!-- 通用查询结果列 -->
-  <sql id="Base_Column_List">
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
           `ID`          ,`USERNAME`          ,`PASSWORD`          ,`NICK_NAME`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`DISABLED`
     </sql>
 
