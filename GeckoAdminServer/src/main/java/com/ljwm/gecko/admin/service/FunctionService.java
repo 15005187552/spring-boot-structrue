@@ -63,7 +63,8 @@ public class FunctionService extends ServiceImpl<FunctionMapper, Function> imple
         .setTitle(menuInfos[2])
         .setDescription(menuInfos[3])
         .setUrl(menuInfos[4])
-        .setIcon(menuInfos[5]);
+        .setIcon(menuInfos[5])
+        .setSort(1);
 //      functionMapper.insert(function);
       if (!SqlHelper.retBool(baseMapper.updateById(function)))
         baseMapper.insertAll(function);

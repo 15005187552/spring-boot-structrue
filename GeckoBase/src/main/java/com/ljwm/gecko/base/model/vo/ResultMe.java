@@ -14,7 +14,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class ResultMe {
 
-  private String id;
+  private Long id;
 
   private String token;
 
