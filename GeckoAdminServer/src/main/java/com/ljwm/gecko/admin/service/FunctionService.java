@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -92,6 +93,19 @@ public class FunctionService extends ServiceImpl<FunctionMapper, Function> imple
     function.setId(form.getId());
 
     commonService.insertOrUpdate(function, functionMapper);
+
+    if(form.getId() == null) {
+      String[] roles = dict.getInitRole().split(",");
+      String[] temp = roles[0].split(":");
+      String id = temp[0];
+      commonMapper.batchInsert(
+        Kv.by(SqlFactory.TABLE, "t_role_function")
+          .set(SqlFactory.COLUMNS, new String[]{"ROLE_ID", "FUNCTION_ID"})
+          .set(SqlFactory.VALUES, Collections.singleton(new String[]{id + "", function.getId() + ""}))
+      );
+    }
+
+
     return function;
   }
 
