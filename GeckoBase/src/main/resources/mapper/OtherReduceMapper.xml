@@ -27,7 +27,7 @@
       <if test="param.text != null and param.text != ''">
         AND (
         `NAME` LIKE CONCAT('%',#{param.text},'%')
-        OR `DESCRIPTION` LIKE  CONCAT('%',#{text},'%')
+        OR `DESCRIPTION` LIKE  CONCAT('%',#{param.text},'%')
         )
       </if>
     </where>
