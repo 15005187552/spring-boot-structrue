@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.AddSpecialMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.AddSpecial">
+        <id column="ID" property="id" />
+        <result column="NAME" property="name" />
+        <result column="SORT" property="sort" />
+        <result column="DESCRIPTION" property="description" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`NAME`          ,`SORT`          ,`DESCRIPTION`
+    </sql>
+
+    <resultMap id="addSpecialVo" type="com.ljwm.gecko.base.model.vo.AddSpecialVo" extends="BaseResultMap">
+      <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.AddSpecialMapper.deleteAble"/>
+    </resultMap>
+
+    <select id="find" resultMap="addSpecialVo">
+      select
+      <include refid="Base_Column_List"/>
+      from t_add_special
+      order by sort
+    </select>
+
+    <select id="deleteAble" parameterType="java.lang.Long" resultType="java.lang.Boolean">
+      <![CDATA[
+            SELECT IF(CONVERT(GROUP_CONCAT(`res` SEPARATOR ''),SIGNED)>=1,0,1) AS res
+            FROM (
+                SELECT IF(COUNT(`ID`)>=1,1,0) AS res FROM `t_tax_special_add` WHERE `SPECIAL_ADD_ID`=#{id} AND `SPECIAL_ADD_ID` IS NOT NULL
+                ) AS temp
+            ]]>
+    </select>
+
+    <select id="findPage" parameterType="map" resultMap="addSpecialVo">
+      select
+      <include refid="Base_Column_List"/>
+      from t_add_special
+      <if test="params != null">
+        <if test="params.text != null and params.text != ''">
+          AND `NAME` LIKE CONCAT('%',#{params.text},'%')
+        </if>
+      </if>
+      ORDER BY `SORT`
+    </select>
+
+</mapper>

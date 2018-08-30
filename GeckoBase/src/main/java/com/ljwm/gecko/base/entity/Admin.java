@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author xixil
- * @since 2018-08-27
+ * @since 2018-08-29
  */
 @Data
 @SuppressWarnings("ALL")
@@ -33,7 +33,7 @@ public class Admin implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "`ID`", type = IdType.INPUT)
-    private String id;
+    private Long id;
 
     @ApiModelProperty(value = "用户名")
     @TableField("`USERNAME`")
@@ -52,8 +52,6 @@ public class Admin implements Serializable {
     @ApiModelProperty(value = "修改时间")
     @TableField("`UPDATE_TIME`")
     private Date updateTime;
-
-    @ApiModelProperty(value = "启用禁用标示")
     @TableField("`DISABLED`")
     private Integer disabled;
 

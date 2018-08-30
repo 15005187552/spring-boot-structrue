@@ -52,4 +52,13 @@ public class EnumUtil {
     }
     return map;
   }
+
+  public static <E extends CommonEnum> LinkedHashMap<String, String> getStringEnumMap(final Class<E> enumClass) {
+    final LinkedHashMap<String, String> map = new LinkedHashMap<>();
+    for (final E e : enumClass.getEnumConstants()) {
+      map.put(""+ e.getCode(), e.getName());
+    }
+    return map;
+  }
+
 }

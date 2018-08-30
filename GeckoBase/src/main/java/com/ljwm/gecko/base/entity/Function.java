@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author xixil
- * @since 2018-08-27
+ * @since 2018-08-29
  */
 @Data
 @SuppressWarnings("ALL")
@@ -33,12 +33,12 @@ public class Function implements Serializable {
 
 
     @ApiModelProperty(value = "菜单ID")
-    @TableId(value = "`ID`", type = IdType.INPUT)
-    private String id;
+    @TableId(value = "`ID`", type = IdType.AUTO)
+    private Long id;
 
     @ApiModelProperty(value = "父节点ID")
     @TableField("`PARENT_ID`")
-    private Integer parentId;
+    private Long parentId;
 
     @ApiModelProperty(value = "名称")
     @TableField("`NAME`")
@@ -64,9 +64,12 @@ public class Function implements Serializable {
     @TableField("`SORT`")
     private Integer sort;
 
-    @ApiModelProperty(value = "启用禁用标识 0启用")
+    @ApiModelProperty(value = "是否展示")
+    @TableField("`IS_SHOW`")
+    private Integer isShow;
+
     @TableField("`DISABLED`")
-    private Boolean disabled;
+    private Integer disabled;
 
 
     public static final String ID = "`ID`";
@@ -84,6 +87,8 @@ public class Function implements Serializable {
     public static final String URL = "`URL`";
 
     public static final String SORT = "`SORT`";
+
+    public static final String IS_SHOW = "`IS_SHOW`";
 
     public static final String DISABLED = "`DISABLED`";
 

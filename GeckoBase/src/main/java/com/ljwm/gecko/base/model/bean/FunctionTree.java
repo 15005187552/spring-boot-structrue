@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 public class FunctionTree {
 
   @ApiModelProperty("菜单的id")
-  private String Id;
+  private Long Id;
 
   @ApiModelProperty("名称")
-  private String name;
+  private String title;
 
   @ApiModelProperty("图标")
   private String icon;
@@ -37,9 +37,10 @@ public class FunctionTree {
   private List<FunctionTree> children;
 
   public FunctionTree(Function function) {
-    this.setId(function.getId())
+    this
+      .setId(function.getId())
       .setIcon(function.getIcon())
-      .setName(function.getName())
+      .setTitle(function.getTitle())
       .setUrl(function.getUrl())
       .setChildren(new LinkedList<>());
   }
@@ -67,7 +68,7 @@ public class FunctionTree {
   }
 
   public static List<FunctionTree> createByRoles(List<RoleDto> roles) {
-    LinkedHashMap<String, FunctionDto> ret = new LinkedHashMap<>();
+    LinkedHashMap<Long, FunctionDto> ret = new LinkedHashMap<>();
     roles.forEach(role -> role.getFunctions().forEach(function -> ret.put(function.getId(), function)));
     List<FunctionDto> has = ret.values().stream().sorted((f1, f2) -> (f1.getSort() - f2.getSort())).collect(Collectors.toCollection(LinkedList::new));
     return has
@@ -110,7 +111,7 @@ public class FunctionTree {
     if (fullMapTree == null) fullMapTree = new HashMap<>();
     if (CollectionUtil.isEmpty(tree)) return fullMapTree;
     for (FunctionTree functionTree : tree) {
-      fullMapTree.put(functionTree.getId(), functionTree);
+      fullMapTree.put("" + functionTree.getId(), functionTree);
       genMapTree(functionTree.getChildren(), fullMapTree);
     }
     return fullMapTree;

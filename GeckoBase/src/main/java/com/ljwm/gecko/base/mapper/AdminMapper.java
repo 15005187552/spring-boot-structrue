@@ -3,10 +3,10 @@ package com.ljwm.gecko.base.mapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.gecko.base.entity.Admin;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ljwm.gecko.base.entity.Function;
 import com.ljwm.gecko.base.model.dto.AdminDto;
 import com.ljwm.gecko.base.model.vo.AdminVo;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,9 @@ public interface AdminMapper extends BaseMapper<Admin> {
   @ResultMap("BaseResultMap")
   Admin logins(String username);
 
-  List<AdminVo> find(Page<AdminVo> page, Map map);
+  List<AdminVo> find(Page<AdminVo> page, @Param("disabled") Integer disabled, @Param("text") String text,@Param("asc") Boolean asc);
 
-  List<AdminVo> find( Map map);
+  @Insert("INSERT INTO `t_admin` ( `ID`,`USERNAME`,`PASSWORD`,`NICK_NAME`,`CREATE_TIME`,`UPDATE_TIME`,`DISABLED` ) VALUES ( #{id},#{username},#{password},#{nickName},#{createTime},#{updateTime},#{disabled} )")
+  @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "ID")
+  Integer insertAll(Admin admin);
 }

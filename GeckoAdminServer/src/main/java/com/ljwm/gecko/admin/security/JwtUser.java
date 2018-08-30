@@ -3,6 +3,7 @@ package com.ljwm.gecko.admin.security;
 import com.ljwm.bootbase.security.IJwtAndSecurityAble;
 import com.ljwm.bootbase.security.LoginInfoHolder;
 import com.ljwm.gecko.base.entity.Admin;
+import com.ljwm.gecko.base.model.dto.AdminDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -19,7 +20,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class JwtUser implements IJwtAndSecurityAble {
 
-  private Admin admin;
+  private AdminDto admin;
 
   private Collection<? extends GrantedAuthority> grantedAuthorities;
 

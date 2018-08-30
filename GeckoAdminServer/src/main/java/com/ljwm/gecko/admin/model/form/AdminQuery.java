@@ -10,5 +10,5 @@ import lombok.experimental.Accessors;
 public class AdminQuery extends CommonQuery {
 
   @ApiModelProperty("0 查看启用 1 查看禁用，  不传值全部")
-  private String disabled;
+  private Integer disabled;
 }

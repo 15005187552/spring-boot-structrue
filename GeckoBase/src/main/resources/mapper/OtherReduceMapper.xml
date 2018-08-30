@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.OtherReduceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.OtherReduce">
+        <id column="ID" property="id" />
+        <result column="NAME" property="name" />
+        <result column="SORT" property="sort" />
+        <result column="DESCRIPTION" property="description" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`NAME`          ,`SORT`          ,`DESCRIPTION`
+    </sql>
+
+  <resultMap id="OtherReduceVo" type="com.ljwm.gecko.base.model.vo.OtherReduceVo" extends="BaseResultMap">
+    <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.OtherReduceMapper.deleteAble"/>
+  </resultMap>
+
+  <select id="findByPage" resultMap="OtherReduceVo" parameterType="java.util.Map">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM `t_other_reduce`
+    <where>
+      <if test="param.text != null and param.text != ''">
+        AND (
+        `NAME` LIKE CONCAT('%',#{param.text},'%')
+        OR `DESCRIPTION` LIKE  CONCAT('%',#{param.text},'%')
+        )
+      </if>
+    </where>
+    ORDER BY `SORT`
+    <if test="param.asc">
+      ASC
+    </if>
+    <if test="!param.asc">
+      DESC
+    </if>
+  </select>
+
+  <select id="find" resultMap="OtherReduceVo" >
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM `t_other_reduce`
+    order by sort
+  </select>
+
+  <select id="deleteAble" parameterType="java.lang.Long" resultType="java.lang.Boolean">
+    <![CDATA[
+          SELECT IF(CONVERT(GROUP_CONCAT(`res` SEPARATOR ''),SIGNED)>=1,0,1) AS res
+          FROM (
+              SELECT IF(COUNT(`ID`)>=1,1,0) AS res FROM `t_tax_other_reduce` WHERE `OTHER_REDUCE_ID`=#{id} AND `OTHER_REDUCE_ID` IS NOT NULL
+              ) AS temp
+          ]]>
+  </select>
+</mapper>

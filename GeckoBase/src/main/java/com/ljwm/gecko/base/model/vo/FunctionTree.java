@@ -17,5 +17,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 public class FunctionTree extends Function {
 
+  private Boolean deleteAble;
+
   private List<FunctionTree> children;
 }

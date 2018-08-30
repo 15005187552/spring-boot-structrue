@@ -1,5 +1,9 @@
 package com.ljwm.gecko.base.model.vo;
 
+import com.ljwm.gecko.base.entity.Function;
+import com.ljwm.gecko.base.entity.Role;
+import com.ljwm.gecko.base.model.bean.FunctionTree;
+import com.ljwm.gecko.base.model.dto.FunctionDto;
 import com.ljwm.gecko.base.model.dto.RoleDto;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -14,7 +18,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class ResultMe {
 
-  private String id;
+  private Long id;
 
   private String token;
 
@@ -22,5 +26,9 @@ public class ResultMe {
 
   private String nickName;
 
-//  private List<RoleDto> roles;
+  private String webPath;
+
+  private List<Role> roles;
+
+  private List<FunctionTree> functions;
 }

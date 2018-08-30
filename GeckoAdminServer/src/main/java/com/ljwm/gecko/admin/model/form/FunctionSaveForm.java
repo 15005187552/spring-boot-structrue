@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class FunctionSaveForm {
 
-  private String id;
+  private Long id;
 
   private String parentId;
 
@@ -20,4 +20,6 @@ public class FunctionSaveForm {
   private String url;
 
   private String sort;
+
+  private Integer isShow;
 }

@@ -28,13 +28,6 @@ CREATE TABLE `t_add_special` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='专项附加扣除分类表';
 
 -- ----------------------------
--- Table structure for t_admin
--- ----------------------------
-DROP TABLE IF EXISTS `t_admin`;
-CREATE TABLE `t_admin` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台管理用户表';
 
 -- ----------------------------
 -- Table structure for t_advertisement
@@ -45,14 +38,14 @@ CREATE TABLE `t_advertisement` (
   `PATH` varchar(255) DEFAULT NULL COMMENT '图片路径',
   `URL_PATH` varchar(255) DEFAULT NULL COMMENT '跳转路径',
   `EQUIP_TYPE` int(1) DEFAULT NULL COMMENT '设备类型 对应枚举类型',
-  `SORT` int(2) DEFAULT NULL COMMENT '排序',
-  `DISABLED` int(1) DEFAULT NULL COMMENT '是否禁用 0-没有禁用 1-禁用',
+  `SORT` int(2) DEFAULT '0' COMMENT '排序',
+  `DISABLED` int(1) DEFAULT '0' COMMENT '是否禁用 0-没有禁用 1-禁用',
   `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
   `CREATER_ID` bigint(20) DEFAULT NULL COMMENT '创建人ID',
   `UPDATE_TIME` datetime DEFAULT NULL COMMENT '更新时间',
   `UPDATER_ID` bigint(20) DEFAULT NULL COMMENT '更新人ID',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='广告数据表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='广告数据表';
 
 -- ----------------------------
 -- Table structure for t_city_item

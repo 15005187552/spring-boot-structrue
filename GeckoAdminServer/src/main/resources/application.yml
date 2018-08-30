@@ -15,3 +15,4 @@ dict:
     - "100001:USER_MANAGE:用户配置:系统中维护用户的菜单:/user:el-icon-edit-outline:100000"
     - "100002:ROLE_MANAGE:角色配置:系统中维护角色的菜单:/role:el-icon-edit-outline:100000"
     - "100003:FUNCTION_MANAGE:权限配置:系统中维护权限的菜单:/function:el-icon-edit-outline:100000"
+  initPassword: "111111"

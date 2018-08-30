@@ -21,4 +21,6 @@ public class Dict {
   private String initRole;
 
   private String[] builtInMenu;
+
+  private String initPassword;
 }

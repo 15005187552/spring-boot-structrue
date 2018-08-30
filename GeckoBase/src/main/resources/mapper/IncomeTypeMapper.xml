@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.IncomeTypeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.IncomeType">
+        <id column="ID" property="id" />
+        <result column="NAME" property="name" />
+        <result column="SORT" property="sort" />
+        <result column="IS_NEED_ENTER" property="isNeedEnter" />
+        <result column="P_ID" property="pId" />
+        <result column="CLASS_DESC" property="classDesc" />
+        <result column="LEVEL" property="level" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`NAME`          ,`SORT`          ,`IS_NEED_ENTER`          ,`P_ID`          ,`CLASS_DESC`          ,`LEVEL`
+    </sql>
+
+
+    <resultMap id="incomeTypeVO" type="com.ljwm.gecko.base.model.vo.IncomeTypeVo" extends="BaseResultMap">
+      <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.IncomeTypeMapper.deleteAble"/>
+      <collection property="children" column="ID"
+                  select="com.ljwm.gecko.base.mapper.IncomeTypeMapper.children"/>
+    </resultMap>
+
+    <select id="find"  resultMap="incomeTypeVO">
+      select
+      <include refid="Base_Column_List"/>
+      from t_income_type where P_ID is null
+      order by sort
+    </select>
+
+    <select id="findPage" parameterType="map" resultMap="incomeTypeVO">
+      select
+      <include refid="Base_Column_List"/>
+      from t_income_type where 1=1
+      <if test="params != null">
+        <if test="params.text != null and params.text != ''">
+          AND `NAME` LIKE CONCAT('%',#{params.text},'%')
+        </if>
+        <if test="params.pId != null and params.pId != ''">
+          AND `P_ID`=#{params.pId}
+        </if>
+      </if>
+      ORDER BY `SORT`
+    </select>
+
+    <select id="children" parameterType="long" resultMap="incomeTypeVO">
+      select
+      <include refid="Base_Column_List"/>
+      from t_income_type where P_ID=#{pId}
+      order by sort
+    </select>
+
+    <select id="deleteAble" parameterType="java.lang.Long" resultType="java.lang.Boolean">
+      <![CDATA[
+          SELECT IF(CONVERT(GROUP_CONCAT(`res` SEPARATOR ''),SIGNED)>=1,0,1) AS res
+          FROM (
+             SELECT IF (COUNT(`ID`) >= 1,1,0) AS res FROM `t_income_type`WHERE `ID` IN (SELECT DISTINCT(P_ID) FROM `t_income_type` WHERE `P_ID` IS NOT NULL) AND `ID` = #{id}
+              UNION
+                 SELECT IF(COUNT(`ID`)>=1,1,0) AS res FROM `t_tax_income` WHERE `INCOME_TYPE_ID`=#{id} AND `INCOME_TYPE_ID` IS NOT NULL
+              ) AS temp
+          ]]>
+    </select>
+
+</mapper>

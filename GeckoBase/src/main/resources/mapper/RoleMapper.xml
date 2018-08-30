@@ -2,19 +2,59 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljwm.gecko.base.mapper.RoleMapper">
 
-  <!-- 通用查询映射结果 -->
-  <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Role">
-    <id column="ID" property="id"/>
-    <result column="ROLE_NAME" property="roleName"/>
-    <result column="DISABLED" property="disabled"/>
-  </resultMap>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Role">
+        <id column="ID" property="id" />
+        <result column="ROLE_NAME" property="roleName" />
+        <result column="ROLE_DESC" property="roleDesc" />
+        <result column="DISABLED" property="disabled" />
+    </resultMap>
 
-  <!-- 通用查询结果列 -->
-  <sql id="Base_Column_List">
-          `ID`          ,`ROLE_NAME`          ,`DISABLED`
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`ROLE_NAME`          ,`ROLE_DESC`          ,`DISABLED`
     </sql>
 
   <resultMap id="RoleDto" type="com.ljwm.gecko.base.model.dto.RoleDto" extends="BaseResultMap">
     <collection property="functions" column="ID" select="com.ljwm.gecko.base.mapper.FunctionMapper.findByRoleId"/>
   </resultMap>
+
+  <resultMap id="RoleVo" type="com.ljwm.gecko.base.model.vo.RoleVo" extends="BaseResultMap">
+    <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.RoleMapper.deleteAble"/>
+    <collection property="functions" column="ID" select="com.ljwm.gecko.base.mapper.FunctionMapper.findBaseByRoleId"/>
+  </resultMap>
+
+  <select id="find" resultMap="RoleVo"  parameterType="java.util.HashMap" >
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM `t_role`
+    <where>
+      <if test="param.text != null and param.text != ''">
+        AND (
+        `ROLE_NAME` LIKE CONCAT('%',#{param.text},'%')
+        )
+      </if>
+      <if test="param.disabled != null and param.disabled != ''">
+        AND (
+        `DISABLED`=#{param.disabled}
+        )
+      </if>
+    </where>
+    ORDER BY `ID`
+    <if test="param.asc">
+      ASC
+    </if>
+    <if test="!param.asc">
+      DESC
+    </if>
+  </select>
+
+  <select id="deleteAble" resultType="java.lang.Boolean" parameterType="java.lang.Long">
+    <![CDATA[
+        SELECT IF(CONVERT(GROUP_CONCAT(`res` SEPARATOR ''),SIGNED)>=1,0,1) AS res
+        FROM (
+            SELECT IF(COUNT(`ROLE_ID`)>=1,1,0) AS res FROM `t_admin_role` WHERE `ROLE_ID`=#{id} AND `ROLE_ID` IS NOT NULL
+            ) AS temp
+        ]]>
+  </select>
 </mapper>
