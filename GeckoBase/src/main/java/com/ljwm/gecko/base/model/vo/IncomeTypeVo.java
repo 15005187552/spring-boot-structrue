@@ -18,10 +18,6 @@ public class IncomeTypeVo extends IncomeType {
   @JSONField(serializeUsing = IdToStringSerializer.class)
   private Long id;
 
-  @JSONField(serializeUsing = IdToStringSerializer.class)
-  private Long pId;
-
-
   private Boolean deleteAble;
 
   private List<IncomeTypeVo> children;

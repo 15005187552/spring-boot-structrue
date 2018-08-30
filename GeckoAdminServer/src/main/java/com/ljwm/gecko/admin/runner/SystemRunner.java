@@ -2,7 +2,7 @@ package com.ljwm.gecko.admin.runner;
 
 import com.ljwm.gecko.admin.service.AuthService;
 import com.ljwm.gecko.admin.service.FunctionService;
-import com.ljwm.gecko.admin.service.UserService;
+import com.ljwm.gecko.admin.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class SystemRunner implements ApplicationRunner {
 
   @Autowired
-  private UserService userService;
+  private AdminService adminService;
 
   @Autowired
   private AuthService authService;
@@ -32,6 +32,6 @@ public class SystemRunner implements ApplicationRunner {
     authService.init();
 
     log.info("初始化用户{}");
-    userService.init();
+    adminService.init();
   }
 }

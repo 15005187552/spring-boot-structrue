@@ -52,6 +52,7 @@ public class AdvertisementService {
   @Transactional
   public Advertisement save(AdvertisementForm form) {
     return Optional.ofNullable(form).map(f -> {
+      if(f.getEquipType() == null) throw new LogicException(ResultEnum.DATA_ERROR,"请选择设备类型");
       Advertisement advertisement = null;
       if (f.getId() != null)
         advertisement = advertisementMapper.selectById(f.getId());

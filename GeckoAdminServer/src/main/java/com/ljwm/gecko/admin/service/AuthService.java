@@ -40,6 +40,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -86,7 +87,7 @@ public class AuthService {
       String[] functions = temp[2].replaceAll(ReUtil.escape("("), "").replaceAll(ReUtil.escape(")"), "").split("-");
 
       authService.saveRole(new RoleSaveForm()
-        .setFunctionIds(Arrays.stream(functions).map(Integer::new).collect(Collectors.toList()))
+        .setFunctionIds(Arrays.stream(functions).filter(i-> StrUtil.isNotBlank(i)).map(Integer::new).collect(Collectors.toList()))
         .setId(Long.valueOf(id))
         .setRoleName(name)
       );

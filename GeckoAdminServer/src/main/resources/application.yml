@@ -8,11 +8,7 @@ dict:
   # ID:用户名:密码:(属于角色1,属于角色2)
   sysAdmin: "-1:admin:ljwm2018:(10000)"
   # 角色ID:角色名称:(属于权限1,属于权限2)
-  initRole: "10000:超级管理员:(100000-100001-100002-100003),20000:系统管理员:(100000-100001)"
+  initRole: "10000:超级管理员:(),20000:系统管理员:()"
   # 系统内置功能菜单 "ID:NAME:TITLE:DESC:URL:ICON:PARENT"
   builtInMenu:
-    - "100000:SYSTEM_MANAGE:系统管理:系统管理员维护系统的菜单:/system.html:icon/computer.png:-1"
-    - "100001:USER_MANAGE:用户配置:系统中维护用户的菜单:/user:el-icon-edit-outline:100000"
-    - "100002:ROLE_MANAGE:角色配置:系统中维护角色的菜单:/role:el-icon-edit-outline:100000"
-    - "100003:FUNCTION_MANAGE:权限配置:系统中维护权限的菜单:/function:el-icon-edit-outline:100000"
   initPassword: "111111"

@@ -5,7 +5,7 @@ import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.admin.model.form.AdminQuery;
 import com.ljwm.gecko.admin.model.form.AdminSaveForm;
-import com.ljwm.gecko.admin.service.UserService;
+import com.ljwm.gecko.admin.service.AdminService;
 import com.ljwm.gecko.base.entity.Admin;
 import com.ljwm.gecko.base.model.vo.AdminVo;
 import io.swagger.annotations.Api;
@@ -23,26 +23,26 @@ public class UserController extends BaseController {
 
 
   @Autowired
-  private UserService userService;
+  private AdminService adminService;
 
   // ================== 后管用户
   @PostMapping("saveAdmin")
   @ApiOperation("保存后管用户")
   public Result saveAdmin(@RequestBody AdminSaveForm form) {
-    return success(userService.saveAdmin(form));
+    return success(adminService.saveAdmin(form));
   }
 
 
   @PostMapping("findAdmin")
   @ApiOperation("分页查询后管用户")
   public Result<Page<AdminVo>> findAdmin(@RequestBody AdminQuery adminQuery) {
-    return success(userService.findAdmin(adminQuery));
+    return success(adminService.findAdmin(adminQuery));
   }
 
   @GetMapping("getAdmin")
   @ApiOperation("获取后管用户")
   public Result<List<Admin>> getAdmin() {
-    return success(userService.getAdmin());
+    return success(adminService.getAdmin());
   }
 
 //  @GetMapping("adminDisabled")
@@ -54,8 +54,14 @@ public class UserController extends BaseController {
 
   @GetMapping("adminDelete")
   @ApiOperation("后管用户 删除")
-  public Result adminDelete(@RequestParam String id){
-    userService.adminDelete(id);
+  public Result adminDelete(@RequestParam String id) {
+    adminService.adminDelete(id);
+    return success();
+  }
+
+  @PostMapping("findMember")
+  @ApiOperation("会员 查询")
+  public Result findMember() {
     return success();
   }
 }

@@ -17,7 +17,7 @@ public class AdvertisementForm {
   @ApiModelProperty("跳转路径")
   private String urlPath;
 
-  @ApiModelProperty("设备类型 0 pc ，1 微信端")
+  @ApiModelProperty("设备类型 0 pc ，1 微信端 必填")
   private Integer equipType;
 
   private Integer sort;

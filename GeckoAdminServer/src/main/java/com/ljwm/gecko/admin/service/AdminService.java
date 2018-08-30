@@ -2,7 +2,6 @@ package com.ljwm.gecko.admin.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -18,7 +17,6 @@ import com.ljwm.gecko.admin.model.bean.Dict;
 import com.ljwm.gecko.admin.model.form.AdminQuery;
 import com.ljwm.gecko.admin.model.form.AdminSaveForm;
 import com.ljwm.gecko.base.entity.Admin;
-import com.ljwm.gecko.base.entity.Function;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.AdminMapper;
 import com.ljwm.gecko.base.mapper.RoleMapper;
@@ -38,7 +36,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @SuppressWarnings("all")
-public class UserService {
+public class AdminService {
 
   @Autowired
   private Dict dict;
@@ -50,7 +48,7 @@ public class UserService {
   private AdminMapper adminMapper;
 
   @Autowired
-  private UserService userService;
+  private AdminService adminService;
 
   @Autowired
   private CommonMapper commonMapper;
@@ -77,7 +75,7 @@ public class UserService {
       .setPassword(password)
       .setId(Long.valueOf(id))
       .setUsername(username);
-    userService.saveAdmin(admin);
+    adminService.saveAdmin(admin);
   }
 
   @Transactional
@@ -103,7 +101,7 @@ public class UserService {
       adminMapper.insertAll(admin);
     //3.更新用户角色
     if (CollectionUtil.isNotEmpty(adminSaveForm.getRoleIds()))
-      userService.updateRoles(admin.getId(), adminSaveForm.getRoleIds());
+      adminService.updateRoles(admin.getId(), adminSaveForm.getRoleIds());
     return admin;
   }
 
