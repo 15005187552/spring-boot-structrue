@@ -26,6 +26,8 @@ public class ResultMe {
 
   private String nickName;
 
+  private String webPath;
+
   private List<Role> roles;
 
   private List<FunctionTree> functions;

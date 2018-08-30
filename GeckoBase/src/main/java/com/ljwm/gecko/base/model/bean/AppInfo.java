@@ -12,6 +12,12 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "appInfo")
 public class AppInfo {
 
+  @ApiModelProperty("图片包")
+  private String pic;
+
   @ApiModelProperty("文件路径")
   private String filePath;
+
+  @ApiModelProperty("上传前缀路径")
+  private String webPath;
 }

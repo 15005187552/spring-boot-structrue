@@ -1,9 +1,16 @@
 jwt:
   tokenHead: "Gecko "
-appInfo:
-  file-path: "D://upload/gecko/"
 spring:
   http:
     multipart:
       maxRequestSize: 100Mb
       maxFileSize: 100Mb
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: "classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,file:${appInfo.webRoot}/"
+appInfo:
+  pic: "pic"
+  webRoot: "D://upload/"
+  webPath: "http://192.168.8.208:6900/"
+  file-path: "${appInfo.webRoot}gecko/"

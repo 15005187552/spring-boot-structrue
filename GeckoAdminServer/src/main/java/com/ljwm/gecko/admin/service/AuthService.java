@@ -26,6 +26,7 @@ import com.ljwm.gecko.base.entity.Role;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.FunctionMapper;
 import com.ljwm.gecko.base.mapper.RoleMapper;
+import com.ljwm.gecko.base.model.bean.AppInfo;
 import com.ljwm.gecko.base.model.bean.FunctionTree;
 import com.ljwm.gecko.base.model.dto.FunctionDto;
 import com.ljwm.gecko.base.model.dto.RoleDto;
@@ -49,6 +50,9 @@ public class AuthService {
 
   @Autowired
   private Dict dict;
+
+  @Autowired
+  private AppInfo appInfo;
 
   @Autowired
   private RoleMapper roleMapper;
@@ -179,6 +183,7 @@ public class AuthService {
       .ofNullable(jwtUser)
       .map(user -> new ResultMe()
         .setId(user.getId())
+        .setWebPath(appInfo.getWebPath())
         .setRoles(user.getAdmin().getRoles().stream().collect(Collectors.toList()))
         .setUserName(user.getAdmin().getUsername())
         .setNickName(user.getAdmin().getNickName())
