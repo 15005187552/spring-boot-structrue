@@ -114,7 +114,7 @@ public class ReportDataController extends BaseController {
   @PostMapping("findOtherReduce")
   @ApiOperation(value = "分页查询其他扣除")
   public Result<Page<OtherReduceVo>> findOtherReduce(@RequestBody OtherReduceQuery query) {
-    return success(otherReduceService.find(query));
+    return success(otherReduceService.findByPage(query));
   }
 
   @PostMapping("getOtherReduce")

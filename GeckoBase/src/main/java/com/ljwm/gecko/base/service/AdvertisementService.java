@@ -11,6 +11,7 @@ import com.ljwm.gecko.base.entity.Advertisement;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.enums.EquipTypeEnum;
 import com.ljwm.gecko.base.mapper.AdvertisementMapper;
+import com.ljwm.gecko.base.model.dto.ClientAdvertisementDto;
 import com.ljwm.gecko.base.model.form.AdvertisementQuery;
 import com.ljwm.gecko.base.model.form.AdvertisementForm;
 import com.ljwm.gecko.base.model.vo.AdvertisementVo;
@@ -84,5 +85,9 @@ public class AdvertisementService {
     Advertisement advertisement = advertisementMapper.selectById(id);
     if (advertisement == null) throw new LogicException(ResultEnum.DATA_ERROR, "未找到id为" + id + "的广告位");
     return advertisement;
+  }
+
+  public List<AdvertisementVo> findClient(ClientAdvertisementDto clientAdvertisementDto){
+    return advertisementMapper.find(BeanUtil.beanToMap(clientAdvertisementDto));
   }
 }

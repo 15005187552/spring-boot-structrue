@@ -36,8 +36,12 @@ public class OtherReduceService {
    * @param query
    * @return
    */
-  public Page<OtherReduceVo> find(OtherReduceQuery query) {
-    return commonService.find(query, (p, q) -> otherReduceMapper.find(p, BeanUtil.beanToMap(query)));
+  public Page<OtherReduceVo> findByPage(OtherReduceQuery query) {
+    return commonService.find(query, (p, q) -> otherReduceMapper.findByPage(p, BeanUtil.beanToMap(query)));
+  }
+
+  public List<OtherReduceVo> find() {
+    return otherReduceMapper.find();
   }
 
   /**

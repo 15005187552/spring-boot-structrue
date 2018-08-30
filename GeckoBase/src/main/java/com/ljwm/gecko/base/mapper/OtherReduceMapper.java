@@ -19,7 +19,9 @@ import java.util.Map;
  */
 public interface OtherReduceMapper extends BaseMapper<OtherReduce> {
 
-  List<OtherReduceVo> find(Page<OtherReduceVo> page, @Param("param")Map map);
+  List<OtherReduceVo> findByPage(Page<OtherReduceVo> page, @Param("param")Map map);
+
+  List<OtherReduceVo> find();
 
   Boolean deleteAble(@Param("id") Long id);
 }

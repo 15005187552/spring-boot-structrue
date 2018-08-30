@@ -19,7 +19,7 @@
     <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.OtherReduceMapper.deleteAble"/>
   </resultMap>
 
-  <select id="find" resultMap="OtherReduceVo" parameterType="java.util.Map">
+  <select id="findByPage" resultMap="OtherReduceVo" parameterType="java.util.Map">
     SELECT
     <include refid="Base_Column_List"/>
     FROM `t_other_reduce`
@@ -38,6 +38,13 @@
     <if test="!param.asc">
       DESC
     </if>
+  </select>
+
+  <select id="find" resultMap="OtherReduceVo" >
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM `t_other_reduce`
+    order by sort
   </select>
 
   <select id="deleteAble" parameterType="java.lang.Long" resultType="java.lang.Boolean">

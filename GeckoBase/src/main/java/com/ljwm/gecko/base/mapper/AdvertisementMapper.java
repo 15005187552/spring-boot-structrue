@@ -21,4 +21,6 @@ public interface AdvertisementMapper extends BaseMapper<Advertisement> {
 
   List<AdvertisementVo> find(Page<AdvertisementVo> page,@Param("params") Map map);
 
+  List<AdvertisementVo> find(@Param("params") Map map);
+
 }
