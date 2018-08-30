@@ -30,6 +30,9 @@ public class FunctionTree {
   @ApiModelProperty("图标")
   private String icon;
 
+  @ApiModelProperty("是否展示")
+  private Integer isShow;
+
   @ApiModelProperty("路由")
   private String url;
 
@@ -40,6 +43,7 @@ public class FunctionTree {
     this
       .setId(function.getId())
       .setIcon(function.getIcon())
+      .setIsShow(function.getIsShow())
       .setTitle(function.getTitle())
       .setUrl(function.getUrl())
       .setChildren(new LinkedList<>());

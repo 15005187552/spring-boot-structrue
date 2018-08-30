@@ -38,7 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     try {
 //      JwtUser jwtUser = userPool.get(username);
-      JwtUser jwtUser = null;
+      JwtUser jwtUser = null ;
       if (jwtUser == null) {
         AdminDto admin = adminMapper.login(username);
         LoginInfoHolder.setLoginType(loginType);
