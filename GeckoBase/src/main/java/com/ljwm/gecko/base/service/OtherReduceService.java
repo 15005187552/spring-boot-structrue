@@ -10,7 +10,6 @@ import com.ljwm.gecko.base.mapper.OtherReduceMapper;
 import com.ljwm.gecko.base.model.form.OtherReduceForm;
 import com.ljwm.gecko.base.model.form.OtherReduceQuery;
 import com.ljwm.gecko.base.model.vo.OtherReduceVo;
-import com.ljwm.gecko.base.model.vo.SpecialDeductionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
