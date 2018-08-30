@@ -1,2 +1,9 @@
 jwt:
   tokenHead: "Gecko "
+appInfo:
+  file-path: "D://upload/gecko/"
+spring:
+  http:
+    multipart:
+      maxRequestSize: 100Mb
+      maxFileSize: 100Mb
