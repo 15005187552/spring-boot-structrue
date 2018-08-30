@@ -1,5 +1,6 @@
 package com.ljwm.gecko.admin.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
@@ -9,12 +10,14 @@ import com.ljwm.gecko.base.model.form.AdvertisementForm;
 import com.ljwm.gecko.base.model.form.AdvertisementQuery;
 import com.ljwm.gecko.base.model.vo.AdvertisementVo;
 import com.ljwm.gecko.base.service.AdvertisementService;
-import com.ljwm.gecko.base.utils.EnumUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -52,6 +55,11 @@ public class AdvertisementController extends BaseController {
 
   @GetMapping("getEquipType")
   public Result getEquipType() {
-    return  success(EnumUtil.getStringEnumMap(EquipTypeEnum.class));
+    return  success(EnumUtils.getEnumList(EquipTypeEnum.class).stream().map(i-> {
+      JSONObject jsonObject = new JSONObject();
+      jsonObject.put("code",i.getCode());
+      jsonObject.put("name",i.getName());
+      return jsonObject;
+    }).collect(Collectors.toList()));
   }
 }
