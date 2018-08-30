@@ -3,7 +3,6 @@ package com.ljwm.gecko.admin.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
-import com.ljwm.gecko.base.entity.IncomeType;
 import com.ljwm.gecko.base.entity.OtherReduce;
 import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.model.form.OtherReduceForm;

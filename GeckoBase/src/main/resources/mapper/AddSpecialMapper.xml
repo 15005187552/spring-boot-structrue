@@ -16,7 +16,7 @@
     </sql>
 
     <resultMap id="addSpecialVo" type="com.ljwm.gecko.base.model.vo.AddSpecialVo" extends="BaseResultMap">
-
+      <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.AddSpecialMapper.deleteAble"/>
     </resultMap>
 
     <select id="find" resultMap="addSpecialVo">
