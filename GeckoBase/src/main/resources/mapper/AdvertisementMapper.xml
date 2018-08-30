@@ -48,7 +48,7 @@
     <if test="!params.asc">
       DESC
     </if>
-    `SORT` asc
+    , `SORT` ASC
   </select>
 
 </mapper>
