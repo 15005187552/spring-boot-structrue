@@ -37,4 +37,15 @@ public class MobileCodeDao {
   public void insert(MobileCode insertMobile) {
     mobileCodeMapper.insert(insertMobile);
   }
+
+  public MobileCode select(String checkCode, String phoneNum) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("MOBILE", phoneNum);
+    map.put("CODE", checkCode);
+    List<MobileCode> list = mobileCodeMapper.selectByMap(map);
+    if(CollectionUtil.isNotEmpty(list)) {
+      return mobileCodeMapper.selectByMap(map).get(0);
+    }
+    return null;
+  }
 }

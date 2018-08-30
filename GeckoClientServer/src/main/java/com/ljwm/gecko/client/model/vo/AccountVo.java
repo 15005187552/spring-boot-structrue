@@ -2,6 +2,7 @@ package com.ljwm.gecko.client.model.vo;
 
 import com.ljwm.gecko.base.entity.MemberAccount;
 import com.ljwm.gecko.base.entity.MemberPassword;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -15,4 +16,5 @@ import lombok.experimental.Accessors;
 public class AccountVo extends MemberAccount {
 
   private MemberPassword password;
+
 }

@@ -1,6 +1,10 @@
 server:
-  port: 7001
+  port: 1227
 spring:
   profiles:
     active: dev,devLocal
     include: base,gecko,common
+wx:
+  xcx:                  #小程序
+    appId: wx02c093bdfb8fba13
+    appSecret: b11358f00ef7ac5b946d4aa1ab488575

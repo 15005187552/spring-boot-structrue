@@ -2,16 +2,22 @@ package com.ljwm.gecko.base.service;
 
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.enums.ResultEnum;
+import com.ljwm.bootbase.security.SecurityKit;
+import com.ljwm.gecko.base.dao.MemberInfoDao;
 import com.ljwm.gecko.base.dao.MobileCodeDao;
 import com.ljwm.gecko.base.entity.MobileCode;
+import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.model.dto.RegisterForm;
+import com.ljwm.gecko.base.model.dto.RegisterMemberForm;
 import com.ljwm.gecko.base.utils.IpUtil;
+import com.ljwm.gecko.base.utils.StringUtil;
 import com.ljwm.gecko.base.utils.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 import static com.ljwm.bootbase.dto.Result.fail;
 import static com.ljwm.bootbase.dto.Result.success;
@@ -27,6 +33,9 @@ public class RegisterService {
 
   @Autowired
   MobileCodeDao mobileCodeDao;
+
+  @Autowired
+  MemberInfoDao memberInfoDao;
 
   public Result getSMS(RegisterForm registerForm, HttpServletRequest request) {
     Long currentTime = System.currentTimeMillis();//获取当前时间
@@ -63,5 +72,24 @@ public class RegisterService {
 
   private String sendSMSCode(String phoneNum) {
     return "123346";
+  }
+
+  public Result register(RegisterMemberForm registerMemberForm) {
+    //根据手机号跟验证码查询是否输入正确，正确即注册成为会员
+    String code = registerMemberForm.getCheckCode();
+    String phoneNum = registerMemberForm.getPhoneNum();
+    String userName = registerMemberForm.getUserName();
+    MobileCode mobileCode = mobileCodeDao.select(code, phoneNum);
+    if(mobileCode != null){
+      memberInfoDao.insert(phoneNum);
+      Long memberId = memberInfoDao.select(phoneNum);
+      String salt = StringUtil.salt();
+      String password = SecurityKit.passwordMD5(userName, salt);
+      memberInfoDao.insertPassword(salt, password, new Date());
+      Long passwordId = memberInfoDao.selectIdByPassword(salt, password);
+      memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, passwordId);
+      return success("成功！");
+    }
+    return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");
   }
 }

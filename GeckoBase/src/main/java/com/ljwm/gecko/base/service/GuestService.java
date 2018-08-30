@@ -49,4 +49,8 @@ public class GuestService {
     return guest;
   }
 
+  public Guest find(String mpOpenId) {
+
+    return guestMapper.findByGuestId(mpOpenId);
+  }
 }
