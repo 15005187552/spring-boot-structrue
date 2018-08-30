@@ -7,6 +7,7 @@ import com.ljwm.gecko.base.enums.EquipTypeEnum;
 import com.ljwm.gecko.base.model.dto.ClientAdvertisementDto;
 import com.ljwm.gecko.base.model.vo.AdvertisementVo;
 import com.ljwm.gecko.base.service.AdvertisementService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/advertisement")
+@Api(tags = "广告管理---客户端")
 public class AdvertisementController extends BaseController {
 
   @Autowired
