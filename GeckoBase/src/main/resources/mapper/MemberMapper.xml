@@ -16,4 +16,11 @@
           `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`CREATE_TIME`          ,`DISABLED`
     </sql>
 
+  <resultMap id="MemberVo" type="com.ljwm.gecko.base.model.vo.MemberVo" extends="BaseResultMap">
+
+  </resultMap>
+
+  <select id="find" resultMap="MemberVo" parameterType="java.util.Map">
+
+  </select>
 </mapper>

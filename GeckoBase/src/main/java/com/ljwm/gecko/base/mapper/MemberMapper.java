@@ -1,11 +1,17 @@
 package com.ljwm.gecko.base.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.entity.MobileCode;
+import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.model.vo.WxResultMe;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -22,4 +28,6 @@ public interface MemberMapper extends BaseMapper<Member> {
   WxResultMe selectByUserName(String userName);
 
   MobileCode selectByPhone(String phoneNum);
+
+  List<MemberVo> find(Page<MemberVo> page, @Param("params")Map map);
 }

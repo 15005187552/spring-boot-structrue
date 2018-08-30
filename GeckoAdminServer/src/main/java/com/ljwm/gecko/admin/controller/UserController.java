@@ -5,7 +5,9 @@ import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.admin.model.form.AdminQuery;
 import com.ljwm.gecko.admin.model.form.AdminSaveForm;
+import com.ljwm.gecko.admin.model.form.MemberQuery;
 import com.ljwm.gecko.admin.service.AdminService;
+import com.ljwm.gecko.admin.service.MaintenanceService;
 import com.ljwm.gecko.base.entity.Admin;
 import com.ljwm.gecko.base.model.vo.AdminVo;
 import io.swagger.annotations.Api;
@@ -24,6 +26,9 @@ public class UserController extends BaseController {
 
   @Autowired
   private AdminService adminService;
+
+  @Autowired
+  private MaintenanceService maintenanceService;
 
   // ================== 后管用户
   @PostMapping("saveAdmin")
@@ -61,7 +66,7 @@ public class UserController extends BaseController {
 
   @PostMapping("findMember")
   @ApiOperation("会员 查询")
-  public Result findMember() {
-    return success();
+  public Result findMember(MemberQuery query) {
+    return success(maintenanceService.find(query));
   }
 }
