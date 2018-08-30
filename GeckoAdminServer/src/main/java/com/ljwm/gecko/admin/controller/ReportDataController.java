@@ -3,6 +3,7 @@ package com.ljwm.gecko.admin.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.base.entity.IncomeType;
 import com.ljwm.gecko.base.entity.OtherReduce;
 import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.model.form.OtherReduceForm;
@@ -37,9 +38,15 @@ public class ReportDataController extends BaseController {
   private AddSpecialService addSpecialService;
 
   @GetMapping("findIncomeType")
-  @ApiOperation(value = "查询收入类型列表")
+  @ApiOperation(value = "查询收入类型列表--不带分页")
   public Result<List<IncomeTypeVo>> findIncomeType() {
     return success(incomeTypeService.find());
+  }
+
+  @ApiOperation(value = "查询收入类型---带分页")
+  @PostMapping("findIncomeTypePage")
+  public Result<Page<IncomeTypeVo>> findIncomeTypePage(@RequestBody IncomeTypeQueryDto incomeTypeQueryDto){
+    return success(incomeTypeService.findPage(incomeTypeQueryDto));
   }
 
   @PostMapping("saveIncomeType")
@@ -81,25 +88,25 @@ public class ReportDataController extends BaseController {
   }
 
   @PostMapping("saveAddSpecial")
-  @ApiOperation(value = "专项扣除添加")
+  @ApiOperation(value = "专项附加扣除添加")
   public Result<AddSpecialVo> saveAddSpecial(@RequestBody AddSpecialDto addSpecialDto){
     return success(addSpecialService.save(addSpecialDto));
   }
 
   @GetMapping("findAddSpecial")
-  @ApiOperation(value = "查询专项扣除---不带分页")
+  @ApiOperation(value = "查询专项附加扣除---不带分页")
   public Result<List<AddSpecialVo>> findAddSpecial(){
     return success(addSpecialService.find());
   }
 
   @PostMapping("findAddSpecialPage")
-  @ApiOperation(value = "查询专项扣除---带分页")
+  @ApiOperation(value = "查询专项附加扣除---带分页")
   public Result<Page<AddSpecialVo>> findAddSpecialPage(@RequestBody AddSpecialQueryDto addSpecialQueryDto){
     return success(addSpecialService.findPage(addSpecialQueryDto));
   }
 
   @GetMapping("/deleteAddSpecial/{id}")
-  @ApiOperation(value = "删除专项扣除")
+  @ApiOperation(value = "删除专项附加扣除")
   public Result deleteAddSpecial(@PathVariable Long id){
     addSpecialService.delete(id);
     return success();

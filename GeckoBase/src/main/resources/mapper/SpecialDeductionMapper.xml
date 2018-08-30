@@ -35,7 +35,7 @@
   <select id="findPage" parameterType="map" resultMap="specialDeductionVO">
     select
     <include refid="Base_Column_List"/>
-    from t_special_deduction
+    from t_special_deduction where 1=1
     <if test="params != null">
       <if test="params.text != null and params.text != ''">
         AND `NAME` LIKE CONCAT('%',#{params.text},'%')

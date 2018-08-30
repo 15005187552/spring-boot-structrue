@@ -1,11 +1,15 @@
 package com.ljwm.gecko.base.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
+import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.IncomeType;
 import com.ljwm.gecko.base.mapper.IncomeTypeMapper;
 import com.ljwm.gecko.base.model.dto.IncomeTypeDto;
+import com.ljwm.gecko.base.model.dto.IncomeTypeQueryDto;
 import com.ljwm.gecko.base.model.vo.IncomeTypeSimpleVo;
 import com.ljwm.gecko.base.model.vo.IncomeTypeVo;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +26,13 @@ public class IncomeTypeService {
 
   @Autowired
   private IncomeTypeMapper incomeTypeMapper;
+
+  @Autowired
+  private CommonService commonService;
+
+  public Page<IncomeTypeVo> findPage(IncomeTypeQueryDto incomeTypeQueryDto){
+    return commonService.find(incomeTypeQueryDto, (p, q) -> incomeTypeMapper.findPage(p, Kv.by("text", incomeTypeQueryDto.getText()).set("pId",incomeTypeQueryDto.getPId())));
+  }
 
   public List<IncomeTypeVo> find(){
     return incomeTypeMapper.find();
