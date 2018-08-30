@@ -7,6 +7,9 @@ import lombok.Data;
 @Data
 public class AdvertisementQuery extends CommonQuery {
 
-  @ApiModelProperty("0 查看启用 1 查看禁用，  不传值全部")
+  @ApiModelProperty(value = "0 查看启用 1 查看禁用，  不传值全部",hidden = true)
   private Integer disabled;
+
+  @ApiModelProperty(value = "设备类型")
+  private Integer equipType;
 }
