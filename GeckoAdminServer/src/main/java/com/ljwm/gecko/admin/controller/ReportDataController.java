@@ -3,9 +3,11 @@ package com.ljwm.gecko.admin.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.base.entity.OtherReduce;
 import com.ljwm.gecko.base.model.dto.IncomeTypeDto;
 import com.ljwm.gecko.base.model.dto.SpecialDeductionDto;
 import com.ljwm.gecko.base.model.dto.SpecialDeductionQueryDto;
+import com.ljwm.gecko.base.model.form.OtherReduceForm;
 import com.ljwm.gecko.base.model.form.OtherReduceQuery;
 import com.ljwm.gecko.base.model.vo.IncomeTypeSimpleVO;
 import com.ljwm.gecko.base.model.vo.IncomeTypeVO;
@@ -77,4 +79,16 @@ public class ReportDataController extends BaseController {
     return success(otherReduceService.find(query));
   }
 
+  @PostMapping("saveOtherReduce")
+  @ApiOperation(value = "其他扣除添加")
+  public Result<OtherReduce> saveOtherReduce(@RequestBody OtherReduceForm form){
+    return success(otherReduceService.save(form));
+  }
+
+  @GetMapping("deleteOtherReduce/{id}")
+  @ApiOperation(value = "根据id删除其他扣除")
+  public Result deleteOtherReduce(@PathVariable Long id){
+    otherReduceService.delete(id);
+    return success();
+  }
 }
