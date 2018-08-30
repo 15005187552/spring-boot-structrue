@@ -6,8 +6,8 @@ import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.gecko.base.entity.IncomeType;
 import com.ljwm.gecko.base.mapper.IncomeTypeMapper;
 import com.ljwm.gecko.base.model.dto.IncomeTypeDto;
-import com.ljwm.gecko.base.model.vo.IncomeTypeSimpleVO;
-import com.ljwm.gecko.base.model.vo.IncomeTypeVO;
+import com.ljwm.gecko.base.model.vo.IncomeTypeSimpleVo;
+import com.ljwm.gecko.base.model.vo.IncomeTypeVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class IncomeTypeService {
   @Autowired
   private IncomeTypeMapper incomeTypeMapper;
 
-  public List<IncomeTypeVO> find(){
+  public List<IncomeTypeVo> find(){
     return incomeTypeMapper.find();
   }
 
@@ -36,7 +36,7 @@ public class IncomeTypeService {
   }
 
   @Transactional
-  public IncomeTypeSimpleVO save(IncomeTypeDto incomeTypeDto){
+  public IncomeTypeSimpleVo save(IncomeTypeDto incomeTypeDto){
     return Optional
       .ofNullable(incomeTypeDto)
       .map(f -> {
@@ -53,8 +53,8 @@ public class IncomeTypeService {
         }else {
           incomeTypeMapper.updateById(incomeType);
         }
-        return new IncomeTypeSimpleVO(incomeType);
+        return new IncomeTypeSimpleVo(incomeType);
       })
-      .map(IncomeTypeSimpleVO::new).get();
+      .map(IncomeTypeSimpleVo::new).get();
   }
 }

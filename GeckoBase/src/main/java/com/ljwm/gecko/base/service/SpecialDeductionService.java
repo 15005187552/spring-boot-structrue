@@ -2,7 +2,6 @@ package com.ljwm.gecko.base.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ljwm.bootbase.dto.CommonQuery;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
@@ -11,7 +10,7 @@ import com.ljwm.gecko.base.entity.SpecialDeduction;
 import com.ljwm.gecko.base.mapper.SpecialDeductionMapper;
 import com.ljwm.gecko.base.model.dto.SpecialDeductionDto;
 import com.ljwm.gecko.base.model.dto.SpecialDeductionQueryDto;
-import com.ljwm.gecko.base.model.vo.SpecialDeductionVO;
+import com.ljwm.gecko.base.model.vo.SpecialDeductionVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,7 @@ public class SpecialDeductionService {
   private CommonService commonService;
 
   @Transactional
-  public SpecialDeductionVO save(SpecialDeductionDto specialDeductionDto){
+  public SpecialDeductionVo save(SpecialDeductionDto specialDeductionDto){
     return Optional
       .ofNullable(specialDeductionDto)
       .map(f -> {
@@ -41,11 +40,11 @@ public class SpecialDeductionService {
           specialDeductionMapper.updateById(specialDeduction);
         }
         specialDeductionMapper.insert(specialDeduction);
-        return new SpecialDeductionVO(specialDeduction);
-      }).map(SpecialDeductionVO::new).get();
+        return new SpecialDeductionVo(specialDeduction);
+      }).map(SpecialDeductionVo::new).get();
   }
 
-  public List<SpecialDeductionVO> find(){
+  public List<SpecialDeductionVo> find(){
     return specialDeductionMapper.find();
   }
 
@@ -57,7 +56,7 @@ public class SpecialDeductionService {
     specialDeductionMapper.deleteById(id);
   }
 
-  public Page<SpecialDeductionVO> findPage(SpecialDeductionQueryDto specialDeductionQueryDto) {
+  public Page<SpecialDeductionVo> findPage(SpecialDeductionQueryDto specialDeductionQueryDto) {
     return commonService.find(specialDeductionQueryDto, (p, q) -> specialDeductionMapper.findPage(p, Kv.by("text", specialDeductionQueryDto.getText())));
   }
 }

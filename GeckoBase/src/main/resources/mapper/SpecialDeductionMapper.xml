@@ -13,7 +13,7 @@
     <sql id="Base_Column_List">
           `ID`          ,`NAME`          ,`SORT`
     </sql>
-    <resultMap id="specialDeductionVO" type="com.ljwm.gecko.base.model.vo.SpecialDeductionVO" extends="BaseResultMap">
+    <resultMap id="specialDeductionVO" type="com.ljwm.gecko.base.model.vo.SpecialDeductionVo" extends="BaseResultMap">
       <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.SpecialDeductionMapper.deleteAble"/>
     </resultMap>
 

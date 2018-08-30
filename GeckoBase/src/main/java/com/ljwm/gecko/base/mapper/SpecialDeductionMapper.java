@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.SpecialDeduction;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ljwm.gecko.base.model.vo.SpecialDeductionVO;
+import com.ljwm.gecko.base.model.vo.SpecialDeductionVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -18,9 +18,9 @@ import java.util.List;
  * @since 2018-08-29
  */
 public interface SpecialDeductionMapper extends BaseMapper<SpecialDeduction> {
-    List<SpecialDeductionVO> find();
+    List<SpecialDeductionVo> find();
 
     Boolean deleteAble(@Param("id") Long id);
 
-    List<SpecialDeductionVO> findPage(Page<SpecialDeductionVO> ret, @Param("params") Kv params);
+    List<SpecialDeductionVo> findPage(Page<SpecialDeductionVo> ret, @Param("params") Kv params);
 }

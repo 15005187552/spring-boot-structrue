@@ -2,7 +2,7 @@ package com.ljwm.gecko.base.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ljwm.gecko.base.entity.IncomeType;
-import com.ljwm.gecko.base.model.vo.IncomeTypeVO;
+import com.ljwm.gecko.base.model.vo.IncomeTypeVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -17,9 +17,9 @@ import java.util.List;
  */
 public interface IncomeTypeMapper extends BaseMapper<IncomeType> {
 
-  List<IncomeTypeVO> find();
+  List<IncomeTypeVo> find();
 
-  List<IncomeTypeVO> children(@Param("pId") Long pId);
+  List<IncomeTypeVo> children(@Param("pId") Long pId);
 
   Boolean deleteAble(@Param("id") Long id);
 }
