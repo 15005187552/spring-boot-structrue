@@ -44,5 +44,9 @@
     ORDER BY `SORT`
   </select>
 
+  <select id="findIdByName" parameterType="string" resultMap="BaseResultMap">
+    select *  from t_special_deduction where NAME =#{name} limit 1
+  </select>
+
 
 </mapper>

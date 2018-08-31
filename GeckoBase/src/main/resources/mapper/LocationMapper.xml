@@ -16,4 +16,20 @@
           `CODE`          ,`NAME`          ,`PCODE`          ,`LEVEL`          ,`DISABLED`
     </sql>
 
+    <select id="findCodeByName" parameterType="map" resultMap="BaseResultMap">
+      select t.*  from t_location t where 1=1
+      <if test="params != null">
+        <if test="params.name != null and params.name != ''">
+          AND t.`NAME` LIKE CONCAT('%',#{params.name},'%')
+        </if>
+        <if test="params.level != null ">
+          AND t.`LEVEL` =#{params.level}
+        </if>
+        <if test="params.id != null and params.id != ''">
+          AND CONCAT(t.`CODE`) LIKE CONCAT('%',#{params.id},'%')
+        </if>
+      </if>
+      limit 1
+    </select>
+
 </mapper>

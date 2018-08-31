@@ -23,4 +23,6 @@ public interface SpecialDeductionMapper extends BaseMapper<SpecialDeduction> {
     Boolean deleteAble(@Param("id") Long id);
 
     List<SpecialDeductionVo> findPage(Page<SpecialDeductionVo> ret, @Param("params") Kv params);
+
+    SpecialDeduction findIdByName(@Param("name") String name);
 }
