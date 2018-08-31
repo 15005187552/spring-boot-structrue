@@ -34,12 +34,20 @@ public class GuestService {
     if (guest == null) {
       guest = new Guest();
       Date now = new Date();
-      String uuid = RandomUtil.simpleUUID();
-      guest.setGuestId(uuid)
-        .setSourceType(userSource.getCode())
-        .setExtInfo(extInfo)
-        .setCreateTime(now)
-        .setLastActiveTime(now);
+      if(userSource.getCode() != UserSource.WX_APP.getCode()) {
+        String uuid = RandomUtil.simpleUUID();
+        guest.setGuestId(uuid)
+          .setSourceType(userSource.getCode())
+          .setExtInfo(extInfo)
+          .setCreateTime(now)
+          .setLastActiveTime(now);
+      }else {
+        guest.setGuestId(guestId)
+          .setSourceType(userSource.getCode())
+          .setExtInfo(extInfo)
+          .setCreateTime(now)
+          .setLastActiveTime(now);
+      }
       guestMapper.insert(guest);
     } else {
       guest.setLastActiveTime(new Date());

@@ -19,4 +19,6 @@ public class WxResultMe {
 
   private String extInfo;
 
+  private String token;
+
 }

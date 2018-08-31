@@ -7,6 +7,7 @@ import com.ljwm.gecko.base.entity.MemberPassword;
 import com.ljwm.gecko.base.mapper.MemberAccountMapper;
 import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.mapper.MemberPasswordMapper;
+import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.model.vo.WxResultMe;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,22 @@ public class MemberInfoDao {
   public void insertAccount(String userName, Integer code, Long memberId, Long passwordId) {
     MemberAccount memberAccount = new MemberAccount(null, userName, code, memberId, passwordId, null);
     memberAccountMapper.insert(memberAccount);
+  }
+
+  public MemberVo selectMemberInfo(Long memberId, Integer code) {
+    return memberMapper.selectByMeVo(memberId, code);
+  }
+
+  public void updateAccount(String mpOpenId, String extInfo, Integer code) {
+    Map<String, Object> map = new HashedMap();
+    map.put("TYPE", code);
+    map.put("USERNAME", mpOpenId);
+    List<MemberAccount> list = memberAccountMapper.selectByMap(map);
+    if(CollectionUtil.isNotEmpty(list)){
+      MemberAccount memberAccount = list.get(0);
+      memberAccount.setExtInfo(extInfo);
+      memberAccountMapper.updateById(memberAccount);
+    }
   }
 }
 

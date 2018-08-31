@@ -11,6 +11,18 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @ApiModel("游客信息表单")
 public class GuestForm {
+
   private Integer source;
+
   private String guestId;
+
+  private String code;
+
+  private String iv;
+
+  private String rawData;
+
+  private String signature;
+
+  private String encryptedData;
 }

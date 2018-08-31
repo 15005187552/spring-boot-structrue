@@ -4,6 +4,7 @@ import com.ljwm.bootbase.security.LoginInfoHolder;
 import com.ljwm.gecko.base.entity.Guest;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.mapper.GuestMapper;
+import com.ljwm.gecko.base.mapper.MemberAccountMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +22,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Autowired
   private GuestMapper guestMapper;
+
+  @Autowired
+  private MemberAccountMapper memberAccountMapper;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

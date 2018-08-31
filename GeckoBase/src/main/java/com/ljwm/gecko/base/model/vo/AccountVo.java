@@ -1,6 +1,7 @@
 package com.ljwm.gecko.base.model.vo;
 
-import com.ljwm.gecko.base.entity.Member;
+import com.ljwm.gecko.base.entity.MemberAccount;
+import com.ljwm.gecko.base.entity.MemberPassword;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -11,7 +12,8 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-public class MemberVo extends Member {
+public class AccountVo extends MemberAccount {
 
-  private AccountVo account;
+  private MemberPassword password;
+
 }

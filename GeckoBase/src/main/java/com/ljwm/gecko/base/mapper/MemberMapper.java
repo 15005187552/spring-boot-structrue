@@ -3,7 +3,6 @@ package com.ljwm.gecko.base.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.gecko.base.entity.Member;
-import com.ljwm.gecko.base.entity.MobileCode;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.model.vo.WxResultMe;
 import org.apache.ibatis.annotations.Param;
@@ -27,7 +26,11 @@ public interface MemberMapper extends BaseMapper<Member> {
   @Select("SELECT a.NICK_NAME, b.USERNAME, b.EXT_INFO FROM t_member a, t_member_account b WHERE a.ID = b.MEMBER_ID AND b.USERNAME = #{userName}")
   WxResultMe selectByUserName(String userName);
 
-  MobileCode selectByPhone(String phoneNum);
-
   List<MemberVo> find(Page<MemberVo> page, @Param("params")Map map);
+
+  @Select("SELECT * FROM t_member a, t_member_account b, t_member_password c WHERE a.ID=#{memberId}  \n" +
+    "AND b.TYPE = #{code}\n" +
+    "AND b.MEMBER_ID =#{memberId}\n" +
+    "AND c.ID = (SELECT b.PASSWORD_ID FROM t_member_account b WHERE b.MEMBER_ID =#{memberId} AND b.TYPE= #{code})\t")
+  MemberVo selectByMeVo(Long memberId, Integer code);
 }

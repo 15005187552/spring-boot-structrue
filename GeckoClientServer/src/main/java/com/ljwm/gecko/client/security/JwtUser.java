@@ -4,7 +4,7 @@ import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.security.IJwtAndSecurityAble;
 import com.ljwm.gecko.base.entity.Guest;
 import com.ljwm.gecko.base.enums.LoginType;
-import com.ljwm.gecko.client.model.vo.MemberVo;
+import com.ljwm.gecko.base.model.vo.MemberVo;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -2,8 +2,8 @@ server:
   port: 7003
 spring:
   profiles:
-    active: dev,devLocal
-    include: base,gecko,common
+    active: dev
+    include: base,gecko
 dict:
   # ID:用户名:密码:(属于角色1,属于角色2)
   sysAdmin: "-1:admin:ljwm2018:(10000)"
@@ -12,3 +12,18 @@ dict:
   # 系统内置功能菜单 "ID:NAME:TITLE:DESC:URL:ICON:PARENT"
   builtInMenu:
   initPassword: "111111"
+swagger2:
+  basePackage: "com.ljwm.gecko.admin"
+  authorization: "Authorization"
+  title: "壁虎个税后台服务API"
+  description: ""
+  version: "V1.0"
+jwt:
+  route:
+    freeRouters: "/auth/login,/**"
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.8.208:3306/geckodb?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: root
