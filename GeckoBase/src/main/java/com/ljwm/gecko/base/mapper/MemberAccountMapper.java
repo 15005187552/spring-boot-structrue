@@ -2,7 +2,12 @@ package com.ljwm.gecko.base.mapper;
 
 import com.ljwm.gecko.base.entity.MemberAccount;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +20,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberAccountMapper extends BaseMapper<MemberAccount> {
 
+
+  @Select("SELECT * FROM `t_member_account` WHERE `MEMBER_ID` = #{id}")
+  @ResultMap("BaseResultMap")
+  List<MemberAccount> findByMember(@Param("ID") Long id);
 }

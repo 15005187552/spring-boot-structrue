@@ -66,7 +66,7 @@ public class UserController extends BaseController {
 
   @PostMapping("findMember")
   @ApiOperation("会员 查询")
-  public Result findMember(MemberQuery query) {
+  public Result findMember(@RequestBody MemberQuery query) {
     return success(maintenanceService.find(query));
   }
 }

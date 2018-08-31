@@ -2,25 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljwm.gecko.base.mapper.MemberMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Member">
-        <id column="ID" property="id" />
-        <result column="REG_MOBILE" property="regMobile" />
-        <result column="NICK_NAME" property="nickName" />
-        <result column="CREATE_TIME" property="createTime" />
-        <result column="DISABLED" property="disabled" />
-    </resultMap>
+  <!-- 通用查询映射结果 -->
+  <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Member">
+    <id column="ID" property="id"/>
+    <result column="REG_MOBILE" property="regMobile"/>
+    <result column="NICK_NAME" property="nickName"/>
+    <result column="CREATE_TIME" property="createTime"/>
+    <result column="DISABLED" property="disabled"/>
+  </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
+  <!-- 通用查询结果列 -->
+  <sql id="Base_Column_List">
           `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`CREATE_TIME`          ,`DISABLED`
     </sql>
 
   <resultMap id="MemberVo" type="com.ljwm.gecko.base.model.vo.MemberVo" extends="BaseResultMap">
-
+    <collection property="memberAccounts" column="ID"
+                select="com.ljwm.gecko.base.mapper.MemberAccountMapper.findByMember"/>
   </resultMap>
 
   <select id="find" resultMap="MemberVo" parameterType="java.util.Map">
-
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM `t_member`
+    <where>
+      <if test="params.text != null and params.text != ''">
+        AND (
+        `REG_MOBILE` LIKE CONCAT('%',#{params.text},'%')
+        OR `NICK_NAME` LIKE CONCAT('%',#{params.text},'%')
+        )
+      </if>
+    </where>
+    ORDER BY `CREATE_TIME`
+    <if test="params.asc">
+      ASC
+    </if>
+    <if test="!params.asc">
+      DESC
+    </if>
   </select>
 </mapper>
