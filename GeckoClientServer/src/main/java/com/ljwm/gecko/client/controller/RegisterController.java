@@ -40,7 +40,7 @@ public class RegisterController extends BaseController {
   @PostMapping("/register")
   @ApiOperation("注册成为会员")
   public Result register(@RequestBody @Valid RegisterMemberForm registerMemberForm){
-    return success(registerService.register(registerMemberForm));
+    return registerService.register(registerMemberForm);
   }
 
 }

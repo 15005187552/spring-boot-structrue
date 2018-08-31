@@ -3,11 +3,14 @@ package com.ljwm.gecko.client.service;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.ljwm.bootbase.dto.Kv;
+import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.JwtKit;
 import com.ljwm.bootbase.security.LoginInfoHolder;
+import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.entity.Guest;
+import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.enums.UserSource;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.service.GuestService;
@@ -21,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 /**
  * Created by yuzhou on 2018/8/22.
@@ -92,5 +96,14 @@ public class AuthService {
     resultMe.setNickName(memberVo.getNickName());
     resultMe.setToken(JwtKit.generateToken(jwtUser));
     return resultMe;
+  }
+
+  public Result me() {
+    Long id = SecurityKit.currentId();
+    //判断是否为会员
+    if (!LoginInfoHolder.getLoginType().equals(LoginType.GUEST.getCode().toString())){
+        return Result.success(memberInfoService.selectMemberInfo(id, LoginInfoHolder.getLoginType()));
+    }
+    return null;
   }
 }

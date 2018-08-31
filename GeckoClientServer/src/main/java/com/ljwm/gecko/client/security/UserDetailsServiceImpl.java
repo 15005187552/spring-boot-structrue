@@ -1,10 +1,11 @@
 package com.ljwm.gecko.client.security;
 
 import com.ljwm.bootbase.security.LoginInfoHolder;
+import com.ljwm.gecko.base.dao.MemberInfoDao;
 import com.ljwm.gecko.base.entity.Guest;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.mapper.GuestMapper;
-import com.ljwm.gecko.base.mapper.MemberAccountMapper;
+import com.ljwm.gecko.base.model.vo.MemberVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   private GuestMapper guestMapper;
 
   @Autowired
-  private MemberAccountMapper memberAccountMapper;
+  private MemberInfoDao memberInfoDao;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -38,7 +39,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         return new JwtUser(guest);
       default:
-        throw new UsernameNotFoundException("用户不存在");
+        MemberVo memberVo = memberInfoDao.selectByUserName(username);
+        if(memberVo == null) {
+          throw new UsernameNotFoundException("用户不存在");
+        }
+        return new JwtUser(memberVo);
     }
   }
 }

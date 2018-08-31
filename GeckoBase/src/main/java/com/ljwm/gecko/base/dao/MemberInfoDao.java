@@ -8,7 +8,6 @@ import com.ljwm.gecko.base.mapper.MemberAccountMapper;
 import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.mapper.MemberPasswordMapper;
 import com.ljwm.gecko.base.model.vo.MemberVo;
-import com.ljwm.gecko.base.model.vo.WxResultMe;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -33,14 +32,14 @@ public class MemberInfoDao {
   @Autowired
   MemberPasswordMapper memberPasswordMapper;
 
-  public  WxResultMe selectByUserName(String userName) {
-
-    return  memberMapper.selectByUserName(userName);
+  public MemberVo selectByUserName(String username) {
+    return memberMapper.selectByUserName(username);
   }
 
   public void insert(String phoneNum) {
     Member member = new Member();
     member.setRegMobile(phoneNum);
+    member.setCreateTime(new Date());
     memberMapper.insert(member);
   }
 
@@ -63,7 +62,7 @@ public class MemberInfoDao {
     Map<String, Object> map = new HashedMap();
     map.put("SALT", salt);
     map.put("PASSWORD", password);
-    List<Member> list = memberMapper.selectByMap(map);
+    List<MemberPassword> list = memberPasswordMapper.selectByMap(map);
     if (CollectionUtil.isNotEmpty(list)) {
       return list.get(0).getId();
     }
@@ -76,9 +75,18 @@ public class MemberInfoDao {
   }
 
   public MemberVo selectMemberInfo(Long memberId, Integer code) {
-    return memberMapper.selectByMeVo(memberId, code);
+    if (CollectionUtil.isNotEmpty(memberMapper.selectByMeVo(memberId, code))) {
+      return memberMapper.selectByMeVo(memberId, code).get(0);
+    }
+    return null;
   }
 
+  public MemberVo selectMemberInfo(Long memberId, String type) {
+    if (CollectionUtil.isNotEmpty(memberMapper.selectByMeVo(memberId, type))) {
+      return memberMapper.selectByMeVo(memberId, type).get(0);
+    }
+    return null;
+  }
   public void updateAccount(String mpOpenId, String extInfo, Integer code) {
     Map<String, Object> map = new HashedMap();
     map.put("TYPE", code);

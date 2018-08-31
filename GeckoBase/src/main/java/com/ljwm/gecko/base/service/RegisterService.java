@@ -56,7 +56,6 @@ public class RegisterService {
         }
         updateMobile = new MobileCode(mobileCode.getId(), sendSMSCode(phoneNum), phoneNum,
           IpUtil.getIPAddr(request), currentTime, Integer.valueOf(mobileCode.getDayIndex()+1));
-
       } else {
         updateMobile = new MobileCode(mobileCode.getId(), sendSMSCode(phoneNum), phoneNum,
           IpUtil.getIPAddr(request), currentTime, 1);
@@ -71,7 +70,7 @@ public class RegisterService {
   }
 
   private String sendSMSCode(String phoneNum) {
-    return "123346";
+    return "123456";
   }
 
   public Result register(RegisterMemberForm registerMemberForm) {
@@ -88,7 +87,7 @@ public class RegisterService {
       memberInfoDao.insertPassword(salt, password, new Date());
       Long passwordId = memberInfoDao.selectIdByPassword(salt, password);
       memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, passwordId);
-      return success("成功！");
+      return success("注册成功！");
     }
     return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");
   }
