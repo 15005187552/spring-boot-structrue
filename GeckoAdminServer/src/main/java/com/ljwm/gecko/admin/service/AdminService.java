@@ -81,9 +81,8 @@ public class AdminService {
   @Transactional
   public Admin saveAdmin(AdminSaveForm adminSaveForm) {
     Admin admin = null;
-
     //1.获取后管用户对象
-    if (Objects.isNull(adminSaveForm.getId()))
+    if (!Objects.isNull(adminSaveForm.getId()))
       admin = adminMapper.selectById(adminSaveForm.getId());
     if (admin == null)
       admin = new Admin();

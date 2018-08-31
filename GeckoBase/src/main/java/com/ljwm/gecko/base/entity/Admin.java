@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author xixil
- * @since 2018-08-29
+ * @since 2018-08-31
  */
 @Data
 @SuppressWarnings("ALL")
@@ -32,7 +32,7 @@ public class Admin implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "`ID`", type = IdType.INPUT)
+    @TableId(value = "`ID`", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "用户名")
