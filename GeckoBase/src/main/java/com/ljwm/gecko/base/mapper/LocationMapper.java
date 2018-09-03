@@ -1,7 +1,9 @@
 package com.ljwm.gecko.base.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.Location;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -28,4 +30,6 @@ public interface LocationMapper extends BaseMapper<Location> {
 
   @Select("SELECT * FROM t_location WHERE PCODE =#{code}")
   List<Location> selectByCode(Integer code);
+
+  Location findCodeByName(@Param("params") Kv kv);
 }

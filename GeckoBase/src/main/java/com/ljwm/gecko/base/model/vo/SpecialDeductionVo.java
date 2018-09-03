@@ -13,6 +13,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class SpecialDeductionVo extends SpecialDeduction {
 
+  private Boolean deleteAble;
+
   @JSONField(serializeUsing = IdToStringSerializer.class)
   private Long id;
 

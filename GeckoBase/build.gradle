@@ -1,6 +1,10 @@
 
 dependencies {
   compile('com.ljwm:BootBase:1.5.5-RELEASE')
+  // easyPoi Excel处理
+  compile('cn.afterturn:easypoi-base:3.2.0')
+  compile('cn.afterturn:easypoi-web:3.2.0')
+  compile('cn.afterturn:easypoi-annotation:3.2.0')
   testCompile('junit:junit:4.12')
   compile ('org.bouncycastle:bcprov-jdk15on:1.54')
 }
