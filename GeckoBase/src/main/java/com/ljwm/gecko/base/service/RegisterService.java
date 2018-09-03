@@ -93,13 +93,13 @@ public class RegisterService {
         return fail(ResultEnum.DATA_ERROR.getCode(),"该用户已注册！");
       }
       memberInfoDao.insert(phoneNum);
-      guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
       memberId = memberInfoDao.select(phoneNum);
       String salt = StringUtil.salt();
       String password = SecurityKit.passwordMD5(userName, salt);
       memberInfoDao.insertPassword(salt, password, new Date());
       Long passwordId = memberInfoDao.selectIdByPassword(salt, password);
       memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, passwordId);
+      guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
       return success("注册成功！");
     }
     return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");
