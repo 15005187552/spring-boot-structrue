@@ -7,6 +7,7 @@ import com.ljwm.gecko.base.dao.MemberInfoDao;
 import com.ljwm.gecko.base.dao.MobileCodeDao;
 import com.ljwm.gecko.base.entity.MobileCode;
 import com.ljwm.gecko.base.enums.LoginType;
+import com.ljwm.gecko.base.mapper.GuestMapper;
 import com.ljwm.gecko.base.model.dto.RegisterForm;
 import com.ljwm.gecko.base.model.dto.RegisterMemberForm;
 import com.ljwm.gecko.base.utils.IpUtil;
@@ -36,6 +37,9 @@ public class RegisterService {
 
   @Autowired
   MemberInfoDao memberInfoDao;
+
+  @Autowired
+  GuestMapper guestMapper;
 
   public Result getSMS(RegisterForm registerForm, HttpServletRequest request) {
     Long memberId = memberInfoDao.select(registerForm.getPhoneNum());
@@ -89,6 +93,7 @@ public class RegisterService {
         return fail(ResultEnum.DATA_ERROR.getCode(),"该用户已注册！");
       }
       memberInfoDao.insert(phoneNum);
+      guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
       memberId = memberInfoDao.select(phoneNum);
       String salt = StringUtil.salt();
       String password = SecurityKit.passwordMD5(userName, salt);

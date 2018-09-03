@@ -4,6 +4,7 @@ import com.ljwm.gecko.base.entity.Guest;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -20,4 +21,8 @@ public interface GuestMapper extends BaseMapper<Guest> {
   @Select("SELECT * FROM `t_guest` WHERE `GUEST_ID`=#{guestId}")
   @ResultMap("BaseResultMap")
   Guest findByGuestId(String guestId);
+
+  @Update("UPDATE t_guest SET MEMBER_ID =#{memberId} WHERE GUEST_ID=#{userName} ")
+  void updateByGuestId(String userName, Long memberId);
+
 }
