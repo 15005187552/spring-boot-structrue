@@ -43,6 +43,7 @@ public class WechatXCXService {
 
   public String getUserInfo(String encryptedData, String sessionKey, String iv) {
     try {
+      log.debug("decrypt data {} with {}， {}", encryptedData, sessionKey, iv);
       AesUtil aes = new AesUtil();
       byte[] resultByte = aes.decrypt(Base64.decodeBase64(encryptedData), Base64.decodeBase64(sessionKey), Base64.decodeBase64(iv));
       if (null != resultByte && resultByte.length > 0) {
@@ -50,6 +51,7 @@ public class WechatXCXService {
         return userInfo;
       }
     } catch (Exception e) {
+      log.error("Error when decrypt data {} with {}， {}", encryptedData,sessionKey, iv, e );
       throw new LogicException(ResultEnum.DATA_ERROR, "解密微信签名数据失败!");
     }
     return null;

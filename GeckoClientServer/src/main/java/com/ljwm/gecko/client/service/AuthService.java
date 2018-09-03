@@ -63,6 +63,7 @@ public class AuthService {
       String unionId = jsonObject.getString("unionid");
       String mpOpenId = jsonObject.getString("openid");
       String sessionKey = jsonObject.getString("session_key");
+      log.info("Json from code: {}", jsonObject.toJSONString());
       log.info("befor {}", LoginInfoHolder.getExtInfo());
       // 存入TOKEN
       LoginInfoHolder.setExtInfo(
@@ -72,6 +73,7 @@ public class AuthService {
       );
       if(StrUtil.isNotBlank(guestForm.getRawData())&&StrUtil.isBlank(unionId)){
         String extInfo = wechatXCXService.getUserInfo(guestForm.getEncryptedData(), sessionKey, guestForm.getIv());
+        log.debug("The ext info for wixin app user: {}", extInfo);
         memberInfoService.updateExt(mpOpenId, extInfo, UserSource.WX_APP.getCode());
       }
       guest = guestService.upsert(UserSource.codeOf(UserSource.WX_APP.getCode()), mpOpenId, null);

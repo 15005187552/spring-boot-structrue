@@ -75,15 +75,17 @@ public class MemberInfoDao {
   }
 
   public MemberVo selectMemberInfo(Long memberId, Integer code) {
-    if (CollectionUtil.isNotEmpty(memberMapper.selectByMeVo(memberId, code))) {
-      return memberMapper.selectByMeVo(memberId, code).get(0);
+    List<MemberVo> list = memberMapper.selectByMeVoAndCode(memberId, code);
+    if(CollectionUtil.isNotEmpty(list)){
+      return list.get(0);
     }
     return null;
   }
 
   public MemberVo selectMemberInfo(Long memberId, String type) {
-    if (CollectionUtil.isNotEmpty(memberMapper.selectByMeVo(memberId, type))) {
-      return memberMapper.selectByMeVo(memberId, type).get(0);
+    List<MemberVo> list = memberMapper.selectByMeVoAndType(memberId, type);
+    if(CollectionUtil.isNotEmpty(list)){
+      return list.get(0);
     }
     return null;
   }

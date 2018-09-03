@@ -94,12 +94,15 @@ public class RegisterService {
       }
       memberInfoDao.insert(phoneNum);
       memberId = memberInfoDao.select(phoneNum);
+      System.out.println(memberId);
+      if(memberId != null) {
+        guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
+      }
       String salt = StringUtil.salt();
       String password = SecurityKit.passwordMD5(userName, salt);
       memberInfoDao.insertPassword(salt, password, new Date());
       Long passwordId = memberInfoDao.selectIdByPassword(salt, password);
       memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, passwordId);
-      guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
       return success("注册成功！");
     }
     return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");

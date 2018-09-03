@@ -11,6 +11,32 @@
     <result column="DISABLED" property="disabled"/>
   </resultMap>
 
+  <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.MemberVo">
+    <id column="ID" property="id"/>
+    <result column="REG_MOBILE" property="regMobile"/>
+    <result column="NICK_NAME" property="nickName"/>
+    <result column="CREATE_TIME" property="createTime"/>
+    <result column="DISABLED" property="disabled"/>
+    <collection property="account" resultMap="AccountMap"/>
+  </resultMap>
+
+  <resultMap id="AccountMap" type="com.ljwm.gecko.base.model.vo.AccountVo">
+    <id column="ID" property="id" />
+    <result column="USERNAME" property="username" />
+    <result column="TYPE" property="type" />
+    <result column="MEMBER_ID" property="memberId" />
+    <result column="PASSWORD_ID" property="passwordId" />
+    <result column="EXT_INFO" property="extInfo" />
+    <collection property="password" resultMap="PasswordMap"/>
+  </resultMap>
+
+  <resultMap id="PasswordMap" type="com.ljwm.gecko.base.entity.MemberPassword">
+    <id column="ID" property="id" />
+    <result column="PASSWORD" property="password" />
+    <result column="SALT" property="salt" />
+    <result column="LAST_MODIFY_TIME" property="lastModifyTime" />
+  </resultMap>
+
   <!-- 通用查询结果列 -->
   <sql id="Base_Column_List">
           `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`CREATE_TIME`          ,`DISABLED`
