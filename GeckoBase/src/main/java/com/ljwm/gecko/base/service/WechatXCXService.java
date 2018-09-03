@@ -4,20 +4,15 @@ package com.ljwm.gecko.base.service;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ljwm.bootbase.enums.ResultEnum;
+import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.gecko.base.constant.Constant;
 import com.ljwm.gecko.base.model.config.WechatConfig;
+import com.ljwm.gecko.base.utils.AesUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.encoders.Base64;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.AlgorithmParameters;
-import java.security.Security;
-import java.util.Arrays;
 
 /**
  * @author Janiffy
@@ -47,7 +42,7 @@ public class WechatXCXService {
   }
 
   public String getUserInfo(String encryptedData, String sessionKey, String iv) {
-    // 被加密的数据
+  /*  // 被加密的数据
     byte[] dataByte = Base64.decode(encryptedData);
     // 加密秘钥
     byte[] keyByte = Base64.decode(sessionKey);
@@ -79,6 +74,16 @@ public class WechatXCXService {
       }
     } catch (Exception e) {
       log.error(e.getMessage(), e);
+    }*/
+    try {
+      AesUtil aes = new AesUtil();
+      byte[] resultByte = aes.decrypt(Base64.decodeBase64(encryptedData), Base64.decodeBase64(sessionKey), Base64.decodeBase64(iv));
+      if (null != resultByte && resultByte.length > 0) {
+        String userInfo = new String(resultByte, "UTF-8");
+        return userInfo;
+      }
+    } catch (Exception e) {
+      throw new LogicException(ResultEnum.DATA_ERROR, "解密微信签名数据失败!");
     }
     return null;
   }
