@@ -6,5 +6,7 @@ dependencies {
   compile('cn.afterturn:easypoi-web:3.2.0')
   compile('cn.afterturn:easypoi-annotation:3.2.0')
   testCompile('junit:junit:4.12')
-  compile ('org.bouncycastle:bcprov-jdk15on:1.54')
+  // 加密算法 SDK
+  compile('commons-codec:commons-codec')
+  compile('org.bouncycastle:bcprov-jdk15on:1.54')
 }

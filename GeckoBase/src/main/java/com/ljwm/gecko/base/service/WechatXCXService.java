@@ -10,7 +10,7 @@ import com.ljwm.gecko.base.constant.Constant;
 import com.ljwm.gecko.base.model.config.WechatConfig;
 import com.ljwm.gecko.base.utils.AesUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

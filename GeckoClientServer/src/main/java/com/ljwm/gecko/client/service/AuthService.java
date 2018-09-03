@@ -70,7 +70,7 @@ public class AuthService {
           .set(MPOPENID, mpOpenId)
           .set(UNNIONID, unionId)
       );
-      if(StrUtil.isNotBlank(guestForm.getRawData())){
+      if(StrUtil.isNotBlank(guestForm.getRawData())&&StrUtil.isBlank(unionId)){
         String extInfo = wechatXCXService.getUserInfo(guestForm.getEncryptedData(), sessionKey, guestForm.getIv());
         memberInfoService.updateExt(mpOpenId, extInfo, UserSource.WX_APP.getCode());
       }
