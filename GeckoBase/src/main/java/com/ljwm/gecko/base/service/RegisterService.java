@@ -38,6 +38,10 @@ public class RegisterService {
   MemberInfoDao memberInfoDao;
 
   public Result getSMS(RegisterForm registerForm, HttpServletRequest request) {
+    Long memberId = memberInfoDao.select(registerForm.getPhoneNum());
+    if (memberId != null){
+      return fail(ResultEnum.DATA_ERROR.getCode(),"该用户已注册！");
+    }
     Long currentTime = System.currentTimeMillis();//获取当前时间
     String phoneNum = registerForm.getPhoneNum();
     MobileCode mobileCode = mobileCodeDao.find(phoneNum);
@@ -80,8 +84,12 @@ public class RegisterService {
     String userName = registerMemberForm.getUserName();
     MobileCode mobileCode = mobileCodeDao.select(code, phoneNum);
     if(mobileCode != null){
-      memberInfoDao.insert(phoneNum);
       Long memberId = memberInfoDao.select(phoneNum);
+      if (memberId != null){
+        return fail(ResultEnum.DATA_ERROR.getCode(),"该用户已注册！");
+      }
+      memberInfoDao.insert(phoneNum);
+      memberId = memberInfoDao.select(phoneNum);
       String salt = StringUtil.salt();
       String password = SecurityKit.passwordMD5(userName, salt);
       memberInfoDao.insertPassword(salt, password, new Date());
