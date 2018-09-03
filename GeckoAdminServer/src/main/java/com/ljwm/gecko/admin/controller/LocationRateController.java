@@ -2,16 +2,18 @@ package com.ljwm.gecko.admin.controller;
 
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.admin.model.form.LocationRateQuery;
 import com.ljwm.gecko.admin.service.LocationRateService;
+import com.ljwm.gecko.base.model.vo.SimpleLocation;
+import com.ljwm.gecko.base.model.vo.SimpleProv;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/locationRate")
@@ -24,8 +26,26 @@ public class LocationRateController extends BaseController {
 
   @PostMapping("uploadLocationRate")
   @ApiOperation(value = "上传地区税率")
-  public Result uploadLocationRate(@RequestParam("file") MultipartFile multipartFile){
+  public Result uploadLocationRate(@RequestParam("file") MultipartFile multipartFile) {
     locationRateService.uploadLocationRate(multipartFile);
     return success();
+  }
+
+  @PostMapping("getProvAndCity")
+  @ApiOperation(value = "获取所有省市")
+  public Result<List<SimpleLocation>> getProvAndCity() {
+    return success(locationRateService.getProvAndCity());
+  }
+
+  @PostMapping("findProv")
+  @ApiOperation(value = "获取所有省")
+  public Result<List<SimpleProv>> findProv() {
+    return success(locationRateService.findProv());
+  }
+
+  @PostMapping("find")
+  @ApiOperation("分页查询获取省份")
+  public Result find(@RequestBody LocationRateQuery query) {
+    return success(locationRateService.find(query));
   }
 }

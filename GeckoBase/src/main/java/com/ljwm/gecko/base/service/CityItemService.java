@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@SuppressWarnings("all")
 public class CityItemService {
 
   @Autowired
@@ -43,37 +44,37 @@ public class CityItemService {
 
 
   @Transactional
-  public void saveLocationRate(List<LocationRateDto> locationRateDtoList){
-    if (CollectionUtils.isEmpty(locationRateDtoList)){
-      throw new LogicException(ResultEnum.DATA_ERROR,"列表不能为空!");
+  public void saveLocationRate(List<LocationRateDto> locationRateDtoList) {
+    if (CollectionUtils.isEmpty(locationRateDtoList)) {
+      throw new LogicException(ResultEnum.DATA_ERROR, "列表不能为空!");
     }
     //迭代省的数据
-    for (LocationRateDto locationRateDto: locationRateDtoList){
+    for (LocationRateDto locationRateDto : locationRateDtoList) {
       String provinceName = locationRateDto.getProvinceName();
-      if (!provinceName.endsWith("省")&& !provinceName.endsWith("市")){
-          if (EnumUtils.getEnumList(DirectCityEnum.class).stream().map(DirectCityEnum::getName).collect(Collectors.toList()).contains(provinceName)){
-            provinceName =provinceName+"市";
-          }else {
-            provinceName =provinceName+"省";
-          }
-      }
-      Location location = locationMapper.findCodeByName(Kv.by("name",provinceName).set("level",0));
-      String code ="";
-      if (location!=null){
+//      if (!provinceName.endsWith("省")&& !provinceName.endsWith("市")){
+//          if (EnumUtils.getEnumList(DirectCityEnum.class).stream().map(DirectCityEnum::getName).collect(Collectors.toList()).contains(provinceName)){
+//            provinceName =provinceName+"市";
+//          }else {
+//            provinceName =provinceName+"省";
+//          }
+//      }
+      Location location = locationMapper.findCodeByName(Kv.by("name", provinceName).set("level", 0));
+      String code = "";
+      if (location != null) {
         code = location.getCode().toString();
       }
-      Location subLocation = locationMapper.findCodeByName(Kv.by("name",locationRateDto.getCityName()).set("id",code.substring(0,2)));
-      for (LocationRateDetailDto locationRateDetailDto : locationRateDto.getLocationRateDetailDtoList()){
+      Location subLocation = locationMapper.findCodeByName(Kv.by("name", locationRateDto.getCityName()).set("id", code.substring(0, 2)));
+      for (LocationRateDetailDto locationRateDetailDto : locationRateDto.getLocationRateDetailDtoList()) {
         CityItem cityItem = new CityItem();
-        BeanUtil.copyProperties(locationRateDetailDto,cityItem);
+        BeanUtil.copyProperties(locationRateDetailDto, cityItem);
         SpecialDeduction specialDeduction = specialDeductionMapper.findIdByName(locationRateDetailDto.getName());
-        if (specialDeduction!=null){
+        if (specialDeduction != null) {
           cityItem.setItemType(specialDeduction.getId());
         }
-        if (subLocation!=null){
+        if (subLocation != null) {
           cityItem.setRegionCode(subLocation.getCode());
         }
-        cityItem.setCreatTime(DateUtil.date());
+        cityItem.setCreateTime(DateUtil.date());
         cityItem.setUpdateTime(DateUtil.date());
         cityItem.setCreator(SecurityKit.currentId());
         cityItem.setUpdaterId(SecurityKit.currentId());

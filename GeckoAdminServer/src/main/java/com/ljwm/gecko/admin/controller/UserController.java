@@ -10,6 +10,7 @@ import com.ljwm.gecko.admin.service.AdminService;
 import com.ljwm.gecko.admin.service.MaintenanceService;
 import com.ljwm.gecko.base.entity.Admin;
 import com.ljwm.gecko.base.model.vo.AdminVo;
+import com.ljwm.gecko.base.model.vo.MemberVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,7 @@ public class UserController extends BaseController {
 
   @PostMapping("findMember")
   @ApiOperation("会员 查询")
-  public Result findMember(@RequestBody MemberQuery query) {
+  public Result<MemberVo> findMember(@RequestBody MemberQuery query) {
     return success(maintenanceService.find(query));
   }
 }

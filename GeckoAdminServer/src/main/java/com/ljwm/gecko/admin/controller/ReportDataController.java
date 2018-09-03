@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("reportData")
-@Api(tags = "收入类型管理  API")
+@Api(tags = "申报数据类型管理  API")
 public class ReportDataController extends BaseController {
 
   @Autowired

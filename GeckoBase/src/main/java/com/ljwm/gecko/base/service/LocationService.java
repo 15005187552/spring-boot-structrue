@@ -22,7 +22,7 @@ public class LocationService {
   }
 
 
-  public List<Location> getProvince() {
+  public List<Location> getProvince() {  // 后台地区税率 有使用
     return locationDao.selectProvinceByLevel();
   }
 

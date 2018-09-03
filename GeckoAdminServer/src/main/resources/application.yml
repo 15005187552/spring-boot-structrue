@@ -12,12 +12,3 @@ dict:
   # 系统内置功能菜单 "ID:NAME:TITLE:DESC:URL:ICON:PARENT"
   builtInMenu:
   initPassword: "111111"
-swagger2:
-  basePackage: "com.ljwm.gecko.admin"
-  authorization: "Authorization"
-  title: "壁虎个税后台服务API"
-  description: ""
-  version: "V1.0"
-jwt:
-  route:
-    freeRouters: "/auth/login,/**"
