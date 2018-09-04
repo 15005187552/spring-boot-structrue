@@ -32,20 +32,20 @@ public class LocationRateController extends BaseController {
     return success();
   }
 
-  @PostMapping("getProvAndCity")
+  @GetMapping("getProvAndCity")
   @ApiOperation(value = "获取所有省市")
   public Result<List<SimpleLocation>> getProvAndCity() {
     return success(locationRateService.getProvAndCity());
   }
 
-  @PostMapping("findProv")
+  @GetMapping("findProv")
   @ApiOperation(value = "获取所有省")
   public Result<List<SimpleProv>> findProv() {
     return success(locationRateService.findProv());
   }
 
   @PostMapping("find")
-  @ApiOperation("分页查询获取省份")
+  @ApiOperation("分页查询获取市")
   public Result find(@RequestBody LocationRateQuery query) {
     return success(locationRateService.find(query));
   }
