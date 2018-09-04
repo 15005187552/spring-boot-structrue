@@ -24,6 +24,7 @@ import java.util.Map;
 public interface MemberMapper extends BaseMapper<Member> {
 
   @Select("SELECT * FROM t_member a, t_member_account b, t_member_password c WHERE b.USERNAME = #{userName} AND b.MEMBER_ID = a.ID AND b.PASSWORD_ID =c.ID")
+  @ResultMap("BaseMap")
   MemberVo selectByUserName(String userName);
 
   List<MemberVo> find(Page<MemberVo> page, @Param("params")Map map);

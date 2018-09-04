@@ -36,11 +36,12 @@ public class MemberInfoDao {
     return memberMapper.selectByUserName(username);
   }
 
-  public void insert(String phoneNum) {
+  public Member insert(String phoneNum) {
     Member member = new Member();
     member.setRegMobile(phoneNum);
     member.setCreateTime(new Date());
     memberMapper.insert(member);
+    return member;
   }
 
   public Long select(String phoneNum) {
@@ -53,9 +54,10 @@ public class MemberInfoDao {
     return null;
   }
 
-  public void insertPassword(String salt, String password, Date date) {
+  public MemberPassword insertPassword(String salt, String password, Date date) {
     MemberPassword memberPassword = new MemberPassword(null, password, salt, date);
     memberPasswordMapper.insert(memberPassword);
+    return memberPassword;
   }
 
   public Long selectIdByPassword(String salt, String password){
@@ -69,9 +71,10 @@ public class MemberInfoDao {
     return null;
   }
 
-  public void insertAccount(String userName, Integer code, Long memberId, Long passwordId) {
+  public MemberAccount insertAccount(String userName, Integer code, Long memberId, Long passwordId) {
     MemberAccount memberAccount = new MemberAccount(null, userName, code, memberId, passwordId, null);
     memberAccountMapper.insert(memberAccount);
+    return memberAccount;
   }
 
   public MemberVo selectMemberInfo(Long memberId, Integer code) {
