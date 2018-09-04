@@ -10,6 +10,9 @@ import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.admin.model.form.LocationRateQuery;
+import com.ljwm.gecko.admin.model.form.RateSaveForm;
+import com.ljwm.gecko.base.entity.CityItem;
+import com.ljwm.gecko.base.mapper.CityItemMapper;
 import com.ljwm.gecko.base.mapper.LocationMapper;
 import com.ljwm.gecko.base.model.dto.LocationRateDetailDto;
 import com.ljwm.gecko.base.model.dto.LocationRateDto;
@@ -24,6 +27,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -35,10 +39,14 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@SuppressWarnings("all")
 public class LocationRateService {
 
   @Autowired
   private LocationMapper locationMapper;
+
+  @Autowired
+  private CityItemMapper cityItemMapper;
 
   @Autowired
   private CityItemService cityItemService;
@@ -158,10 +166,21 @@ public class LocationRateService {
     return locationService.getProvince().stream().map(SimpleProv::new).collect(Collectors.toList());
   }
 
+  /**
+   * 获取省份
+   *
+   * @return
+   */
   public List<SimpleLocation> getProvAndCity() {
     return locationMapper.findProvAndCity();
   }
 
+  /**
+   * 分页获取服务
+   *
+   * @param query
+   * @return
+   */
   public Page<LocationRateVo> find(LocationRateQuery query) {
     // 处理判断类型
     String suffix = query.getCode().toString().substring(query.getCode().toString().length() - 4, query.getCode().toString().length());
@@ -171,5 +190,17 @@ public class LocationRateService {
     // 处理省份
     page.setRecords(page.getRecords().stream().filter(i -> CollectionUtil.isNotEmpty(i.getRates())).collect(Collectors.toList()));
     return page;
+  }
+
+  @Transactional
+  public CityItem saveRate(RateSaveForm saveForm) {
+    CityItem cityItem = null;
+    if (saveForm.getId() != null)
+      cityItem = cityItemMapper.selectById(saveForm.getId());
+    if (cityItem == null)
+      cityItem = new CityItem();
+    BeanUtil.copyProperties(saveForm, cityItem);
+    commonService.insertOrUpdate(cityItem, cityItemMapper);
+    return cityItem;
   }
 }

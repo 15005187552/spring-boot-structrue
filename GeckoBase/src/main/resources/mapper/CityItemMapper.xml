@@ -26,5 +26,19 @@
 
   <resultMap id="RateVo" type="com.ljwm.gecko.base.model.vo.RateVo" extends="BaseResultMap">
     <result column="NAME" property="typeName" />
+    <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.CityItemMapper.deleteAble"/>
   </resultMap>
+
+  <select id="deleteAble" parameterType="java.lang.Long" resultType="java.lang.Boolean">
+  <![CDATA[
+
+        SELECT IF(CONVERT(GROUP_CONCAT(`res` SEPARATOR ''),SIGNED)>=1,0,1) AS res
+        FROM (
+            SELECT IF(COUNT(`ID`)>=1,1,0) AS res FROM `t_function` WHERE `ID` IN (SELECT DISTINCT(PARENT_ID) FROM `t_function` WHERE `PARENT_ID` IS NOT NULL) AND `ID`=#{id}
+            UNION
+            SELECT IF(COUNT(`FUNCTION_ID`)>=1,1,0) AS res FROM `t_role_function` WHERE `FUNCTION_ID`=#{id}
+            ) AS temp
+
+    ]]>
+</select>
 </mapper>

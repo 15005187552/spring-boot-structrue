@@ -7,4 +7,6 @@ import lombok.Data;
 public class RateVo extends CityItem{
 
     private String typeName;
+
+  private Boolean deleteAble;
 }
