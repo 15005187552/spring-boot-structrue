@@ -6,26 +6,29 @@ import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
+import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.admin.model.form.LocationRateQuery;
 import com.ljwm.gecko.admin.model.form.RateSaveForm;
 import com.ljwm.gecko.base.entity.CityItem;
+import com.ljwm.gecko.base.entity.SpecialDeduction;
 import com.ljwm.gecko.base.mapper.CityItemMapper;
 import com.ljwm.gecko.base.mapper.LocationMapper;
+import com.ljwm.gecko.base.mapper.SpecialDeductionMapper;
 import com.ljwm.gecko.base.model.dto.LocationRateDetailDto;
 import com.ljwm.gecko.base.model.dto.LocationRateDto;
 import com.ljwm.gecko.base.model.vo.LocationRateVo;
 import com.ljwm.gecko.base.model.vo.SimpleLocation;
 import com.ljwm.gecko.base.model.vo.SimpleProv;
+import com.ljwm.gecko.base.model.vo.SimpleSpecial;
 import com.ljwm.gecko.base.service.CityItemService;
 import com.ljwm.gecko.base.service.LocationService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,6 +60,9 @@ public class LocationRateService {
 
   @Autowired
   private CommonService commonService;
+
+  @Autowired
+  private SpecialDeductionMapper specialDeductionMapper;
 
   public void uploadLocationRate(MultipartFile multipartFile) {
     String fileName = null;
@@ -213,6 +219,17 @@ public class LocationRateService {
         if (cityItem == null) throw new LogicException(ResultEnum.DATA_ERROR, "未找到ID为" + code + "的税率值");
         cityItemMapper.deleteById(code);
         return true;
+      }).get();
+  }
+
+  public List<SimpleSpecial> getItemType(Long regionId) {
+    return Optional
+      .ofNullable(regionId)
+      .map(id -> {
+        List<CityItem> cityItems = cityItemMapper.selectByMap(Kv.by("REGION_CODE", id));
+        List<Long> itemIds = cityItems.stream().map(CityItem::getItemType).collect(Collectors.toList());
+        List<SpecialDeduction> specialDeductions = specialDeductionMapper.selectList(null);
+        return specialDeductions.stream().filter(i -> !itemIds.contains(i.getId())).map(SimpleSpecial::new).collect(Collectors.toList());
       }).get();
   }
 }

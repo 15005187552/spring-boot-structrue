@@ -35,7 +35,7 @@ public class UserController extends BaseController {
   @PostMapping("saveAdmin")
   @ApiOperation("保存后管用户")
   public Result saveAdmin(@RequestBody AdminSaveForm form) {
-    return success(adminService.saveAdmin(form));
+    return success(adminService.saveAdmin(form.setUpdateTime(true)));
   }
 
 

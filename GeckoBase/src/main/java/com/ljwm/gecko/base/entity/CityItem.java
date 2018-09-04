@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author xixil
- * @since 2018-09-03
+ * @since 2018-09-04
  */
 @Data
 @SuppressWarnings("ALL")
@@ -62,9 +62,13 @@ public class CityItem implements Serializable {
     @TableField("`PERSON_PER`")
     private BigDecimal personPer;
 
-    @ApiModelProperty(value = "比例类型 0-百分比 1-金额")
+    @ApiModelProperty(value = "个人类型 0-百分比 1-金额")
     @TableField("`PER_TYPE`")
     private Integer perType;
+
+    @ApiModelProperty(value = "个人类型 0-百分比 1-金额")
+    @TableField("`COM_TYPE`")
+    private Integer comType;
 
     @ApiModelProperty(value = "排序")
     @TableField("`SORT`")
@@ -96,6 +100,8 @@ public class CityItem implements Serializable {
     public static final String PERSON_PER = "`PERSON_PER`";
 
     public static final String PER_TYPE = "`PER_TYPE`";
+
+    public static final String COM_TYPE = "`COM_TYPE`";
 
     public static final String SORT = "`SORT`";
 

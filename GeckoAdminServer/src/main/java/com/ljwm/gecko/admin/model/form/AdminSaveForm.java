@@ -1,5 +1,6 @@
 package com.ljwm.gecko.admin.model.form;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -16,6 +17,9 @@ public class AdminSaveForm {
   private String password;
 
   private String nickName;
+
+  @ApiModelProperty(hidden = true)
+  private Boolean updateTime;
 
   private List<Integer> roleIds;
 }

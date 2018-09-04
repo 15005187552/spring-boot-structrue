@@ -1,6 +1,7 @@
 package com.ljwm.gecko.admin.service;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
@@ -74,7 +75,8 @@ public class AdminService {
       .setRoleIds(Arrays.stream(roles).map(Integer::new).collect(Collectors.toList()))
       .setPassword(password)
       .setId(Long.valueOf(id))
-      .setUsername(username);
+      .setUsername(username)
+      .setUpdateTime(false);
     adminService.saveAdmin(admin);
   }
 
@@ -89,14 +91,13 @@ public class AdminService {
     if (StrUtil.isBlank(adminSaveForm.getPassword())) adminSaveForm.setPassword(dict.getInitPassword());
     //2.设置新参数并插入数据库
     admin.setPassword(SecureUtil.md5(SecureUtil.md5(adminSaveForm.getPassword()) + adminSaveForm.getUsername()))
-      .setId( adminSaveForm.getId())
+      .setId(adminSaveForm.getId())
       .setUsername(adminSaveForm.getUsername())
       .setNickName(adminSaveForm.getNickName())
-      .setUpdateTime(DateUtil.date())
-      .setCreateTime(DateUtil.date());
+    ;
     if (Objects.isNull(adminSaveForm.getId()))
-      adminMapper.insert(admin);
-    else if (!SqlHelper.retBool(adminMapper.updateById(admin)))
+      adminMapper.insert(admin.setCreateTime(DateUtil.date()));
+    else if (!SqlHelper.retBool(adminMapper.updateById(admin.setUpdateTime(adminSaveForm.getUpdateTime() ? DateTime.now() : null))))
       adminMapper.insertAll(admin);
     //3.更新用户角色
     if (CollectionUtil.isNotEmpty(adminSaveForm.getRoleIds()))

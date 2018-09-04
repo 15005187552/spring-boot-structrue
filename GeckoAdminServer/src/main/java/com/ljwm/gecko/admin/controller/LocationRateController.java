@@ -7,6 +7,7 @@ import com.ljwm.gecko.admin.model.form.RateSaveForm;
 import com.ljwm.gecko.admin.service.LocationRateService;
 import com.ljwm.gecko.base.model.vo.SimpleLocation;
 import com.ljwm.gecko.base.model.vo.SimpleProv;
+import com.sun.org.apache.regexp.internal.RE;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +59,13 @@ public class LocationRateController extends BaseController {
   }
 
   @GetMapping("deleteRate/{id}")
+  @ApiOperation("删除税率")
   public Result deleteRate(@PathVariable Long id) {
     return success(locationRateService.deleteRate(id));
+  }
+
+  @GetMapping("getItemType/{regionId}")
+  public Result getItemType(@PathVariable Long regionId) {
+    return success(locationRateService.getItemType(regionId));
   }
 }
