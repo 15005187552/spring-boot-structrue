@@ -4,9 +4,7 @@ import com.ljwm.gecko.base.entity.CityItem;
 import lombok.Data;
 
 @Data
-public class RateVo extends CityItem{
+public class RateVo extends CityItem {
 
-    private String typeName;
-
-  private Boolean deleteAble;
+  private String typeName;
 }

@@ -35,6 +35,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -202,5 +203,16 @@ public class LocationRateService {
     BeanUtil.copyProperties(saveForm, cityItem);
     commonService.insertOrUpdate(cityItem, cityItemMapper);
     return cityItem;
+  }
+
+  public Boolean deleteRate(Long id) {
+    return Optional
+      .ofNullable(id)
+      .map(code -> {
+        CityItem cityItem = cityItemMapper.selectById(code);
+        if (cityItem == null) throw new LogicException(ResultEnum.DATA_ERROR, "未找到ID为" + code + "的税率值");
+        cityItemMapper.deleteById(code);
+        return true;
+      }).get();
   }
 }

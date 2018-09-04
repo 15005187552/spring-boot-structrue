@@ -56,4 +56,9 @@ public class LocationRateController extends BaseController {
   public Result saveRate(@RequestBody RateSaveForm form) {
     return success(locationRateService.saveRate(form));
   }
+
+  @GetMapping("deleteRate/{id}")
+  public Result deleteRate(@PathVariable Long id) {
+    return success(locationRateService.deleteRate(id));
+  }
 }
