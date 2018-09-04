@@ -2,7 +2,7 @@ server:
   port: 1227
 spring:
   profiles:
-    active: dev
+    active: dev,devLocal
     include: base,gecko,common
 wx:
   xcx:                  #小程序

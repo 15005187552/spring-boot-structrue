@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +39,7 @@ public class CompanyService {
       IdentificationType.NO_IDENTI.getCode(), DisabledEnum.ENABLED.getCode(), companyForm.getCode(), 1L,
     null, null, null, new Date(), null, companyForm.getProvCode(), companyForm.getCityCode(), companyForm.getAreaCode(), companyForm.getAddress());
     Map<String, Object> map = new HashMap<>();
-    map.put("CODE", companyForm.getCityCode());
+    map.put("CODE", companyForm.getCode());
     map.put("DISABLED", DisabledEnum.ENABLED.getCode());
     List<Company> list = companyMapper.selectByMap(map);
     if(CollectionUtil.isNotEmpty(list)){
@@ -46,9 +47,15 @@ public class CompanyService {
       companyMapper.updateById(company);
     } else {
       companyMapper.insert(company);
+      File file = new File(appInfo.getCompanyFile() + company.getId());
+      if(!file.exists()){
+        file.mkdir();
+      }
     }
     if(StrUtil.isNotBlank(companyForm.getFilePath())) {
-      Fileutil.cutGeneralFile(appInfo.getCachePath() + companyForm.getFilePath(), appInfo.getCompanyFile() + company.getId());
+      String srcPath = appInfo.getCachePath() + companyForm.getFilePath();
+      String destDir = appInfo.getCompanyFile() + company.getId()+ "/";
+      Fileutil.cutGeneralFile(srcPath, destDir);
       company.setPicPath(company.getId() + "/" + companyForm.getFilePath());
       companyMapper.updateById(company);
     }

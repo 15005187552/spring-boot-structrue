@@ -51,8 +51,7 @@ public class Fileutil {
       return false;
     }
     // 获取待复制文件的文件名
-    String fileName = srcPath
-      .substring(srcPath.lastIndexOf(File.separator));
+    String fileName = srcFile.getName();
     String destPath = destDir + fileName;
     if (destPath.equals(srcPath)) { // 源文件路径和目标文件路径重复
       System.out.println("源文件路径和目标文件路径重复!");
@@ -64,8 +63,6 @@ public class Fileutil {
       return false;
     }
 
-    File destFileDir = new File(destDir);
-    destFileDir.mkdirs();
     try {
       FileInputStream fis = new FileInputStream(srcPath);
       FileOutputStream fos = new FileOutputStream(destFile);

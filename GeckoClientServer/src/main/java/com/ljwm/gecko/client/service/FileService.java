@@ -23,7 +23,8 @@ public class FileService {
   ApplicationInfo appInfo;
 
   public Object upload(MultipartFile file) {
-    String filePath = FileKit.saveUploadFile(file, appInfo.getFilePath());
+    String s = appInfo.toString();
+    String filePath = FileKit.saveUploadFile(file, appInfo.getCachePath());
     if (StrUtil.isEmpty(filePath))
       return fail(ResultEnum.FAIL_TO_SAVE_FILE);
     Map<String, Object> map = new HashedMap();

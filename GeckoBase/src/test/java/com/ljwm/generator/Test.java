@@ -9,6 +9,6 @@ import com.ljwm.gecko.base.utils.Fileutil;
 public class Test {
   @org.junit.Test
   public void cut(){
-    Fileutil.cutGeneralFile("C:\\Users\\Administrator\\Desktop\\550471725290436555.png","E:\\pic");
+    Fileutil.cutGeneralFile("D:\\upload\\cache\\20180904185851.png","D:\\upload\\gecko\\company\\6");
   }
 }
