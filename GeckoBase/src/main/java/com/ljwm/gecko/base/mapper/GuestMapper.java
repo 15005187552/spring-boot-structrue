@@ -2,6 +2,7 @@ package com.ljwm.gecko.base.mapper;
 
 import com.ljwm.gecko.base.entity.Guest;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -23,6 +24,6 @@ public interface GuestMapper extends BaseMapper<Guest> {
   Guest findByGuestId(String guestId);
 
   @Update("UPDATE t_guest SET MEMBER_ID =#{memberId} WHERE GUEST_ID=#{userName} ")
-  void updateByGuestId(String userName, Long memberId);
+  void updateByGuestId(@Param("userName") String userName,@Param("memberId") Long memberId);
 
 }
