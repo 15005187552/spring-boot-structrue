@@ -92,7 +92,7 @@ public class MemberInfoDao {
     }
     return null;
   }
-  public void updateAccount(String mpOpenId, String extInfo, Integer code) {
+  public Long updateAccount(String mpOpenId, String extInfo, Integer code) {
     Map<String, Object> map = new HashedMap();
     map.put("TYPE", code);
     map.put("USERNAME", mpOpenId);
@@ -101,7 +101,23 @@ public class MemberInfoDao {
       MemberAccount memberAccount = list.get(0);
       memberAccount.setExtInfo(extInfo);
       memberAccountMapper.updateById(memberAccount);
+      return memberAccount.getMemberId();
     }
+    return null;
+  }
+
+  public String selectMember(Long memberId) {
+    Member member = memberMapper.selectById(memberId);
+    if(member !=null){
+      return member.getNickName();
+    }
+    return null;
+  }
+
+  public void updateMember(String nickName, Long memberId) {
+    Member member = memberMapper.selectById(memberId);
+    member.setNickName(nickName);
+    memberMapper.updateById(member);
   }
 }
 

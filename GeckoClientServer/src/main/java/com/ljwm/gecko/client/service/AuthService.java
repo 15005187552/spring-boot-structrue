@@ -1,6 +1,7 @@
 package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.dto.Result;
@@ -74,7 +75,13 @@ public class AuthService {
       if(StrUtil.isNotBlank(guestForm.getRawData())&&StrUtil.isBlank(unionId)){
         String extInfo = wechatXCXService.getUserInfo(guestForm.getEncryptedData(), sessionKey, guestForm.getIv());
         log.debug("The ext info for wixin app user: {}", extInfo);
-        memberInfoService.updateExt(mpOpenId, extInfo, UserSource.WX_APP.getCode());
+        JSONObject js = JSON.parseObject(extInfo);
+        String nickName = js.getString("nickName");
+        Long memberId = memberInfoService.updateExt(mpOpenId, extInfo, UserSource.WX_APP.getCode());
+        String nName = memberInfoService.selectMember(memberId);
+        if(StrUtil.isBlank(nName)){
+          memberInfoService.updateMember(nickName, memberId);
+        }
       }
       guest = guestService.upsert(UserSource.codeOf(UserSource.WX_APP.getCode()), mpOpenId, null);
     }
@@ -93,6 +100,7 @@ public class AuthService {
     ResultMe resultMe = new ResultMe();
     resultMe.setId(jwtUser.getId());
     resultMe.setIsGuest(false);
+    resultMe.setPhoneNum(memberVo.getRegMobile());
     resultMe.setUsername(jwtUser.getUsername());
     resultMe.setExtInfo(memberVo.getAccount().getExtInfo());
     resultMe.setNickName(memberVo.getNickName());

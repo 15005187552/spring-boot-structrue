@@ -26,7 +26,7 @@ public class CompanyForm {
   @TableField("`CODE`")
   private String code;
 
-  @ApiModelProperty(value = "证照图片路径")
+  @ApiModelProperty(value = "证照图片文件")
   private MultipartFile file;
 
   @ApiModelProperty(value = "省级代码")
