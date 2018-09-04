@@ -13,7 +13,7 @@
     <result column="CODE" property="code"/>
     <result column="CREATER_ID" property="createrId"/>
     <result column="PIC_PATH" property="picPath"/>
-    <result column="VALIDATER_ID" property="validaterId"/>
+    <result column="VALIDATOR_ID" property="validatorId"/>
     <result column="VALIDATE_TIME" property="validateTime"/>
     <result column="UPDATE_TIME" property="updateTime"/>
     <result column="VALIDATE_TEXT" property="validateText"/>
@@ -25,8 +25,9 @@
 
   <!-- 通用查询结果列 -->
   <sql id="Base_Column_List">
-          `ID`          ,`NAME`          ,`TYPE`          ,`CREATE_TIME`          ,`VALIDATE_STATE`          ,`DISABLED`          ,`CODE`          ,`CREATER_ID`          ,`PIC_PATH`          ,`VALIDATER_ID`          ,`VALIDATE_TIME`          ,`UPDATE_TIME`          ,`VALIDATE_TEXT`          ,`PROV_CODE`          ,`CITY_CODE`          ,`AREA_CODE`          ,`ADDRESS`
+          `ID`          ,`NAME`          ,`TYPE`          ,`CREATE_TIME`          ,`VALIDATE_STATE`          ,`DISABLED`          ,`CODE`          ,`CREATER_ID`          ,`PIC_PATH`          ,`VALIDATOR_ID`          ,`VALIDATE_TIME`          ,`UPDATE_TIME`          ,`VALIDATE_TEXT`          ,`PROV_CODE`          ,`CITY_CODE`          ,`AREA_CODE`          ,`ADDRESS`
     </sql>
+
 
   <resultMap id="UnValidateCompanyVo" type="com.ljwm.gecko.base.model.vo.UnValidateCompanyVo">
   </resultMap>

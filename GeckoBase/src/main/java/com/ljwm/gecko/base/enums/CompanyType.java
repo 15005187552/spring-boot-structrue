@@ -11,8 +11,7 @@ import lombok.Getter;
 public enum CompanyType implements CommonEnum {
   COMPANY(0, "企业"),
   PUBLIC(1, "事业单位"),
-  SOCIAL(2, "社会团体")
-  ;
+  SOCIAL(2, "社会团体");
 
   private Integer code;
   private String name;
@@ -23,9 +22,18 @@ public enum CompanyType implements CommonEnum {
   }
 
   public static CompanyType codeOf(Integer code) {
-    for(CompanyType loginType : CompanyType.values()) {
+    for (CompanyType loginType : CompanyType.values()) {
       if (loginType.code.equals(code)) {
         return loginType;
+      }
+    }
+    return null;
+  }
+
+  public static String getNameByCode(Integer code) {
+    for (CompanyType loginType : CompanyType.values()) {
+      if (loginType.code.equals(code)) {
+        return loginType.getName();
       }
     }
     return null;

@@ -1,34 +1,31 @@
 package com.ljwm.gecko.base.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
+import com.baomidou.mybatisplus.annotation.IdType;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import java.io.Serializable;
+
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
-import java.util.Date;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
  * 入驻企业表
  * </p>
  *
- * @author Levis
- * @since 2018-09-03
+ * @author xixil
+ * @since 2018-09-04
  */
 @Data
 @SuppressWarnings("ALL")
 @Accessors(chain = true)
 @TableName("`t_company`")
-@AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value = "入驻企业表", subTypes = {Company.class})
 public class Company implements Serializable {
@@ -58,7 +55,7 @@ public class Company implements Serializable {
 
     @ApiModelProperty(value = "是否禁用")
     @TableField("`DISABLED`")
-    private Integer disabled;
+    private Boolean disabled;
 
     @ApiModelProperty(value = "企业纳税代码")
     @TableField("`CODE`")
@@ -73,8 +70,8 @@ public class Company implements Serializable {
     private String picPath;
 
     @ApiModelProperty(value = "审核人ID")
-    @TableField("`VALIDATER_ID`")
-    private Integer validaterId;
+    @TableField("`VALIDATOR_ID`")
+    private Integer validatorId;
 
     @ApiModelProperty(value = "审核时间")
     @TableField("`VALIDATE_TIME`")
@@ -123,7 +120,7 @@ public class Company implements Serializable {
 
     public static final String PIC_PATH = "`PIC_PATH`";
 
-    public static final String VALIDATER_ID = "`VALIDATER_ID`";
+    public static final String VALIDATOR_ID = "`VALIDATOR_ID`";
 
     public static final String VALIDATE_TIME = "`VALIDATE_TIME`";
 
