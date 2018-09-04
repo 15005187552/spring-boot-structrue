@@ -100,6 +100,7 @@ public class AuthService {
     ResultMe resultMe = new ResultMe();
     resultMe.setId(jwtUser.getId());
     resultMe.setIsGuest(false);
+    resultMe.setPhoneNum(memberVo.getRegMobile());
     resultMe.setUsername(jwtUser.getUsername());
     resultMe.setExtInfo(memberVo.getAccount().getExtInfo());
     resultMe.setNickName(memberVo.getNickName());

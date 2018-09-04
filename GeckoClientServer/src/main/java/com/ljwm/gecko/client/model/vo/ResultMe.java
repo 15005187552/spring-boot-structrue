@@ -17,6 +17,7 @@ public class ResultMe {
 
   private Long id;
   private String username;
+  private String phoneNum;
   private String nickName;
   private String extInfo;
   private String token;
