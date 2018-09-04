@@ -6,8 +6,10 @@ import com.ljwm.gecko.client.service.CompanyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
@@ -26,12 +28,7 @@ public class CompanyController {
   @PostMapping("/commit")
   @ApiOperation("提交公司信息")
   public Result commit(@RequestBody @Valid CompanyForm companyForm){
-    return Result.success(companyService.commit(companyForm));
+    return companyService.commit(companyForm);
   }
 
-  @PostMapping("/uploadfile")
-  @ApiOperation("提交公司信息")
-  public Result commit(@RequestParam("updateFiles") MultipartFile[] files){
-    return Result.success(companyService.upload(files));
-  }
 }

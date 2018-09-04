@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -44,6 +45,36 @@ public class FileKit {
       java.io.File dest = new java.io.File(uploadPath + fileName);
       if (!dest.getParentFile().exists()) {
         log.debug("Create folder: {}", folder);
+        dest.getParentFile().mkdirs();
+      }
+      try {
+        file.transferTo(dest);
+      } catch (Exception e) {
+        log.error("Fail to save file {} ", dest.getAbsolutePath(), e);
+        return null;
+      }
+    }
+    return fileName;
+  }
+
+  /**
+   * 文件上传
+   *
+   * @param file
+   * @param uploadPath
+   * @param folder
+   * @return
+   */
+  public static String saveUploadFile(MultipartFile file, String cachePath) {
+    String fileName = null;
+    if (!file.isEmpty()) {
+      fileName = file.getOriginalFilename();
+      log.debug("上传的文件名为：" + fileName);
+      String suffixName = fileName.substring(fileName.lastIndexOf("."));
+      log.debug("上传的后缀名为：" + suffixName);
+      fileName = TimeUtil.getCurrentTime() + suffixName;
+      File dest = new File(cachePath + fileName);
+      if (!dest.getParentFile().exists()) {
         dest.getParentFile().mkdirs();
       }
       try {
