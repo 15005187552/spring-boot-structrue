@@ -13,7 +13,7 @@
         <result column="PERSON_PER" property="personPer" />
         <result column="PER_TYPE" property="perType" />
         <result column="SORT" property="sort" />
-        <result column="CREAT_TIME" property="creatTime" />
+        <result column="CREATE_TIME" property="createTime" />
         <result column="CREATOR" property="creator" />
         <result column="UPDATE_TIME" property="updateTime" />
         <result column="UPDATER_ID" property="updaterId" />
@@ -21,7 +21,10 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`ITEM_TYPE`          ,`REGION_CODE`          ,`UPPER_LIMIT`          ,`LOWER_LIMIT`          ,`COMPANY_PER`          ,`PERSON_PER`          ,`PER_TYPE`          ,`SORT`          ,`CREAT_TIME`          ,`CREATOR`          ,`UPDATE_TIME`          ,`UPDATER_ID`
+          `ID`          ,`ITEM_TYPE`          ,`REGION_CODE`          ,`UPPER_LIMIT`          ,`LOWER_LIMIT`          ,`COMPANY_PER`          ,`PERSON_PER`          ,`PER_TYPE`          ,`SORT`          ,`CREATE_TIME`          ,`CREATOR`          ,`UPDATE_TIME`          ,`UPDATER_ID`
     </sql>
 
+  <resultMap id="RateVo" type="com.ljwm.gecko.base.model.vo.RateVo" extends="BaseResultMap">
+    <result column="NAME" property="typeName" />
+  </resultMap>
 </mapper>

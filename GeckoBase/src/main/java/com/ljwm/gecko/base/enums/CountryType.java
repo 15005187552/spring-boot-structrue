@@ -9,9 +9,9 @@ import lombok.Getter;
  */
 @Getter
 public enum CountryType implements CommonEnum {
-  CHINA(0, "中国大陆")/*,
-  HTMT(2, "港澳台"),
-  FOREIGN(3, "外籍")*/
+  CHINA(0, "中国大陆居民"),
+  HTMT(2, "港澳台居民"),
+  FOREIGN(3, "外籍居民")
   ;
 
   private Integer code;

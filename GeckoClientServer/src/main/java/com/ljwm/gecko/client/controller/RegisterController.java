@@ -32,7 +32,7 @@ public class RegisterController extends BaseController {
   @ApiOperation("发送验证码")
   public Result sendSMS(@RequestBody @Valid RegisterForm registerForm,
                          HttpServletRequest request){
-      return success(registerService.getSMS(registerForm, request));
+      return registerService.getSMS(registerForm, request);
   }
 
 

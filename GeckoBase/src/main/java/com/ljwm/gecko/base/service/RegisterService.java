@@ -5,8 +5,12 @@ import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.dao.MemberInfoDao;
 import com.ljwm.gecko.base.dao.MobileCodeDao;
+import com.ljwm.gecko.base.entity.Member;
+import com.ljwm.gecko.base.entity.MemberAccount;
+import com.ljwm.gecko.base.entity.MemberPassword;
 import com.ljwm.gecko.base.entity.MobileCode;
 import com.ljwm.gecko.base.enums.LoginType;
+import com.ljwm.gecko.base.mapper.GuestMapper;
 import com.ljwm.gecko.base.model.dto.RegisterForm;
 import com.ljwm.gecko.base.model.dto.RegisterMemberForm;
 import com.ljwm.gecko.base.utils.IpUtil;
@@ -37,7 +41,14 @@ public class RegisterService {
   @Autowired
   MemberInfoDao memberInfoDao;
 
+  @Autowired
+  GuestMapper guestMapper;
+
   public Result getSMS(RegisterForm registerForm, HttpServletRequest request) {
+    Long memberId = memberInfoDao.select(registerForm.getPhoneNum());
+    if (memberId != null){
+      return fail(ResultEnum.DATA_ERROR.getCode(),"该用户已注册！");
+    }
     Long currentTime = System.currentTimeMillis();//获取当前时间
     String phoneNum = registerForm.getPhoneNum();
     MobileCode mobileCode = mobileCodeDao.find(phoneNum);
@@ -80,15 +91,27 @@ public class RegisterService {
     String userName = registerMemberForm.getUserName();
     MobileCode mobileCode = mobileCodeDao.select(code, phoneNum);
     if(mobileCode != null){
-      memberInfoDao.insert(phoneNum);
       Long memberId = memberInfoDao.select(phoneNum);
+      if (memberId != null){
+        return fail(ResultEnum.DATA_ERROR.getCode(),"该用户已注册！");
+      }
+      Member member = memberInfoDao.insert(phoneNum);
+      memberId = member.getId();
+      log.debug("Saved member :{}", member);
+      if(memberId != null) {
+        guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
+      }
       String salt = StringUtil.salt();
       String password = SecurityKit.passwordMD5(userName, salt);
-      memberInfoDao.insertPassword(salt, password, new Date());
-      Long passwordId = memberInfoDao.selectIdByPassword(salt, password);
-      memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, passwordId);
+      MemberPassword memberPassword = memberInfoDao.insertPassword(salt, password, new Date());
+      log.debug("Saved password: {}", memberPassword);
+
+      MemberAccount memberAccount = memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, memberPassword.getId());
+
+      log.debug("Saved account: {}", memberAccount);
       return success("注册成功！");
     }
+
     return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");
   }
 }

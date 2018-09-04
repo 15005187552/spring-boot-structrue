@@ -8,3 +8,8 @@ wx:
   xcx:                  #小程序
     appId: wx02c093bdfb8fba13
     appSecret: b11358f00ef7ac5b946d4aa1ab488575
+
+appInfo:
+  webRoot: "D://upload/"
+  webPath: "https://mhs.1322.com"
+  filePath: "${appInfo.webRoot}/gecko/"

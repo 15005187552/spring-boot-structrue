@@ -1,12 +1,3 @@
-swagger2:
-  basePackage: "com.ljwm.gecko.client"
-  authorization: "Authorization"
-  title: "壁虎个税客户服务API"
-  description: ""
-  version: "V1.0"
-jwt:
-  route:
-    freeRouters: "/auth/login,/register,/sendSMS,/enum/*"
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

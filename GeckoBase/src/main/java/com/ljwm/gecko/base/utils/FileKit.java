@@ -9,6 +9,11 @@ import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /**
  * stoa Created by yunqisong on 2018/7/9/009.
  * FOR:
@@ -60,6 +65,34 @@ public class FileKit {
    */
   public static String getStrFormClassPathFile(String filePath) {
     return FileUtil.readString(URLUtil.url(URLUtil.CLASSPATH_URL_PREFIX + filePath), "UTF-8");
+  }
+
+  /**
+   * 下载文件
+   *
+   * @param response
+   * @param inputStream
+   */
+  public static void downloadFile(HttpServletResponse response, InputStream inputStream, String name) {
+    response.setContentType("application/force-download");// 设置强制下载不打开
+//        response.addHeader("Content-Disposition",
+//                String.format("attachment;fileName=%s", new String(name.getBytes(), Charset.forName("GBK"))));    // 设置文件名
+    OutputStream ops = null;
+    try {
+      ops = response.getOutputStream();
+//            StrUtil.
+      ops.write(cn.hutool.core.io.IoUtil.readBytes(inputStream));
+      ops.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (ops != null)
+          ops.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
 

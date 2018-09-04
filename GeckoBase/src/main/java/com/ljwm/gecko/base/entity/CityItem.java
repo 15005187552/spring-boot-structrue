@@ -20,8 +20,8 @@ import io.swagger.annotations.ApiModelProperty;
  * 各城市缴纳项目扣除项表
  * </p>
  *
- * @author Levis
- * @since 2018-08-31
+ * @author xixil
+ * @since 2018-09-03
  */
 @Data
 @SuppressWarnings("ALL")
@@ -69,8 +69,8 @@ public class CityItem implements Serializable {
     @ApiModelProperty(value = "排序")
     @TableField("`SORT`")
     private Integer sort;
-    @TableField("`CREAT_TIME`")
-    private Date creatTime;
+    @TableField("`CREATE_TIME`")
+    private Date createTime;
     @TableField("`CREATOR`")
     private Long creator;
     @TableField("`UPDATE_TIME`")
@@ -99,7 +99,7 @@ public class CityItem implements Serializable {
 
     public static final String SORT = "`SORT`";
 
-    public static final String CREAT_TIME = "`CREAT_TIME`";
+    public static final String CREATE_TIME = "`CREATE_TIME`";
 
     public static final String CREATOR = "`CREATOR`";
 

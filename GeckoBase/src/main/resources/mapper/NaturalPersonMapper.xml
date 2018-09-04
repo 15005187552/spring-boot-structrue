@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.NaturalPersonMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.NaturalPerson">
+        <id column="MEMBER_ID" property="memberId" />
+        <result column="COUNTRY" property="country" />
+        <result column="NAME" property="name" />
+        <result column="CERTIFICATE" property="certificate" />
+        <result column="CERT_NUM" property="certNum" />
+        <result column="CERT_POS_PATH" property="certPosPath" />
+        <result column="CERT_OPPO_PATH" property="certOppoPath" />
+        <result column="DISABLITY_NUM" property="disablityNum" />
+        <result column="DISABLITY_PATH" property="disablityPath" />
+        <result column="MATRTYR_NUM" property="matrtyrNum" />
+        <result column="MATRTYR_PATH" property="matrtyrPath" />
+        <result column="OLD_NUM" property="oldNum" />
+        <result column="OLD_PATH" property="oldPath" />
+        <result column="PROFESSOR_NUM" property="professorNum" />
+        <result column="PROFESSOR_PATH" property="professorPath" />
+        <result column="ACADEMIC_NUM" property="academicNum" />
+        <result column="ACADEMIC_PATH" property="academicPath" />
+        <result column="SOCIAL_SECU" property="socialSecu" />
+        <result column="CREAT_TIME" property="creatTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `MEMBER_ID`          ,`COUNTRY`          ,`NAME`          ,`CERTIFICATE`          ,`CERT_NUM`          ,`CERT_POS_PATH`          ,`CERT_OPPO_PATH`          ,`DISABLITY_NUM`          ,`DISABLITY_PATH`          ,`MATRTYR_NUM`          ,`MATRTYR_PATH`          ,`OLD_NUM`          ,`OLD_PATH`          ,`PROFESSOR_NUM`          ,`PROFESSOR_PATH`          ,`ACADEMIC_NUM`          ,`ACADEMIC_PATH`          ,`SOCIAL_SECU`          ,`CREAT_TIME`          ,`UPDATE_TIME`
+    </sql>
+
+</mapper>
