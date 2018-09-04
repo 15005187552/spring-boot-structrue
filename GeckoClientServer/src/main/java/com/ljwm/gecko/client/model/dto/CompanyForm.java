@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Janiffy
@@ -27,7 +26,7 @@ public class CompanyForm {
   private String code;
 
   @ApiModelProperty(value = "证照图片文件")
-  private MultipartFile file;
+  private String filePath;
 
   @ApiModelProperty(value = "省级代码")
   @TableField("`PROV_CODE`")

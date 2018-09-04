@@ -1,6 +1,7 @@
 package com.ljwm.gecko.base.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author Janiffy
@@ -19,4 +20,10 @@ public class TimeUtil {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
     return sdf.format(firstTime).equals(sdf.format(secondTime));
   }
+
+  public static String getCurrentTime(){
+    SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");//设置日期格式
+    return df.format(new Date());
+  }
+
 }

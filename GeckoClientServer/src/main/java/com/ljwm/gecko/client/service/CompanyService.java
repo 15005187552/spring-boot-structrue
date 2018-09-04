@@ -1,23 +1,23 @@
 package com.ljwm.gecko.client.service;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import com.ljwm.bootbase.enums.ResultEnum;
-import com.ljwm.bootbase.security.SecurityKit;
+import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.entity.Company;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.enums.IdentificationType;
 import com.ljwm.gecko.base.mapper.CompanyMapper;
-import com.ljwm.gecko.base.model.bean.AppInfo;
-import com.ljwm.gecko.base.utils.FileKit;
+import com.ljwm.gecko.base.utils.Fileutil;
+import com.ljwm.gecko.client.model.ApplicationInfo;
 import com.ljwm.gecko.client.model.dto.CompanyForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
-
-import static com.ljwm.bootbase.dto.Result.fail;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Janiffy
@@ -28,29 +28,32 @@ import static com.ljwm.bootbase.dto.Result.fail;
 public class CompanyService {
 
   @Autowired
-  AppInfo appInfo;
+  ApplicationInfo appInfo;
 
   @Autowired
   CompanyMapper companyMapper;
 
-  public Object commit(CompanyForm companyForm) {
-    String fileName = FileKit.saveUploadFile(companyForm.getFile(), appInfo.getFilePath(), appInfo.getPic());
-    if (StrUtil.isEmpty(fileName))
-      return fail(ResultEnum.FAIL_TO_SAVE_FILE);
+  public Result commit(CompanyForm companyForm) {
     Company company = new Company(null, companyForm.getName(), companyForm.getType(), new Date(),
-      IdentificationType.NO_IDENTI.getCode(), DisabledEnum.ENABLED.getCode(), companyForm.getCode(), SecurityKit.currentId(),
-    fileName, null, null, new Date(), null, companyForm.getProvCode(), companyForm.getCityCode(), companyForm.getAreaCode(), companyForm.getAddress());
-    companyMapper.insert(company);
-    return "提交成功！";
-  }
-
-
-  public Object upload(MultipartFile[] updateFiles) {
-    for (int i=0; i<updateFiles.length; i++) {
-      String fileName = FileKit.saveUploadFile(updateFiles[i], appInfo.getFilePath(), appInfo.getPic());
-      if (StrUtil.isEmpty(fileName))
-        return fail(ResultEnum.FAIL_TO_SAVE_FILE);
+      IdentificationType.NO_IDENTI.getCode(), DisabledEnum.ENABLED.getCode(), companyForm.getCode(), 1L,
+    null, null, null, new Date(), null, companyForm.getProvCode(), companyForm.getCityCode(), companyForm.getAreaCode(), companyForm.getAddress());
+    Map<String, Object> map = new HashMap<>();
+    map.put("CODE", companyForm.getCityCode());
+    map.put("DISABLED", DisabledEnum.ENABLED.getCode());
+    List<Company> list = companyMapper.selectByMap(map);
+    if(CollectionUtil.isNotEmpty(list)){
+      company.setId(list.get(0).getId());
+      companyMapper.updateById(company);
+    } else {
+      companyMapper.insert(company);
     }
-    return "上传成功！";
+    if(StrUtil.isNotBlank(companyForm.getFilePath())) {
+      Fileutil.cutGeneralFile(appInfo.getCachePath() + companyForm.getFilePath(), appInfo.getCompanyFile() + company.getId());
+      company.setPicPath(company.getId() + "/" + companyForm.getFilePath());
+      companyMapper.updateById(company);
+    }
+    return Result.success("成功！");
   }
+
+
 }

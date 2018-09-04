@@ -108,11 +108,20 @@ public class AuthService {
     return resultMe;
   }
 
-  public Result me() {
+  public ResultMe me() {
     Long id = SecurityKit.currentId();
     //判断是否为会员
+    String code = LoginInfoHolder.getLoginType();
     if (!LoginInfoHolder.getLoginType().equals(LoginType.GUEST.getCode().toString())){
-        return Result.success(memberInfoService.selectMemberInfo(id, LoginInfoHolder.getLoginType()));
+        MemberVo memberVo = memberInfoService.selectMemberInfo(id, LoginInfoHolder.getLoginType());
+        ResultMe resultMe = new ResultMe();
+        resultMe.setIsGuest(false);
+        resultMe.setId(id);
+        resultMe.setPhoneNum(memberVo.getRegMobile());
+        resultMe.setUsername(memberVo.getAccount().getUsername());
+        resultMe.setExtInfo(memberVo.getAccount().getExtInfo());
+        resultMe.setNickName(memberVo.getNickName());
+        return resultMe;
     }
     return null;
   }

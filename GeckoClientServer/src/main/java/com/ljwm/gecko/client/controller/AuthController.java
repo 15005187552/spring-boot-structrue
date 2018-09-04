@@ -34,6 +34,6 @@ public class AuthController extends BaseController {
   @GetMapping("me")
   @ApiOperation("当前用户信息")
   public Result me() {
-    return authService.me();
+    return success(authService.me());
   }
 }
