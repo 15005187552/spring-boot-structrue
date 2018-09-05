@@ -1,5 +1,7 @@
 package com.ljwm.gecko.base.utils;
 
+import com.ljwm.bootbase.exception.LogicException;
+
 import java.io.*;
 
 /**
@@ -15,12 +17,11 @@ public class Fileutil {
    *            目标文件所在的目录
    * @return
    */
-  public static boolean copyGeneralFile(String srcPath, String destDir) {
+  public static boolean copyGeneralFile(String srcPath, String destDir){
     boolean flag = false;
     File file = new File(srcPath);
     if (!file.exists()) {
       System.out.println("源文件或源文件夹不存在!");
-      return false;
     }
     if (file.isFile()) { // 源文件
       System.out.println("下面进行文件复制!");
@@ -81,9 +82,11 @@ public class Fileutil {
 
     if (flag) {
       System.out.println("复制文件成功!");
+      return flag;
+    }else {
+      throw new LogicException("复制文件失败!");
     }
 
-    return flag;
   }
 
   /**
@@ -229,14 +232,12 @@ public class Fileutil {
    * @param destDir
    *            同上
    */
-  public static boolean cutGeneralFile(String srcPath, String destDir) {
+  public static boolean cutGeneralFile(String srcPath, String destDir){
     if (!copyGeneralFile(srcPath, destDir)) {
       System.out.println("复制失败导致剪切失败!");
-      return false;
     }
     if (!deleteGeneralFile(srcPath)) {
       System.out.println("删除源文件(文件夹)失败导致剪切失败!");
-      return false;
     }
 
     System.out.println("剪切成功!");

@@ -1,10 +1,10 @@
 package com.ljwm.gecko.client.model.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Janiffy
@@ -26,20 +26,53 @@ public class PersonInfoForm {
   @ApiModelProperty(value = "姓名")
   private String name;
 
-  @ApiModelProperty(value = "证件类型 0-身份证号 1-港澳台证件号 3-外籍证件号")
+  @ApiModelProperty(value = "证件类型")
   private Integer certificate;
 
   @ApiModelProperty(value = "证件号")
   private Integer certNum;
 
-  @ApiModelProperty(value = "身份证正面图片")
-  private MultipartFile posFile;
-
-  @ApiModelProperty(value = "身份证反面图片")
-  private MultipartFile oppoFile;
-
   @ApiModelProperty(value = "社保属性 0-公司代缴 1-个人缴纳")
   private Integer socialSecu;
 
+  @ApiModelProperty(value = "残疾人证件号")
+  @TableField("`DISABLITY_NUM`")
+  private String disablityNum;
+
+  @ApiModelProperty(value = "残疾证件路径")
+  @TableField("`DISABLITY_PATH`")
+  private String disablityPath;
+
+  @ApiModelProperty(value = "烈属证件号")
+  @TableField("`MATRTYR_NUM`")
+  private String matrtyrNum;
+
+  @ApiModelProperty(value = "烈属证件路径")
+  @TableField("`MATRTYR_PATH`")
+  private String matrtyrPath;
+
+  @ApiModelProperty(value = "孤老证件号")
+  @TableField("`OLD_NUM`")
+  private String oldNum;
+
+  @ApiModelProperty(value = "孤老路径")
+  @TableField("`OLD_PATH`")
+  private String oldPath;
+
+  @ApiModelProperty(value = "专家学者证件号")
+  @TableField("`PROFESSOR_NUM`")
+  private String professorNum;
+
+  @ApiModelProperty(value = "专家学者证件路径")
+  @TableField("`PROFESSOR_PATH`")
+  private String professorPath;
+
+  @ApiModelProperty(value = "院士证件号")
+  @TableField("`ACADEMIC_NUM`")
+  private String academicNum;
+
+  @ApiModelProperty(value = "院士证件路径")
+  @TableField("`ACADEMIC_PATH`")
+  private String academicPath;
 
 }

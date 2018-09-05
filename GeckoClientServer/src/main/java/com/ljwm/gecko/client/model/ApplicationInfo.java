@@ -30,4 +30,7 @@ public class ApplicationInfo {
 
   @ApiModelProperty("图片缓存路径前缀")
   private String cachePath;
+
+  @ApiModelProperty("图片缓存路径前缀")
+  private String personFile;
 }

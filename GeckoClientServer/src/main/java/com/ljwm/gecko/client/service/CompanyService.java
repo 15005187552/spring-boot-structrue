@@ -49,7 +49,7 @@ public class CompanyService {
       companyMapper.insert(company);
       File file = new File(appInfo.getCompanyFile() + company.getId());
       if(!file.exists()){
-        file.mkdir();
+        file.mkdirs();
       }
     }
     if(StrUtil.isNotBlank(companyForm.getFilePath())) {
@@ -62,5 +62,13 @@ public class CompanyService {
     return Result.success("成功！");
   }
 
-
+  public Result findByName(String name) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("NAME", name);
+    List<Company> list = companyMapper.selectByMap(map);
+    if(CollectionUtil.isNotEmpty(list)){
+      return Result.success(list.get(0));
+    }
+    return null;
+  }
 }

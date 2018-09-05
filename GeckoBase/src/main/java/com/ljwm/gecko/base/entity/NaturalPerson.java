@@ -1,18 +1,17 @@
 package com.ljwm.gecko.base.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-
-
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -34,7 +33,7 @@ public class NaturalPerson implements Serializable {
 
 
     @ApiModelProperty(value = "会员ID")
-    @TableId(value = "`MEMBER_ID`", type = IdType.AUTO)
+    @TableId(value = "`MEMBER_ID`", type = IdType.INPUT)
     private Long memberId;
 
     @ApiModelProperty(value = "国籍 0-中国大陆 1-港澳台 2-外籍")
