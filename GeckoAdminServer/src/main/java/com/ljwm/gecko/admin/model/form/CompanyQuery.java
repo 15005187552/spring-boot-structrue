@@ -7,6 +7,5 @@ import lombok.Data;
 @Data
 public class CompanyQuery extends CommonQuery {
 
-  @ApiModelProperty(hidden = true)
   private Integer validateStatus;
 }

@@ -1,8 +1,13 @@
 package com.ljwm.gecko.base.utils;
 
+import com.alibaba.fastjson.JSONObject;
+import com.ljwm.gecko.base.enums.CompanyType;
 import com.ljwm.gecko.base.listener.CommonEnum;
+import org.apache.commons.lang3.EnumUtils;
 
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Janiffy
@@ -61,4 +66,13 @@ public class EnumUtil {
     return map;
   }
 
+
+//  public static <E extends CommonEnum> List<JSONObject> getListByEnum( Class<E> enumClass ) {
+//    return EnumUtils.getEnumList(enumClass ).stream().map(i -> {
+//      JSONObject jsonObject = new JSONObject();
+//      jsonObject.put("code", i.getCode());
+//      jsonObject.put("name", i.getName());
+//      return jsonObject;
+//    }).collect(Collectors.toList());
+//  }
 }

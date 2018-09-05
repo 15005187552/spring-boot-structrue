@@ -12,6 +12,8 @@ import java.util.Date;
 @Accessors(chain = true)
 public class UnValidateCompanyVo extends Company {
 
+  private String location;
+
   @JSONField(serializeUsing = CompanyEnumCodeToName.class)
   private Integer type;
 

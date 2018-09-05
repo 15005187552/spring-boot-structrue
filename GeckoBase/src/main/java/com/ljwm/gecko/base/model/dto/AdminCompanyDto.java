@@ -10,6 +10,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class AdminCompanyDto extends Company {
 
+  private String location;
+
   @JSONField(serializeUsing = CompanyEnumCodeToName.class)
   private Integer type;
 }

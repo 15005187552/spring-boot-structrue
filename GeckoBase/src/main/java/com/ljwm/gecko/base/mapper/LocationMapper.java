@@ -43,5 +43,10 @@ public interface LocationMapper extends BaseMapper<Location> {
   @ResultMap("SimpleLocation")
   List<SimpleLocation> findProvAndCity();
 
-  List<LocationRateVo> find(Page<LocationRateVo> page, @Param("params")Map map);
+  List<LocationRateVo> find(Page<LocationRateVo> page, @Param("params") Map map);
+
+  @Select("SELECT GROUP_CONCAT(temp.`NAME`)  AS f FROM (SELECT *  FROM t_location t WHERE t.`CODE` = CONCAT(LEFT(#{areaCode}, 2),'0000') \n" +
+    "UNION SELECT *  FROM t_location t WHERE t.`CODE` = CONCAT(LEFT(#{areaCode}, 4),'00') \n" +
+    "UNION SELECT *  FROM t_location t WHERE t.`CODE` = #{areaCode}) temp  ")
+  String getLocationByArea(@Param("areaCode") Integer areaCode);
 }
