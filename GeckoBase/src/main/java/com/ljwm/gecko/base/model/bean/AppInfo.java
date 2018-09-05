@@ -20,4 +20,7 @@ public class AppInfo {
 
   @ApiModelProperty("上传前缀路径")
   private String webPath;
+
+  @ApiModelProperty("后台图片访问")
+  private String adminPath;
 }

@@ -2,8 +2,10 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.base.config.FilePathAppend;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.enums.EquipTypeEnum;
+import com.ljwm.gecko.base.model.bean.AppInfo;
 import com.ljwm.gecko.base.model.dto.ClientAdvertisementDto;
 import com.ljwm.gecko.base.model.vo.AdvertisementVo;
 import com.ljwm.gecko.base.service.AdvertisementService;
@@ -24,9 +26,13 @@ public class AdvertisementController extends BaseController {
   @Autowired
   private AdvertisementService advertisementService;
 
+  @Autowired
+  private AppInfo appInfo;
+
   @GetMapping("findClient")
   @ApiOperation(value = "查询客户端广告列表")
   public Result<List<AdvertisementVo>> findClient(){
+    FilePathAppend.path = appInfo.getAdminPath();
     ClientAdvertisementDto clientAdvertisementDto = new ClientAdvertisementDto();
     clientAdvertisementDto.setDisabled(DisabledEnum.ENABLED.getCode());
     clientAdvertisementDto.setEquipType(EquipTypeEnum.WEIXIN.getCode());
