@@ -5,6 +5,7 @@ import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.admin.model.form.LocationRateQuery;
 import com.ljwm.gecko.admin.model.form.RateSaveForm;
 import com.ljwm.gecko.admin.service.LocationRateService;
+import com.ljwm.gecko.admin.util.FileKit;
 import com.ljwm.gecko.base.model.vo.SimpleLocation;
 import com.ljwm.gecko.base.model.vo.SimpleProv;
 import com.sun.org.apache.regexp.internal.RE;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -67,5 +69,11 @@ public class LocationRateController extends BaseController {
   @GetMapping("getItemType/{regionId}")
   public Result getItemType(@PathVariable Long regionId) {
     return success(locationRateService.getItemType(regionId));
+  }
+
+  @GetMapping("downLoadModel")
+  @ApiOperation("rrr")
+  public void downLoadModel(HttpServletResponse response) {
+    FileKit.downloadInClassPath("地区税率模板.xlsx", "excel/地区税率模板.xlsx", response);
   }
 }

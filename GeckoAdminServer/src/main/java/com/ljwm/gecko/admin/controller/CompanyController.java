@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.ljwm.bootbase.dto.Result;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -55,7 +56,7 @@ public class CompanyController extends BaseController {
 
   @PostMapping("checkCompany")
   @ApiOperation("审核公司")
-  public Result checkCompany(@RequestBody CompanyCheckForm form){
-      return success(companyService.checkCompany(form));
+  public Result checkCompany(@RequestBody CompanyCheckForm form) {
+    return success(companyService.checkCompany(form));
   }
 }

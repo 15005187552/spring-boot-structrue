@@ -1,8 +1,11 @@
 package com.ljwm.gecko.base.utils;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.URLUtil;
+import com.ljwm.bootbase.enums.ResultEnum;
+import com.ljwm.bootbase.exception.LogicException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -127,29 +130,5 @@ public class FileKit {
   }
 
 
-//  /**
-//   * 从ClassPath下面下载
-//   *
-//   * @param fileName
-//   * @param path
-//   * @param response
-//   */
-//  public static void downloadInClassPath(String fileName, String path, HttpServletResponse response) {
-//    try {
-//      response.setContentType("multipart/form-data");
-//      response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
-//      IoUtil.copy(FlowController.class.getClassLoader().getResourceAsStream(path), response.getOutputStream());
-//      response.getOutputStream().flush();
-//    } catch (Exception e) {
-//      log.info("IO ERROR -- E : {}", e);
-//      throw new LogicException(ResultEnum.DATA_ERROR, "下载文件出错!");
-//    } finally {
-//      try {
-//        response.getOutputStream().close();
-//      } catch (IOException e) {
-//        log.info("IO ERROR -- E : {}", e);
-//        throw new LogicException(ResultEnum.DATA_ERROR, "下载文件出错!");
-//      }
-//    }
-//  }
+
 }

@@ -1,6 +1,7 @@
 package com.ljwm.gecko.base.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.enums.ResultEnum;
@@ -61,6 +62,11 @@ public class CityItemService {
         code = location.getCode().toString();
       }
       Location subLocation = locationMapper.findCodeByName(Kv.by("name", locationRateDto.getCityName()).set("id", code.substring(0, 2)));
+
+      // 判单非空  是否已经有属性判定地址
+      if (subLocation != null)
+        cityItemMapper.deleteByMap(Kv.by("REGION_CODE", subLocation.getCode()));
+
       for (LocationRateDetailDto locationRateDetailDto : locationRateDto.getLocationRateDetailDtoList()) {
         CityItem cityItem = new CityItem();
         BeanUtil.copyProperties(locationRateDetailDto, cityItem);
