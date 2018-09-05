@@ -1,19 +1,14 @@
-package com.ljwm.gecko.client.model.dto;
+package com.ljwm.gecko.client.model.vo;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
  * @author Janiffy
- * @date 2018/9/3 10:52
+ * @date 2018/9/5 15:13
  */
 @Data
-@Accessors(chain = true)
-@ApiModel("公司信息表单")
-public class CompanyForm {
-
+public class CompanyVo {
   @ApiModelProperty(value = "企业名称")
   private String name;
 

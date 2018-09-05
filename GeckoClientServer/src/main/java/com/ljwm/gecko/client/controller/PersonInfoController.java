@@ -6,10 +6,7 @@ import com.ljwm.gecko.client.service.PersonInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -25,10 +22,16 @@ public class PersonInfoController {
   @Autowired
   PersonInfoService personInfoService;
 
-  @PostMapping("/commitPersonInfo")
+  @PostMapping("/commitInfo")
   @ApiOperation("提交个人信息")
   public Result commit(@RequestBody @Valid PersonInfoForm personInfoForm){
     return personInfoService.commit(personInfoForm);
+  }
+
+  @PostMapping("/findInfo")
+  @ApiOperation("查看个人信息")
+  public Result commit(@RequestParam("memberId")Long memberId){
+    return personInfoService.findByMemberId(memberId);
   }
 
 }

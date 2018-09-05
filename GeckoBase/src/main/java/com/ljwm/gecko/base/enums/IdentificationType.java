@@ -10,8 +10,8 @@ import lombok.Getter;
 public enum IdentificationType {
   //0：未认证，1：认证通过，2:认证失败
   NO_IDENTI(0, "未认证"),
-  PASS_IDENTI(0, "认证通过"),
-  FAIL_IDENTI(0, "认证失败");
+  PASS_IDENTI(1, "认证通过"),
+  FAIL_IDENTI(2, "认证失败");
 
   private Integer code;
   private String name;

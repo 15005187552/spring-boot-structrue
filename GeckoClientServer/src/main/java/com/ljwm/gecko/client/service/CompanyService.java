@@ -1,5 +1,6 @@
 package com.ljwm.gecko.client.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ljwm.bootbase.dto.Result;
@@ -8,8 +9,10 @@ import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.enums.IdentificationType;
 import com.ljwm.gecko.base.mapper.CompanyMapper;
 import com.ljwm.gecko.base.utils.Fileutil;
+import com.ljwm.gecko.client.constant.Constant;
 import com.ljwm.gecko.client.model.ApplicationInfo;
 import com.ljwm.gecko.client.model.dto.CompanyForm;
+import com.ljwm.gecko.client.model.vo.CompanyVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +39,7 @@ public class CompanyService {
 
   public Result commit(CompanyForm companyForm) {
     Company company = new Company(null, companyForm.getName(), companyForm.getType(), new Date(),
-      IdentificationType.NO_IDENTI.getCode(), DisabledEnum.ENABLED.getCode(), companyForm.getCode(), 1L,
+      IdentificationType.NO_IDENTI.getCode(), DisabledEnum.ENABLED.getCode(), companyForm.getCode(), 3L,
     null, null, null, new Date(), null, companyForm.getProvCode(), companyForm.getCityCode(), companyForm.getAreaCode(), companyForm.getAddress());
     Map<String, Object> map = new HashMap<>();
     map.put("CODE", companyForm.getCode());
@@ -47,27 +50,34 @@ public class CompanyService {
       companyMapper.updateById(company);
     } else {
       companyMapper.insert(company);
-      File file = new File(appInfo.getCompanyFile() + company.getId());
+      File file = new File(appInfo.getFilePath()+ Constant.COMPANY+ company.getId());
       if(!file.exists()){
         file.mkdirs();
       }
     }
-    if(StrUtil.isNotBlank(companyForm.getFilePath())) {
-      String srcPath = appInfo.getCachePath() + companyForm.getFilePath();
-      String destDir = appInfo.getCompanyFile() + company.getId()+ "/";
+    if(!companyForm.getFilePath().contains(Constant.HTTP)) {
+      String srcPath = appInfo.getFilePath() + Constant.CACHE + companyForm.getFilePath();
+      String destDir = appInfo.getFilePath()+Constant.COMPANY + company.getId()+ "/";
       Fileutil.cutGeneralFile(srcPath, destDir);
-      company.setPicPath(company.getId() + "/" + companyForm.getFilePath());
-      companyMapper.updateById(company);
+      company.setPicPath(Constant.COMPANY + company.getId() + "/" + companyForm.getFilePath());
     }
+    companyMapper.updateById(company);
     return Result.success("成功！");
   }
 
   public Result findByName(String name) {
     Map<String, Object> map = new HashMap<>();
     map.put("NAME", name);
+    map.put("VALIDATE_STATE", IdentificationType.PASS_IDENTI);
     List<Company> list = companyMapper.selectByMap(map);
     if(CollectionUtil.isNotEmpty(list)){
-      return Result.success(list.get(0));
+      Company company = list.get(0);
+      CompanyVo companyVo = new CompanyVo();
+      BeanUtil.copyProperties(company, companyVo);
+      if(StrUtil.isNotBlank(company.getPicPath())) {
+        companyVo.setFilePath(appInfo.getWebPath() + company.getPicPath());
+      }
+      return Result.success(companyVo);
     }
     return null;
   }

@@ -25,12 +25,4 @@ public class ApplicationInfo {
   @ApiModelProperty("文件路径")
   private String filePath;
 
-  @ApiModelProperty("公司文件路径")
-  private String companyFile;
-
-  @ApiModelProperty("图片缓存路径前缀")
-  private String cachePath;
-
-  @ApiModelProperty("图片缓存路径前缀")
-  private String personFile;
 }
