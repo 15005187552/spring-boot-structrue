@@ -19,6 +19,8 @@ public class Constant {
   //个人文件存储路径
   public static final String PERSON = "person/";
 
+  public static final String PROVIDER = "provider/";
+
   //税务文件存储路径
   public static final String TAX = "tax/";
 

@@ -101,4 +101,8 @@ public class MemberInfoService {
       memberPaperMapper.insert(memberPaper);
     }
   }
+
+  public MemberVo findMemberVoByRegMobile(String regMobile){
+    return memberMapper.findMemberVoByPhone(regMobile);
+  }
 }
