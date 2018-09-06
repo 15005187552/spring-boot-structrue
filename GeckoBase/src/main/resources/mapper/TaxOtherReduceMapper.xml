@@ -14,6 +14,13 @@
         <result column="UPDATER" property="updater" />
     </resultMap>
 
+    <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.TaxOtherReduceVo">
+      <result column="ID" property="otherReduceId" />
+      <result column="NAME" property="name" />
+      <result column="TAX_MONEY" property="taxMoney" />
+      <result column="TAX_DOC_PATH" property="taxDocPath" />
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
           `ID`          ,`TAX_ID`          ,`OTHER_REDUCE_ID`          ,`TAX_MONEY`          ,`TAX_DOC_PATH`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`UPDATER`

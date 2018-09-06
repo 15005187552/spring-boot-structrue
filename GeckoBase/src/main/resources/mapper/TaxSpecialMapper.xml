@@ -16,6 +16,15 @@
         <result column="UPDATER" property="updater" />
     </resultMap>
 
+    <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.TaxSpecialVo">
+      <id column="ID" property="id" />
+      <result column="NAME" property="name" />
+      <result column="PERSONAL_MONEY" property="personalMoney" />
+      <result column="COMPANY_MONEY" property="companyMoney" />
+      <result column="PERSONAL_PERCENT" property="personalPercent" />
+      <result column="COMPANY_PERCENT" property="companyPercent" />
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
           `ID`          ,`TAX_ID`          ,`SPECIAL_DEDU_ID`          ,`PERSONAL_MONEY`          ,`COMPANY_MONEY`          ,`PERSONAL_PERCENT`          ,`COMPANY_PERCENT`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`UPDATER`

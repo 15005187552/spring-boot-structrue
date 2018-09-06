@@ -8,6 +8,10 @@ import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.mapper.*;
+import com.ljwm.gecko.base.model.vo.TaxIncomeVo;
+import com.ljwm.gecko.base.model.vo.TaxOtherReduceVo;
+import com.ljwm.gecko.base.model.vo.TaxSpecialAddVo;
+import com.ljwm.gecko.base.model.vo.TaxSpecialVo;
 import com.ljwm.gecko.base.utils.Fileutil;
 import com.ljwm.gecko.client.model.dto.TaxIncomeForm;
 import com.ljwm.gecko.client.model.dto.TaxOtherReduceForm;
@@ -160,4 +164,45 @@ public class TaxInfoDao {
     }
   }
 
+  public List<TaxIncomeVo> selectIncomeInfo(Long memberId, String declareTime, Integer declareType) {
+    List<TaxIncomeVo> list = taxIncomeMapper.selectIncome(memberId, declareTime, declareType);
+    if(CollectionUtil.isNotEmpty(list)) {
+      return list;
+    }
+    return null;
+  }
+
+  public List<TaxOtherReduceVo> selectOther(Long memberId, String declareTime, Integer declareType) {
+    List<TaxOtherReduceVo> list = taxOtherReduceMapper.selectOther(memberId, declareTime, declareType);
+    if(CollectionUtil.isNotEmpty(list)) {
+      for(TaxOtherReduceVo taxOtherReduceVo: list){
+        if(StrUtil.isNotBlank(taxOtherReduceVo.getTaxDocPath())) {
+          taxOtherReduceVo.setTaxDocPath(appInfo.getWebPath() + taxOtherReduceVo.getTaxDocPath());
+        }
+      }
+      return list;
+    }
+    return null;
+  }
+
+  public List<TaxSpecialVo> selectSpecial(Long memberId, String declareTime, Integer declareType) {
+    List<TaxSpecialVo> list = taxSpecialMapper.selectSpecial(memberId, declareTime, declareType);
+    if(CollectionUtil.isNotEmpty(list)) {
+      return list;
+    }
+    return null;
+  }
+
+  public List<TaxSpecialAddVo> selectSpecialAdd(Long memberId, String declareTime, Integer declareType) {
+    List<TaxSpecialAddVo> list = taxSpecialAddMapper.selectSpecialAdd(memberId, declareTime, declareType);
+    if(CollectionUtil.isNotEmpty(list)) {
+      for(TaxSpecialAddVo taxSpecialAddVo: list){
+        if(StrUtil.isNotBlank(taxSpecialAddVo.getTaxDocPath())) {
+          taxSpecialAddVo.setTaxDocPath(appInfo.getWebPath() + taxSpecialAddVo.getTaxDocPath());
+        }
+      }
+      return list;
+    }
+    return null;
+  }
 }

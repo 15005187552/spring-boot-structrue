@@ -2,6 +2,7 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.client.model.dto.TaxForm;
+import com.ljwm.gecko.client.model.dto.TaxInfoForm;
 import com.ljwm.gecko.client.service.TaxDeclarationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,6 +30,12 @@ public class TaxDeclarationController {
   @ApiOperation("提交信息")
   public Result commit(@RequestBody @Valid TaxForm taxForm){
     return taxDeclarationService.commit(taxForm);
+  }
+
+  @PostMapping("/findInfo")
+  @ApiOperation("查看信息")
+  public Result findInfo(@RequestBody @Valid TaxInfoForm taxInfoForm){
+    return taxDeclarationService.find(taxInfoForm);
   }
 
 }
