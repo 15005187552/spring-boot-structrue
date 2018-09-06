@@ -83,23 +83,26 @@ public class PersonInfoService {
 
   public Result findByMemberId(Long memberId) {
     NaturalPerson naturalPerson= naturalPersonMapper.selectById(memberId);
-    NaturalPersonVo naturalPersonVo = new NaturalPersonVo();
-    BeanUtil.copyProperties(naturalPerson, naturalPersonVo);
-    if(!naturalPersonVo.getAcademicPath().contains(Constant.HTTP)){
-      naturalPersonVo.setAcademicPath(appInfo.getWebPath()+naturalPersonVo.getAcademicPath());
+    if (naturalPerson != null) {
+      NaturalPersonVo naturalPersonVo = new NaturalPersonVo();
+      BeanUtil.copyProperties(naturalPerson, naturalPersonVo);
+      if (StrUtil.isNotBlank(naturalPersonVo.getAcademicPath()) && !naturalPersonVo.getAcademicPath().contains(Constant.HTTP)) {
+        naturalPersonVo.setAcademicPath(appInfo.getWebPath() + naturalPersonVo.getAcademicPath());
+      }
+      if (StrUtil.isNotBlank(naturalPersonVo.getDisablityPath()) && !naturalPersonVo.getDisablityPath().contains(Constant.HTTP)) {
+        naturalPersonVo.setDisablityPath(appInfo.getWebPath() + naturalPersonVo.getDisablityPath());
+      }
+      if (StrUtil.isNotBlank(naturalPersonVo.getMatrtyrPath()) && !naturalPersonVo.getMatrtyrPath().contains(Constant.HTTP)) {
+        naturalPersonVo.setMatrtyrPath(appInfo.getWebPath() + naturalPersonVo.getMatrtyrPath());
+      }
+      if (StrUtil.isNotBlank(naturalPersonVo.getOldPath()) && !naturalPersonVo.getOldPath().contains(Constant.HTTP)) {
+        naturalPersonVo.setOldPath(appInfo.getWebPath() + naturalPersonVo.getOldPath());
+      }
+      if (StrUtil.isNotBlank(naturalPersonVo.getProfessorPath()) && !naturalPersonVo.getProfessorPath().contains(Constant.HTTP)) {
+        naturalPersonVo.setProfessorPath(appInfo.getWebPath() + naturalPersonVo.getProfessorPath());
+      }
+      return Result.success(naturalPersonVo);
     }
-    if(!naturalPersonVo.getDisablityPath().contains(Constant.HTTP)){
-      naturalPersonVo.setDisablityPath(appInfo.getWebPath()+naturalPersonVo.getDisablityPath());
-    }
-    if(!naturalPersonVo.getMatrtyrPath().contains(Constant.HTTP)){
-      naturalPersonVo.setMatrtyrPath(appInfo.getWebPath()+naturalPersonVo.getMatrtyrPath());
-    }
-    if(!naturalPersonVo.getOldPath().contains(Constant.HTTP)){
-      naturalPersonVo.setOldPath(appInfo.getWebPath()+naturalPersonVo.getOldPath());
-    }
-    if(!naturalPersonVo.getProfessorPath().contains(Constant.HTTP)){
-      naturalPersonVo.setProfessorPath(appInfo.getWebPath()+naturalPersonVo.getProfessorPath());
-    }
-    return Result.success(naturalPersonVo);
+    return Result.success(null);
   }
 }

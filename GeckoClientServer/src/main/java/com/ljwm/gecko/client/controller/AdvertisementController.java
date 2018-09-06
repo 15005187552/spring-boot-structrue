@@ -32,7 +32,7 @@ public class AdvertisementController extends BaseController {
   @GetMapping("findClient")
   @ApiOperation(value = "查询客户端广告列表")
   public Result<List<AdvertisementVo>> findClient(){
-    FilePathAppend.path = appInfo.getAdminPath();
+    FilePathAppend.path = appInfo.getWebPath();
     ClientAdvertisementDto clientAdvertisementDto = new ClientAdvertisementDto();
     clientAdvertisementDto.setDisabled(DisabledEnum.ENABLED.getCode());
     clientAdvertisementDto.setEquipType(EquipTypeEnum.WEIXIN.getCode());

@@ -50,7 +50,7 @@ public class NaturalPerson implements Serializable {
 
     @ApiModelProperty(value = "证件号")
     @TableField("`CERT_NUM`")
-    private Integer certNum;
+    private Long certNum;
 
     @ApiModelProperty(value = "证件照正面")
     @TableField("`CERT_POS_PATH`")
