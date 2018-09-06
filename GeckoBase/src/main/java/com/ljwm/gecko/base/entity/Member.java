@@ -14,6 +14,8 @@ import lombok.experimental.Accessors;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.Valid;
+
 /**
  * <p>
  * 会员表
@@ -53,6 +55,25 @@ public class Member implements Serializable {
     @TableField("DISABLED")
     private Boolean disabled;
 
+    @ApiModelProperty(value = "会员身份证号")
+    @TableField("MEMBER_IDCARD")
+    private String memberIdcard;
+
+    @ApiModelProperty(value ="认证人id")
+    @TableField("VALIDATER_ID")
+    private Long validaterId;
+
+    @ApiModelProperty(value = "认证时间")
+    @TableField("VALIDATE_TIME")
+    private Date validateTime;
+
+    @ApiModelProperty(value = "审核状态 0 待审核 1 审核通过 2 审核失败")
+    @TableField("VALIDATE_STATE")
+    private Integer validateState;
+
+    @ApiModelProperty(value = "认证内容")
+    @TableField("VALIDATE_TEXT")
+    private String validateText;
 
     public static final String ID = "ID";
 

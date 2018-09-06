@@ -2,14 +2,17 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.base.model.dto.MemberDto;
+import com.ljwm.gecko.base.service.MemberInfoService;
 import com.ljwm.gecko.client.security.JwtUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * Created by yuzhou on 2018/8/23.
@@ -21,9 +24,19 @@ import org.springframework.web.bind.annotation.RestController;
 @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
 public class MemberController extends BaseController {
 
+  @Autowired
+  private MemberInfoService memberInfoService;
+
   @GetMapping("company")
   @ApiOperation("会员所在企业")
   public Result myCompany() {
+    return success();
+  }
+
+  @PostMapping("validateMember")
+  @ApiOperation("会员认证")
+  public Result validateMember(@RequestBody @Valid MemberDto memberDto){
+    memberInfoService.validateMember(memberDto);
     return success();
   }
 }

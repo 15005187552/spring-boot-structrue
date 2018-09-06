@@ -9,6 +9,12 @@
     <result column="NICK_NAME" property="nickName"/>
     <result column="CREATE_TIME" property="createTime"/>
     <result column="DISABLED" property="disabled"/>
+
+    <result column="MEMBER_IDCARD" property="memberIdcard"/>
+    <result column="VALIDATER_ID" property="validaterId"/>
+    <result column="VALIDATE_TIME" property="validateTime"/>
+    <result column="VALIDATE_STATE" property="validateState"/>
+    <result column="VALIDATE_TEXT" property="validateText"/>
   </resultMap>
 
   <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.MemberVo">

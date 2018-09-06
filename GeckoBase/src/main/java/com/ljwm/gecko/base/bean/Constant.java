@@ -1,6 +1,5 @@
-package com.ljwm.gecko.client.constant;
+package com.ljwm.gecko.base.bean;
 
-import com.ljwm.gecko.client.model.ApplicationInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
