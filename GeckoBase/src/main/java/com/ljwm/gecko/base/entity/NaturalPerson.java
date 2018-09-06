@@ -19,7 +19,7 @@ import java.util.Date;
  * </p>
  *
  * @author Levis
- * @since 2018-09-03
+ * @since 2018-09-05
  */
 @Data
 @SuppressWarnings("ALL")
@@ -33,7 +33,7 @@ public class NaturalPerson implements Serializable {
 
 
     @ApiModelProperty(value = "会员ID")
-    @TableId(value = "`MEMBER_ID`", type = IdType.INPUT)
+    @TableId(value = "`MEMBER_ID`", type = IdType.AUTO)
     private Long memberId;
 
     @ApiModelProperty(value = "国籍 0-中国大陆 1-港澳台 2-外籍")

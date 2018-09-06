@@ -1,6 +1,5 @@
 package com.ljwm.gecko.client.model.dto;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -36,43 +35,33 @@ public class PersonInfoForm {
   private Integer socialSecu;
 
   @ApiModelProperty(value = "残疾人证件号")
-  @TableField("`DISABLITY_NUM`")
   private String disablityNum;
 
   @ApiModelProperty(value = "残疾证件路径")
-  @TableField("`DISABLITY_PATH`")
   private String disablityPath;
 
   @ApiModelProperty(value = "烈属证件号")
-  @TableField("`MATRTYR_NUM`")
   private String matrtyrNum;
 
   @ApiModelProperty(value = "烈属证件路径")
-  @TableField("`MATRTYR_PATH`")
   private String matrtyrPath;
 
   @ApiModelProperty(value = "孤老证件号")
-  @TableField("`OLD_NUM`")
   private String oldNum;
 
   @ApiModelProperty(value = "孤老路径")
-  @TableField("`OLD_PATH`")
   private String oldPath;
 
   @ApiModelProperty(value = "专家学者证件号")
-  @TableField("`PROFESSOR_NUM`")
   private String professorNum;
 
   @ApiModelProperty(value = "专家学者证件路径")
-  @TableField("`PROFESSOR_PATH`")
   private String professorPath;
 
   @ApiModelProperty(value = "院士证件号")
-  @TableField("`ACADEMIC_NUM`")
   private String academicNum;
 
   @ApiModelProperty(value = "院士证件路径")
-  @TableField("`ACADEMIC_PATH`")
   private String academicPath;
 
 }

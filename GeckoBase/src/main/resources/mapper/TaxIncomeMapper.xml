@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.TaxIncomeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.TaxIncome">
+        <id column="ID" property="id" />
+        <result column="TAX_ID" property="taxId" />
+        <result column="INCOME_TYPE_ID" property="incomeTypeId" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="UPDATER" property="updater" />
+        <result column="INCOME" property="income" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`TAX_ID`          ,`INCOME_TYPE_ID`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`UPDATER`          ,`INCOME`
+    </sql>
+
+</mapper>

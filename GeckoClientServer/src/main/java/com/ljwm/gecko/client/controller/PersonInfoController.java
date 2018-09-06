@@ -16,7 +16,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/person")
-@Api(tags = "个人信息")
+@Api(tags = "个人信息 API")
 public class PersonInfoController {
 
   @Autowired
