@@ -4,13 +4,13 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.base.bean.ApplicationInfo;
+import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.entity.Company;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.enums.IdentificationType;
 import com.ljwm.gecko.base.mapper.CompanyMapper;
 import com.ljwm.gecko.base.utils.Fileutil;
-import com.ljwm.gecko.client.constant.Constant;
-import com.ljwm.gecko.client.model.ApplicationInfo;
 import com.ljwm.gecko.client.model.dto.CompanyForm;
 import com.ljwm.gecko.client.model.vo.CompanyVo;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +55,7 @@ public class CompanyService {
         file.mkdirs();
       }
     }
-    if(!companyForm.getFilePath().contains(Constant.HTTP)) {
+    if(StrUtil.isNotBlank(companyForm.getFilePath())&&companyForm.getFilePath().indexOf(Constant.HTTP) >= 0) {
       String srcPath = appInfo.getFilePath() + Constant.CACHE + companyForm.getFilePath();
       String destDir = appInfo.getFilePath()+Constant.COMPANY + company.getId()+ "/";
       Fileutil.cutGeneralFile(srcPath, destDir);

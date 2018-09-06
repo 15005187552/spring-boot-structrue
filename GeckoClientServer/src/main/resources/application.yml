@@ -10,6 +10,6 @@ wx:
     appSecret: b11358f00ef7ac5b946d4aa1ab488575
 
 appInfo:
-  webRoot: "D://upload/"
+  webRoot: "E://upload/"
   webPath: "https://mhs.1322.com"
   filePath: "${appInfo.webRoot}/gecko/"

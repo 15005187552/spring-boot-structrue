@@ -1,4 +1,4 @@
-package com.ljwm.gecko.client.model;
+package com.ljwm.gecko.base.bean;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

@@ -9,6 +9,12 @@
     <result column="NICK_NAME" property="nickName"/>
     <result column="CREATE_TIME" property="createTime"/>
     <result column="DISABLED" property="disabled"/>
+
+    <result column="MEMBER_IDCARD" property="memberIdcard"/>
+    <result column="VALIDATER_ID" property="validaterId"/>
+    <result column="VALIDATE_TIME" property="validateTime"/>
+    <result column="VALIDATE_STATE" property="validateState"/>
+    <result column="VALIDATE_TEXT" property="validateText"/>
   </resultMap>
 
   <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.MemberVo">
@@ -45,6 +51,8 @@
   <resultMap id="MemberVo" type="com.ljwm.gecko.base.model.vo.MemberVo" extends="BaseResultMap">
     <collection property="memberAccounts" column="ID"
                 select="com.ljwm.gecko.base.mapper.MemberAccountMapper.findByMember"/>
+    <collection property="memberPaperVoList" column="ID"
+                select="com.ljwm.gecko.base.mapper.MemberPaperMapper.findMemberPaperVoListByMemberId"/>
   </resultMap>
 
   <select id="find" resultMap="MemberVo" parameterType="java.util.Map">
@@ -66,5 +74,9 @@
     <if test="!params.asc">
       DESC
     </if>
+  </select>
+
+  <select id="findMemberVoByPhone" parameterType="string" resultMap="MemberVo">
+      select t.*  from t_member t where t.REG_MOBILE=#{regMobile}
   </select>
 </mapper>

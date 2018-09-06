@@ -40,4 +40,6 @@ public interface MemberMapper extends BaseMapper<Member> {
   @Select("SELECT * FROM t_member a, t_member_account b, t_member_password c WHERE b.TYPE=#{type} AND b.MEMBER_ID = a.ID AND a.ID=#{memberId} AND b.PASSWORD_ID =c.ID")
   @ResultMap("BaseMap")
   List<MemberVo> selectByMeVoAndType(@Param("memberId")Long memberId, @Param("type")String type);
+
+  MemberVo findMemberVoByPhone(@Param("regMobile") String regMobile);
 }
