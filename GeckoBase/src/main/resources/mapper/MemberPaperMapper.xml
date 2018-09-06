@@ -17,4 +17,12 @@
           `ID`          ,`PAPER_ID`          ,`MEMBER_ID`          ,`PIC_PATH`          ,`CREATE_TIME`          ,`UPDATE_TIME`
     </sql>
 
+    <resultMap id="memberPaperVo" type="com.ljwm.gecko.base.model.vo.MemberPaperVo" extends="BaseResultMap">
+        <association property="paperVo" column="PAPER_ID" select="com.ljwm.gecko.base.mapper.PaperMapper.findPaperVoByPaperId"/>
+    </resultMap>
+
+    <select id="findMemberPaperVoListByMemberId" parameterType="long" resultMap="memberPaperVo">
+        select t.*  from t_member_paper t where t.VALIDATE_STATE=2 and t.MEMBER_ID=#{memberId}
+    </select>
+
 </mapper>

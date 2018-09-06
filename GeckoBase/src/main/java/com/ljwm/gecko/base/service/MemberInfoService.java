@@ -1,16 +1,20 @@
 package com.ljwm.gecko.base.service;
 
+import cn.hutool.core.date.DateUtil;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.dao.MemberInfoDao;
 import com.ljwm.gecko.base.entity.Member;
+import com.ljwm.gecko.base.entity.MemberPaper;
 import com.ljwm.gecko.base.enums.ValidateStatEnum;
 import com.ljwm.gecko.base.mapper.MemberMapper;
+import com.ljwm.gecko.base.mapper.MemberPaperMapper;
 import com.ljwm.gecko.base.model.bean.AppInfo;
 import com.ljwm.gecko.base.model.dto.FileDto;
 import com.ljwm.gecko.base.model.dto.MemberDto;
 import com.ljwm.gecko.base.model.vo.MemberVo;
+import com.ljwm.gecko.base.utils.Fileutil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,9 @@ public class MemberInfoService {
 
   @Autowired
   private MemberMapper memberMapper;
+
+  @Autowired
+  private MemberPaperMapper memberPaperMapper;
 
   @Autowired
   private AppInfo appInfo;
@@ -75,13 +82,23 @@ public class MemberInfoService {
       throw new LogicException(ResultEnum.DATA_ERROR,"个人资质证件不能为空!");
     }
     member.setMemberIdcard(memberDto.getMemberIdcard());
+    member.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
     memberMapper.updateById(member);
-    File file = new File(appInfo.getFilePath()+ Constant.PERSON+ member.getId());
+    File file = new File(appInfo.getFilePath()+ Constant.MEMBER+ member.getId());
     if(!file.exists()){
       file.mkdirs();
     }
     for (FileDto fileDto: fileDtoList){
-
+      String srcPath = appInfo.getFilePath() + Constant.CACHE + fileDto.getFileName();
+      String destDir = appInfo.getFilePath()+Constant.MEMBER + member.getId()+ "/";
+      Fileutil.cutGeneralFile(srcPath, destDir);
+      MemberPaper memberPaper = new MemberPaper();
+      memberPaper.setMemberId(member.getId());
+      memberPaper.setPaperId(fileDto.getPaperId());
+      memberPaper.setPicPath(Constant.MEMBER + member.getId() + "/" + fileDto.getFileName());
+      memberPaper.setCreateTime(DateUtil.date());
+      memberPaper.setUpdateTime(DateUtil.date());
+      memberPaperMapper.insert(memberPaper);
     }
   }
 }
