@@ -22,7 +22,7 @@ public class FileController {
 
   @PostMapping("/uploadfile")
   @ApiOperation("上传文件")
-  public Result commit(@RequestParam("updateFiles") MultipartFile file){
+  public Result commit(@RequestParam("file") MultipartFile file){
     return fileService.upload(file);
   }
 

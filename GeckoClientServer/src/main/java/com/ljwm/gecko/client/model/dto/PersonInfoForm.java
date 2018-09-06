@@ -30,7 +30,7 @@ public class PersonInfoForm {
   private Integer certificate;
 
   @ApiModelProperty(value = "证件号")
-  private Integer certNum;
+  private Long certNum;
 
   @ApiModelProperty(value = "社保属性 0-公司代缴 1-个人缴纳")
   private Integer socialSecu;
