@@ -33,7 +33,7 @@ public class NaturalPerson implements Serializable {
 
 
     @ApiModelProperty(value = "会员ID")
-    @TableId(value = "`MEMBER_ID`", type = IdType.AUTO)
+    @TableId(value = "`MEMBER_ID`", type = IdType.INPUT)
     private Long memberId;
 
     @ApiModelProperty(value = "国籍 0-中国大陆 1-港澳台 2-外籍")
