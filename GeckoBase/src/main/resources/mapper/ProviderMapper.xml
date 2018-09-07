@@ -26,4 +26,31 @@
           `ID`          ,`NAME`          ,`CREATE_TIME`          ,`VALIDATE_STATE`          ,`DISABLED`          ,`TYPE`          ,`CREATER_ID`          ,`VALIDATER_ID`          ,`VALIDATE_TIME`          ,`UPDATE_TIME`          ,`VALIDATE_TEXT`          ,`PROV_CODE`          ,`CITY_CODE`          ,`AREA_CODE`          ,`ADDRESS`
     </sql>
 
+    <resultMap id="providerVo" type="com.ljwm.gecko.base.model.vo.ProviderVo" extends="BaseResultMap">
+        <collection property="providerPaperVoList" column="ID" select="com.ljwm.gecko.base.mapper.ProviderPaperMapper.findProviderPaperVoListByProviderId"/>
+    </resultMap>
+    <select id="findByPage" parameterType="map" resultMap="providerVo">
+        select t.*  from t_provider t
+      <where>
+        <if test="params.text != null and params.text != ''">
+          AND (
+          t.`NAME` LIKE CONCAT('%',#{params.text},'%')
+          )
+        </if>
+        <if test="params.disabled != null ">
+          AND t.`DISABLED` = #{params.disabled}
+        </if>
+        <if test="params.validateStat != null ">
+          AND t.`VALIDATE_STATE` = #{params.validateStat}
+        </if>
+      </where>
+      ORDER BY t.ID
+      <if test="params.asc">
+        ASC
+      </if>
+      <if test="!params.asc">
+        DESC
+      </if>
+    </select>
+
 </mapper>

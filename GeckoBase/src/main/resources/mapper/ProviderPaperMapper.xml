@@ -17,4 +17,11 @@
           `ID`          ,`PAPER_ID`          ,`PROVIDER_ID`          ,`PIC_PATH`          ,`CREATE_TIME`          ,`UPDATE_TIME`
     </sql>
 
+    <resultMap id="providerPaperVo" type="com.ljwm.gecko.base.model.vo.ProviderPaperVo" extends="BaseResultMap">
+      <association property="paperVo" column="PAPER_ID" select="com.ljwm.gecko.base.mapper.PaperMapper.findPaperVoByPaperId"/>
+    </resultMap>
+    <select id="findProviderPaperVoListByProviderId" parameterType="long" resultMap="providerPaperVo">
+      select t.*  from t_provider_paper t where t.PROVIDER_ID=#{providerId}
+    </select>
+
 </mapper>
