@@ -1,5 +1,8 @@
 package com.ljwm.gecko.admin.service;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.poi.excel.ExcelReader;
@@ -10,35 +13,44 @@ import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.service.CommonService;
+import com.ljwm.gecko.admin.model.bean.BaseNumberBean;
+import com.ljwm.gecko.admin.model.bean.LocationExcelBean;
+import com.ljwm.gecko.admin.model.bean.ProjectBean;
+import com.ljwm.gecko.admin.model.bean.RateBean;
 import com.ljwm.gecko.admin.model.form.LocationRateQuery;
 import com.ljwm.gecko.admin.model.form.RateSaveForm;
+import com.ljwm.gecko.admin.util.ExportKit;
 import com.ljwm.gecko.base.entity.CityItem;
+import com.ljwm.gecko.base.entity.Location;
 import com.ljwm.gecko.base.entity.SpecialDeduction;
 import com.ljwm.gecko.base.mapper.CityItemMapper;
 import com.ljwm.gecko.base.mapper.LocationMapper;
 import com.ljwm.gecko.base.mapper.SpecialDeductionMapper;
 import com.ljwm.gecko.base.model.dto.LocationRateDetailDto;
 import com.ljwm.gecko.base.model.dto.LocationRateDto;
-import com.ljwm.gecko.base.model.vo.LocationRateVo;
-import com.ljwm.gecko.base.model.vo.SimpleLocation;
-import com.ljwm.gecko.base.model.vo.SimpleProv;
-import com.ljwm.gecko.base.model.vo.SimpleSpecial;
+import com.ljwm.gecko.base.model.vo.*;
 import com.ljwm.gecko.base.service.CityItemService;
 import com.ljwm.gecko.base.service.LocationService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -231,5 +243,42 @@ public class LocationRateService {
         List<SpecialDeduction> specialDeductions = specialDeductionMapper.selectList(null);
         return specialDeductions.stream().filter(i -> !itemIds.contains(i.getId())).map(SimpleSpecial::new).collect(Collectors.toList());
       }).get();
+  }
+
+  public void downloadByProv(HttpServletResponse response, Integer code) {
+
+    List<Location> locations = locationMapper.findPCByCode(code);
+
+    List<Map<String, Object>> sheetsList = new ArrayList<>();
+    List<LocationExcelBean> data = null;
+
+    for (Location location : locations) {
+      List<RateVo> rates = cityItemMapper.findByLoCode(location.getCode());
+      if (CollectionUtil.isNotEmpty(rates)) {
+        data = rates.stream().map(LocationExcelBean::new).collect(Collectors.toList());
+        ExportParams params = new ExportParams();
+        params.setSheetName(location.getName());
+        params.setTitle("职工社保公积金缴费比例");
+        sheetsList.add(Kv.by("data", data).set("title", params).set("entity", LocationExcelBean.class));
+      }
+    }
+
+
+//    data.add(new LocationExcelBean("呱呱项目", new BaseNumberBean("100", "200"), new RateBean("0.02", "0.05")));
+//
+//    ExportParams params = new ExportParams();
+//
+//    params.setSheetName("我是來測試的");
+//    params.setTitle("RUA");
+//    Map<String, Object> dataMap = new HashMap<>();
+//    dataMap.put("data", data);
+//    dataMap.put("title", params);
+//    dataMap.put("entity", LocationExcelBean.class);
+//    sheetsList.add(dataMap);
+    Workbook workbook = ExcelExportUtil.exportExcel(sheetsList, ExcelType.HSSF);
+//    HSSFCellStyle cellStyle = (HSSFCellStyle) workbook.createCellStyle();
+//    cellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("0.00%"));
+    String fileName = locations.stream().filter(i -> Objects.equals(i.getCode(), code)).findFirst().map(i -> i.getName()).get();
+    ExportKit.downLoadExcel(fileName + ".xlsx", response, workbook);
   }
 }

@@ -72,8 +72,14 @@ public class LocationRateController extends BaseController {
   }
 
   @GetMapping("downLoadModel")
-  @ApiOperation("rrr")
+  @ApiOperation("地区税率模板下载")
   public void downLoadModel(HttpServletResponse response) {
     FileKit.downloadInClassPath("地区税率模板.xlsx", "excel/地区税率模板.xlsx", response);
+  }
+
+  @GetMapping("downLoadByProv/{code}")
+  @ApiOperation("根据地区下载-地区税率")
+  public void downLoadByProv(HttpServletResponse response,@PathVariable Integer code) {
+    locationRateService.downloadByProv(response, code);
   }
 }

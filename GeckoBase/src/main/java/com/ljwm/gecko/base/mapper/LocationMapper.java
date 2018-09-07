@@ -45,6 +45,10 @@ public interface LocationMapper extends BaseMapper<Location> {
 
   List<LocationRateVo> find(Page<LocationRateVo> page, @Param("params") Map map);
 
+  @Select("SELECT * FROM `t_location` WHERE `CODE` LIKE CONCAT(LEFT(#{code},4),'00')")
+  @ResultMap("BaseResultMap")
+  List<Location> findPCByCode(Integer code);
+
   @Select("SELECT GROUP_CONCAT(temp.`NAME`)  AS f FROM (SELECT *  FROM t_location t WHERE t.`CODE` = CONCAT(LEFT(#{areaCode}, 2),'0000') \n" +
     "UNION SELECT *  FROM t_location t WHERE t.`CODE` = CONCAT(LEFT(#{areaCode}, 4),'00') \n" +
     "UNION SELECT *  FROM t_location t WHERE t.`CODE` = #{areaCode}) temp  ")

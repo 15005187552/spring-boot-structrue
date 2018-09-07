@@ -51,7 +51,7 @@ public class Provider implements Serializable {
 
     @ApiModelProperty(value = "是否禁用")
     @TableField("DISABLED")
-    private Boolean disabled;
+    private Integer disabled;
 
     @ApiModelProperty(value = "服务商类型(个人：0，机构：1)")
     @TableField("TYPE")
@@ -63,7 +63,7 @@ public class Provider implements Serializable {
 
     @ApiModelProperty(value = "审核人ID")
     @TableField("VALIDATER_ID")
-    private Integer validaterId;
+    private Long validaterId;
 
     @ApiModelProperty(value = "审核时间")
     @TableField("VALIDATE_TIME")

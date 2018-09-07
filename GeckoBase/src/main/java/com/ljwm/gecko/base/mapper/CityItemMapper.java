@@ -21,5 +21,5 @@ public interface CityItemMapper extends BaseMapper<CityItem> {
 
   @Select("SELECT ci.*,sd.`NAME`  FROM `t_city_item` ci LEFT JOIN `t_special_deduction` sd ON ci.`ITEM_TYPE` = sd.`ID` WHERE ci.`REGION_CODE` = #{code}")
   @ResultMap("RateVo")
-  List<RateVo> findByLoCode(@Param("CODE") Integer code);
+  List<RateVo> findByLoCode(Integer code);
 }

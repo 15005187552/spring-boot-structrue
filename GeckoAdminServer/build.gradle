@@ -5,4 +5,9 @@ dependencies {
   compile('org.springframework.boot:spring-boot-devtools')
 
   compile("mysql:mysql-connector-java:8.0.11")
+
+  // easyPoi Excel处理
+  compile("cn.afterturn:easypoi-base:3.2.0")
+  compile("cn.afterturn:easypoi-web:3.2.0")
+  compile("cn.afterturn:easypoi-annotation:3.2.0")
 }

@@ -1,6 +1,7 @@
 package com.ljwm.gecko.base.utils;
 
 import com.ljwm.bootbase.exception.LogicException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 
@@ -8,6 +9,7 @@ import java.io.*;
  * @author Janiffy
  * @date 2018/9/4 15:34
  */
+@Slf4j
 public class Fileutil {
   /**
    * 复制文件或文件夹
@@ -21,13 +23,13 @@ public class Fileutil {
     boolean flag = false;
     File file = new File(srcPath);
     if (!file.exists()) {
-      System.out.println("源文件或源文件夹不存在!");
+      log.info("源文件或源文件夹不存在!");
     }
     if (file.isFile()) { // 源文件
-      System.out.println("下面进行文件复制!");
+      log.info("下面进行文件复制!");
       flag = copyFile(srcPath, destDir);
     } else if (file.isDirectory()) {
-      System.out.println("下面进行文件夹复制!");
+      log.info("下面进行文件夹复制!");
       flag = copyDirectory(srcPath, destDir);
     }
 
@@ -48,19 +50,19 @@ public class Fileutil {
 
     File srcFile = new File(srcPath);
     if (!srcFile.exists()) { // 源文件不存在
-      System.out.println("源文件不存在");
+      log.info("源文件不存在");
       return false;
     }
     // 获取待复制文件的文件名
     String fileName = srcFile.getName();
     String destPath = destDir + fileName;
     if (destPath.equals(srcPath)) { // 源文件路径和目标文件路径重复
-      System.out.println("源文件路径和目标文件路径重复!");
+      log.info("源文件路径和目标文件路径重复!");
       return false;
     }
     File destFile = new File(destPath);
     if (destFile.exists() && destFile.isFile()) { // 该路径下已经有一个同名文件
-      System.out.println("目标目录下已有同名文件!");
+      log.info("目标目录下已有同名文件!");
       return false;
     }
 
@@ -81,7 +83,7 @@ public class Fileutil {
     }
 
     if (flag) {
-      System.out.println("复制文件成功!");
+      log.info("复制文件成功!");
       return flag;
     }else {
       throw new LogicException("复制文件失败!");
@@ -98,12 +100,12 @@ public class Fileutil {
    * @return
    */
   private static boolean copyDirectory(String srcPath, String destDir) {
-    System.out.println("复制文件夹开始!");
+    log.info("复制文件夹开始!");
     boolean flag = false;
 
     File srcFile = new File(srcPath);
     if (!srcFile.exists()) { // 源文件夹不存在
-      System.out.println("源文件夹不存在");
+      log.info("源文件夹不存在");
       return false;
     }
     // 获得待复制的文件夹的名字，比如待复制的文件夹为"E://dir"则获取的名字为"dir"
@@ -113,12 +115,12 @@ public class Fileutil {
     // System.out.println("目标文件夹的完整路径为：" + destPath);
 
     if (destPath.equals(srcPath)) {
-      System.out.println("目标文件夹与源文件夹重复");
+      log.info("目标文件夹与源文件夹重复");
       return false;
     }
     File destDirFile = new File(destPath);
     if (destDirFile.exists()) { // 目标位置有一个同名文件夹
-      System.out.println("目标位置已有同名文件夹!");
+      log.info("目标位置已有同名文件夹!");
       return false;
     }
     destDirFile.mkdirs(); // 生成目录
@@ -140,7 +142,7 @@ public class Fileutil {
     }
 
     if (flag) {
-      System.out.println("复制文件夹成功!");
+      log.info("复制文件夹成功!");
     }
 
     return flag;
@@ -171,7 +173,7 @@ public class Fileutil {
 
     File file = new File(path);
     if (!file.exists()) { // 文件不存在
-      System.out.println("要删除的文件不存在！");
+      log.info("要删除的文件不存在！");
     }
 
     if (file.isDirectory()) { // 如果是目录，则单独处理
@@ -181,7 +183,7 @@ public class Fileutil {
     }
 
     if (flag) {
-      System.out.println("删除文件或文件夹成功!");
+      log.info("删除文件或文件夹成功!");
     }
 
     return flag;
@@ -234,13 +236,13 @@ public class Fileutil {
    */
   public static boolean cutGeneralFile(String srcPath, String destDir){
     if (!copyGeneralFile(srcPath, destDir)) {
-      System.out.println("复制失败导致剪切失败!");
+      log.info("复制失败导致剪切失败!");
     }
     if (!deleteGeneralFile(srcPath)) {
-      System.out.println("删除源文件(文件夹)失败导致剪切失败!");
+      log.info("删除源文件(文件夹)失败导致剪切失败!");
     }
 
-    System.out.println("剪切成功!");
+    log.info("剪切成功!");
     return true;
   }
 

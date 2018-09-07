@@ -1,8 +1,11 @@
 package com.ljwm.gecko.client.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.model.dto.MemberDto;
+import com.ljwm.gecko.base.model.dto.MemberQueryDto;
+import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.service.MemberInfoService;
 import com.ljwm.gecko.client.security.JwtUser;
 import io.swagger.annotations.Api;
@@ -38,5 +41,11 @@ public class MemberController extends BaseController {
   public Result validateMember(@RequestBody @Valid MemberDto memberDto){
     memberInfoService.validateMember(memberDto);
     return success();
+  }
+
+  @GetMapping("findMemberVoByRegMobile/{regMobile}")
+  @ApiOperation("根据手机号查询资质认证人信息")
+  public Result<MemberVo> findMemberVoByRegMobile(@PathVariable String regMobile){
+    return success(memberInfoService.findMemberVoByRegMobile(regMobile));
   }
 }

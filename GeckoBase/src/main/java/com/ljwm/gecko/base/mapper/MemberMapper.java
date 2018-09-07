@@ -2,6 +2,7 @@ package com.ljwm.gecko.base.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import org.apache.ibatis.annotations.Param;
@@ -40,4 +41,8 @@ public interface MemberMapper extends BaseMapper<Member> {
   @Select("SELECT * FROM t_member a, t_member_account b, t_member_password c WHERE b.TYPE=#{type} AND b.MEMBER_ID = a.ID AND a.ID=#{memberId} AND b.PASSWORD_ID =c.ID")
   @ResultMap("BaseMap")
   List<MemberVo> selectByMeVoAndType(@Param("memberId")Long memberId, @Param("type")String type);
+
+  MemberVo findMemberVoByPhone(@Param("regMobile") String regMobile);
+
+  List<MemberVo> findByPage(Page<MemberVo> ret, @Param("params") Kv params);
 }
