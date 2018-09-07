@@ -55,7 +55,7 @@ public class CompanyService {
         file.mkdirs();
       }
     }
-    if(StrUtil.isNotBlank(companyForm.getFilePath())&&companyForm.getFilePath().indexOf(Constant.HTTP) >= 0) {
+    if(StrUtil.isNotBlank(companyForm.getFilePath())&&companyForm.getFilePath().indexOf(Constant.HTTP) == -1) {
       String srcPath = appInfo.getFilePath() + Constant.CACHE + companyForm.getFilePath();
       String destDir = appInfo.getFilePath()+Constant.COMPANY + company.getId()+ "/";
       Fileutil.cutGeneralFile(srcPath, destDir);

@@ -52,27 +52,27 @@ public class PersonInfoService {
       }
     }
     String destDir = appInfo.getFilePath() + Constant.PERSON + naturalPerson.getMemberId() + "/";
-    if (StrUtil.isNotBlank(personInfoForm.getDisablityPath()) && personInfoForm.getDisablityPath().indexOf(Constant.HTTP) >= 0) {
+    if (StrUtil.isNotBlank(personInfoForm.getDisablityPath()) && personInfoForm.getDisablityPath().indexOf(Constant.HTTP) == -1) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getDisablityPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
       naturalPerson.setDisablityPath(Constant.PERSON+ naturalPerson.getMemberId() + "/" + personInfoForm.getDisablityPath());
     }
-    if (StrUtil.isNotBlank(personInfoForm.getAcademicPath()) && personInfoForm.getAcademicPath().indexOf(Constant.HTTP) >= 0) {
+    if (StrUtil.isNotBlank(personInfoForm.getAcademicPath()) && personInfoForm.getAcademicPath().indexOf(Constant.HTTP) == -1) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getAcademicPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
       naturalPerson.setDisablityPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getAcademicPath());
     }
-    if (StrUtil.isNotBlank(personInfoForm.getOldPath()) && personInfoForm.getOldPath().indexOf(Constant.HTTP) >= 0) {
+    if (StrUtil.isNotBlank(personInfoForm.getOldPath()) && personInfoForm.getOldPath().indexOf(Constant.HTTP) == -1) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getOldPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
       naturalPerson.setDisablityPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getOldPath());
     }
-    if (StrUtil.isNotBlank(personInfoForm.getMatrtyrPath()) && personInfoForm.getMatrtyrPath().indexOf(Constant.HTTP) >= 0) {
+    if (StrUtil.isNotBlank(personInfoForm.getMatrtyrPath()) && personInfoForm.getMatrtyrPath().indexOf(Constant.HTTP) == -1) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getMatrtyrPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
       naturalPerson.setDisablityPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getMatrtyrPath());
     }
-    if (StrUtil.isNotBlank(personInfoForm.getProfessorPath()) && personInfoForm.getProfessorPath().indexOf(Constant.HTTP) >= 0) {
+    if (StrUtil.isNotBlank(personInfoForm.getProfessorPath()) && personInfoForm.getProfessorPath().indexOf(Constant.HTTP) == -1) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getProfessorPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
       naturalPerson.setDisablityPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getProfessorPath());
