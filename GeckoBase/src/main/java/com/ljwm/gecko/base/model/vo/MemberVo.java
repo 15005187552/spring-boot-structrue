@@ -23,7 +23,7 @@ public class MemberVo extends Member {
   List<MemberAccount> memberAccounts;
 
   @JSONField(serializeUsing = StatusWithNameSerializer.ValidateStatSerializer.class)
-  private Integer validateStat;
+  private Integer validateState;
 
   private List<MemberPaperVo> memberPaperVoList;
 }

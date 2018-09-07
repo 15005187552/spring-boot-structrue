@@ -10,8 +10,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class MemberQueryDto extends CommonQuery {
 
-  @ApiModelProperty("状态")
-  private Integer validateStat;
+  @ApiModelProperty("状态 0  初始状态   1 待审核 2 审核通过 3 审核失败")
+  private Integer validateState;
 
   @ApiModelProperty("是否可用")
   private Integer disabled;

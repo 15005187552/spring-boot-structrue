@@ -40,8 +40,8 @@
         <if test="params.disabled != null ">
           AND t.`DISABLED` = #{params.disabled}
         </if>
-        <if test="params.validateStat != null ">
-          AND t.`VALIDATE_STATE` = #{params.validateStat}
+        <if test="params.validateState != null ">
+          AND t.`VALIDATE_STATE` = #{params.validateState}
         </if>
       </where>
       ORDER BY t.ID

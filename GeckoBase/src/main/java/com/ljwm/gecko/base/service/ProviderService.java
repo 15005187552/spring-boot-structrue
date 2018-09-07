@@ -64,7 +64,7 @@ public class ProviderService {
   @Transactional
   public void saveProvider(ProviderDto providerDto){
     Member member = memberMapper.selectById(providerDto.getMemberId());
-    if (member!=null&& !Objects.equals(member.getValidateStat(),ValidateStatEnum.CONFIRM_SUCCESS.getCode())){
+    if (member!=null&& !Objects.equals(member.getValidateState(),ValidateStatEnum.CONFIRM_SUCCESS.getCode())){
       if (CollectionUtils.isEmpty(providerDto.getMemberIds())){
         log.info("会员id：{} 没有添加资质认证人!",providerDto.getMemberId());
         throw new LogicException(ResultEnum.DATA_ERROR,"请添加资质认证人!");
@@ -84,7 +84,7 @@ public class ProviderService {
       for (Long memberId : providerDto.getMemberIds()){
         memberIds.add(memberId);
         Member tempMember = memberMapper.selectById(memberId);
-        if (tempMember==null || !Objects.equals(tempMember.getValidateStat(),ValidateStatEnum.CONFIRM_SUCCESS.getCode())){
+        if (tempMember==null || !Objects.equals(tempMember.getValidateState(),ValidateStatEnum.CONFIRM_SUCCESS.getCode())){
           log.info("会员id：{} 没有进行资质认证,请重新添加!",tempMember.getId());
           throw new LogicException(ResultEnum.DATA_ERROR,"会员没有进行资质认证,请重新添加!");
         }
@@ -126,7 +126,7 @@ public class ProviderService {
   }
 
   public Page<ProviderVo> findByPage(ProviderQueryDto providerQueryDto){
-    return commonService.find(providerQueryDto, (p, q) -> providerMapper.findByPage(p, Kv.by("text", providerQueryDto.getText()).set("disabled",providerQueryDto.getDisabled()).set("validateStat",providerQueryDto.getValidateStat())));
+    return commonService.find(providerQueryDto, (p, q) -> providerMapper.findByPage(p, Kv.by("text", providerQueryDto.getText()).set("disabled",providerQueryDto.getDisabled()).set("validateState",providerQueryDto.getValidateState())));
   }
 
   @Transactional

@@ -9,8 +9,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class ProviderQueryDto extends CommonQuery {
 
-  @ApiModelProperty("状态")
-  private Integer validateStat;
+  @ApiModelProperty("状态 审核状态 1待审核 2 审核通过 3 审核失败")
+  private Integer validateState;
 
   @ApiModelProperty("是否可用")
   private Integer disabled;
