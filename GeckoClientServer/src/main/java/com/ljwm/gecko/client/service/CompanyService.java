@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.entity.Company;
@@ -39,7 +40,7 @@ public class CompanyService {
 
   public Result commit(CompanyForm companyForm) {
     Company company = new Company(null, companyForm.getName(), companyForm.getType(), new Date(),
-      IdentificationType.NO_IDENTI.getCode(), DisabledEnum.ENABLED.getCode(), companyForm.getCode(), 3L,
+      IdentificationType.NO_IDENTI.getCode(), DisabledEnum.ENABLED.getCode(), companyForm.getPhoneNum(), companyForm.getCode(), SecurityKit.currentId(),
     null, null, null, new Date(), null, companyForm.getProvCode(), companyForm.getCityCode(), companyForm.getAreaCode(), companyForm.getAddress());
     Map<String, Object> map = new HashMap<>();
     map.put("CODE", companyForm.getCode());
@@ -79,6 +80,6 @@ public class CompanyService {
       }
       return Result.success(companyVo);
     }
-    return null;
+    return Result.success(null);
   }
 }

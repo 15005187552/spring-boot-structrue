@@ -23,6 +23,9 @@ public class CompanyForm {
   @ApiModelProperty(value = "企业纳税代码")
   private String code;
 
+  @ApiModelProperty(value = "手机号码")
+  private String phoneNum;
+
   @ApiModelProperty(value = "证照图片文件")
   private String filePath;
 

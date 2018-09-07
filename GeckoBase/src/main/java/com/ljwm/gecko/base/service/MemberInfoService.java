@@ -1,11 +1,8 @@
 package com.ljwm.gecko.base.service;
 
 import cn.hutool.core.date.DateUtil;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
-import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.dao.MemberInfoDao;
 import com.ljwm.gecko.base.entity.Member;
@@ -15,9 +12,7 @@ import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.mapper.MemberPaperMapper;
 import com.ljwm.gecko.base.model.bean.AppInfo;
 import com.ljwm.gecko.base.model.dto.FileDto;
-import com.ljwm.gecko.base.model.dto.MemberConfirmDto;
 import com.ljwm.gecko.base.model.dto.MemberDto;
-import com.ljwm.gecko.base.model.dto.MemberQueryDto;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.utils.Fileutil;
 import lombok.extern.slf4j.Slf4j;
@@ -49,9 +44,6 @@ public class MemberInfoService {
 
   @Autowired
   private AppInfo appInfo;
-
-  @Autowired
-  private CommonService commonService;
 
   public MemberVo selectMemberInfo(Long memberId, Integer code) {
     return memberInfoDao.selectMemberInfo(memberId, code);
@@ -112,27 +104,5 @@ public class MemberInfoService {
 
   public MemberVo findMemberVoByRegMobile(String regMobile){
     return memberMapper.findMemberVoByPhone(regMobile);
-  }
-
-  public Page<MemberVo> findByPage(MemberQueryDto memberQueryDto){
-    return commonService.find(memberQueryDto, (p, q) -> memberMapper.findByPage(p, Kv.by("text", memberQueryDto.getText()).set("disabled",memberQueryDto.getDisabled()).set("validateState",memberQueryDto.getValidateState())));
-  }
-
-  @Transactional
-  public void checkMember(MemberConfirmDto memberConfirmDto){
-    Member member = memberMapper.selectById(memberConfirmDto.getMemberId());
-    if (member==null || !Objects.equals(member.getValidateState(),ValidateStatEnum.WAIT_CONFIRM.getCode())){
-      log.info("会员id:{} 会员信息不存在,或非待认证状态!",memberConfirmDto.getMemberId());
-      throw new LogicException(ResultEnum.DATA_ERROR,"会员查询不到或非认证状态!");
-    }
-    if (memberConfirmDto.isAgree()){
-      member.setValidateState(ValidateStatEnum.CONFIRM_SUCCESS.getCode());
-    }else {
-      member.setValidateState(ValidateStatEnum.CONFIRM_FAILED.getCode());
-    }
-    member.setValidaterId(memberConfirmDto.getValidaterId());
-    member.setValidateText(memberConfirmDto.getValidateText());
-    member.setValidateTime(DateUtil.date());
-    memberMapper.updateById(member);
   }
 }

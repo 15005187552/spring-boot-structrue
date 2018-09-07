@@ -1,10 +1,8 @@
 package com.ljwm.gecko.client.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.model.dto.MemberDto;
-import com.ljwm.gecko.base.model.dto.MemberQueryDto;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.service.MemberInfoService;
 import com.ljwm.gecko.client.security.JwtUser;

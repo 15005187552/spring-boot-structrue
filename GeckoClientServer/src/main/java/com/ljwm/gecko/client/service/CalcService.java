@@ -112,7 +112,7 @@ public class CalcService {
       newTax = BigDecimal.ZERO;
     }
     BigDecimal difference = oldTax.subtract(newTax);
-    BigDecimal percent = difference.divide(oldTax);
+    BigDecimal percent = difference.divide(oldTax, 4, BigDecimal.ROUND_HALF_UP);
     if(difference.compareTo(BigDecimal.ZERO)>=0){
       String id = SecurityKit.currentId();
       String guestId;

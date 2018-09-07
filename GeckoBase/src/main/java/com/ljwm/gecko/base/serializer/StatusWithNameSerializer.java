@@ -2,7 +2,6 @@ package com.ljwm.gecko.base.serializer;
 
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
-import com.ljwm.gecko.base.enums.ProviderStatEnum;
 import com.ljwm.gecko.base.enums.ValidateStatEnum;
 
 import java.io.IOException;
@@ -16,15 +15,6 @@ public abstract class StatusWithNameSerializer implements ObjectSerializer {
     @Override
     public String getNameByCode(Integer code) {
       return ValidateStatEnum.getName(code);
-    }
-
-  }
-
-  public static class ProviderValidateStatSerializer extends StatusWithNameSerializer {
-
-    @Override
-    public String getNameByCode(Integer code) {
-      return ProviderStatEnum.getName(code);
     }
 
   }

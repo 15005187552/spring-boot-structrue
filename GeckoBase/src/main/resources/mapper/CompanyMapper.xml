@@ -10,6 +10,7 @@
         <result column="CREATE_TIME" property="createTime" />
         <result column="VALIDATE_STATE" property="validateState" />
         <result column="DISABLED" property="disabled" />
+        <result column="PHONE_NUM" property="phoneNum" />
         <result column="CODE" property="code" />
         <result column="CREATER_ID" property="createrId" />
         <result column="PIC_PATH" property="picPath" />
@@ -25,41 +26,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`NAME`          ,`TYPE`          ,`CREATE_TIME`          ,`VALIDATE_STATE`          ,`DISABLED`          ,`CODE`          ,`CREATER_ID`          ,`PIC_PATH`          ,`VALIDATOR_ID`          ,`VALIDATE_TIME`          ,`UPDATE_TIME`          ,`VALIDATE_TEXT`          ,`PROV_CODE`          ,`CITY_CODE`          ,`AREA_CODE`          ,`ADDRESS`
+          `ID`          ,`NAME`          ,`TYPE`          ,`CREATE_TIME`          ,`VALIDATE_STATE`          ,`DISABLED`          ,`PHONE_NUM`          ,`CODE`          ,`CREATER_ID`          ,`PIC_PATH`          ,`VALIDATOR_ID`          ,`VALIDATE_TIME`          ,`UPDATE_TIME`          ,`VALIDATE_TEXT`          ,`PROV_CODE`          ,`CITY_CODE`          ,`AREA_CODE`          ,`ADDRESS`
     </sql>
 
-
-
-  <resultMap id="UnValidateCompanyVo" type="com.ljwm.gecko.base.model.vo.UnValidateCompanyVo">
-  </resultMap>
-
-  <resultMap id="AdminCompanyDto" type="com.ljwm.gecko.base.model.dto.AdminCompanyDto" extends="BaseResultMap">
-    <association property="location" column="AREA_CODE"
-                 select="com.ljwm.gecko.base.mapper.LocationMapper.getLocationByArea"/>
-  </resultMap>
-
-  <select id="find" resultMap="AdminCompanyDto">
-    SELECT
-    <include refid="Base_Column_List"/>
-    FROM `t_company`
-    <where>
-      <if test="params.text != null and params.text != ''">
-        AND (
-        `NAME` LIKE CONCAT('%',#{params.text},'%')
-        )
-      </if>
-      <if test="params.validateStatus != null">
-        AND (
-        `VALIDATE_STATE`=#{params.validateStatus}
-        )
-      </if>
-    </where>
-    ORDER BY `UPDATE_TIME`
-    <if test="params.asc">
-      ASC
-    </if>
-    <if test="!params.asc">
-      DESC
-    </if>
-  </select>
 </mapper>

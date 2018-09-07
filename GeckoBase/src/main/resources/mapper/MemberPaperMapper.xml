@@ -22,7 +22,7 @@
     </resultMap>
 
     <select id="findMemberPaperVoListByMemberId" parameterType="long" resultMap="memberPaperVo">
-        select t.*  from t_member_paper t where t.MEMBER_ID=#{memberId}
+        select t.*  from t_member_paper t where t.VALIDATE_STATE=2 and t.MEMBER_ID=#{memberId}
     </select>
 
 </mapper>
