@@ -1,18 +1,21 @@
 package com.ljwm.gecko.base.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
+import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import com.baomidou.mybatisplus.annotation.IdType;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import java.io.Serializable;
+
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
@@ -20,14 +23,14 @@ import java.util.Date;
  * </p>
  *
  * @author Levis
- * @since 2018-09-07
+ * @since 2018-09-08
  */
 @Data
 @SuppressWarnings("ALL")
 @Accessors(chain = true)
+@TableName("`t_cal_tax`")
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("`t_cal_tax`")
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value = "个税计算表", subTypes = {CalTax.class})
 public class CalTax implements Serializable {
@@ -36,7 +39,7 @@ public class CalTax implements Serializable {
 
 
     @ApiModelProperty(value = "游客ID")
-    @TableField("`GUEST_ID`")
+    @TableId(value = "`GUEST_ID`", type = IdType.INPUT)
     private String guestId;
 
     @ApiModelProperty(value = "城市编码")

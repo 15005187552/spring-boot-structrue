@@ -114,7 +114,12 @@ public class CalcService {
     BigDecimal difference = oldTax.subtract(newTax);
     BigDecimal percent = difference.divide(oldTax, 4, BigDecimal.ROUND_HALF_UP);
     if(difference.compareTo(BigDecimal.ZERO)>=0){
-      String id = SecurityKit.currentId();
+      String id;
+      if (SecurityKit.currentId() instanceof String){
+        id = SecurityKit.currentId();
+      } else {
+        id = SecurityKit.currentId().toString();
+      }
       String guestId;
       if(LoginType.codeOf(LoginInfoHolder.getLoginType()) == LoginType.GUEST){
         guestId = id;

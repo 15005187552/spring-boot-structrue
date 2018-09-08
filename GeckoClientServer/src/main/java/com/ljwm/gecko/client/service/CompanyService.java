@@ -69,7 +69,7 @@ public class CompanyService {
   public Result findByName(String name) {
     Map<String, Object> map = new HashMap<>();
     map.put("NAME", name);
-    map.put("VALIDATE_STATE", IdentificationType.PASS_IDENTI);
+    map.put("VALIDATE_STATE", IdentificationType.PASS_IDENTI.getCode());
     List<Company> list = companyMapper.selectByMap(map);
     if(CollectionUtil.isNotEmpty(list)){
       Company company = list.get(0);

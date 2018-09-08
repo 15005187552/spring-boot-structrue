@@ -2,7 +2,6 @@ package com.ljwm.gecko.base.mapper;
 
 import com.ljwm.gecko.base.entity.CalTax;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -10,9 +9,8 @@ import org.springframework.stereotype.Repository;
  * </p>
  *
  * @author Levis
- * @since 2018-09-07
+ * @since 2018-09-08
  */
-@Repository
 public interface CalTaxMapper extends BaseMapper<CalTax> {
 
 }

@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.CalTax">
-        <result column="GUEST_ID" property="guestId" />
+        <id column="GUEST_ID" property="guestId" />
         <result column="REGION_CODE" property="regionCode" />
         <result column="MONEY" property="money" />
         <result column="OLD_TAX" property="oldTax" />

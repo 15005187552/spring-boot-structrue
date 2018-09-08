@@ -25,9 +25,9 @@ public class GeckoGeneratorTest {
         .username("root")
         .password("root")
         .created(true)    // 第一次建类用创建
-        .idType(IdType.AUTO)
+        .idType(IdType.INPUT)
         .tables(new String[]{
-          "t_service"})
+          "t_cal_tax"})
         .build()
     );
   }
