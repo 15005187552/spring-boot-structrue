@@ -59,4 +59,10 @@ public class CompanyController extends BaseController {
   public Result checkCompany(@RequestBody CompanyCheckForm form) {
     return success(companyService.checkCompany(form));
   }
+
+  @GetMapping("getCompany")
+  @ApiOperation("获取所有公司")
+  public Result getCompany() {
+    return success(companyService.getCompany());
+  }
 }

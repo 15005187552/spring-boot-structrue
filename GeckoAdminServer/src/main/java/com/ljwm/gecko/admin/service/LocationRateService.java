@@ -262,22 +262,7 @@ public class LocationRateService {
         sheetsList.add(Kv.by("data", data).set("title", params).set("entity", LocationExcelBean.class));
       }
     }
-
-
-//    data.add(new LocationExcelBean("呱呱项目", new BaseNumberBean("100", "200"), new RateBean("0.02", "0.05")));
-//
-//    ExportParams params = new ExportParams();
-//
-//    params.setSheetName("我是來測試的");
-//    params.setTitle("RUA");
-//    Map<String, Object> dataMap = new HashMap<>();
-//    dataMap.put("data", data);
-//    dataMap.put("title", params);
-//    dataMap.put("entity", LocationExcelBean.class);
-//    sheetsList.add(dataMap);
     Workbook workbook = ExcelExportUtil.exportExcel(sheetsList, ExcelType.HSSF);
-//    HSSFCellStyle cellStyle = (HSSFCellStyle) workbook.createCellStyle();
-//    cellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("0.00%"));
     String fileName = locations.stream().filter(i -> Objects.equals(i.getCode(), code)).findFirst().map(i -> i.getName()).get();
     ExportKit.downLoadExcel(fileName + ".xlsx", response, workbook);
   }

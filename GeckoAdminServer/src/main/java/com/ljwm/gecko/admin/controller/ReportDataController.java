@@ -135,4 +135,10 @@ public class ReportDataController extends BaseController {
     otherReduceService.delete(id);
     return success();
   }
+
+  @GetMapping("exportReportData")
+  @ApiOperation("导出所有申报数据的excel模块")
+  public void exportReportData(){
+
+  }
 }

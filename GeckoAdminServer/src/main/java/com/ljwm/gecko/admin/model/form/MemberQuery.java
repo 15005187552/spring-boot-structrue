@@ -7,4 +7,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class MemberQuery extends CommonQuery {
+
+  private Integer companyId;
 }
