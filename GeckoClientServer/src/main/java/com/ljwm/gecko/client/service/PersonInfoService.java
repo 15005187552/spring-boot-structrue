@@ -60,22 +60,22 @@ public class PersonInfoService {
     if (StrUtil.isNotBlank(personInfoForm.getAcademicPath()) && personInfoForm.getAcademicPath().indexOf(Constant.HTTP) == -1) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getAcademicPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
-      naturalPerson.setDisablityPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getAcademicPath());
+      naturalPerson.setAcademicPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getAcademicPath());
     }
     if (StrUtil.isNotBlank(personInfoForm.getOldPath()) && personInfoForm.getOldPath().indexOf(Constant.HTTP) == -1) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getOldPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
-      naturalPerson.setDisablityPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getOldPath());
+      naturalPerson.setOldPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getOldPath());
     }
     if (StrUtil.isNotBlank(personInfoForm.getMatrtyrPath()) && personInfoForm.getMatrtyrPath().indexOf(Constant.HTTP) == -1) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getMatrtyrPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
-      naturalPerson.setDisablityPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getMatrtyrPath());
+      naturalPerson.setMatrtyrPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getMatrtyrPath());
     }
     if (StrUtil.isNotBlank(personInfoForm.getProfessorPath()) && personInfoForm.getProfessorPath().indexOf(Constant.HTTP) == -1) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getProfessorPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
-      naturalPerson.setDisablityPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getProfessorPath());
+      naturalPerson.setProfessorPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getProfessorPath());
     }
     naturalPersonMapper.updateById(naturalPerson);
     return Result.success("成功！");
