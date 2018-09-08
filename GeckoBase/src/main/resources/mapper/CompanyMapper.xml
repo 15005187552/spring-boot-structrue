@@ -10,6 +10,7 @@
         <result column="CREATE_TIME" property="createTime" />
         <result column="VALIDATE_STATE" property="validateState" />
         <result column="DISABLED" property="disabled" />
+        <result column="PHONE_NUM" property="phoneNum" />
         <result column="CODE" property="code" />
         <result column="CREATER_ID" property="createrId" />
         <result column="PIC_PATH" property="picPath" />
@@ -25,10 +26,8 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`NAME`          ,`TYPE`          ,`CREATE_TIME`          ,`VALIDATE_STATE`          ,`DISABLED`          ,`CODE`          ,`CREATER_ID`          ,`PIC_PATH`          ,`VALIDATOR_ID`          ,`VALIDATE_TIME`          ,`UPDATE_TIME`          ,`VALIDATE_TEXT`          ,`PROV_CODE`          ,`CITY_CODE`          ,`AREA_CODE`          ,`ADDRESS`
+          `ID`          ,`NAME`          ,`TYPE`          ,`CREATE_TIME`          ,`VALIDATE_STATE`          ,`DISABLED`          ,`PHONE_NUM`          ,`CODE`          ,`CREATER_ID`          ,`PIC_PATH`          ,`VALIDATOR_ID`          ,`VALIDATE_TIME`          ,`UPDATE_TIME`          ,`VALIDATE_TEXT`          ,`PROV_CODE`          ,`CITY_CODE`          ,`AREA_CODE`          ,`ADDRESS`
     </sql>
-
-
 
   <resultMap id="UnValidateCompanyVo" type="com.ljwm.gecko.base.model.vo.UnValidateCompanyVo">
   </resultMap>

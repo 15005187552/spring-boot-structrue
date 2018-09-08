@@ -68,8 +68,8 @@ public class Member implements Serializable {
     private Date validateTime;
 
     @ApiModelProperty(value = "审核状态 0 待审核 1 审核通过 2 审核失败")
-    @TableField("VALIDATE_STAT")
-    private Integer validateStat;
+    @TableField("VALIDATE_STATE")
+    private Integer validateState;
 
     @ApiModelProperty(value = "认证内容")
     @TableField("VALIDATE_TEXT")

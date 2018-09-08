@@ -8,6 +8,10 @@ import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.mapper.*;
+import com.ljwm.gecko.base.model.vo.TaxIncomeVo;
+import com.ljwm.gecko.base.model.vo.TaxOtherReduceVo;
+import com.ljwm.gecko.base.model.vo.TaxSpecialAddVo;
+import com.ljwm.gecko.base.model.vo.TaxSpecialVo;
 import com.ljwm.gecko.base.utils.Fileutil;
 import com.ljwm.gecko.client.model.dto.TaxIncomeForm;
 import com.ljwm.gecko.client.model.dto.TaxOtherReduceForm;
@@ -96,7 +100,7 @@ public class TaxInfoDao {
       TaxOtherReduce taxOtherReduce = list.get(0);
       taxOtherReduce.setUpdateTime(new Date());
       taxOtherReduce.setUpdater(currentId);
-      if (StrUtil.isNotBlank(taxOtherReduceForm.getTaxDocPath()) && taxOtherReduceForm.getTaxDocPath().indexOf(Constant.HTTP) >= 0) {
+      if (StrUtil.isNotBlank(taxOtherReduceForm.getTaxDocPath()) && taxOtherReduceForm.getTaxDocPath().indexOf(Constant.HTTP) == -1) {
         String destDir = appInfo.getFilePath() + Constant.TAX + memberId + "/";
         String srcPath = appInfo.getFilePath()+Constant.CACHE + taxOtherReduceForm.getTaxDocPath();
         Fileutil.cutGeneralFile(srcPath, destDir);
@@ -107,7 +111,7 @@ public class TaxInfoDao {
       Date date = new Date();
       TaxOtherReduce taxOtherReduce = new TaxOtherReduce();
       BeanUtil.copyProperties(taxOtherReduceForm, taxOtherReduce);
-      if (StrUtil.isNotBlank(taxOtherReduceForm.getTaxDocPath()) && taxOtherReduceForm.getTaxDocPath().indexOf(Constant.HTTP) >= 0) {
+      if (StrUtil.isNotBlank(taxOtherReduceForm.getTaxDocPath()) && taxOtherReduceForm.getTaxDocPath().indexOf(Constant.HTTP) == -1) {
         String destDir = appInfo.getFilePath() + Constant.TAX + memberId + "/";
         File file = new File(destDir);
         if(!file.exists()){
@@ -160,4 +164,45 @@ public class TaxInfoDao {
     }
   }
 
+  public List<TaxIncomeVo> selectIncomeInfo(Long memberId, String declareTime, Integer declareType) {
+    List<TaxIncomeVo> list = taxIncomeMapper.selectIncome(memberId, declareTime, declareType);
+    if(CollectionUtil.isNotEmpty(list)) {
+      return list;
+    }
+    return null;
+  }
+
+  public List<TaxOtherReduceVo> selectOther(Long memberId, String declareTime, Integer declareType) {
+    List<TaxOtherReduceVo> list = taxOtherReduceMapper.selectOther(memberId, declareTime, declareType);
+    if(CollectionUtil.isNotEmpty(list)) {
+      for(TaxOtherReduceVo taxOtherReduceVo: list){
+        if(StrUtil.isNotBlank(taxOtherReduceVo.getTaxDocPath())) {
+          taxOtherReduceVo.setTaxDocPath(appInfo.getWebPath() + taxOtherReduceVo.getTaxDocPath());
+        }
+      }
+      return list;
+    }
+    return null;
+  }
+
+  public List<TaxSpecialVo> selectSpecial(Long memberId, String declareTime, Integer declareType) {
+    List<TaxSpecialVo> list = taxSpecialMapper.selectSpecial(memberId, declareTime, declareType);
+    if(CollectionUtil.isNotEmpty(list)) {
+      return list;
+    }
+    return null;
+  }
+
+  public List<TaxSpecialAddVo> selectSpecialAdd(Long memberId, String declareTime, Integer declareType) {
+    List<TaxSpecialAddVo> list = taxSpecialAddMapper.selectSpecialAdd(memberId, declareTime, declareType);
+    if(CollectionUtil.isNotEmpty(list)) {
+      for(TaxSpecialAddVo taxSpecialAddVo: list){
+        if(StrUtil.isNotBlank(taxSpecialAddVo.getTaxDocPath())) {
+          taxSpecialAddVo.setTaxDocPath(appInfo.getWebPath() + taxSpecialAddVo.getTaxDocPath());
+        }
+      }
+      return list;
+    }
+    return null;
+  }
 }

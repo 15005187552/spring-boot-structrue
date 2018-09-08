@@ -13,7 +13,7 @@
     <result column="MEMBER_IDCARD" property="memberIdcard"/>
     <result column="VALIDATER_ID" property="validaterId"/>
     <result column="VALIDATE_TIME" property="validateTime"/>
-    <result column="VALIDATE_STAT" property="validateStat"/>
+    <result column="VALIDATE_STATE" property="validateState"/>
     <result column="VALIDATE_TEXT" property="validateText"/>
   </resultMap>
 
@@ -81,31 +81,5 @@
 
   <select id="findMemberVoByPhone" parameterType="string" resultMap="MemberVo">
       select t.*  from t_member t where t.REG_MOBILE=#{regMobile}
-  </select>
-
-  <select id="findByPage" parameterType="map" resultMap="MemberVo">
-    select t.*  from t_member t
-    <where>
-      <if test="params.text != null and params.text != ''">
-        AND (
-        t.`REG_MOBILE` LIKE CONCAT('%',#{params.text},'%')
-        OR t.`NICK_NAME` LIKE  CONCAT('%',#{params.text},'%')
-        OR t.`MEMBER_IDCARD` LIKE  CONCAT('%',#{params.text},'%')
-        )
-      </if>
-      <if test="params.disabled != null ">
-        AND t.`DISABLED` = #{params.disabled}
-      </if>
-      <if test="params.validateStat != null ">
-        AND t.`VALIDATE_STAT` = #{params.validateStat}
-      </if>
-    </where>
-    ORDER BY t.ID
-    <if test="params.asc">
-      ASC
-    </if>
-    <if test="!params.asc">
-      DESC
-    </if>
   </select>
 </mapper>

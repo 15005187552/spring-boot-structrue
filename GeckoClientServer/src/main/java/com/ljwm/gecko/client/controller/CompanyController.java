@@ -23,7 +23,7 @@ public class CompanyController {
   CompanyService companyService;
 
   @PostMapping("/commit")
-  @ApiOperation("提交公司信息（包含修改，没有修改执照时，filePath传null）")
+  @ApiOperation("提交公司信息（包含修改）")
   public Result commit(@RequestBody @Valid CompanyForm companyForm){
     return companyService.commit(companyForm);
   }

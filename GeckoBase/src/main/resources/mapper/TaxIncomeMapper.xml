@@ -13,6 +13,15 @@
         <result column="INCOME" property="income" />
     </resultMap>
 
+    <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.TaxIncomeVo">
+      <result column="ID" property="incomeId" />
+      <result column="NAME" property="name" />
+      <result column="SORT" property="sort" />
+      <result column="IS_NEED_ENTER" property="isNeedEnter" />
+      <result column="P_ID" property="pId" />
+      <result column="LEVEL" property="level" />
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
           `ID`          ,`TAX_ID`          ,`INCOME_TYPE_ID`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`UPDATER`          ,`INCOME`

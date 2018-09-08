@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author Levis
- * @since 2018-09-05
+ * @since 2018-09-06
  */
 @Data
 @SuppressWarnings("ALL")
@@ -43,7 +43,7 @@ public class Tax implements Serializable {
 
     @ApiModelProperty(value = "申报类型 0-月报 1-年报")
     @TableField("`DECLARE_TYPE`")
-    private String declareType;
+    private Integer declareType;
 
     @ApiModelProperty(value = "申报时段")
     @TableField("`DECLARE_TIME`")
