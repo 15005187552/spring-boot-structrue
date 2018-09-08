@@ -1,7 +1,6 @@
 package com.ljwm.gecko.admin.model.vo;
 
 import com.ljwm.gecko.base.entity.Company;
-import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -9,7 +8,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class SimpleCompany {
 
-  private Integer id;
+  private Long id;
 
   private String name;
 

@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.entity.MemberAccount;
 import com.ljwm.gecko.base.entity.MemberPassword;
+import com.ljwm.gecko.base.mapper.CompanyUserMapper;
 import com.ljwm.gecko.base.mapper.MemberAccountMapper;
 import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.mapper.MemberPasswordMapper;
@@ -31,6 +32,9 @@ public class MemberInfoDao {
 
   @Autowired
   MemberPasswordMapper memberPasswordMapper;
+
+  @Autowired
+  CompanyUserMapper companyUserMapper;
 
   public MemberVo selectByUserName(String username) {
     return memberMapper.selectByUserName(username);
@@ -119,5 +123,6 @@ public class MemberInfoDao {
     member.setNickName(nickName);
     memberMapper.updateById(member);
   }
+
 }
 

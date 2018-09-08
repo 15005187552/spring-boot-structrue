@@ -1,18 +1,19 @@
 package com.ljwm.gecko.base.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -26,6 +27,8 @@ import io.swagger.annotations.ApiModelProperty;
 @SuppressWarnings("ALL")
 @Accessors(chain = true)
 @TableName("`t_company_user`")
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value = "企业员工表", subTypes = {CompanyUser.class})
 public class CompanyUser implements Serializable {
@@ -37,7 +40,7 @@ public class CompanyUser implements Serializable {
 
     @ApiModelProperty(value = "所属企业ID")
     @TableField("`COMPANY_ID`")
-    private Integer companyId;
+    private Long companyId;
 
     @ApiModelProperty(value = "会员ID")
     @TableField("`MEMBER_ID`")
@@ -57,7 +60,7 @@ public class CompanyUser implements Serializable {
 
     @ApiModelProperty(value = "是否离职")
     @TableField("`DISABLED`")
-    private Boolean disabled;
+    private Integer disabled;
 
 
     public static final String ID = "`ID`";

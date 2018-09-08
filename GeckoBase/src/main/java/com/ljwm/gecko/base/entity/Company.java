@@ -38,7 +38,7 @@ public class Company implements Serializable {
 
     @ApiModelProperty(value = "入驻企业")
     @TableId(value = "`ID`", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     @ApiModelProperty(value = "企业名称")
     @TableField("`NAME`")

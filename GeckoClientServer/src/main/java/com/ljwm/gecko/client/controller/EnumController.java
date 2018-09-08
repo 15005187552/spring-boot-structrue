@@ -48,4 +48,12 @@ public class EnumController extends BaseController {
   public Result declare(){
     return enumService.declare();
   }
+
+  @PostMapping("/roleType")
+  @ApiOperation("公司角色类型")
+  public Result roleType(){
+    return enumService.roleType();
+  }
+
+
 }

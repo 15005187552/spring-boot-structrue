@@ -3,6 +3,7 @@ package com.ljwm.gecko.base.mapper;
 import com.ljwm.gecko.base.entity.MemberPaper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ljwm.gecko.base.model.vo.MemberPaperVo;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @author Levis
  * @since 2018-09-05
  */
+@Component
 public interface MemberPaperMapper extends BaseMapper<MemberPaper> {
   List<MemberPaperVo> findMemberPaperVoListByMemberId(Long memberId);
 }

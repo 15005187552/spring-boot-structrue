@@ -8,9 +8,12 @@ import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.entity.Company;
+import com.ljwm.gecko.base.entity.CompanyUser;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.enums.IdentificationType;
+import com.ljwm.gecko.base.enums.RoleCodeType;
 import com.ljwm.gecko.base.mapper.CompanyMapper;
+import com.ljwm.gecko.base.mapper.CompanyUserMapper;
 import com.ljwm.gecko.base.utils.Fileutil;
 import com.ljwm.gecko.client.model.dto.CompanyForm;
 import com.ljwm.gecko.client.model.vo.CompanyVo;
@@ -38,6 +41,9 @@ public class CompanyService {
   @Autowired
   CompanyMapper companyMapper;
 
+  @Autowired
+  CompanyUserMapper companyUserMapper;
+
   public Result commit(CompanyForm companyForm) {
     Company company = new Company(null, companyForm.getName(), companyForm.getType(), new Date(),
       IdentificationType.NO_IDENTI.getCode(), DisabledEnum.ENABLED.getCode(), companyForm.getPhoneNum(), companyForm.getCode(), SecurityKit.currentId(),
@@ -51,6 +57,18 @@ public class CompanyService {
       companyMapper.updateById(company);
     } else {
       companyMapper.insert(company);
+      int codeLenth = RoleCodeType.values().length;
+      String[] code = new String[codeLenth];
+      code[codeLenth-RoleCodeType.ADMIN.getDigit()] = String.valueOf(RoleCodeType.ADMIN.getValue());
+      code[codeLenth-RoleCodeType.CREATOR.getDigit()] = String.valueOf(RoleCodeType.CREATOR.getValue());
+      code[codeLenth-RoleCodeType.ITIN.getDigit()] = "0";
+      StringBuffer s = new StringBuffer();
+      for(String str :code){
+        s.append(str);
+      }
+      Integer roleCode = Integer.valueOf(s.toString());
+      CompanyUser companyUser = new CompanyUser(null, company.getId(), SecurityKit.currentId(), roleCode, new Date(), new Date(), DisabledEnum.ENABLED.getCode());
+      companyUserMapper.insert(companyUser);
       File file = new File(appInfo.getFilePath()+ Constant.COMPANY+ company.getId());
       if(!file.exists()){
         file.mkdirs();

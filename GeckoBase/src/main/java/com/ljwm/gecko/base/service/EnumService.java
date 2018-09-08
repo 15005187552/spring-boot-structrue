@@ -2,10 +2,7 @@ package com.ljwm.gecko.base.service;
 
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.dto.Result;
-import com.ljwm.gecko.base.enums.CertificateType;
-import com.ljwm.gecko.base.enums.CompanyType;
-import com.ljwm.gecko.base.enums.CountryType;
-import com.ljwm.gecko.base.enums.DeclareType;
+import com.ljwm.gecko.base.enums.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -35,6 +32,10 @@ public class EnumService {
 
   public Result declare() {
     return Result.success(Arrays.stream(DeclareType.values()).map(declareType -> Kv.by("code",declareType.getCode()).set("value",declareType.getName())).toArray());
+  }
+
+  public Result roleType() {
+    return Result.success(Arrays.stream(RoleCodeType.values()).map(roleCodeType -> Kv.by("digit",roleCodeType.getDigit()).set("role",roleCodeType.getRole()).set("value",roleCodeType.getValue())).toArray());
   }
 }
 

@@ -6,6 +6,7 @@ import com.ljwm.gecko.base.model.dto.MemberDto;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.service.MemberInfoService;
 import com.ljwm.gecko.client.security.JwtUser;
+import com.ljwm.gecko.client.service.CompanyUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import javax.validation.Valid;
 
 /**
  * Created by yuzhou on 2018/8/23.
+ * Updated by Janiffy on 2018/9/8.
  */
 @Slf4j
 @RestController
@@ -28,10 +30,13 @@ public class MemberController extends BaseController {
   @Autowired
   private MemberInfoService memberInfoService;
 
-  @GetMapping("company")
+  @Autowired
+  CompanyUserService companyUserService;
+
+  @PostMapping("company")
   @ApiOperation("会员所在企业")
   public Result myCompany() {
-    return success();
+    return companyUserService.findCompany();
   }
 
   @PostMapping("validateMember")
@@ -46,4 +51,7 @@ public class MemberController extends BaseController {
   public Result<MemberVo> findMemberVoByRegMobile(@PathVariable String regMobile){
     return success(memberInfoService.findMemberVoByRegMobile(regMobile));
   }
+
+
+
 }
