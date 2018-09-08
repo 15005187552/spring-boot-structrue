@@ -58,19 +58,16 @@
   <select id="find" resultMap="MemberVo" parameterType="java.util.Map">
     SELECT
     <include refid="Base_Column_List"/>
-    FROM `t_member` tm
+    FROM `t_member`
     <where>
       <if test="params.text != null and params.text != ''">
         AND (
-        tm.`REG_MOBILE` LIKE CONCAT('%',#{params.text},'%')
-        OR tm.`NICK_NAME` LIKE CONCAT('%',#{params.text},'%')
+        `REG_MOBILE` LIKE CONCAT('%',#{params.text},'%')
+        OR `NICK_NAME` LIKE CONCAT('%',#{params.text},'%')
         )
       </if>
-      <if test="params.companyId != null">
-        AND tm.`ID` IN (SELECT `MEMBER_ID` FROM `t_company_user` WHERE `COMPANY_ID` = #{params.companyId})
-      </if>
     </where>
-    ORDER BY tm.`CREATE_TIME`
+    ORDER BY `CREATE_TIME`
     <if test="params.asc">
       ASC
     </if>
@@ -81,5 +78,31 @@
 
   <select id="findMemberVoByPhone" parameterType="string" resultMap="MemberVo">
       select t.*  from t_member t where t.REG_MOBILE=#{regMobile}
+  </select>
+
+  <select id="findByPage" parameterType="map" resultMap="MemberVo">
+    select t.*  from t_member t
+    <where>
+      <if test="params.text != null and params.text != ''">
+        AND (
+        t.`REG_MOBILE` LIKE CONCAT('%',#{params.text},'%')
+        OR t.`NICK_NAME` LIKE  CONCAT('%',#{params.text},'%')
+        OR t.`MEMBER_IDCARD` LIKE  CONCAT('%',#{params.text},'%')
+        )
+      </if>
+      <if test="params.disabled != null ">
+        AND t.`DISABLED` = #{params.disabled}
+      </if>
+      <if test="params.validateState != null ">
+        AND t.`VALIDATE_STATE` = #{params.validateState}
+      </if>
+    </where>
+    ORDER BY t.ID
+    <if test="params.asc">
+      ASC
+    </if>
+    <if test="!params.asc">
+      DESC
+    </if>
   </select>
 </mapper>
