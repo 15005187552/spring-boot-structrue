@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
-import com.ljwm.gecko.base.constant.Constant;
+import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.model.config.WechatConfig;
 import com.ljwm.gecko.base.utils.AesUtil;
 import lombok.extern.slf4j.Slf4j;

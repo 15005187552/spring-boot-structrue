@@ -2,20 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljwm.gecko.base.mapper.MemberMapper">
 
-  <!-- 通用查询映射结果 -->
-  <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Member">
-    <id column="ID" property="id"/>
-    <result column="REG_MOBILE" property="regMobile"/>
-    <result column="NICK_NAME" property="nickName"/>
-    <result column="CREATE_TIME" property="createTime"/>
-    <result column="DISABLED" property="disabled"/>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Member">
+        <id column="ID" property="id" />
+        <result column="REG_MOBILE" property="regMobile" />
+        <result column="NICK_NAME" property="nickName" />
+        <result column="AVATAR_PATH" property="avatarPath" />
+        <result column="MEMBER_IDCARD" property="memberIdcard" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="DISABLED" property="disabled" />
+        <result column="VALIDATER_ID" property="validaterId" />
+        <result column="VALIDATE_TIME" property="validateTime" />
+        <result column="VALIDATE_STATE" property="validateState" />
+        <result column="VALIDATE_TEXT" property="validateText" />
+    </resultMap>
 
-    <result column="MEMBER_IDCARD" property="memberIdcard"/>
-    <result column="VALIDATER_ID" property="validaterId"/>
-    <result column="VALIDATE_TIME" property="validateTime"/>
-    <result column="VALIDATE_STATE" property="validateState"/>
-    <result column="VALIDATE_TEXT" property="validateText"/>
-  </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATER_ID`          ,`VALIDATE_TIME`          ,`VALIDATE_STATE`          ,`VALIDATE_TEXT`
+    </sql>
 
   <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.MemberVo">
     <id column="ID" property="id"/>
@@ -43,10 +48,6 @@
     <result column="LAST_MODIFY_TIME" property="lastModifyTime" />
   </resultMap>
 
-  <!-- 通用查询结果列 -->
-  <sql id="Base_Column_List">
-          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`CREATE_TIME`          ,`DISABLED`
-    </sql>
 
   <resultMap id="MemberVo" type="com.ljwm.gecko.base.model.vo.MemberVo" extends="BaseResultMap">
     <collection property="memberAccounts" column="ID"
@@ -105,4 +106,5 @@
       DESC
     </if>
   </select>
+
 </mapper>

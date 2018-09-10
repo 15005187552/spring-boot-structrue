@@ -21,4 +21,5 @@ public class ResultMe {
   private String nickName;
   private String extInfo;
   private String token;
+  private String avatarPath;
 }

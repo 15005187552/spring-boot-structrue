@@ -4,7 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ljwm.bootbase.dto.Kv;
-import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.JwtKit;
@@ -100,6 +99,7 @@ public class AuthService {
     ResultMe resultMe = new ResultMe();
     resultMe.setId(jwtUser.getId());
     resultMe.setIsGuest(false);
+    resultMe.setAvatarPath(memberVo.getAvatarPath());
     resultMe.setPhoneNum(memberVo.getRegMobile());
     resultMe.setUsername(jwtUser.getUsername());
     resultMe.setExtInfo(memberVo.getAccount().getExtInfo());
@@ -117,6 +117,7 @@ public class AuthService {
         ResultMe resultMe = new ResultMe();
         resultMe.setIsGuest(false);
         resultMe.setId(id);
+        resultMe.setAvatarPath(memberVo.getAvatarPath());
         resultMe.setPhoneNum(memberVo.getRegMobile());
         resultMe.setUsername(memberVo.getAccount().getUsername());
         resultMe.setExtInfo(memberVo.getAccount().getExtInfo());

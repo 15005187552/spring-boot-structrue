@@ -1,21 +1,20 @@
 package com.ljwm.gecko.base.entity;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-
-
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * <p>
@@ -23,14 +22,14 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author Levis
- * @since 2018-09-08
+ * @since 2018-09-10
  */
 @Data
 @SuppressWarnings("ALL")
-@Accessors(chain = true)
-@TableName("`t_cal_tax`")
 @AllArgsConstructor
 @NoArgsConstructor
+@Accessors(chain = true)
+@TableName("`t_cal_tax`")
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value = "个税计算表", subTypes = {CalTax.class})
 public class CalTax implements Serializable {
