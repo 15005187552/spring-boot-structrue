@@ -27,7 +27,10 @@ public class RegisterMemberForm {
   @NotBlank(message = "请输入验证码！")
   private String checkCode;
 
+  @ApiModelProperty("密码")
+  private String password;
+
   @NotBlank(message = "userName不能为空")
-  @ApiModelProperty("小程序输入我给你的userName，其他客户端输入手机号")
+  @ApiModelProperty("小程序输入我给你的userName")
   private String userName;
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.CompanyUserInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.CompanyUserInfo">
+        <id column="COMPANY_USER_ID" property="companyUserId" />
+        <result column="JOB_NUM" property="jobNum" />
+        <result column="EDUCATION" property="education" />
+        <result column="PERSON_STATE" property="personState" />
+        <result column="EMPLOYEE" property="employee" />
+        <result column="HIRE_DATE" property="hireDate" />
+        <result column="EMPLOYEE_TYPE" property="employeeType" />
+        <result column="DEPARTMENT" property="department" />
+        <result column="STATION" property="station" />
+        <result column="TERM_DATE" property="termDate" />
+        <result column="SOCIAL_BASE" property="socialBase" />
+        <result column="SOCIAL_COM_PER" property="socialComPer" />
+        <result column="COM_PENSION" property="comPension" />
+        <result column="COM_MEDICAL" property="comMedical" />
+        <result column="COM_UNEMPLOY" property="comUnemploy" />
+        <result column="COM_INJURY" property="comInjury" />
+        <result column="COM_BIRTH" property="comBirth" />
+        <result column="SOCIAL_PERSON_PER" property="socialPersonPer" />
+        <result column="PERSON_PENSION" property="personPension" />
+        <result column="PERSON_MEDICAL" property="personMedical" />
+        <result column="PERSON_UNEMPLOY" property="personUnemploy" />
+        <result column="FUND_BASE" property="fundBase" />
+        <result column="FUND_COM" property="fundCom" />
+        <result column="FUND_PERSON" property="fundPerson" />
+        <result column="WORK_CITY" property="workCity" />
+        <result column="MARITAL_STATUS" property="maritalStatus" />
+        <result column="NTRODUCE_TALENTS" property="ntroduceTalents" />
+        <result column="BANK" property="bank" />
+        <result column="BANK_NUM" property="bankNum" />
+        <result column="SOCIAL_NUM" property="socialNum" />
+        <result column="FUND_NUM" property="fundNum" />
+        <result column="SPECIAL_INDUSTRY" property="specialIndustry" />
+        <result column="IS_INVESTOR" property="isInvestor" />
+        <result column="EMAIL" property="email" />
+        <result column="REMARK" property="remark" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `COMPANY_USER_ID`          ,`JOB_NUM`          ,`EDUCATION`          ,`PERSON_STATE`          ,`EMPLOYEE`          ,`HIRE_DATE`          ,`EMPLOYEE_TYPE`          ,`DEPARTMENT`          ,`STATION`          ,`TERM_DATE`          ,`SOCIAL_BASE`          ,`SOCIAL_COM_PER`          ,`COM_PENSION`          ,`COM_MEDICAL`          ,`COM_UNEMPLOY`          ,`COM_INJURY`          ,`COM_BIRTH`          ,`SOCIAL_PERSON_PER`          ,`PERSON_PENSION`          ,`PERSON_MEDICAL`          ,`PERSON_UNEMPLOY`          ,`FUND_BASE`          ,`FUND_COM`          ,`FUND_PERSON`          ,`WORK_CITY`          ,`MARITAL_STATUS`          ,`NTRODUCE_TALENTS`          ,`BANK`          ,`BANK_NUM`          ,`SOCIAL_NUM`          ,`FUND_NUM`          ,`SPECIAL_INDUSTRY`          ,`IS_INVESTOR`          ,`EMAIL`          ,`REMARK`
+    </sql>
+
+</mapper>

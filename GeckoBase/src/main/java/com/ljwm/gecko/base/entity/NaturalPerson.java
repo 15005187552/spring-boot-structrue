@@ -1,17 +1,18 @@
 package com.ljwm.gecko.base.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import com.baomidou.mybatisplus.annotation.IdType;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import java.io.Serializable;
+
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
-import java.util.Date;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
@@ -19,7 +20,7 @@ import java.util.Date;
  * </p>
  *
  * @author Levis
- * @since 2018-09-05
+ * @since 2018-09-10
  */
 @Data
 @SuppressWarnings("ALL")
@@ -35,6 +36,8 @@ public class NaturalPerson implements Serializable {
     @ApiModelProperty(value = "会员ID")
     @TableId(value = "`MEMBER_ID`", type = IdType.INPUT)
     private Long memberId;
+    @TableField("`COMPANY_ID`")
+    private Long companyId;
 
     @ApiModelProperty(value = "国籍 0-中国大陆 1-港澳台 2-外籍")
     @TableField("`COUNTRY`")
@@ -44,9 +47,33 @@ public class NaturalPerson implements Serializable {
     @TableField("`NAME`")
     private String name;
 
+    @ApiModelProperty(value = "性别 0-男  1-女")
+    @TableField("`GENDER`")
+    private Integer gender;
+
+    @ApiModelProperty(value = "出生年月")
+    @TableField("`BIRTHDAY`")
+    private Date birthday;
+
     @ApiModelProperty(value = "证件类型 0-身份证号 1-港澳台证件号 3-外籍证件号")
     @TableField("`CERTIFICATE`")
     private Integer certificate;
+
+    @ApiModelProperty(value = "省")
+    @TableField("`PROVINCE`")
+    private Integer province;
+
+    @ApiModelProperty(value = "城市")
+    @TableField("`CITY`")
+    private Integer city;
+
+    @ApiModelProperty(value = "区")
+    @TableField("`AREA`")
+    private Integer area;
+
+    @ApiModelProperty(value = "详细地址")
+    @TableField("`ADDRESS`")
+    private String address;
 
     @ApiModelProperty(value = "证件号")
     @TableField("`CERT_NUM`")
@@ -115,11 +142,25 @@ public class NaturalPerson implements Serializable {
 
     public static final String MEMBER_ID = "`MEMBER_ID`";
 
+    public static final String COMPANY_ID = "`COMPANY_ID`";
+
     public static final String COUNTRY = "`COUNTRY`";
 
     public static final String NAME = "`NAME`";
 
+    public static final String GENDER = "`GENDER`";
+
+    public static final String BIRTHDAY = "`BIRTHDAY`";
+
     public static final String CERTIFICATE = "`CERTIFICATE`";
+
+    public static final String PROVINCE = "`PROVINCE`";
+
+    public static final String CITY = "`CITY`";
+
+    public static final String AREA = "`AREA`";
+
+    public static final String ADDRESS = "`ADDRESS`";
 
     public static final String CERT_NUM = "`CERT_NUM`";
 
