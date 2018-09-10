@@ -18,6 +18,12 @@ public class CompanyVo {
   @ApiModelProperty(value = "企业纳税代码")
   private String code;
 
+  @ApiModelProperty(value = "手机号码")
+  private String phoneNum;
+
+  @ApiModelProperty(value = "认证状态：0：未认证，1：认证通过，2:认证失败")
+  private Integer validateState;
+
   @ApiModelProperty(value = "证照图片文件")
   private String filePath;
 
