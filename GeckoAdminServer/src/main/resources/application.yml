@@ -7,8 +7,8 @@ spring:
 dict:
   # ID:用户名:密码:(属于角色1,属于角色2)
   sysAdmin: "-1:admin:ljwm2018:(10000)"
-  # 角色ID:角色名称:(属于权限1,属于权限2)
-  initRole: "10000:超级管理员:()"
+  # 角色ID:角色名称:角色代码:(属于权限1,属于权限2)
+  initRole: "10000:超级管理员:superAdmin:()"
   # 系统内置功能菜单 "ID:NAME:TITLE:DESC:URL:ICON:PARENT"
   builtInMenu:
   initPassword: "111111"

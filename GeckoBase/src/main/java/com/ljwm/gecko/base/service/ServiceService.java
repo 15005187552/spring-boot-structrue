@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class ServeService {
+public class ServiceService {
 
   @Autowired
   private ServiceMapper serviceMapper;

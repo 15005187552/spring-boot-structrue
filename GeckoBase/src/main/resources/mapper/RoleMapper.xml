@@ -6,13 +6,14 @@
     <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Role">
         <id column="ID" property="id" />
         <result column="ROLE_NAME" property="roleName" />
+        <result column="ROLE_CODE" property="roleCode" />
         <result column="ROLE_DESC" property="roleDesc" />
         <result column="DISABLED" property="disabled" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`ROLE_NAME`          ,`ROLE_DESC`          ,`DISABLED`
+          `ID`          ,`ROLE_NAME`          ,`ROLE_CODE`          ,`ROLE_DESC`          ,`DISABLED`
     </sql>
 
   <resultMap id="RoleDto" type="com.ljwm.gecko.base.model.dto.RoleDto" extends="BaseResultMap">

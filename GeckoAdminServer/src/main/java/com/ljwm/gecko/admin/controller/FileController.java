@@ -19,7 +19,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("file")
-@Api(tags = "上传接口")
+@Api(tags = "上传接口 API")
 public class FileController extends BaseController {
 
   @Autowired

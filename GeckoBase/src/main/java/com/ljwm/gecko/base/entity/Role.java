@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author xixil
- * @since 2018-08-29
+ * @since 2018-09-10
  */
 @Data
 @SuppressWarnings("ALL")
@@ -38,6 +38,10 @@ public class Role implements Serializable {
     @TableField("`ROLE_NAME`")
     private String roleName;
 
+    @ApiModelProperty(value = "角色代码")
+    @TableField("`ROLE_CODE`")
+    private String roleCode;
+
     @ApiModelProperty(value = "角色描述")
     @TableField("`ROLE_DESC`")
     private String roleDesc;
@@ -50,6 +54,8 @@ public class Role implements Serializable {
     public static final String ID = "`ID`";
 
     public static final String ROLE_NAME = "`ROLE_NAME`";
+
+    public static final String ROLE_CODE = "`ROLE_CODE`";
 
     public static final String ROLE_DESC = "`ROLE_DESC`";
 

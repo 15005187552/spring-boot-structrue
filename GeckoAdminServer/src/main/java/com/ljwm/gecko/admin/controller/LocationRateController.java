@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/locationRate")
-@Api(tags = "地区利率管理  PI")
+@Api(tags = "地区利率 API")
 @Slf4j
 public class LocationRateController extends BaseController {
 

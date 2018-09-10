@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/member")
-@Api(tags = "会员信息管理 API")
+@Api(tags = "会员信息 API")
 public class MemberController extends BaseController {
 
   @Autowired

@@ -84,11 +84,14 @@ public class AuthService {
       // 获取角色名称
       String name = temp[1];
 
-      String[] functions = temp[2].replaceAll(ReUtil.escape("("), "").replaceAll(ReUtil.escape(")"), "").split("-");
+      String code = temp[2];
+
+      String[] functions = temp[3].replaceAll(ReUtil.escape("("), "").replaceAll(ReUtil.escape(")"), "").split("-");
 
       authService.saveRole(new RoleSaveForm()
-        .setFunctionIds(Arrays.stream(functions).filter(i-> StrUtil.isNotBlank(i)).map(Integer::new).collect(Collectors.toList()))
+        .setFunctionIds(Arrays.stream(functions).filter(i -> StrUtil.isNotBlank(i)).map(Integer::new).collect(Collectors.toList()))
         .setId(Long.valueOf(id))
+        .setRoleCode(code)
         .setRoleName(name)
       );
     }
@@ -111,6 +114,7 @@ public class AuthService {
     //2.设置新参数并保存
     role.setId(roleSaveForm.getId())
       .setRoleName(roleSaveForm.getRoleName())
+      .setRoleCode(roleSaveForm.getRoleCode())
       .setRoleDesc(roleSaveForm.getRoleDesc());
 //    commonService.insertOrUpdate(role, roleMapper);
     if (Objects.isNull(roleSaveForm.getId()))

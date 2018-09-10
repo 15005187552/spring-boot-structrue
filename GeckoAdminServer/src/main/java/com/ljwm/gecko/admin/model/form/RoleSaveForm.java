@@ -15,5 +15,7 @@ public class RoleSaveForm {
 
   private String roleDesc;
 
+  private String roleCode;
+
   private List<Integer> functionIds;
 }
