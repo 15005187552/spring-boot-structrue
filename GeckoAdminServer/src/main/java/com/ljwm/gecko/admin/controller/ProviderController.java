@@ -10,7 +10,7 @@ import com.ljwm.gecko.base.model.vo.ProviderVo;
 import com.ljwm.gecko.base.model.vo.ServeSimpleVo;
 import com.ljwm.gecko.base.model.vo.ServiceVo;
 import com.ljwm.gecko.base.service.ProviderService;
-import com.ljwm.gecko.base.service.ServiceService;
+import com.ljwm.gecko.base.service.ServiceTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import java.util.List;
 public class ProviderController extends BaseController {
 
   @Autowired
-  private ServiceService serviceService;
+  private ServiceTypeService serviceTypeService;
 
   @Autowired
   private ProviderService providerService;
@@ -45,12 +45,12 @@ public class ProviderController extends BaseController {
   @GetMapping("find")
   @ApiOperation("获取服务类型树")
   public Result<List<ServiceVo>> find(){
-    return success(serviceService.find());
+    return success(serviceTypeService.find());
   }
 
   @PostMapping("save")
   @ApiOperation("保存服务类型")
   public Result<ServeSimpleVo> save(@RequestBody ServeDto serveDto){
-    return success(serviceService.save(serveDto));
+    return success(serviceTypeService.save(serveDto));
   }
 }
