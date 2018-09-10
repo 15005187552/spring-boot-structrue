@@ -1,7 +1,7 @@
 package com.ljwm.gecko.base.mapper;
 
+import com.ljwm.gecko.base.entity.ServiceType;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ljwm.gecko.base.entity.Service;
 import com.ljwm.gecko.base.model.vo.ServiceVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,9 +13,9 @@ import java.util.List;
  * </p>
  *
  * @author Levis
- * @since 2018-09-08
+ * @since 2018-09-10
  */
-public interface ServiceMapper extends BaseMapper<Service> {
+public interface ServiceTypeMapper extends BaseMapper<ServiceType> {
   List<ServiceVo> find();
 
   List<ServiceVo> children(@Param("pId") Integer pId);

@@ -3,7 +3,8 @@ package com.ljwm.gecko.base.service;
 import cn.hutool.core.bean.BeanUtil;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
-import com.ljwm.gecko.base.mapper.ServiceMapper;
+import com.ljwm.gecko.base.entity.ServiceType;
+import com.ljwm.gecko.base.mapper.ServiceTypeMapper;
 import com.ljwm.gecko.base.model.dto.ServeDto;
 import com.ljwm.gecko.base.model.vo.ServeSimpleVo;
 import com.ljwm.gecko.base.model.vo.ServiceVo;
@@ -20,10 +21,10 @@ import java.util.Optional;
 public class ServiceService {
 
   @Autowired
-  private ServiceMapper serviceMapper;
+  private ServiceTypeMapper serviceTypeMapper;
 
   public List<ServiceVo> find(){
-    return serviceMapper.find();
+    return serviceTypeMapper.find();
   }
 
   @Transactional
@@ -32,17 +33,17 @@ public class ServiceService {
       .ofNullable(serveDto)
       .map(f -> {
         if (f.getPid()!=null){
-          com.ljwm.gecko.base.entity.Service service = serviceMapper.selectById(f.getPid());
+          ServiceType service = serviceTypeMapper.selectById(f.getPid());
           if (service==null){
             throw new LogicException(ResultEnum.DATA_ERROR, "找不到要修改的“id为" + f.getId() + "”节点!");
           }
         }
-        com.ljwm.gecko.base.entity.Service service = new com.ljwm.gecko.base.entity.Service();
+        ServiceType service = new ServiceType();
         BeanUtil.copyProperties(f,service);
         if (f.getId()==null){
-          serviceMapper.insert(service);
+          serviceTypeMapper.insert(service);
         }else {
-          serviceMapper.updateById(service);
+          serviceTypeMapper.updateById(service);
         }
         return new ServeSimpleVo(service);
       })
