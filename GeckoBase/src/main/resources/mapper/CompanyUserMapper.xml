@@ -11,19 +11,20 @@
         <result column="CREATE_TIME" property="createTime" />
         <result column="UPDATE_TIME" property="updateTime" />
         <result column="DISABLED" property="disabled" />
+        <result column="ACTIVATED" property="activated" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`COMPANY_ID`          ,`MEMBER_ID`          ,`ROLES_CODE`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`DISABLED`
+          `ID`          ,`COMPANY_ID`          ,`MEMBER_ID`          ,`ROLES_CODE`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`DISABLED`          ,`ACTIVATED`
     </sql>
 
-  <resultMap id="CompanyUserVo" type="com.ljwm.gecko.base.model.vo.admin.CompanyUserVo" extends="BaseResultMap">
-    <result column="NICK_NAME" property="nickName"/>
-    <result column="REG_MOBILE" property="regMobile"/>
-    <result column="AVATAR_PATH" property="avatarPath"/>
-    <result column="MEMBER_IDCARD" property="memberIdCard"/>
-    <result column="memberDisabled" property="memberDisabled"/>
-  </resultMap>
+    <resultMap id="CompanyUserVo" type="com.ljwm.gecko.base.model.vo.admin.CompanyUserVo" extends="BaseResultMap">
+      <result column="NICK_NAME" property="nickName"/>
+      <result column="REG_MOBILE" property="regMobile"/>
+      <result column="AVATAR_PATH" property="avatarPath"/>
+      <result column="MEMBER_IDCARD" property="memberIdCard"/>
+      <result column="memberDisabled" property="memberDisabled"/>
+    </resultMap>
 
 </mapper>

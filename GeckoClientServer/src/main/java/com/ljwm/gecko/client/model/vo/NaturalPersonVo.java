@@ -34,7 +34,7 @@ public class NaturalPersonVo extends NaturalPerson {
   private Integer certificate;
 
   @ApiModelProperty(value = "证件号")
-  private Long certNum;
+  private String certNum;
 
   @ApiModelProperty(value = "残疾人证件号")
   private String disablityNum;

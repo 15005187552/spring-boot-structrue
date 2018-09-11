@@ -21,14 +21,14 @@ import java.util.Date;
  * </p>
  *
  * @author Levis
- * @since 2018-09-03
+ * @since 2018-09-11
  */
 @Data
 @SuppressWarnings("ALL")
 @Accessors(chain = true)
-@TableName("`t_company_user`")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@TableName("`t_company_user`")
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value = "企业员工表", subTypes = {CompanyUser.class})
 public class CompanyUser implements Serializable {
@@ -62,6 +62,10 @@ public class CompanyUser implements Serializable {
     @TableField("`DISABLED`")
     private Integer disabled;
 
+    @ApiModelProperty(value = "是否激活")
+    @TableField("`ACTIVATED`")
+    private Integer activated;
+
 
     public static final String ID = "`ID`";
 
@@ -76,5 +80,7 @@ public class CompanyUser implements Serializable {
     public static final String UPDATE_TIME = "`UPDATE_TIME`";
 
     public static final String DISABLED = "`DISABLED`";
+
+    public static final String ACTIVATED = "`ACTIVATED`";
 
 }

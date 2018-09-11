@@ -12,12 +12,14 @@ import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.entity.Guest;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.enums.UserSource;
+import com.ljwm.gecko.base.model.vo.LoginVo;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.service.GuestService;
 import com.ljwm.gecko.base.service.MemberInfoService;
 import com.ljwm.gecko.base.service.WechatXCXService;
 import com.ljwm.gecko.base.utils.FunctionUtil;
 import com.ljwm.gecko.client.model.dto.GuestForm;
+import com.ljwm.gecko.client.model.dto.LoginForm;
 import com.ljwm.gecko.client.model.vo.ResultMe;
 import com.ljwm.gecko.client.security.JwtUser;
 import lombok.extern.slf4j.Slf4j;
@@ -76,7 +78,7 @@ public class AuthService {
         log.debug("The ext info for wixin app user: {}", extInfo);
         JSONObject js = JSON.parseObject(extInfo);
         String nickName = js.getString("nickName");
-        Long memberId = memberInfoService.updateExt(mpOpenId, extInfo, UserSource.WX_APP.getCode());
+        Long memberId = memberInfoService.updateExt(mpOpenId, extInfo, LoginType.WX_APP.getCode());
         String nName = memberInfoService.selectMember(memberId);
         if(StrUtil.isBlank(nName)){
           memberInfoService.updateMember(nickName, memberId);
@@ -94,7 +96,7 @@ public class AuthService {
       return resultMe;
     }
 
-    MemberVo memberVo = memberInfoService.selectMemberInfo(guest.getMemberId(), userSource.getCode());
+    MemberVo memberVo = memberInfoService.selectMemberInfo(guest.getMemberId(), LoginType.WX_APP.getCode());
     JwtUser jwtUser = new JwtUser(memberVo);
     ResultMe resultMe = new ResultMe();
     resultMe.setId(jwtUser.getId());
@@ -123,6 +125,28 @@ public class AuthService {
         resultMe.setExtInfo(memberVo.getAccount().getExtInfo());
         resultMe.setNickName(memberVo.getNickName());
         return resultMe;
+    }
+    return null;
+  }
+
+  public ResultMe loginSys(LoginForm loginForm) {
+    String phoneNum = loginForm.getPhoneNum();
+    String password = loginForm.getPassword();
+    LoginVo loginVo = memberInfoService.selectByPhone(phoneNum);
+    password = SecurityKit.passwordMD5(password, loginVo.getSalt());
+    if(password.equals(loginVo.getPassword())){
+      MemberVo memberVo = memberInfoService.selectMemberInfo(loginVo.getMemberId(), LoginType.MOBILE.getCode());
+      JwtUser jwtUser = new JwtUser(memberVo);
+      ResultMe resultMe = new ResultMe();
+      resultMe.setId(jwtUser.getId());
+      resultMe.setIsGuest(false);
+      resultMe.setAvatarPath(memberVo.getAvatarPath());
+      resultMe.setPhoneNum(memberVo.getRegMobile());
+      resultMe.setUsername(jwtUser.getUsername());
+      resultMe.setExtInfo(memberVo.getAccount().getExtInfo());
+      resultMe.setNickName(memberVo.getNickName());
+      resultMe.setToken(JwtKit.generateToken(jwtUser));
+      return resultMe;
     }
     return null;
   }

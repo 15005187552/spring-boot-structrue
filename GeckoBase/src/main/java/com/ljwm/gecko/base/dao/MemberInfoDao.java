@@ -64,17 +64,6 @@ public class MemberInfoDao {
     return memberPassword;
   }
 
-  public Long selectIdByPassword(String salt, String password){
-    Map<String, Object> map = new HashedMap();
-    map.put("SALT", salt);
-    map.put("PASSWORD", password);
-    List<MemberPassword> list = memberPasswordMapper.selectByMap(map);
-    if (CollectionUtil.isNotEmpty(list)) {
-      return list.get(0).getId();
-    }
-    return null;
-  }
-
   public MemberAccount insertAccount(String userName, Integer code, Long memberId, Long passwordId) {
     MemberAccount memberAccount = new MemberAccount(null, userName, code, memberId, passwordId, null);
     memberAccountMapper.insert(memberAccount);

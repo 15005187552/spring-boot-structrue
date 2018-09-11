@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author Levis
- * @since 2018-09-10
+ * @since 2018-09-11
  */
 @Data
 @SuppressWarnings("ALL")
@@ -34,7 +34,7 @@ public class NaturalPerson implements Serializable {
 
 
     @ApiModelProperty(value = "会员ID")
-    @TableId(value = "`MEMBER_ID`", type = IdType.INPUT)
+    @TableId(value = "`MEMBER_ID`", type = IdType.AUTO)
     private Long memberId;
     @TableField("`COMPANY_ID`")
     private Long companyId;
@@ -77,7 +77,7 @@ public class NaturalPerson implements Serializable {
 
     @ApiModelProperty(value = "证件号")
     @TableField("`CERT_NUM`")
-    private Long certNum;
+    private String certNum;
 
     @ApiModelProperty(value = "证件照正面")
     @TableField("`CERT_POS_PATH`")

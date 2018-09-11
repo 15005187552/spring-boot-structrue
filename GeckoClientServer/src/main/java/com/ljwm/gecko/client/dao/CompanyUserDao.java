@@ -2,7 +2,9 @@ package com.ljwm.gecko.client.dao;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.entity.CompanyUser;
+import com.ljwm.gecko.base.enums.ActivateEnum;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.CompanyUserMapper;
 import org.apache.commons.collections.map.HashedMap;
@@ -35,7 +37,12 @@ public class CompanyUserDao {
       companyUserMapper.updateById(companyUser);
     } else {
       Date date = new Date();
-      companyUser = new CompanyUser(null, companyId, memberId, roleCode, date, date, DisabledEnum.ENABLED.getCode());
+      companyUser = new CompanyUser(null, companyId, memberId, roleCode, date, date, DisabledEnum.ENABLED.getCode(),null);
+      if(memberId == SecurityKit.currentId()){
+        companyUser.setActivated(ActivateEnum.ENABLED.getCode());
+      } else {
+        companyUser.setActivated(ActivateEnum.DISABLED.getCode());
+      }
       companyUserMapper.insert(companyUser);
     }
     return null;

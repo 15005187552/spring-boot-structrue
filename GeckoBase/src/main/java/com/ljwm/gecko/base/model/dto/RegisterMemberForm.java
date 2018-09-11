@@ -31,6 +31,6 @@ public class RegisterMemberForm {
   private String password;
 
   @NotBlank(message = "userName不能为空")
-  @ApiModelProperty("小程序输入我给你的userName")
+  @ApiModelProperty("小程序输入我给你的userName，其他客户端输入手机号")
   private String userName;
 }

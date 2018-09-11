@@ -14,11 +14,13 @@ import com.ljwm.gecko.base.entity.MemberPaper;
 import com.ljwm.gecko.base.enums.ValidateStatEnum;
 import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.mapper.MemberPaperMapper;
+import com.ljwm.gecko.base.mapper.MemberPasswordMapper;
 import com.ljwm.gecko.base.model.bean.AppInfo;
 import com.ljwm.gecko.base.model.dto.FileDto;
 import com.ljwm.gecko.base.model.dto.MemberConfirmDto;
 import com.ljwm.gecko.base.model.dto.MemberDto;
 import com.ljwm.gecko.base.model.dto.MemberQueryDto;
+import com.ljwm.gecko.base.model.vo.LoginVo;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.utils.Fileutil;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +48,9 @@ public class MemberInfoService {
 
   @Autowired
   private MemberPaperMapper memberPaperMapper;
+
+  @Autowired
+  private MemberPasswordMapper memberPasswordMapper;
 
   @Autowired
   private AppInfo appInfo;
@@ -134,5 +139,13 @@ public class MemberInfoService {
     member.setValidateText(memberConfirmDto.getValidateText());
     member.setValidateTime(DateUtil.date());
     memberMapper.updateById(member);
+  }
+
+  public LoginVo selectByPhone(String phoneNum) {
+    List<LoginVo> list = memberPasswordMapper.selectByPhone(phoneNum);
+    if(CollectionUtils.isNotEmpty(list)){
+      return list.get(0);
+    }
+    return null;
   }
 }

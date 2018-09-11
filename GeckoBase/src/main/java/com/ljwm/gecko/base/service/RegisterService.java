@@ -111,9 +111,12 @@ public class RegisterService {
       }
       MemberPassword memberPassword = memberInfoDao.insertPassword(salt, password, new Date());
       log.debug("Saved password: {}", memberPassword);
-
-      MemberAccount memberAccount = memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, memberPassword.getId());
-
+      MemberAccount memberAccount;
+      if(StrUtil.isBlank(password)) {
+        memberAccount = memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, memberPassword.getId());
+      } else {
+        memberAccount = memberInfoDao.insertAccount(userName, LoginType.MOBILE.getCode(), memberId, memberPassword.getId());
+      }
       log.debug("Saved account: {}", memberAccount);
       return success("注册成功！");
     }

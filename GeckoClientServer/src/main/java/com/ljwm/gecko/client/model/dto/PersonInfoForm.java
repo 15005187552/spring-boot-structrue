@@ -29,7 +29,7 @@ public class PersonInfoForm {
   private Integer certificate;
 
   @ApiModelProperty(value = "证件号")
-  private Long certNum;
+  private String certNum;
 
   @ApiModelProperty(value = "纳税公司ID")
   private Long companyId;

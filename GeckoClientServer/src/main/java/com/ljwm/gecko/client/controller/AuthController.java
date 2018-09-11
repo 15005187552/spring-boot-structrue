@@ -3,6 +3,7 @@ package com.ljwm.gecko.client.controller;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.client.model.dto.GuestForm;
+import com.ljwm.gecko.client.model.dto.LoginForm;
 import com.ljwm.gecko.client.security.JwtUser;
 import com.ljwm.gecko.client.service.AuthService;
 import io.swagger.annotations.Api;
@@ -25,9 +26,15 @@ public class AuthController extends BaseController {
   private AuthService authService;
 
   @PostMapping("/login")
-  @ApiOperation("登录")
-  public Result guest(@RequestBody GuestForm guestForm) {
+  @ApiOperation("小程序登录")
+  public Result login(@RequestBody GuestForm guestForm) {
     return success(authService.login(guestForm));
+  }
+
+  @PostMapping("/loginSys")
+  @ApiOperation("登录")
+  public Result loginSys(@RequestBody LoginForm loginForm) {
+    return success(authService.loginSys(loginForm));
   }
 
   @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)

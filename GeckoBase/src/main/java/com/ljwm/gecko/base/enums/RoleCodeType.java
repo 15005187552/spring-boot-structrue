@@ -10,7 +10,7 @@ import lombok.Getter;
 public enum RoleCodeType {
   CREATOR(1, "创建人", 1),
   ADMIN(2, "管理员", 1),
-  ITIN(3, "申报人", 1);
+  ITIN(3, "报税员", 1);
 
   private Integer digit;
 
