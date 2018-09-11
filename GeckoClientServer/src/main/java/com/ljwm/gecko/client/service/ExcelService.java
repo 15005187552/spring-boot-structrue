@@ -69,7 +69,6 @@ public class ExcelService {
     if(CollectionUtil.isEmpty(companyUserList)){
       throw new LogicException("你没有该操作的权限");
     }
-    Long companyUserId = companyUserList.get(0).getId();
     String roleCode = companyUserList.get(0).getRolesCode().toString();
     int c = roleCode.length()- RoleCodeType.ITIN.getDigit();
     Integer code = Integer.valueOf(roleCode.substring(c, c+1));
@@ -109,14 +108,6 @@ public class ExcelService {
         memberMapper.insert(member);
         memberId = member.getId();
       }
-      String[] str = new String[RoleCodeType.values().length];
-      StringBuffer stringBuffer = new StringBuffer();
-      for (int j = 0; j < str.length; j++) {
-        str[j] = "0";
-        stringBuffer.append(str[j]);
-      }
-      Integer role = Integer.valueOf(stringBuffer.toString());
-      companyUserDao.insertOrUpdate(memberId, companyId, role);
       Integer provinceCode = locationDao.getProvinceCode(personInfoDto.getProvince());
       Integer cityCode = locationDao.getCityCode(personInfoDto.getCity(), provinceCode);
       Integer areaCode = locationDao.getAreaCode(personInfoDto.getArea(), cityCode);
@@ -140,13 +131,23 @@ public class ExcelService {
       } else {
         naturalPersonMapper.insert(naturalPerson);
       }
+      String[] str = new String[RoleCodeType.values().length];
+      StringBuffer stringBuffer = new StringBuffer();
+      for (int j = 0; j < str.length; j++) {
+        str[j] = "0";
+        stringBuffer.append(str[j]);
+      }
+      Integer role = Integer.valueOf(stringBuffer.toString());
+      CompanyUser companyUser = companyUserDao.insertOrUpdate(memberId, companyId, role);
+      Long companyUserId = companyUser.getId();
       CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUserId);
       CompanyUserInfo companyUserInfo1 = new CompanyUserInfo();
       Integer workCity = locationDao.getCityCode(personInfoDto.getWorkCity(), null);
-      companyUserInfo1.setJobNum(personInfoDto.getJobNum())
+      companyUserInfo1.setCompanyUserId(companyUserId)
+        .setJobNum(personInfoDto.getJobNum())
         .setEducation(EnumUtil.getEnumByName(EducationEnum.class, personInfoDto.getEducation()).getCode())
         .setPersonState(EnumUtil.getEnumByName(PersonStateEnum.class, personInfoDto.getPersonState()).getCode())
-        .setEmployee(EnumUtil.getEnumByName(PersonStateEnum.class, personInfoDto.getEmployee()).getCode())
+        .setEmployee(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getEmployee()).getCode())
         .setHireDate(TimeUtil.parseString(personInfoDto.getHireDate()))
         .setEmployeeType(personInfoDto.getEmployeeType())
         .setDepartment(personInfoDto.getDepartment())

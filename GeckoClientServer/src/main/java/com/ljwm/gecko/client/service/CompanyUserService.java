@@ -22,7 +22,8 @@ public class CompanyUserService {
   CompanyUserMapper companyUserMapper;
 
   public Result memberEnterCom(MemberComForm memberComForm) {
-    return companyUserDao.insertOrUpdate(memberComForm.getMemberId(), memberComForm.getCompanyId(), memberComForm.getRoleCode());
+    companyUserDao.insertOrUpdate(memberComForm.getMemberId(), memberComForm.getCompanyId(), memberComForm.getRoleCode());
+    return Result.success("成功！");
   }
 
   public Result findCompany() {

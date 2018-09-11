@@ -1,7 +1,6 @@
 package com.ljwm.gecko.client.dao;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.entity.CompanyUser;
 import com.ljwm.gecko.base.enums.ActivateEnum;
@@ -25,7 +24,7 @@ public class CompanyUserDao {
   @Autowired
   CompanyUserMapper companyUserMapper;
 
-  public Result insertOrUpdate(Long memberId, Long companyId, Integer roleCode) {
+  public CompanyUser insertOrUpdate(Long memberId, Long companyId, Integer roleCode) {
     Map<String, Object> map = new HashedMap();
     map.put("MEMBER_ID", memberId);
     map.put("COMPANY_ID", companyId);
@@ -45,6 +44,6 @@ public class CompanyUserDao {
       }
       companyUserMapper.insert(companyUser);
     }
-    return null;
+    return companyUser;
   }
 }
