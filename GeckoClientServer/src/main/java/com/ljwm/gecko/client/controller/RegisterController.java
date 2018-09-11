@@ -35,12 +35,9 @@ public class RegisterController extends BaseController {
       return registerService.getSMS(registerForm, request);
   }
 
-
-
   @PostMapping("/register")
-  @ApiOperation("注册成为会员")
+  @ApiOperation("小程序注册成为会员（专用）")
   public Result register(@RequestBody @Valid RegisterMemberForm registerMemberForm){
     return registerService.register(registerMemberForm);
   }
-
 }

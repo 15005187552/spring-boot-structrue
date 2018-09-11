@@ -5,9 +5,16 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.NaturalPerson">
         <id column="MEMBER_ID" property="memberId" />
+        <result column="COMPANY_ID" property="companyId" />
         <result column="COUNTRY" property="country" />
         <result column="NAME" property="name" />
+        <result column="GENDER" property="gender" />
+        <result column="BIRTHDAY" property="birthday" />
         <result column="CERTIFICATE" property="certificate" />
+        <result column="PROVINCE" property="province" />
+        <result column="CITY" property="city" />
+        <result column="AREA" property="area" />
+        <result column="ADDRESS" property="address" />
         <result column="CERT_NUM" property="certNum" />
         <result column="CERT_POS_PATH" property="certPosPath" />
         <result column="CERT_OPPO_PATH" property="certOppoPath" />
@@ -28,7 +35,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `MEMBER_ID`          ,`COUNTRY`          ,`NAME`          ,`CERTIFICATE`          ,`CERT_NUM`          ,`CERT_POS_PATH`          ,`CERT_OPPO_PATH`          ,`DISABLITY_NUM`          ,`DISABLITY_PATH`          ,`MATRTYR_NUM`          ,`MATRTYR_PATH`          ,`OLD_NUM`          ,`OLD_PATH`          ,`PROFESSOR_NUM`          ,`PROFESSOR_PATH`          ,`ACADEMIC_NUM`          ,`ACADEMIC_PATH`          ,`SOCIAL_SECU`          ,`CREAT_TIME`          ,`UPDATE_TIME`
+          `MEMBER_ID`          ,`COMPANY_ID`          ,`COUNTRY`          ,`NAME`          ,`GENDER`          ,`BIRTHDAY`          ,`CERTIFICATE`          ,`PROVINCE`          ,`CITY`          ,`AREA`          ,`ADDRESS`          ,`CERT_NUM`          ,`CERT_POS_PATH`          ,`CERT_OPPO_PATH`          ,`DISABLITY_NUM`          ,`DISABLITY_PATH`          ,`MATRTYR_NUM`          ,`MATRTYR_PATH`          ,`OLD_NUM`          ,`OLD_PATH`          ,`PROFESSOR_NUM`          ,`PROFESSOR_PATH`          ,`ACADEMIC_NUM`          ,`ACADEMIC_PATH`          ,`SOCIAL_SECU`          ,`CREAT_TIME`          ,`UPDATE_TIME`
     </sql>
 
 </mapper>

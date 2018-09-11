@@ -9,4 +9,8 @@ dependencies {
   // 加密算法 SDK
   compile('commons-codec:commons-codec')
   compile('org.bouncycastle:bcprov-jdk15on:1.54')
+
+  compile('com.sargeraswang.util:excel-util:1.2.1')
+
+  compile('cn.hutool:hutool-all:4.0.9')
 }

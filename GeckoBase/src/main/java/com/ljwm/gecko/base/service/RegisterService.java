@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.service;
 
+import cn.hutool.core.util.StrUtil;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.security.SecurityKit;
@@ -89,6 +90,7 @@ public class RegisterService {
     String code = registerMemberForm.getCheckCode();
     String phoneNum = registerMemberForm.getPhoneNum();
     String userName = registerMemberForm.getUserName();
+    String password = registerMemberForm.getPassword();
     MobileCode mobileCode = mobileCodeDao.select(code, phoneNum);
     if(mobileCode != null){
       Long memberId = memberInfoDao.select(phoneNum);
@@ -102,7 +104,11 @@ public class RegisterService {
         guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
       }
       String salt = StringUtil.salt();
-      String password = SecurityKit.passwordMD5(userName, salt);
+      if(StrUtil.isNotBlank(password)){
+        password = SecurityKit.passwordMD5(password, salt);
+      } else {
+        password = SecurityKit.passwordMD5(userName, salt);
+      }
       MemberPassword memberPassword = memberInfoDao.insertPassword(salt, password, new Date());
       log.debug("Saved password: {}", memberPassword);
 
@@ -114,4 +120,5 @@ public class RegisterService {
 
     return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");
   }
+
 }
