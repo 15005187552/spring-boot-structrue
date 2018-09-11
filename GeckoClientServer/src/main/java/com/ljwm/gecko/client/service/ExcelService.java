@@ -55,8 +55,8 @@ public class ExcelService {
       throw new LogicException("你没有该操作的权限");
     }
     String roleCode = companyUserList.get(0).getRolesCode().toString();
-    int m = roleCode.length()- RoleCodeType.ITIN.getDigit();
-    String code = roleCode.substring(m, m+1);
+    int c = roleCode.length()- RoleCodeType.ITIN.getDigit();
+    String code = roleCode.substring(c, c+1);
     if (!code.equals(RoleCodeType.ITIN.getValue())){
       throw new LogicException("你没有该操作的权限");
     }
@@ -89,7 +89,7 @@ public class ExcelService {
         Member member = new Member();
         member.setRegMobile(personInfoDto.getRegMobile())
               .setCreateTime(new Date())
-              .setDisabled(DisabledEnum.DISABLED.getCode());
+              .setDisabled(DisabledEnum.DISABLED.getInfo());
         memberMapper.insert(member);
         memberId = member.getId();
       }

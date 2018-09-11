@@ -58,7 +58,7 @@ public class Member implements Serializable {
 
     @ApiModelProperty(value = "是否禁用")
     @TableField("`DISABLED`")
-    private Integer disabled;
+    private Boolean disabled;
 
 
     @TableField("`VALIDATER_ID`")

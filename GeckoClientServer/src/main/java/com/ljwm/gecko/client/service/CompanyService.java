@@ -9,6 +9,7 @@ import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.entity.Company;
 import com.ljwm.gecko.base.entity.CompanyUser;
+import com.ljwm.gecko.base.enums.ActivateEnum;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.enums.IdentificationType;
 import com.ljwm.gecko.base.enums.RoleCodeType;
@@ -67,7 +68,7 @@ public class CompanyService {
         s.append(str);
       }
       Integer roleCode = Integer.valueOf(s.toString());
-      CompanyUser companyUser = new CompanyUser(null, company.getId(), SecurityKit.currentId(), roleCode, new Date(), new Date(), DisabledEnum.ENABLED.getCode());
+      CompanyUser companyUser = new CompanyUser(null, company.getId(), SecurityKit.currentId(), roleCode, new Date(), new Date(), DisabledEnum.ENABLED.getCode(), ActivateEnum.ENABLED.getCode());
       companyUserMapper.insert(companyUser);
       File file = new File(appInfo.getFilePath()+ Constant.COMPANY+ company.getId());
       if(!file.exists()){

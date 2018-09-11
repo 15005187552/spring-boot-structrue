@@ -25,9 +25,9 @@ import java.util.Date;
  */
 @Data
 @SuppressWarnings("ALL")
-@Accessors(chain = true)
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
 @TableName("`t_company_user`")
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value = "企业员工表", subTypes = {CompanyUser.class})
