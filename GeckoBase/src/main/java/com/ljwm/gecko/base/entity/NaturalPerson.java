@@ -1,18 +1,17 @@
 package com.ljwm.gecko.base.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-
-
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -34,7 +33,7 @@ public class NaturalPerson implements Serializable {
 
 
     @ApiModelProperty(value = "会员ID")
-    @TableId(value = "`MEMBER_ID`", type = IdType.AUTO)
+    @TableId(value = "`MEMBER_ID`", type = IdType.INPUT)
     private Long memberId;
     @TableField("`COMPANY_ID`")
     private Long companyId;
@@ -139,6 +138,10 @@ public class NaturalPerson implements Serializable {
     @TableField("`UPDATE_TIME`")
     private Date updateTime;
 
+    @ApiModelProperty(value = "激活状态")
+    @TableField("`ACTIVATED`")
+    private Integer activated;
+
 
     public static final String MEMBER_ID = "`MEMBER_ID`";
 
@@ -193,5 +196,7 @@ public class NaturalPerson implements Serializable {
     public static final String CREAT_TIME = "`CREAT_TIME`";
 
     public static final String UPDATE_TIME = "`UPDATE_TIME`";
+
+    public static final String ACTIVATED = "`ACTIVATED`";
 
 }

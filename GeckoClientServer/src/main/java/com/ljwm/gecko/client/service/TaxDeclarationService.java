@@ -73,6 +73,6 @@ public class TaxDeclarationService {
       .setSpecialVoList(taxSpecialVoList).setSpecialAddVoList(taxSpecialAddVoList);
       return Result.success(taxVo);
     }
-    return null;
+    return  Result.success(null);
   }
 }

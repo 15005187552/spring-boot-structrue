@@ -29,4 +29,8 @@ public class LocationService {
   public List<Location> getCityOrArea(Integer code) {
     return locationDao.selectByCode(code);
   }
+
+  public Integer getProvinceCode(String name){
+    return locationDao.getProvinceCode(name);
+  }
 }

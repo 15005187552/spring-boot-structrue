@@ -1,11 +1,14 @@
 package com.ljwm.gecko.base.dao;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.ljwm.gecko.base.entity.Location;
 import com.ljwm.gecko.base.mapper.LocationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Janiffy
@@ -32,5 +35,40 @@ public class LocationDao {
 
   public List<Location> selectByCode(Integer code) {
     return locationMapper.selectByCode(code);
+  }
+
+  public Integer getProvinceCode(String name) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("NAME", name);
+    map.put("LEVEL", "0");
+    List<Location> list = locationMapper.selectByMap(map);
+    if(CollectionUtil.isNotEmpty(list)){
+      return list.get(0).getCode();
+    }
+    return null;
+  }
+
+  public Integer getCityCode(String city, Integer provinceCode) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("NAME", city);
+    map.put("LEVEL", "1");
+    map.put("PCODE", provinceCode);
+    List<Location> list = locationMapper.selectByMap(map);
+    if(CollectionUtil.isNotEmpty(list)){
+      return list.get(0).getCode();
+    }
+    return null;
+  }
+
+  public Integer getAreaCode(String area, Integer cityCode) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("NAME", area);
+    map.put("LEVEL", "2");
+    map.put("PCODE", cityCode);
+    List<Location> list = locationMapper.selectByMap(map);
+    if(CollectionUtil.isNotEmpty(list)){
+      return list.get(0).getCode();
+    }
+    return null;
   }
 }

@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -24,6 +25,11 @@ public class TimeUtil {
   public static String getCurrentTime(){
     SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");//设置日期格式
     return df.format(new Date());
+  }
+
+  public static Date parseString(String str) throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    return sdf.parse(str);
   }
 
 }

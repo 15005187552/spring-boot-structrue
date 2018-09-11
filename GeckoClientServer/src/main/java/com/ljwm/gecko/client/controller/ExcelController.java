@@ -1,5 +1,6 @@
 package com.ljwm.gecko.client.controller;
 
+import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.client.service.ExcelService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,8 @@ public class ExcelController {
   ExcelService excelService;
 
   @PostMapping("/personInfo/import")
-  public void importExcel(@RequestParam("file") MultipartFile file, @RequestParam("companyId")Long companyId) throws Exception {
+  public Result importExcel(@RequestParam("file") MultipartFile file, @RequestParam("companyId")Long companyId) throws Exception {
     excelService.improtPersonInfo(file, companyId);
+    return Result.success("导入成功！");
   }
 }

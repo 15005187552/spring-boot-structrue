@@ -31,11 +31,12 @@
         <result column="SOCIAL_SECU" property="socialSecu" />
         <result column="CREAT_TIME" property="creatTime" />
         <result column="UPDATE_TIME" property="updateTime" />
+        <result column="ACTIVATED" property="activated" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `MEMBER_ID`          ,`COMPANY_ID`          ,`COUNTRY`          ,`NAME`          ,`GENDER`          ,`BIRTHDAY`          ,`CERTIFICATE`          ,`PROVINCE`          ,`CITY`          ,`AREA`          ,`ADDRESS`          ,`CERT_NUM`          ,`CERT_POS_PATH`          ,`CERT_OPPO_PATH`          ,`DISABLITY_NUM`          ,`DISABLITY_PATH`          ,`MATRTYR_NUM`          ,`MATRTYR_PATH`          ,`OLD_NUM`          ,`OLD_PATH`          ,`PROFESSOR_NUM`          ,`PROFESSOR_PATH`          ,`ACADEMIC_NUM`          ,`ACADEMIC_PATH`          ,`SOCIAL_SECU`          ,`CREAT_TIME`          ,`UPDATE_TIME`
+          `MEMBER_ID`          ,`COMPANY_ID`          ,`COUNTRY`          ,`NAME`          ,`GENDER`          ,`BIRTHDAY`          ,`CERTIFICATE`          ,`PROVINCE`          ,`CITY`          ,`AREA`          ,`ADDRESS`          ,`CERT_NUM`          ,`CERT_POS_PATH`          ,`CERT_OPPO_PATH`          ,`DISABLITY_NUM`          ,`DISABLITY_PATH`          ,`MATRTYR_NUM`          ,`MATRTYR_PATH`          ,`OLD_NUM`          ,`OLD_PATH`          ,`PROFESSOR_NUM`          ,`PROFESSOR_PATH`          ,`ACADEMIC_NUM`          ,`ACADEMIC_PATH`          ,`SOCIAL_SECU`          ,`CREAT_TIME`          ,`UPDATE_TIME`          ,`ACTIVATED`
     </sql>
 
 </mapper>

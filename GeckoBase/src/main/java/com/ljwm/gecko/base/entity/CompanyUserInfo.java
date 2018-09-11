@@ -1,19 +1,18 @@
 package com.ljwm.gecko.base.entity;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-
-
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * <p>
@@ -60,11 +59,11 @@ public class CompanyUserInfo implements Serializable {
 
     @ApiModelProperty(value = "员工类别")
     @TableField("`EMPLOYEE_TYPE`")
-    private Integer employeeType;
+    private String employeeType;
 
     @ApiModelProperty(value = "部门")
     @TableField("`DEPARTMENT`")
-    private Integer department;
+    private String department;
 
     @ApiModelProperty(value = "岗位")
     @TableField("`STATION`")
