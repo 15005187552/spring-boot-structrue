@@ -21,4 +21,6 @@ import java.util.List;
 public interface ProviderMapper extends BaseMapper<Provider> {
 
   List<ProviderVo> findByPage(Page<ProviderVo> ret, @Param("params") Kv params);
+
+  ProviderVo findById(@Param("id") Long id);
 }

@@ -20,11 +20,18 @@
     <collection property="children" column="ID" select="com.ljwm.gecko.base.mapper.ServiceTypeMapper.children"/>
   </resultMap>
   <select id="find" resultMap="serviceVo">
-    select *  from t_service where t.PID is null
+    select *  from t_service_type where t.PID is null
   </select>
 
   <select id="children" parameterType="integer" resultMap="serviceVo">
-    select *  from t_service where t.PID=#{pId}
+    select *  from t_service_type where t.PID=#{pId}
+  </select>
+  <resultMap id="serverSimpleVo" type="com.ljwm.gecko.base.model.vo.ServeSimpleVo" extends="BaseResultMap">
+
+  </resultMap>
+
+  <select id="findById" parameterType="integer" resultMap="serverSimpleVo">
+      select *  from t_service_type where id=#{id} limit 1
   </select>
 
 </mapper>

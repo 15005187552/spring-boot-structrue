@@ -53,4 +53,8 @@
       </if>
     </select>
 
+    <select id="findById" parameterType="long" resultMap="providerVo">
+      select *  t_provider where id=#{id}
+    </select>
+
 </mapper>

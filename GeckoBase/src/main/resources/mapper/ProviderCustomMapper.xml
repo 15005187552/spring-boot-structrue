@@ -23,4 +23,34 @@
           `id`          ,`service_id`          ,`provider_id`          ,`name`          ,`subtitle`          ,`main_image`          ,`sub_images`          ,`detail`          ,`price`          ,`status`          ,`create_time`          ,`update_time`
     </sql>
 
+    <resultMap id="providerCustomVo" type="com.ljwm.gecko.base.model.vo.ProviderCustomVo" extends="BaseResultMap">
+        <association property="serveSimpleVo" column="service_id" select="com.ljwm.gecko.base.mapper.findById"/>
+        <association property="providerVo" column="provider_id" select="com.ljwm.gecko.base.mapper.findById"/>
+    </resultMap>
+
+    <select id="findByPage" parameterType="map" resultMap="providerCustomVo">
+      select t.*  from t_provider_custom t
+      <where>
+        <if test="params.text != null and params.text != ''">
+          AND (
+          t.`name` LIKE CONCAT('%',#{params.text},'%')
+          or t.`subtitle` LIKE CONCAT('%',#{params.text},'%')
+          )
+        </if>
+        <if test="params.providerId != null ">
+          AND t.`provider_id` = #{params.providerId}
+        </if>
+        <if test="params.serviceId != null ">
+          AND t.`service_id` = #{params.serviceId}
+        </if>
+      </where>
+      ORDER BY t.ID
+      <if test="params.asc">
+        ASC
+      </if>
+      <if test="!params.asc">
+        DESC
+      </if>
+    </select>
+
 </mapper>

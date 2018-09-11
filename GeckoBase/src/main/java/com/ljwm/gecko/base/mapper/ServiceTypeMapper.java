@@ -2,6 +2,7 @@ package com.ljwm.gecko.base.mapper;
 
 import com.ljwm.gecko.base.entity.ServiceType;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ljwm.gecko.base.model.vo.ServeSimpleVo;
 import com.ljwm.gecko.base.model.vo.ServiceVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,4 +20,6 @@ public interface ServiceTypeMapper extends BaseMapper<ServiceType> {
   List<ServiceVo> find();
 
   List<ServiceVo> children(@Param("pId") Integer pId);
+
+  ServeSimpleVo findById(@Param("id") Integer id);
 }
