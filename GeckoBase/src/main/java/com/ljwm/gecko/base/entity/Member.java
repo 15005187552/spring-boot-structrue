@@ -1,25 +1,26 @@
 package com.ljwm.gecko.base.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import com.baomidou.mybatisplus.annotation.IdType;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import java.io.Serializable;
+
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
-import java.util.Date;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
  * 会员表
  * </p>
  *
- * @author Levis
- * @since 2018-09-10
+ * @author xixil
+ * @since 2018-09-12
  */
 @Data
 @SuppressWarnings("ALL")
@@ -60,19 +61,17 @@ public class Member implements Serializable {
     @TableField("`DISABLED`")
     private Boolean disabled;
 
-
-    @TableField("`VALIDATER_ID`")
-    private Long validaterId;
-
-    @ApiModelProperty(value = "认证时间")
-    @TableField("`VALIDATE_TIME`")
-    private Date validateTime;
-
     @ApiModelProperty(value = "审核状态 0  初始状态   1 待审核 2 审核通过 3 审核失败")
     @TableField("`VALIDATE_STATE`")
     private Integer validateState;
-    @TableField("`VALIDATE_TEXT`")
-    private String validateText;
+
+    @ApiModelProperty(value = "身份证正面")
+    @TableField("`PIC_FRONT`")
+    private String picFront;
+
+    @ApiModelProperty(value = "身份证反面")
+    @TableField("`PIC_BACK`")
+    private String picBack;
 
 
     public static final String ID = "`ID`";
@@ -89,12 +88,10 @@ public class Member implements Serializable {
 
     public static final String DISABLED = "`DISABLED`";
 
-    public static final String VALIDATER_ID = "`VALIDATER_ID`";
-
-    public static final String VALIDATE_TIME = "`VALIDATE_TIME`";
-
     public static final String VALIDATE_STATE = "`VALIDATE_STATE`";
 
-    public static final String VALIDATE_TEXT = "`VALIDATE_TEXT`";
+    public static final String PIC_FRONT = "`PIC_FRONT`";
+
+    public static final String PIC_BACK = "`PIC_BACK`";
 
 }

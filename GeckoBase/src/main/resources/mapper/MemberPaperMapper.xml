@@ -10,19 +10,23 @@
         <result column="PIC_PATH" property="picPath" />
         <result column="CREATE_TIME" property="createTime" />
         <result column="UPDATE_TIME" property="updateTime" />
+        <result column="VALIDATE_STATE" property="validateState" />
+        <result column="VALIDATOR_ID" property="validatorId" />
+        <result column="VALIDATE_TIME" property="validateTime" />
+        <result column="VALIDATE_TEXT" property="validateText" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`PAPER_ID`          ,`MEMBER_ID`          ,`PIC_PATH`          ,`CREATE_TIME`          ,`UPDATE_TIME`
+          `ID`          ,`PAPER_ID`          ,`MEMBER_ID`          ,`PIC_PATH`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`VALIDATE_STATE`          ,`VALIDATOR_ID`          ,`VALIDATE_TIME`          ,`VALIDATE_TEXT`
     </sql>
 
-    <resultMap id="memberPaperVo" type="com.ljwm.gecko.base.model.vo.MemberPaperVo" extends="BaseResultMap">
-        <association property="paperVo" column="PAPER_ID" select="com.ljwm.gecko.base.mapper.PaperMapper.findPaperVoByPaperId"/>
-    </resultMap>
+  <resultMap id="memberPaperVo" type="com.ljwm.gecko.base.model.vo.MemberPaperVo" extends="BaseResultMap">
+    <association property="paperVo" column="PAPER_ID" select="com.ljwm.gecko.base.mapper.PaperMapper.findPaperVoByPaperId"/>
+  </resultMap>
 
-    <select id="findMemberPaperVoListByMemberId" parameterType="long" resultMap="memberPaperVo">
-        select t.*  from t_member_paper t where t.MEMBER_ID=#{memberId}
-    </select>
+  <select id="findMemberPaperVoListByMemberId" parameterType="long" resultMap="memberPaperVo">
+    select t.*  from t_member_paper t where t.MEMBER_ID=#{memberId}
+  </select>
 
 </mapper>

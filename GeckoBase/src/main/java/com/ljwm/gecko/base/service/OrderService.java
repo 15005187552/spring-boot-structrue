@@ -92,7 +92,7 @@ public class OrderService {
       order.setOrderNo(MAIN_ORDER+idWorkerUtil.nextId());
       order.setPaymentType(PaymentTypeEnum.ONLINE_PAY.getCode());
       order.setCreateTime(DateUtil.date());
-      order.setPayment(orderItemDto.getCurrentUnitPrice());  //暂时不考虑数量
+      order.setPayment(totalPrice);  //暂时不考虑数量
       order.setStatus(OrderStatusEnum.NO_PAID.getCode());
       orderMapper.insert(order);
       for (OrderItem orderItem : orderItemList){

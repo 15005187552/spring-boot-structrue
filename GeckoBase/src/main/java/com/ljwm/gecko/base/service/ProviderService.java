@@ -96,7 +96,7 @@ public class ProviderService {
     Provider provider = new Provider();
     BeanUtil.copyProperties(providerDto, provider);
     provider.setCreateTime(DateUtil.date());
-    provider.setCreaterId(providerDto.getMemberId());
+    provider.setCreatorId(providerDto.getMemberId());
     provider.setUpdateTime(DateUtil.date());
     provider.setDisabled(DisabledEnum.ENABLED.getCode());
     providerMapper.insert(provider);
@@ -150,7 +150,7 @@ public class ProviderService {
     } else {
       provider.setValidateState(ProviderStatEnum.CONFIRM_FAILED.getCode());
     }
-    provider.setValidaterId(confirmProviderDto.getValidaterId());
+    provider.setValidatorId(confirmProviderDto.getValidaterId());
     provider.setValidateText(confirmProviderDto.getValidateText());
     provider.setValidateTime(DateUtil.date());
     providerMapper.updateById(provider);

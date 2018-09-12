@@ -11,15 +11,14 @@
         <result column="MEMBER_IDCARD" property="memberIdcard" />
         <result column="CREATE_TIME" property="createTime" />
         <result column="DISABLED" property="disabled" />
-        <result column="VALIDATER_ID" property="validaterId" />
-        <result column="VALIDATE_TIME" property="validateTime" />
         <result column="VALIDATE_STATE" property="validateState" />
-        <result column="VALIDATE_TEXT" property="validateText" />
+        <result column="PIC_FRONT" property="picFront" />
+        <result column="PIC_BACK" property="picBack" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATER_ID`          ,`VALIDATE_TIME`          ,`VALIDATE_STATE`          ,`VALIDATE_TEXT`
+          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATE_STATE`          ,`PIC_FRONT`          ,`PIC_BACK`
     </sql>
 
   <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.MemberVo">
@@ -78,7 +77,7 @@
   </select>
 
   <select id="findMemberVoByPhone" parameterType="string" resultMap="MemberVo">
-      select t.*  from t_member t where t.REG_MOBILE=#{regMobile}
+    select t.*  from t_member t where t.REG_MOBILE=#{regMobile}
   </select>
 
   <select id="findByPage" parameterType="map" resultMap="MemberVo">
@@ -106,5 +105,4 @@
       DESC
     </if>
   </select>
-
 </mapper>

@@ -148,9 +148,6 @@ public class MemberInfoService {
     } else {
       member.setValidateState(ValidateStatEnum.CONFIRM_FAILED.getCode());
     }
-    member.setValidaterId(memberConfirmDto.getValidatorId());
-    member.setValidateText(memberConfirmDto.getValidateText());
-    member.setValidateTime(DateUtil.date());
     memberMapper.updateById(member);
     // 建立 证件与服务类型链接
     memberInfoService.updateBind(memberConfirmDto, member.getId());

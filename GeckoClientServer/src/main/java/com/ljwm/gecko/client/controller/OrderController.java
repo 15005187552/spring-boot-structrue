@@ -24,6 +24,7 @@ public class OrderController extends BaseController {
   @PostMapping("createOrder")
   @ApiOperation("创建支付订单")
   public Result createOrder(@RequestBody OrderDto orderDto){
+    orderService.createOrder(orderDto);
     return success();
   }
 

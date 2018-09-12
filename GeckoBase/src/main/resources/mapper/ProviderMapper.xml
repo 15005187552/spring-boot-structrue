@@ -10,8 +10,8 @@
         <result column="VALIDATE_STATE" property="validateState" />
         <result column="DISABLED" property="disabled" />
         <result column="TYPE" property="type" />
-        <result column="CREATER_ID" property="createrId" />
-        <result column="VALIDATER_ID" property="validaterId" />
+        <result column="CREATOR_ID" property="creatorId" />
+        <result column="VALIDATOR_ID" property="validatorId" />
         <result column="VALIDATE_TIME" property="validateTime" />
         <result column="UPDATE_TIME" property="updateTime" />
         <result column="VALIDATE_TEXT" property="validateText" />
@@ -19,11 +19,12 @@
         <result column="CITY_CODE" property="cityCode" />
         <result column="AREA_CODE" property="areaCode" />
         <result column="ADDRESS" property="address" />
+        <result column="PIC_PATH" property="picPath" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`NAME`          ,`CREATE_TIME`          ,`VALIDATE_STATE`          ,`DISABLED`          ,`TYPE`          ,`CREATER_ID`          ,`VALIDATER_ID`          ,`VALIDATE_TIME`          ,`UPDATE_TIME`          ,`VALIDATE_TEXT`          ,`PROV_CODE`          ,`CITY_CODE`          ,`AREA_CODE`          ,`ADDRESS`
+          `ID`          ,`NAME`          ,`CREATE_TIME`          ,`VALIDATE_STATE`          ,`DISABLED`          ,`TYPE`          ,`CREATOR_ID`          ,`VALIDATOR_ID`          ,`VALIDATE_TIME`          ,`UPDATE_TIME`          ,`VALIDATE_TEXT`          ,`PROV_CODE`          ,`CITY_CODE`          ,`AREA_CODE`          ,`ADDRESS` ,`PIC_PATH`
     </sql>
 
     <resultMap id="providerVo" type="com.ljwm.gecko.base.model.vo.ProviderVo" extends="BaseResultMap">

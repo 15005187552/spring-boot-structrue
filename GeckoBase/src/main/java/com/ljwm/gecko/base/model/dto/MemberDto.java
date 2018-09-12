@@ -10,7 +10,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class MemberDto {
 
-  @ApiModelProperty(value = "会员id")
+  @ApiModelProperty(value = "会员id",hidden = true)
   private Long id;
 
   @ApiModelProperty("会员身份证号")

@@ -2,6 +2,7 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.model.dto.MemberDto;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.service.MemberInfoService;
@@ -42,6 +43,7 @@ public class MemberController extends BaseController {
   @PostMapping("validateMember")
   @ApiOperation("会员认证")
   public Result validateMember(@RequestBody @Valid MemberDto memberDto){
+    memberDto.setId(SecurityKit.currentId());
     memberInfoService.validateMember(memberDto);
     return success();
   }

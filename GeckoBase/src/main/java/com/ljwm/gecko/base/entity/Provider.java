@@ -58,12 +58,12 @@ public class Provider implements Serializable {
     private Integer type;
 
     @ApiModelProperty(value = "创建人ID")
-    @TableField("CREATER_ID")
-    private Long createrId;
+    @TableField("CREATOR_ID")
+    private Long creatorId;
 
     @ApiModelProperty(value = "审核人ID")
-    @TableField("VALIDATER_ID")
-    private Long validaterId;
+    @TableField("VALIDATOR_ID")
+    private Long validatorId;
 
     @ApiModelProperty(value = "审核时间")
     @TableField("VALIDATE_TIME")
@@ -92,6 +92,10 @@ public class Provider implements Serializable {
     @ApiModelProperty(value = "详细地址")
     @TableField("ADDRESS")
     private String address;
+
+    @ApiModelProperty("营业执照路径")
+    @TableField("PIC_PATH")
+    private String picPath;
 
 
     public static final String ID = "ID";
@@ -123,5 +127,7 @@ public class Provider implements Serializable {
     public static final String AREA_CODE = "AREA_CODE";
 
     public static final String ADDRESS = "ADDRESS";
+
+  public static final String PIC_PATH = "PIC_PATH";
 
 }

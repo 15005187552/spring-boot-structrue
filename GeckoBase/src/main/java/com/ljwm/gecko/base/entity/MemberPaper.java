@@ -19,8 +19,8 @@ import io.swagger.annotations.ApiModelProperty;
  * 服务商证书表
  * </p>
  *
- * @author Levis
- * @since 2018-09-05
+ * @author xixil
+ * @since 2018-09-12
  */
 @Data
 @SuppressWarnings("ALL")
@@ -51,6 +51,22 @@ public class MemberPaper implements Serializable {
     @TableField("`UPDATE_TIME`")
     private Date updateTime;
 
+    @ApiModelProperty(value = "审核状态  1 待审核 2 审核通过 3 审核失败")
+    @TableField("`VALIDATE_STATE`")
+    private Boolean validateState;
+
+    @ApiModelProperty(value = "认证人id")
+    @TableField("`VALIDATOR_ID`")
+    private Long validatorId;
+
+    @ApiModelProperty(value = "认证时间")
+    @TableField("`VALIDATE_TIME`")
+    private Date validateTime;
+
+    @ApiModelProperty(value = "认证内容")
+    @TableField("`VALIDATE_TEXT`")
+    private String validateText;
+
 
     public static final String ID = "`ID`";
 
@@ -63,5 +79,13 @@ public class MemberPaper implements Serializable {
     public static final String CREATE_TIME = "`CREATE_TIME`";
 
     public static final String UPDATE_TIME = "`UPDATE_TIME`";
+
+    public static final String VALIDATE_STATE = "`VALIDATE_STATE`";
+
+    public static final String VALIDATOR_ID = "`VALIDATOR_ID`";
+
+    public static final String VALIDATE_TIME = "`VALIDATE_TIME`";
+
+    public static final String VALIDATE_TEXT = "`VALIDATE_TEXT`";
 
 }
