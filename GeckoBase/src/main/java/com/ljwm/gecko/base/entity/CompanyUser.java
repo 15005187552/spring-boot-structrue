@@ -48,7 +48,7 @@ public class CompanyUser implements Serializable {
 
     @ApiModelProperty(value = "角色代码")
     @TableField("`ROLES_CODE`")
-    private Integer rolesCode;
+    private String rolesCode;
 
     @ApiModelProperty(value = "加入时间")
     @TableField("`CREATE_TIME`")

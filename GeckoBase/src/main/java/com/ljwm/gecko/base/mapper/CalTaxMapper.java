@@ -1,7 +1,8 @@
 package com.ljwm.gecko.base.mapper;
 
-import com.ljwm.gecko.base.entity.CalTax;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ljwm.gecko.base.entity.CalTax;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * <p>
@@ -13,4 +14,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface CalTaxMapper extends BaseMapper<CalTax> {
 
+  @Select("SELECT COUNT(*) FROM t_cal_tax WHERE OLD_TAX> NEW_TAX")
+  Long redPackage();
 }

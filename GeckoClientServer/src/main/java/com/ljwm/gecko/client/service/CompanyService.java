@@ -71,7 +71,7 @@ public class CompanyService {
       for(String str :code){
         s.append(str);
       }
-      Integer roleCode = Integer.valueOf(s.toString());
+      String roleCode = s.toString();
       CompanyUser companyUser = new CompanyUser(null, company.getId(), SecurityKit.currentId(), roleCode, new Date(), new Date(), DisabledEnum.ENABLED.getCode(), ActivateEnum.ENABLED.getCode());
       companyUserMapper.insert(companyUser);
       File file = new File(appInfo.getFilePath()+ Constant.COMPANY+ company.getId());

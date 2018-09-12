@@ -32,5 +32,11 @@ public class CalcController {
     return calcService.calc(calcForm);
   }
 
+  @PostMapping("/redPackage")
+  @ApiOperation("领红包")
+  public Result redPackage(){
+    return calcService.redPackage();
+  }
+
 
 }

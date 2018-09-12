@@ -2,7 +2,6 @@ package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.ljwm.bootbase.exception.LogicException;
-import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.dao.LocationDao;
 import com.ljwm.gecko.base.entity.CompanyUser;
 import com.ljwm.gecko.base.entity.CompanyUserInfo;
@@ -14,7 +13,6 @@ import com.ljwm.gecko.base.mapper.CompanyUserMapper;
 import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.mapper.NaturalPersonMapper;
 import com.ljwm.gecko.base.utils.EnumUtil;
-import com.ljwm.gecko.base.utils.TimeUtil;
 import com.ljwm.gecko.base.utils.excelutil.ExcelLogs;
 import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
@@ -62,7 +60,7 @@ public class ExcelService {
 
   public void improtPersonInfo(MultipartFile file, Long companyId) throws Exception {
     Map<String, Object> findMap = new HashedMap();
-    findMap.put("MEMBER_ID", SecurityKit.currentId());
+    findMap.put("MEMBER_ID", 3);
     findMap.put("COMPANY_ID", companyId);
     findMap.put("DISABLED", DisabledEnum.ENABLED.getCode());
     findMap.put("ACTIVATED", ActivateEnum.ENABLED.getCode());
@@ -110,26 +108,26 @@ public class ExcelService {
         memberMapper.insert(member);
         memberId = member.getId();
       }
-      Integer provinceCode = locationDao.getProvinceCode(personInfoDto.getProvince());
+     /* Integer provinceCode = locationDao.getProvinceCode(personInfoDto.getProvince());
       Integer cityCode = locationDao.getCityCode(personInfoDto.getCity(), provinceCode);
-      Integer areaCode = locationDao.getAreaCode(personInfoDto.getArea(), cityCode);
+      Integer areaCode = locationDao.getAreaCode(personInfoDto.getArea(), cityCode);*/
       NaturalPerson naturalPerson = new NaturalPerson();
       naturalPerson.setMemberId(memberId)
         .setCountry(EnumUtil.getEnumByName(CountryType.class, personInfoDto.getCountry()).getCode())
         .setName(personInfoDto.getName())
-        .setGender(EnumUtil.getEnumByName(GenderEnum.class, personInfoDto.getGender()).getCode())
-        .setBirthday(TimeUtil.parseString(personInfoDto.getBirthday()))
+        /*.setGender(EnumUtil.getEnumByName(GenderEnum.class, personInfoDto.getGender()).getCode())
+        .setBirthday(TimeUtil.parseString(personInfoDto.getBirthday()))*/
         .setCertificate(EnumUtil.getEnumByName(CertificateType.class, personInfoDto.getCertificate()).getCode())
-        .setProvince(provinceCode)
+        /*.setProvince(provinceCode)
         .setCity(cityCode)
         .setArea(areaCode)
-        .setAddress(personInfoDto.getAddress())
-        .setCertNum(personInfoDto.getCertNum())
-        .setDisablityNum(personInfoDto.getDisablityNum())
-        .setMatrtyrNum(personInfoDto.getMatrtyrNum());
+        .setAddress(personInfoDto.getAddress())*/
+        .setCertNum(personInfoDto.getCertNum());
+       /* .setDisablityNum(personInfoDto.getDisablityNum())
+        .setMatrtyrNum(personInfoDto.getMatrtyrNum());*/
       NaturalPerson naturalPerson1 = naturalPersonMapper.selectById(memberId);
       if(naturalPerson1 != null){
-
+        naturalPersonMapper.updateById(naturalPerson);
       } else {
         naturalPersonMapper.insert(naturalPerson);
       }
@@ -139,24 +137,24 @@ public class ExcelService {
         str[j] = "0";
         stringBuffer.append(str[j]);
       }
-      Integer role = Integer.valueOf(stringBuffer.toString());
+      String role = stringBuffer.toString();
       CompanyUser companyUser = companyUserDao.insertOrUpdate(memberId, companyId, role);
       Long companyUserId = companyUser.getId();
       CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUserId);
       CompanyUserInfo companyUserInfo1 = new CompanyUserInfo();
-      Integer workCity = locationDao.getCityCode(personInfoDto.getWorkCity(), null);
+      //Integer workCity = locationDao.getCityCode(personInfoDto.getWorkCity(), null);
       companyUserInfo1.setCompanyUserId(companyUserId)
         .setJobNum(personInfoDto.getJobNum())
-        .setEducation(EnumUtil.getEnumByName(EducationEnum.class, personInfoDto.getEducation()).getCode())
+        //.setEducation(EnumUtil.getEnumByName(EducationEnum.class, personInfoDto.getEducation()).getCode())
         .setPersonState(EnumUtil.getEnumByName(PersonStateEnum.class, personInfoDto.getPersonState()).getCode())
         .setEmployee(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getEmployee()).getCode())
-        .setHireDate(TimeUtil.parseString(personInfoDto.getHireDate()))
+      /*  .setHireDate(TimeUtil.parseString(personInfoDto.getHireDate()))
         .setEmployeeType(personInfoDto.getEmployeeType())
         .setDepartment(personInfoDto.getDepartment())
         .setStation(personInfoDto.getStation())
-        .setTermDate(TimeUtil.parseString(personInfoDto.getTermDate()))
+        .setTermDate(TimeUtil.parseString(personInfoDto.getTermDate()))*/
         .setSocialBase(new BigDecimal(personInfoDto.getSocialBase()))
-        .setSocialComPer(new BigDecimal(personInfoDto.getSocialComPer()))
+       /* .setSocialComPer(new BigDecimal(personInfoDto.getSocialComPer()))
         .setComPension(new BigDecimal(personInfoDto.getComPension()))
         .setComMedical(new BigDecimal(personInfoDto.getComMedical()))
         .setComUnemploy(new BigDecimal(personInfoDto.getComUnemploy()))
@@ -165,11 +163,11 @@ public class ExcelService {
         .setSocialPersonPer(new BigDecimal(personInfoDto.getSocialPersonPer()))
         .setPersonPension(new BigDecimal(personInfoDto.getPersonPension()))
         .setPersonMedical(new BigDecimal(personInfoDto.getPersonMedical()))
-        .setPersonUnemploy(new BigDecimal(personInfoDto.getPersonUnemploy()))
-        .setFundBase(new BigDecimal(personInfoDto.getFundBase()))
-        .setFundCom(new BigDecimal(personInfoDto.getFundCom()))
+        .setPersonUnemploy(new BigDecimal(personInfoDto.getPersonUnemploy()))*/
+        .setFundBase(new BigDecimal(personInfoDto.getFundBase()));
+       /* .setFundCom(new BigDecimal(personInfoDto.getFundCom()))
         .setFundPerson(new BigDecimal(personInfoDto.getFundPerson()))
-        .setWorkCity(workCity)
+        .setWorkCity(workCity);
         .setMaritalStatus(EnumUtil.getEnumByName(MaritalStatusEnum.class, personInfoDto.getMaritalStatus()).getCode())
         .setNtroduceTalents(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getNtroduceTalents()).getCode())
         .setBank(personInfoDto.getBank())
@@ -179,9 +177,9 @@ public class ExcelService {
         .setSpecialIndustry(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getSpecialIndustry()).getCode())
         .setIsInvestor(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getIsInvestor()).getCode())
         .setEmail(personInfoDto.getEmail())
-        .setRemark(personInfoDto.getRemark());
+        .setRemark(personInfoDto.getRemark());*/
       if(companyUserInfo != null) {
-
+        companyUserInfoMapper.updateById(companyUserInfo1);
       } else {
         companyUserInfoMapper.insert(companyUserInfo1);
       }

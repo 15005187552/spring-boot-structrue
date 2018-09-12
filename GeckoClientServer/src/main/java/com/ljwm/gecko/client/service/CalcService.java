@@ -139,4 +139,8 @@ public class CalcService {
     CalcVo calcVo = new CalcVo(percent, difference, oldTax, newTax);
     return Result.success(calcVo);
   }
+
+  public Result redPackage() {
+    return Result.success(calTaxMapper.redPackage());
+  }
 }

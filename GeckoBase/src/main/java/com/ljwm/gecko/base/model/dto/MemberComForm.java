@@ -17,6 +17,6 @@ public class MemberComForm {
   private Long companyId;
 
   @ApiModelProperty("角色编码,以二进制数传")
-  private Integer roleCode;
+  private String roleCode;
 
 }

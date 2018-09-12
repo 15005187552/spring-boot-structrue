@@ -24,7 +24,7 @@ public class CompanyUserDao {
   @Autowired
   CompanyUserMapper companyUserMapper;
 
-  public CompanyUser insertOrUpdate(Long memberId, Long companyId, Integer roleCode) {
+  public CompanyUser insertOrUpdate(Long memberId, Long companyId, String roleCode) {
     Map<String, Object> map = new HashedMap();
     map.put("MEMBER_ID", memberId);
     map.put("COMPANY_ID", companyId);

@@ -138,11 +138,6 @@ public class NaturalPerson implements Serializable {
     @TableField("`UPDATE_TIME`")
     private Date updateTime;
 
-    @ApiModelProperty(value = "激活状态")
-    @TableField("`ACTIVATED`")
-    private Integer activated;
-
-
     public static final String MEMBER_ID = "`MEMBER_ID`";
 
     public static final String COMPANY_ID = "`COMPANY_ID`";
@@ -196,7 +191,5 @@ public class NaturalPerson implements Serializable {
     public static final String CREAT_TIME = "`CREAT_TIME`";
 
     public static final String UPDATE_TIME = "`UPDATE_TIME`";
-
-    public static final String ACTIVATED = "`ACTIVATED`";
 
 }

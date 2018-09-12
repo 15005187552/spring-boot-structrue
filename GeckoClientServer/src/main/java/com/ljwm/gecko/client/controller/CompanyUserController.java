@@ -2,6 +2,8 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.model.dto.MemberComForm;
+import com.ljwm.gecko.client.model.dto.InactiveForm;
+import com.ljwm.gecko.client.model.dto.MemberForm;
 import com.ljwm.gecko.client.service.CompanyUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +33,19 @@ public class CompanyUserController {
   @ApiOperation("会员加入企业")
   public Result memberEnterCom(@RequestBody @Valid MemberComForm memberComForm){
     return companyUserService.memberEnterCom(memberComForm);
+  }
+
+
+  @PostMapping("/inactiveCompany")
+  @ApiOperation("已邀请你加入的公司列表（未激活的）")
+  public Result inactiveCompany(@RequestBody MemberForm memberForm){
+    return companyUserService.inactiveCompany(memberForm);
+  }
+
+  @PostMapping("/enterCompany")
+  @ApiOperation("已邀请你加入的公司（未激活的）")
+  public Result enterCompany(@RequestBody InactiveForm inactiveForm){
+    return companyUserService.enterCompany(inactiveForm);
   }
 
 }
