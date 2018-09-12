@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public enum DisabledEnum {
 
-  ENABLED(0,"启用",true),
-  DISABLED(1,"禁用",false);
+  ENABLED(0,"启用",false),
+  DISABLED(1,"禁用",true);
 
   private Integer code;
   private String name;
