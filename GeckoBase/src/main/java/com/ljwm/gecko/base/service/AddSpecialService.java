@@ -30,32 +30,33 @@ public class AddSpecialService {
   private CommonService commonService;
 
   @Transactional
-  public AddSpecialVo save(AddSpecialDto addSpecialDto){
+  public AddSpecialVo save(AddSpecialDto addSpecialDto) {
     return Optional
       .ofNullable(addSpecialDto)
-      .map(f ->{
+      .map(f -> {
         AddSpecial addSpecial = new AddSpecial();
         BeanUtil.copyProperties(f, addSpecial);
-        if (f.getId()!=null){
+        if (f.getId() != null) {
           addSpecialMapper.updateById(addSpecial);
+        } else {
+          addSpecialMapper.insert(addSpecial);
         }
-        addSpecialMapper.insert(addSpecial);
-      return new AddSpecialVo(addSpecial);
-    }).map(AddSpecialVo::new).get();
+        return new AddSpecialVo(addSpecial);
+      }).map(AddSpecialVo::new).get();
   }
 
-  public List<AddSpecialVo> find(){
+  public List<AddSpecialVo> find() {
     return addSpecialMapper.find();
   }
 
-  public Page<AddSpecialVo> findPage(AddSpecialQueryDto addSpecialQueryDto){
-   return commonService.find(addSpecialQueryDto, (p, q) -> addSpecialMapper.findPage(p, Kv.by("text", addSpecialQueryDto.getText())));
+  public Page<AddSpecialVo> findPage(AddSpecialQueryDto addSpecialQueryDto) {
+    return commonService.find(addSpecialQueryDto, (p, q) -> addSpecialMapper.findPage(p, Kv.by("text", addSpecialQueryDto.getText())));
   }
 
   @Transactional
-  public void delete(Long id){
-    if (!addSpecialMapper.deleteAble(id)){
-      throw new LogicException(ResultEnum.DATA_ERROR,"该节点已经被使用,无法删除");
+  public void delete(Long id) {
+    if (!addSpecialMapper.deleteAble(id)) {
+      throw new LogicException(ResultEnum.DATA_ERROR, "该节点已经被使用,无法删除");
     }
     addSpecialMapper.deleteById(id);
   }

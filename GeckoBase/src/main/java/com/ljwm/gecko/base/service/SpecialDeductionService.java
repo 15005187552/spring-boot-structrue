@@ -38,8 +38,9 @@ public class SpecialDeductionService {
         BeanUtil.copyProperties(f, specialDeduction);
         if (f.getId()!=null){
           specialDeductionMapper.updateById(specialDeduction);
+        } else {
+          specialDeductionMapper.insert(specialDeduction);
         }
-        specialDeductionMapper.insert(specialDeduction);
         return new SpecialDeductionVo(specialDeduction);
       }).map(SpecialDeductionVo::new).get();
   }
