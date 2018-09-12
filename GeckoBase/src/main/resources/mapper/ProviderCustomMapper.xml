@@ -24,8 +24,8 @@
     </sql>
 
     <resultMap id="providerCustomVo" type="com.ljwm.gecko.base.model.vo.ProviderCustomVo" extends="BaseResultMap">
-        <association property="serveSimpleVo" column="service_id" select="com.ljwm.gecko.base.mapper.findById"/>
-        <association property="providerVo" column="provider_id" select="com.ljwm.gecko.base.mapper.findById"/>
+        <association property="serveSimpleVo" column="service_id" select="com.ljwm.gecko.base.mapper.ServiceTypeMapper.findById"/>
+        <association property="providerVo" column="provider_id" select="com.ljwm.gecko.base.mapper.ProviderMapper.findById"/>
     </resultMap>
 
     <select id="findByPage" parameterType="map" resultMap="providerCustomVo">

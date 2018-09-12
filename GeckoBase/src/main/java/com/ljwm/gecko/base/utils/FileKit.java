@@ -73,7 +73,7 @@ public class FileKit {
       log.debug("上传的文件名为：" + fileName);
       String suffixName = fileName.substring(fileName.lastIndexOf("."));
       log.debug("上传的后缀名为：" + suffixName);
-      fileName = TimeUtil.getCurrentTime() + suffixName;
+      fileName = RandomUtil.randomUUID() + suffixName;
       File dest = new File(cachePath + fileName);
       if (!dest.getParentFile().exists()) {
         dest.getParentFile().mkdirs();

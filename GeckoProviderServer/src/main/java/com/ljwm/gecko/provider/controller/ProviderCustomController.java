@@ -33,6 +33,6 @@ public class ProviderCustomController extends BaseController {
   @PostMapping("findByPage")
   @ApiOperation("查询服务商服务明细---带分页")
   public Result<Page<ProviderCustomVo>> findByPage(@RequestBody ProviderCustomQueryDto providerCustomQueryDto){
-    return success();
+    return success(providerCustomService.findByPage(providerCustomQueryDto));
   }
 }

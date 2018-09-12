@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Levis
@@ -40,11 +40,12 @@ public class Order implements Serializable {
 
     @ApiModelProperty(value = "订单号")
     @TableField("`order_no`")
-    private Long orderNo;
+    private String orderNo;
 
     @ApiModelProperty(value = "用户id")
     @TableField("`member_id`")
     private Long memberId;
+
     @TableField("`shipping_id`")
     private Long shippingId;
 

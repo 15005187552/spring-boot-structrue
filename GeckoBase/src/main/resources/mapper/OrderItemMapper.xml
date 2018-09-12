@@ -17,11 +17,17 @@
         <result column="service_content" property="serviceContent" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
+        <result column="order_item_no" property="orderItemNo" />
+        <result column="order_item_status" property="orderItemStatus" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `id`          ,`member_id`          ,`order_no`          ,`service_id`          ,`product_service_id`          ,`service_name`          ,`service_image`          ,`current_unit_price`          ,`quantity`          ,`total_price`          ,`service_content`          ,`create_time`          ,`update_time`
+          `id`          ,`member_id`          ,`order_no`          ,`service_id`          ,`product_service_id`          ,`service_name`          ,`service_image`          ,`current_unit_price`          ,`quantity`          ,`total_price`          ,`service_content`          ,`create_time`          ,`update_time`          ,`order_item_no`          ,`order_item_status`
     </sql>
+
+    <select id="findByOrderItemNo" parameterType="string" resultMap="BaseResultMap">
+      select *  from t_order_item where order_item_no=#{orderItemNo}
+    </select>
 
 </mapper>
