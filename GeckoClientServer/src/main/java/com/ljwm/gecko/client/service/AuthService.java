@@ -134,6 +134,9 @@ public class AuthService {
     String phoneNum = loginForm.getPhoneNum();
     String password = loginForm.getPassword();
     LoginVo loginVo = memberInfoService.selectByPhone(phoneNum);
+    if(loginVo == null){
+      return Result.fail("密码错误!");
+    }
     password = SecurityKit.passwordMD5(password, loginVo.getSalt());
     if(password.equals(loginVo.getPassword())){
       MemberVo memberVo = memberInfoService.selectMemberInfo(loginVo.getMemberId(), LoginType.MOBILE.getCode());
@@ -149,6 +152,6 @@ public class AuthService {
       resultMe.setToken(JwtKit.generateToken(jwtUser));
       return Result.success(resultMe);
     }
-    return Result.fail("密码错误");
+    return Result.fail("密码错误!");
   }
 }

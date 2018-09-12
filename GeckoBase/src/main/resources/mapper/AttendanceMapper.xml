@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.AttendanceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Attendance">
+        <id column="ID" property="id" />
+        <result column="DATE" property="date" />
+        <result column="COMPANY__USER_ID" property="companyUserId" />
+        <result column="OVERTIME" property="overtime" />
+        <result column="BONUSES" property="bonuses" />
+        <result column="APPRAISAL" property="appraisal" />
+        <result column="OTHER_INCOME" property="otherIncome" />
+        <result column="AFFAIR_DAY" property="affairDay" />
+        <result column="SICK_LEAVE" property="sickLeave" />
+        <result column="TARDINESS" property="tardiness" />
+        <result column="OTHER_ABSENCE" property="otherAbsence" />
+        <result column="ABSENTEEISM" property="absenteeism" />
+        <result column="DIMISSION" property="dimission" />
+        <result column="FINE" property="fine" />
+        <result column="OTHER_FINE" property="otherFine" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`DATE`          ,`COMPANY__USER_ID`          ,`OVERTIME`          ,`BONUSES`          ,`APPRAISAL`          ,`OTHER_INCOME`          ,`AFFAIR_DAY`          ,`SICK_LEAVE`          ,`TARDINESS`          ,`OTHER_ABSENCE`          ,`ABSENTEEISM`          ,`DIMISSION`          ,`FINE`          ,`OTHER_FINE`
+    </sql>
+
+</mapper>
