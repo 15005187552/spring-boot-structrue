@@ -17,11 +17,11 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Levis
- * @since 2018-09-10
+ * @since 2018-09-11
  */
 @Data
 @SuppressWarnings("ALL")
@@ -42,7 +42,7 @@ public class OrderItem implements Serializable {
     @TableField("`member_id`")
     private Long memberId;
     @TableField("`order_no`")
-    private Long orderNo;
+    private String orderNo;
 
     @ApiModelProperty(value = "服务id")
     @TableField("`service_id`")
@@ -79,6 +79,14 @@ public class OrderItem implements Serializable {
     @TableField("`update_time`")
     private Date updateTime;
 
+    @ApiModelProperty(value = "子订单号")
+    @TableField("`order_item_no`")
+    private String orderItemNo;
+
+    @ApiModelProperty(value = "订单状态:0-已取消,5-待服务定价,10-未付款,20-已付款,50-交易成功,60-交易关闭")
+    @TableField("`order_item_status`")
+    private Integer orderItemStatus;
+
 
     public static final String ID = "`id`";
 
@@ -105,5 +113,9 @@ public class OrderItem implements Serializable {
     public static final String CREATE_TIME = "`create_time`";
 
     public static final String UPDATE_TIME = "`update_time`";
+
+    public static final String ORDER_ITEM_NO = "`order_item_no`";
+
+    public static final String ORDER_ITEM_STATUS = "`order_item_status`";
 
 }
