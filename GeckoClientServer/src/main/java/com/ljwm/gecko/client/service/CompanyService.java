@@ -15,6 +15,7 @@ import com.ljwm.gecko.base.enums.IdentificationType;
 import com.ljwm.gecko.base.enums.RoleCodeType;
 import com.ljwm.gecko.base.mapper.CompanyMapper;
 import com.ljwm.gecko.base.mapper.CompanyUserMapper;
+import com.ljwm.gecko.base.service.LocationService;
 import com.ljwm.gecko.base.utils.Fileutil;
 import com.ljwm.gecko.client.model.dto.CompanyForm;
 import com.ljwm.gecko.client.model.vo.CompanyVo;
@@ -41,6 +42,9 @@ public class CompanyService {
 
   @Autowired
   CompanyMapper companyMapper;
+
+  @Autowired
+  LocationService locationService;
 
   @Autowired
   CompanyUserMapper companyUserMapper;
@@ -93,6 +97,9 @@ public class CompanyService {
     if(CollectionUtil.isNotEmpty(list)){
       Company company = list.get(0);
       CompanyVo companyVo = new CompanyVo();
+      companyVo.setProvince(locationService.getNameByCode(company.getProvCode()));
+      companyVo.setCity(locationService.getNameByCode(company.getCityCode()));
+      companyVo.setArea(locationService.getNameByCode(company.getAreaCode()));
       BeanUtil.copyProperties(company, companyVo);
       if(StrUtil.isNotBlank(company.getPicPath())) {
         companyVo.setFilePath(appInfo.getWebPath() + company.getPicPath());

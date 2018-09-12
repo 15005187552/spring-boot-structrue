@@ -2,7 +2,6 @@ package com.ljwm.gecko.base.service;
 
 import com.ljwm.gecko.base.dao.LocationDao;
 import com.ljwm.gecko.base.entity.Location;
-import com.ljwm.gecko.base.mapper.LocationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +31,9 @@ public class LocationService {
 
   public Integer getProvinceCode(String name){
     return locationDao.getProvinceCode(name);
+  }
+
+  public String getNameByCode(Integer code) {
+    return locationDao.getNameByCode(code);
   }
 }

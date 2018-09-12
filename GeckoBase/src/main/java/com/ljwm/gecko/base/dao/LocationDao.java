@@ -71,4 +71,14 @@ public class LocationDao {
     }
     return null;
   }
+
+  public String getNameByCode(Integer code) {
+    Map<String ,Object> map = new HashMap<>();
+    map.put("CODE", code);
+    List<Location> list = locationMapper.selectByMap(map);
+    if(CollectionUtil.isNotEmpty(list)){
+      return list.get(0).getName();
+    }
+    return null;
+  }
 }

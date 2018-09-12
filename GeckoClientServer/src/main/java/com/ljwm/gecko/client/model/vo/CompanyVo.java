@@ -24,17 +24,20 @@ public class CompanyVo {
   @ApiModelProperty(value = "认证状态：0：未认证，1：认证通过，2:认证失败")
   private Integer validateState;
 
+  @ApiModelProperty(value = "创建人ID")
+  private Long createrId;
+
   @ApiModelProperty(value = "证照图片文件")
   private String filePath;
 
-  @ApiModelProperty(value = "省级代码")
-  private Integer provCode;
+  @ApiModelProperty(value = "省")
+  private String province;
 
-  @ApiModelProperty(value = "市级代码")
-  private Integer cityCode;
+  @ApiModelProperty(value = "市")
+  private String city;
 
-  @ApiModelProperty(value = "区级代码")
-  private Integer areaCode;
+  @ApiModelProperty(value = "区")
+  private String area;
 
   @ApiModelProperty(value = "详细地址")
   private String address;
