@@ -406,13 +406,6 @@ public class ExcelUtil {
             List<ExcelLog> logList = new ArrayList<>();
             // Map<title,index>
             Map<String, Integer> titleMap = new LinkedHashMap<>();
-            /*Field[] fields = clazz1.getClass().getDeclaredFields();
-            String[] fieldNames = new String[fields.length];
-            int i = 0;
-            for (Field f : fields) {
-              fieldNames[i] = f.getName();
-              i++;
-            }*/
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
                 if (row.getRowNum() == 0) {
@@ -457,18 +450,6 @@ public class ExcelUtil {
                             map.put(k, value);
                         }
                     }
-                    /*for (String k : titleMap.keySet()) {
-                      Integer index = titleMap.get(k);
-                      Cell cell = row.getCell(index);
-                      // 判空
-                      if (cell == null) {
-                        map.put(k, null);
-                      } else {
-                        cell.setCellType(CellType.STRING);
-                        String value = cell.getStringCellValue();
-                        map.put(k, value);
-                      }
-                    }*/
                     list.add((T) map);
 
                 } else {

@@ -23,8 +23,15 @@ public class ExcelController {
   ExcelService excelService;
 
   @PostMapping("/personInfo/import")
-  public Result importExcel(@RequestParam("file") MultipartFile file, @RequestParam("companyId")Long companyId) throws Exception {
+  public Result importExcel(@RequestParam("file")MultipartFile file, @RequestParam("companyId")Long companyId) throws Exception {
     excelService.improtPersonInfo(file, companyId);
+    return Result.success("导入成功！");
+  }
+
+  @PostMapping("/attendance/import")
+  public Result importAttendance(@RequestParam("file")MultipartFile file, @RequestParam("companyId")Long companyId,
+                                 @RequestParam("date")String date) throws Exception {
+    excelService.improtAttendance(file, companyId, date);
     return Result.success("导入成功！");
   }
 }

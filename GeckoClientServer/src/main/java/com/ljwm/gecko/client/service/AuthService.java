@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ljwm.bootbase.dto.Kv;
+import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.JwtKit;
@@ -129,7 +130,7 @@ public class AuthService {
     return null;
   }
 
-  public ResultMe loginSys(LoginForm loginForm) {
+  public Result loginSys(LoginForm loginForm) {
     String phoneNum = loginForm.getPhoneNum();
     String password = loginForm.getPassword();
     LoginVo loginVo = memberInfoService.selectByPhone(phoneNum);
@@ -146,8 +147,8 @@ public class AuthService {
       resultMe.setExtInfo(memberVo.getAccount().getExtInfo());
       resultMe.setNickName(memberVo.getNickName());
       resultMe.setToken(JwtKit.generateToken(jwtUser));
-      return resultMe;
+      return Result.success(resultMe);
     }
-    return null;
+    return Result.fail("密码错误");
   }
 }

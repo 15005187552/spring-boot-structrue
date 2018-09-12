@@ -2,6 +2,7 @@ package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.ljwm.bootbase.exception.LogicException;
+import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.dao.LocationDao;
 import com.ljwm.gecko.base.entity.CompanyUser;
 import com.ljwm.gecko.base.entity.CompanyUserInfo;
@@ -17,6 +18,7 @@ import com.ljwm.gecko.base.utils.TimeUtil;
 import com.ljwm.gecko.base.utils.excelutil.ExcelLogs;
 import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
+import com.ljwm.gecko.client.model.dto.AttendanceDto;
 import com.ljwm.gecko.client.model.dto.PersonInfoDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.map.HashedMap;
@@ -60,8 +62,7 @@ public class ExcelService {
 
   public void improtPersonInfo(MultipartFile file, Long companyId) throws Exception {
     Map<String, Object> findMap = new HashedMap();
-    //findMap.put("MEMBER_ID", SecurityKit.currentId());
-    findMap.put("MEMBER_ID", 3);
+    findMap.put("MEMBER_ID", SecurityKit.currentId());
     findMap.put("COMPANY_ID", companyId);
     findMap.put("DISABLED", DisabledEnum.ENABLED.getCode());
     findMap.put("ACTIVATED", ActivateEnum.ENABLED.getCode());
@@ -78,15 +79,16 @@ public class ExcelService {
     InputStream inputStream = file.getInputStream();
     ExcelLogs logs =new ExcelLogs();
     Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs , 0);
+    Field[] fields = PersonInfoDto.class.getDeclaredFields();
+    String[] fieldNames = new String[fields.length];
+    int i = 0;
+    for (Field f : fields) {
+      fieldNames[i] = f.getName();
+      i++;
+    }
     for(Map m:importExcel){
       PersonInfoDto personInfoDto = new PersonInfoDto();
-      Field[] fields = PersonInfoDto.class.getDeclaredFields();
-      String[] fieldNames = new String[fields.length];
-      int i = 0,index = 0;
-      for (Field f : fields) {
-        fieldNames[i] = f.getName();
-        i++;
-      }
+      int index = 0;
       for (Object key:m.keySet()){
         Field temFiels = PersonInfoDto.class.getDeclaredField(fieldNames[index]);
         temFiels.setAccessible(true);
@@ -184,6 +186,38 @@ public class ExcelService {
         companyUserInfoMapper.insert(companyUserInfo1);
       }
       log.debug("{}", personInfoDto);
+    }
+  }
+
+
+  public void improtAttendance(MultipartFile file, Long companyId, String date) throws Exception {
+    Map<String, Object> findMap = new HashedMap();
+    findMap.put("MEMBER_ID", 3);
+    findMap.put("COMPANY_ID", companyId);
+    findMap.put("DISABLED", DisabledEnum.ENABLED.getCode());
+    findMap.put("ACTIVATED", ActivateEnum.ENABLED.getCode());
+    List<CompanyUser> companyUserList = companyUserMapper.selectByMap(findMap);
+    if(CollectionUtil.isEmpty(companyUserList)){
+      throw new LogicException("你没有该操作的权限");
+    }
+    String roleCode = companyUserList.get(0).getRolesCode().toString();
+    int c = roleCode.length()- RoleCodeType.ITIN.getDigit();
+    Integer code = Integer.valueOf(roleCode.substring(c, c+1));
+    if (!code.equals(RoleCodeType.ITIN.getValue())){
+      throw new LogicException("你没有该操作的权限");
+    }
+    InputStream inputStream = file.getInputStream();
+    ExcelLogs logs =new ExcelLogs();
+    Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs , 0);
+    Field[] fields = AttendanceDto.class.getDeclaredFields();
+    String[] fieldNames = new String[fields.length];
+    int i = 0;
+    for (Field f : fields) {
+      fieldNames[i] = f.getName();
+      i++;
+    }
+    for(Map m:importExcel){
+      log.debug("{}", m);
     }
   }
 }

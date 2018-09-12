@@ -34,7 +34,7 @@ public class AuthController extends BaseController {
   @PostMapping("/loginSys")
   @ApiOperation("登录")
   public Result loginSys(@RequestBody LoginForm loginForm) {
-    return success(authService.loginSys(loginForm));
+    return authService.loginSys(loginForm);
   }
 
   @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
