@@ -9,6 +9,7 @@ import com.ljwm.gecko.base.model.vo.ProviderVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -20,7 +21,8 @@ import java.util.List;
  */
 public interface ProviderMapper extends BaseMapper<Provider> {
 
-  List<ProviderVo> findByPage(Page<ProviderVo> ret, @Param("params") Kv params);
 
   ProviderVo findById(@Param("id") Long id);
+
+  List<ProviderVo> findByPage(Page<ProviderVo> ret, @Param("params")Map map);
 }

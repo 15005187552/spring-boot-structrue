@@ -34,7 +34,7 @@ public class MemberController extends BaseController {
   @PostMapping("checkMember")
   @ApiModelProperty("会员审核")
   public Result checkMember(@RequestBody MemberConfirmDto memberConfirmDto){
-    memberConfirmDto.setValidaterId(SecurityKit.currentId());
+    memberConfirmDto.setValidatorId(SecurityKit.currentId());
     memberInfoService.checkMember(memberConfirmDto);
     return success();
   }

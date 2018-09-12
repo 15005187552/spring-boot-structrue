@@ -28,6 +28,7 @@
 
     <resultMap id="providerVo" type="com.ljwm.gecko.base.model.vo.ProviderVo" extends="BaseResultMap">
         <collection property="providerPaperVoList" column="ID" select="com.ljwm.gecko.base.mapper.ProviderPaperMapper.findProviderPaperVoListByProviderId"/>
+        <collection property="serviceTypes" column="ID" select="com.ljwm.gecko.base.mapper.ServiceTypeMapper.findByProviderId"/>
     </resultMap>
     <select id="findByPage" parameterType="map" resultMap="providerVo">
         select t.*  from t_provider t

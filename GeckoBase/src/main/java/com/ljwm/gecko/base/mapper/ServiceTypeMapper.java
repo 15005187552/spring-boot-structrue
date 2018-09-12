@@ -1,12 +1,15 @@
 package com.ljwm.gecko.base.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.gecko.base.entity.ServiceType;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ljwm.gecko.base.model.vo.ServeSimpleVo;
 import com.ljwm.gecko.base.model.vo.ServiceVo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -17,9 +20,16 @@ import java.util.List;
  * @since 2018-09-10
  */
 public interface ServiceTypeMapper extends BaseMapper<ServiceType> {
+
   List<ServiceVo> find();
+
+  List<ServiceVo> find(Page<ServiceVo> page, @Param("params")Map map);
 
   List<ServiceVo> children(@Param("pId") Integer pId);
 
   ServeSimpleVo findById(@Param("id") Integer id);
+
+  @Select("SELECT st.* FROM `t_service_type` st LEFT JOIN `t_provider_service` ps ON st.`ID` = ps.`SERVICE_ID` \n" +
+    "WHERE ps.`PROVIDER_ID` = #{id} ORDER BY st.`LEVEL`")
+  List<ServiceType> findByProviderId(Integer id);
 }
