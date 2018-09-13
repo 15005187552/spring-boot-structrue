@@ -1,23 +1,17 @@
 package com.ljwm.gecko.base.model.dto;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
 
 /**
  * @author Janiffy
- * @date 2018/8/30 13:36
+ * @date 2018/9/13 11:51
  */
 @Data
-@Accessors(chain = true)
-@NoArgsConstructor
-@AllArgsConstructor
-public class RegisterMemberForm {
+public class PasswordForm {
 
   @Pattern(regexp="^(1[3-9]\\d{9})$",message="请填入正确的手机号！")
   @ApiModelProperty("手机号")
@@ -27,7 +21,6 @@ public class RegisterMemberForm {
   @NotBlank(message = "请输入验证码！")
   private String checkCode;
 
-  @NotBlank(message = "userName不能为空")
-  @ApiModelProperty("小程序输入我给你的userName，其他客户端输入手机号")
-  private String userName;
+  @ApiModelProperty("密码")
+  private String password;
 }

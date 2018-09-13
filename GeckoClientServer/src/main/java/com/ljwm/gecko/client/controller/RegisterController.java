@@ -2,8 +2,7 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
-import com.ljwm.gecko.base.model.dto.RegisterForm;
-import com.ljwm.gecko.base.model.dto.RegisterMemberForm;
+import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.service.RegisterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,9 +34,27 @@ public class RegisterController extends BaseController {
       return registerService.getSMS(registerForm, request);
   }
 
-  @PostMapping("/register")
-  @ApiOperation("小程序注册成为会员（专用）")
-  public Result register(@RequestBody @Valid RegisterMemberForm registerMemberForm){
+  @PostMapping("/registerWX")
+  @ApiOperation("小程序注册成为会员")
+  public Result registerWX(@RequestBody @Valid RegisterMemberForm registerMemberForm){
     return registerService.register(registerMemberForm);
+  }
+
+  @PostMapping("/setPasswordWX")
+  @ApiOperation("小程序设置或修改密码（短信验证码方式）")
+  public Result setPasswordWX(@RequestBody @Valid PasswordForm passwordForm){
+    return registerService.setPasswordWX(passwordForm);
+  }
+
+  @PostMapping("/registerPC")
+  @ApiOperation("pc成为会员")
+  public Result registerPC(@RequestBody @Valid RegisterPCForm registerPCForm){
+    return registerService.registerPC(registerPCForm);
+  }
+
+  @PostMapping("/modifyPassword")
+  @ApiOperation("修改密码")
+  public Result modifyPassword(@RequestBody @Valid ModifyPasswordForm modifyPasswordForm){
+    return registerService.modifyPassword(modifyPasswordForm);
   }
 }
