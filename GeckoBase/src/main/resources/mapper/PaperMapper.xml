@@ -2,26 +2,56 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljwm.gecko.base.mapper.PaperMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Paper">
-        <id column="ID" property="id" />
-        <result column="NAME" property="name" />
-        <result column="TYPE" property="type" />
-        <result column="DIABLED" property="diabled" />
-        <result column="CREATE_TIME" property="createTime" />
-        <result column="UPDATE_TIME" property="updateTime" />
-    </resultMap>
+  <!-- 通用查询映射结果 -->
+  <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Paper">
+    <id column="ID" property="id"/>
+    <result column="NAME" property="name"/>
+    <result column="TYPE" property="type"/>
+    <result column="DIABLED" property="diabled"/>
+    <result column="CREATE_TIME" property="createTime"/>
+    <result column="UPDATE_TIME" property="updateTime"/>
+  </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
+  <!-- 通用查询结果列 -->
+  <sql id="Base_Column_List">
           `ID`          ,`NAME`          ,`TYPE`          ,`DIABLED`          ,`CREATE_TIME`          ,`UPDATE_TIME`
     </sql>
 
-    <resultMap id="paperVo" type="com.ljwm.gecko.base.model.vo.PaperVo" extends="BaseResultMap">
+  <resultMap id="paperVo" type="com.ljwm.gecko.base.model.vo.PaperVo" extends="BaseResultMap">
+  </resultMap>
 
-    </resultMap>
-    <select id="findPaperVoByPaperId" parameterType="integer" resultMap="paperVo">
+  <resultMap id="paperAdminVo" type="com.ljwm.gecko.base.model.vo.admin.PaperAdminVo" extends="BaseResultMap">
+    <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.PaperMapper.deleteAble"/>
+  </resultMap>
+
+  <select id="findPaperVoByPaperId" parameterType="integer" resultMap="paperVo">
       select *  from t_paper where ID=#{paperId}
     </select>
 
+  <select id="find" resultMap="paperAdminVo">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM `t_paper`
+    <where>
+      <if test="params.text !=null and params.text != ''">
+        AND `NAME` LIKE CONCAT('%',#{params.text},'%')
+      </if>
+    </where>
+    ORDER BY `ID`
+    <if test="params.asc">
+      ASC
+    </if>
+    <if test="!params.asc">
+      DESC
+    </if>
+  </select>
+
+  <select id="deleteAble" resultType="java.lang.Boolean" parameterType="java.lang.Long">
+    <![CDATA[
+        SELECT IF(CONVERT(GROUP_CONCAT(`res` SEPARATOR ''),SIGNED)>=1,0,1) AS res
+        FROM (
+            SELECT IF(COUNT(`PAPER_ID`)>=1,1,0) AS res FROM `t_member_paper` WHERE `PAPER_ID`=#{id} AND `PAPER_ID` IS NOT NULL
+            ) AS temp
+        ]]>
+  </select>
 </mapper>
