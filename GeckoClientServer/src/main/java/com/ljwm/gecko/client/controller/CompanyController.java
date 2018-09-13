@@ -34,4 +34,10 @@ public class CompanyController {
     return companyService.findByName(name);
   }
 
+  @PostMapping("/findEmployee")
+  @ApiOperation("根据公司名搜索审核通过的公司")
+  public Result findEmployee(@RequestParam("companyId") String companyId){
+    return companyService.findEmployee(companyId);
+  }
+
 }
