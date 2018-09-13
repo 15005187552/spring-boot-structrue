@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.ProviderServicesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.ProviderServices">
+        <id column="ID" property="id" />
+        <result column="SERVICE_ID" property="serviceId" />
+        <result column="PROVIDER_ID" property="providerId" />
+        <result column="VALIDATE_STATE" property="validateState" />
+        <result column="VALIDATOR_ID" property="validatorId" />
+        <result column="VALIDATE_TIME" property="validateTime" />
+        <result column="VALIDATE_TEXT" property="validateText" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`SERVICE_ID`          ,`PROVIDER_ID`          ,`VALIDATE_STATE`          ,`VALIDATOR_ID`          ,`VALIDATE_TIME`          ,`VALIDATE_TEXT`          ,`CREATE_TIME`          ,`UPDATE_TIME`
+    </sql>
+
+</mapper>

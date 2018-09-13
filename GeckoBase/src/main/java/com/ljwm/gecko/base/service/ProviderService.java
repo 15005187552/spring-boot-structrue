@@ -30,6 +30,7 @@ import com.ljwm.gecko.base.model.vo.admin.ServiceTypeTree;
 import com.ljwm.gecko.base.utils.Fileutil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,7 +96,19 @@ public class ProviderService {
     provider.setCreatorId(providerDto.getMemberId());
     provider.setUpdateTime(DateUtil.date());
     provider.setDisabled(DisabledEnum.ENABLED.getCode());
+    if (StringUtils.isNotEmpty(providerDto.getPicPath())){
+      File file = new File(appInfo.getFilePath() + Constant.PROVIDER + member.getId());
+      if (!file.exists()) {
+        file.mkdirs();
+      }
+      String srcPath = appInfo.getFilePath() + Constant.CACHE + providerDto.getPicPath();
+      String destDir = appInfo.getFilePath() + Constant.PROVIDER + member.getId() + "/";
+      Fileutil.cutGeneralFile(srcPath, destDir);
+      provider.setPicPath(Constant.PROVIDER + member.getId() + "/" + providerDto.getPicPath());
+    }
     providerMapper.insert(provider);
+
+
 
     //插入服务商服务表
     commonMapper.batchInsert(
@@ -103,27 +116,6 @@ public class ProviderService {
         .set(SqlFactory.COLUMNS, new String[]{"SERVICE_ID", "PROVIDER_ID"})
         .set(SqlFactory.VALUES, new HashSet<>(providerDto.getServiceIds()).stream().map(roleId -> new String[]{roleId + "", provider.getId() + ""}).collect(Collectors.toList()))
     );
-    //执行资质文件入库操作
-    File file = new File(appInfo.getFilePath() + Constant.PROVIDER + member.getId());
-    if (!file.exists()) {
-      file.mkdirs();
-    }
-    /*
-    for (FileDto fileDto : providerDto.getFileDtoList()) {
-
-      String srcPath = appInfo.getFilePath() + Constant.CACHE + fileDto.getFileName();
-      String destDir = appInfo.getFilePath() + Constant.PROVIDER + member.getId() + "/";
-      Fileutil.cutGeneralFile(srcPath, destDir);
-      ProviderPaper providerPaper = new ProviderPaper();
-      providerPaper.setProviderId(provider.getId());
-      providerPaper.setPaperId(fileDto.getPaperId());
-      providerPaper.setPicPath(Constant.PROVIDER + member.getId() + "/" + fileDto.getFileName());
-      providerPaper.setCreateTime(DateUtil.date());
-      providerPaper.setUpdateTime(DateUtil.date());
-      providerPaperMapper.insert(providerPaper);
-    }
-     */
-
   }
 
   public Page<ProviderVo> findByPage(ProviderQueryDto query) {

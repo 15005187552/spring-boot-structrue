@@ -128,13 +128,13 @@ public class MemberInfoService {
       String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicBack();
       String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
       Fileutil.cutGeneralFile(srcPath, destDir);
-      member.setPicFront(Constant.MEMBER + member.getId() + "/" + memberDto.getPicBack());
+      member.setPicBack(Constant.MEMBER + member.getId() + "/" + memberDto.getPicBack());
     }
     if (StringUtils.isNotEmpty(memberDto.getPicPassport())){
       String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicPassport();
       String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
       Fileutil.cutGeneralFile(srcPath, destDir);
-      member.setPicFront(Constant.MEMBER + member.getId() + "/" + memberDto.getPicPassport());
+      member.setPicPassport(Constant.MEMBER + member.getId() + "/" + memberDto.getPicPassport());
     }
     memberMapper.updateById(member);
     for (FileDto fileDto : fileDtoList) {
