@@ -27,4 +27,14 @@
       <result column="memberDisabled" property="memberDisabled"/>
     </resultMap>
 
+
+  <resultMap id="EmployeeVo" type="com.ljwm.gecko.base.model.vo.EmployeeVo">
+    <result column="MEMBER_ID" property="memberId"/>
+    <result column="COMPANY_USER_ID" property="companyUserId"/>
+    <result column="JOB_NUM" property="jobNum"/>
+    <result column="CERTIFICATE" property="certType"/>
+    <result column="CERT_NUM" property="certNum"/>
+    <result column="NAME" property="name"/>
+  </resultMap>
+
 </mapper>
