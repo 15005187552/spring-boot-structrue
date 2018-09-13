@@ -44,8 +44,10 @@ public class Paper implements Serializable {
     private Integer type;
     @TableField("`DIABLED`")
     private Boolean diabled;
+
     @TableField("`CREATE_TIME`")
     private Date createTime;
+
     @TableField("`UPDATE_TIME`")
     private Date updateTime;
 

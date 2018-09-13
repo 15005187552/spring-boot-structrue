@@ -46,7 +46,7 @@
     </if>
   </select>
 
-  <select id="deleteAble" resultType="java.lang.Boolean" parameterType="java.lang.Long">
+  <select id="deleteAble" resultType="java.lang.Boolean" parameterType="java.lang.Integer">
     <![CDATA[
         SELECT IF(CONVERT(GROUP_CONCAT(`res` SEPARATOR ''),SIGNED)>=1,0,1) AS res
         FROM (
