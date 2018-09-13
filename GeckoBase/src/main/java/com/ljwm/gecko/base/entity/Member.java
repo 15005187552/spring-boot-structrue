@@ -37,6 +37,9 @@ public class Member implements Serializable {
     @TableId(value = "`ID`", type = IdType.AUTO)
     private Long id;
 
+    @ApiModelProperty("会员姓名")
+    private String name;
+
     @ApiModelProperty(value = "注册手机号")
     @TableField("`REG_MOBILE`")
     private String regMobile;

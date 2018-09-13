@@ -110,27 +110,40 @@ public class MemberInfoService {
 
     member.setMemberIdcard(memberDto.getMemberIdcard());
     member.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
+    member.setName(memberDto.getName());
     File file = new File(appInfo.getFilePath() + Constant.MEMBER + member.getId());
     if (!file.exists()) {
       file.mkdirs();
     }
     if (StringUtils.isNotEmpty(memberDto.getPicFront())){
-      String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicFront();
-      String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
-      Fileutil.cutGeneralFile(srcPath, destDir);
-      member.setPicFront(Constant.MEMBER + member.getId() + "/" + memberDto.getPicFront());
+      if (memberDto.getPicFront().contains(Constant.MEMBER)){
+        member.setPicFront(memberDto.getPicFront());
+      }else {
+        String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicFront();
+        String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
+        Fileutil.cutGeneralFile(srcPath, destDir);
+        member.setPicFront(Constant.MEMBER + member.getId() + "/" + memberDto.getPicFront());
+      }
     }
     if (StringUtils.isNotEmpty(memberDto.getPicBack())){
-      String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicBack();
-      String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
-      Fileutil.cutGeneralFile(srcPath, destDir);
-      member.setPicBack(Constant.MEMBER + member.getId() + "/" + memberDto.getPicBack());
+      if (memberDto.getPicBack().contains(Constant.MEMBER)){
+        member.setPicBack(memberDto.getPicBack());
+      }else {
+        String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicBack();
+        String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
+        Fileutil.cutGeneralFile(srcPath, destDir);
+        member.setPicBack(Constant.MEMBER + member.getId() + "/" + memberDto.getPicBack());
+      }
     }
     if (StringUtils.isNotEmpty(memberDto.getPicPassport())){
-      String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicPassport();
-      String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
-      Fileutil.cutGeneralFile(srcPath, destDir);
-      member.setPicPassport(Constant.MEMBER + member.getId() + "/" + memberDto.getPicPassport());
+      if (memberDto.getPicPassport().contains(Constant.MEMBER)){
+        member.setPicPassport(memberDto.getPicBack());
+      }else {
+        String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicPassport();
+        String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
+        Fileutil.cutGeneralFile(srcPath, destDir);
+        member.setPicPassport(Constant.MEMBER + member.getId() + "/" + memberDto.getPicPassport());
+      }
     }
     memberMapper.updateById(member);
     for (FileDto fileDto : fileDtoList) {

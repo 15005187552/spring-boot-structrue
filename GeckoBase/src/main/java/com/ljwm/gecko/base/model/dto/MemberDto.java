@@ -13,6 +13,9 @@ public class MemberDto {
   @ApiModelProperty(value = "会员id",hidden = true)
   private Long id;
 
+  @ApiModelProperty("会员姓名")
+  private String name;
+
   @ApiModelProperty("会员身份证号")
   private String memberIdcard;
 

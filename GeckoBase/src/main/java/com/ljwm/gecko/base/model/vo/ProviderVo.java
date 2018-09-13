@@ -1,10 +1,13 @@
 package com.ljwm.gecko.base.model.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.ljwm.gecko.base.entity.Provider;
 import com.ljwm.gecko.base.entity.ServiceType;
 import com.ljwm.gecko.base.model.vo.admin.ServiceTypeTree;
 import com.ljwm.gecko.base.serializer.StatusWithNameSerializer;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;

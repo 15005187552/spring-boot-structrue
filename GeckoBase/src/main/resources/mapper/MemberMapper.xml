@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Member">
         <id column="ID" property="id" />
         <result column="REG_MOBILE" property="regMobile" />
+        <result column="NAME" property="name" />
         <result column="NICK_NAME" property="nickName" />
         <result column="AVATAR_PATH" property="avatarPath" />
         <result column="MEMBER_IDCARD" property="memberIdcard" />
@@ -19,7 +20,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATE_STATE`          ,`PIC_FRONT`          ,`PIC_BACK`          ,`PIC_PASSPORT`
+          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATE_STATE`          ,`PIC_FRONT`          ,`PIC_BACK`          ,`PIC_PASSPORT`,`NAME`
     </sql>
   <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.MemberVo">
     <id column="ID" property="id"/>
