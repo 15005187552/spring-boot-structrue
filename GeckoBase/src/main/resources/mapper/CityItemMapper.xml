@@ -28,4 +28,10 @@
   <resultMap id="RateVo" type="com.ljwm.gecko.base.model.vo.RateVo" extends="BaseResultMap">
     <result column="NAME" property="typeName" />
   </resultMap>
+
+  <resultMap id="SpecialPercentVo" type="com.ljwm.gecko.base.model.vo.SpecialPercentVo">
+    <result column="NAME" property="name" />
+    <result column="COMPANY_PER" property="companyPer" />
+    <result column="PERSON_PER" property="personPer" />
+  </resultMap>
 </mapper>
