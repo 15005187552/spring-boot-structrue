@@ -16,4 +16,8 @@
           `ID`          ,`MEMBER_PAPER_ID`          ,`PIC_PATH`          ,`CREATE_TIME`          ,`UPDATE_TIME`
     </sql>
 
+    <delete id="delete" parameterType="long">
+      delete from t_paper_path where MEMBER_PAPER_ID=#{memberPaperId}
+    </delete>
+
 </mapper>

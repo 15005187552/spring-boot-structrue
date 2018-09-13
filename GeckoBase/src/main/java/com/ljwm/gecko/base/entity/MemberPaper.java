@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author xixil
@@ -41,7 +41,7 @@ public class MemberPaper implements Serializable {
 
     @ApiModelProperty(value = "审核状态  1 待审核 2 审核通过 3 审核失败")
     @TableField("`VALIDATE_STATE`")
-    private Boolean validateState;
+    private Integer validateState;
 
     @ApiModelProperty(value = "认证人id")
     @TableField("`VALIDATOR_ID`")

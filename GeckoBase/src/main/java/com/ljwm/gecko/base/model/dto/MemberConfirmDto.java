@@ -13,14 +13,9 @@ public class MemberConfirmDto {
   @ApiModelProperty("会员id")
   private Long memberId;
 
-  @ApiModelProperty("是否同意")
-  private boolean isAgree=true;
-
   @ApiModelProperty(value = "认证人",hidden = true)
   private Long validatorId;
 
-  @ApiModelProperty("认证内容")
-  private String validateText;
-
-  private List<Integer> serviceTypes;
+  @ApiModelProperty("审核资质明细list")
+  private List<MemberPaperConfirmDto> paperConfirmDtoList;
 }
