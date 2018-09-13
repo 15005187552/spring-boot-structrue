@@ -102,10 +102,6 @@ public class MemberInfoService {
       log.info("根据会员id:{} 查询不到该会员信息", memberDto.getId());
       throw new LogicException(ResultEnum.DATA_ERROR, "根据会员id" + memberDto.getId() + "查询不到该会员信息!");
     }
-    if (!Objects.equals(member.getValidateState(), ValidateStatEnum.INIT.getCode()) && !Objects.equals(member.getValidateState(), ValidateStatEnum.CONFIRM_FAILED.getCode())) {
-      log.info("根据会员id:{} 认证中或认证通过,不可重复认证!", memberDto.getId());
-      throw new LogicException(ResultEnum.DATA_ERROR, "该会员认证中或认证通过,不可重复认证!");
-    }
     List<FileDto> fileDtoList = memberDto.getFileDtoList();
     if (CollectionUtils.isEmpty(fileDtoList)) {
       log.info("根据会员id:{}个人资质证件不能为空!", memberDto.getId());
