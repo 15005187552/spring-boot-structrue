@@ -22,6 +22,9 @@ public class MemberDto {
   @ApiModelProperty("身份证反面")
   private String picBack;
 
+  @ApiModelProperty("个人证件照")
+  private String picPassport;
+
   @ApiModelProperty("资质文件上传")
   private List<FileDto> fileDtoList;
 }

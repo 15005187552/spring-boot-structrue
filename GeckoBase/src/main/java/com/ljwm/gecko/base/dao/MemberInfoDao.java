@@ -113,5 +113,19 @@ public class MemberInfoDao {
     memberMapper.updateById(member);
   }
 
+  public List<MemberAccount> selectAccount(String phoneNum, Long memberId) {
+    Map<String, Object> map = new HashedMap();
+    map.put("USERNAME", phoneNum);
+    map.put("MEMBER_ID", memberId);
+    List<MemberAccount> list = memberAccountMapper.selectByMap(map);
+    return list;
+  }
+
+  public List<MemberAccount> selectAccount(Long memberId) {
+    Map<String, Object> map = new HashedMap();
+    map.put("MEMBER_ID", memberId);
+    List<MemberAccount> list = memberAccountMapper.selectByMap(map);
+    return list;
+  }
 }
 

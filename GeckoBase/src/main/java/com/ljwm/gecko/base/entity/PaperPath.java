@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author xixil
- * @since 2018-09-12
+ * @since 2018-09-13
  */
 @Data
 @SuppressWarnings("ALL")
@@ -37,7 +37,7 @@ public class PaperPath implements Serializable {
 
     @ApiModelProperty(value = "证件类型ID")
     @TableField("`MEMBER_PAPER_ID`")
-    private Integer memberPaperId;
+    private Long memberPaperId;
 
     @ApiModelProperty(value = "证件文件路径")
     @TableField("`PIC_PATH`")

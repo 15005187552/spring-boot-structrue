@@ -113,6 +113,7 @@ public class ProviderService {
       file.mkdirs();
     }
     for (FileDto fileDto : providerDto.getFileDtoList()) {
+      /*
       String srcPath = appInfo.getFilePath() + Constant.CACHE + fileDto.getFileName();
       String destDir = appInfo.getFilePath() + Constant.PROVIDER + member.getId() + "/";
       Fileutil.cutGeneralFile(srcPath, destDir);
@@ -123,6 +124,7 @@ public class ProviderService {
       providerPaper.setCreateTime(DateUtil.date());
       providerPaper.setUpdateTime(DateUtil.date());
       providerPaperMapper.insert(providerPaper);
+      */
     }
 
   }

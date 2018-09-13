@@ -1,6 +1,6 @@
 package com.ljwm.gecko.base.service;
 
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.security.SecurityKit;
@@ -12,17 +12,20 @@ import com.ljwm.gecko.base.entity.MemberPassword;
 import com.ljwm.gecko.base.entity.MobileCode;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.mapper.GuestMapper;
-import com.ljwm.gecko.base.model.dto.RegisterForm;
-import com.ljwm.gecko.base.model.dto.RegisterMemberForm;
+import com.ljwm.gecko.base.mapper.MemberPasswordMapper;
+import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.utils.IpUtil;
 import com.ljwm.gecko.base.utils.StringUtil;
 import com.ljwm.gecko.base.utils.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import static com.ljwm.bootbase.dto.Result.fail;
 import static com.ljwm.bootbase.dto.Result.success;
@@ -41,6 +44,9 @@ public class RegisterService {
 
   @Autowired
   MemberInfoDao memberInfoDao;
+
+  @Autowired
+  MemberPasswordMapper memberPasswordMapper;
 
   @Autowired
   GuestMapper guestMapper;
@@ -90,38 +96,125 @@ public class RegisterService {
     String code = registerMemberForm.getCheckCode();
     String phoneNum = registerMemberForm.getPhoneNum();
     String userName = registerMemberForm.getUserName();
-    String password = registerMemberForm.getPassword();
     MobileCode mobileCode = mobileCodeDao.select(code, phoneNum);
+    //小程序只是绑定手机号的操作，其账号密码无实际意义
     if(mobileCode != null){
       Long memberId = memberInfoDao.select(phoneNum);
+      Member member = null;
       if (memberId != null){
-        return fail(ResultEnum.DATA_ERROR.getCode(),"该用户已注册！");
+        List<MemberAccount> list = memberInfoDao.selectAccount(userName, memberId);
+        if(CollectionUtil.isNotEmpty(list)) {
+          return fail(ResultEnum.DATA_ERROR.getCode(), "该用户已注册！");
+        }
+      } else {
+        member = memberInfoDao.insert(phoneNum);
+        memberId = member.getId();
       }
-      Member member = memberInfoDao.insert(phoneNum);
-      memberId = member.getId();
       log.debug("Saved member :{}", member);
       if(memberId != null) {
         guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
       }
-      String salt = StringUtil.salt();
-      if(StrUtil.isNotBlank(password)){
-        password = SecurityKit.passwordMD5(password, salt);
-      } else {
-        password = SecurityKit.passwordMD5(userName, salt);
-      }
+     /* String salt = StringUtil.salt();
+      password = SecurityKit.passwordMD5(password, salt);
       MemberPassword memberPassword = memberInfoDao.insertPassword(salt, password, new Date());
       log.debug("Saved password: {}", memberPassword);
       MemberAccount memberAccount;
-      if(StrUtil.isBlank(password)) {
-        memberAccount = memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, memberPassword.getId());
-      } else {
+      if(StrUtil.isBlank(password)) {*/
+      MemberAccount memberAccount = memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, null);
+      memberInfoDao.insertAccount(phoneNum, LoginType.MOBILE.getCode(), memberId, null);
+     /* } else {
         memberAccount = memberInfoDao.insertAccount(userName, LoginType.MOBILE.getCode(), memberId, memberPassword.getId());
-      }
+      }*/
       log.debug("Saved account: {}", memberAccount);
-      return success("注册成功！");
+      Map<String, Object> map = new HashedMap();
+      map.put("phoneNum", phoneNum);
+      return success(map);
     }
 
     return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");
   }
 
+  public Result registerPC(RegisterPCForm registerPCForm) {
+    //根据手机号跟验证码查询是否输入正确，正确即注册成为会员
+    String code = registerPCForm.getCheckCode();
+    String phoneNum = registerPCForm.getPhoneNum();
+    String password = registerPCForm.getPassword();
+    MobileCode mobileCode = mobileCodeDao.select(code, phoneNum);
+    if(mobileCode != null){
+      Long memberId = memberInfoDao.select(phoneNum);
+      Member member = null;
+      if (memberId != null){
+        List<MemberAccount> list = memberInfoDao.selectAccount(phoneNum, memberId);
+        if(CollectionUtil.isNotEmpty(list)) {
+          return fail(ResultEnum.DATA_ERROR.getCode(), "该用户已注册！");
+        }
+      } else {
+        member = memberInfoDao.insert(phoneNum);
+        memberId = member.getId();
+      }
+      log.debug("Saved member :{}", member);
+      if(memberId != null) {
+        guestMapper.updateByGuestId(registerPCForm.getGuestId(), memberId);
+      }
+      String salt = StringUtil.salt();
+      password = SecurityKit.passwordMD5(password, salt);
+      MemberPassword memberPassword = memberInfoDao.insertPassword(salt, password, new Date());
+      log.debug("Saved password: {}", memberPassword);
+      MemberAccount memberAccount;
+      memberAccount = memberInfoDao.insertAccount(phoneNum, LoginType.MOBILE.getCode(), memberId, memberPassword.getId());
+      log.debug("Saved account: {}", memberAccount);
+      return success("注册成功！");
+    }
+    return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");
+  }
+
+  public Result setPasswordWX(PasswordForm passwordForm) {
+    String code = passwordForm.getCheckCode();
+    String phoneNum = passwordForm.getPhoneNum();
+    String password = passwordForm.getPassword();
+    MobileCode mobileCode = mobileCodeDao.select(code, phoneNum);
+    if(mobileCode != null){
+      Long memberId = memberInfoDao.select(phoneNum);
+      String salt = StringUtil.salt();
+      password = SecurityKit.passwordMD5(password, salt);
+      if(memberId != null){
+        List<MemberAccount> list = memberInfoDao.selectAccount(phoneNum, memberId);
+        if (CollectionUtil.isNotEmpty(list)){
+          Long passwordId = list.get(0).getPasswordId();
+          MemberPassword memberPassword = memberPasswordMapper.selectById(passwordId);
+          memberPassword.setSalt(salt).setPassword(password).setLastModifyTime(new Date());
+          memberPasswordMapper.updateById(memberPassword);
+        } else {
+          MemberPassword memberPassword = new MemberPassword();
+          memberPassword.setSalt(salt).setPassword(password).setLastModifyTime(new Date());
+          memberPasswordMapper.insert(memberPassword);
+        }
+      }
+      return success("成功！");
+    }
+    return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");
+  }
+
+  public Result modifyPassword(ModifyPasswordForm modifyPasswordForm) {
+    String phoneNum = modifyPasswordForm.getPhoneNum();
+    String oldPassword = modifyPasswordForm.getOldPassword();
+    String newPassword = modifyPasswordForm.getNewPassword();
+    Long memberId = memberInfoDao.select(phoneNum);
+    if(memberId == null){
+      return fail(ResultEnum.DATA_ERROR.getCode(), "该手机号未注册！");
+    }
+    List<MemberAccount> list = memberInfoDao.selectAccount(phoneNum, memberId);
+    if (CollectionUtil.isNotEmpty(list)){
+      Long passwordId = list.get(0).getPasswordId();
+      MemberPassword memberPassword = memberPasswordMapper.selectById(passwordId);
+      String password = SecurityKit.passwordMD5(oldPassword, memberPassword.getSalt());
+      if (!password.equals(memberPassword.getPassword())){
+        return fail(ResultEnum.DATA_ERROR.getCode(), "旧密码不正确！");
+      }
+      String salt = StringUtil.salt();
+      memberPassword.setSalt(salt).setPassword(SecurityKit.passwordMD5(newPassword, salt)).setLastModifyTime(new Date());
+      return success("成功！");
+    }
+    return fail(ResultEnum.DATA_ERROR.getCode(), "该手机号未注册！");
+  }
 }

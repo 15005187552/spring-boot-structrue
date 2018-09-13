@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author xixil
- * @since 2018-09-12
+ * @since 2018-09-13
  */
 public interface PaperPathMapper extends BaseMapper<PaperPath> {
-
+  void delete(Long memberPaperId);
 }

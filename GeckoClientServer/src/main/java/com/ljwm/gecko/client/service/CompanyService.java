@@ -9,13 +9,12 @@ import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.entity.Company;
 import com.ljwm.gecko.base.entity.CompanyUser;
-import com.ljwm.gecko.base.enums.ActivateEnum;
-import com.ljwm.gecko.base.enums.DisabledEnum;
-import com.ljwm.gecko.base.enums.IdentificationType;
-import com.ljwm.gecko.base.enums.RoleCodeType;
+import com.ljwm.gecko.base.enums.*;
 import com.ljwm.gecko.base.mapper.CompanyMapper;
 import com.ljwm.gecko.base.mapper.CompanyUserMapper;
+import com.ljwm.gecko.base.model.vo.EmployeeVo;
 import com.ljwm.gecko.base.service.LocationService;
+import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.base.utils.Fileutil;
 import com.ljwm.gecko.client.model.dto.CompanyForm;
 import com.ljwm.gecko.client.model.vo.CompanyVo;
@@ -105,6 +104,17 @@ public class CompanyService {
         companyVo.setFilePath(appInfo.getWebPath() + company.getPicPath());
       }
       return Result.success(companyVo);
+    }
+    return Result.success(null);
+  }
+
+  public Result findEmployee(String companyId) {
+    List<EmployeeVo> list = companyUserMapper.selectEmployee(companyId, DisabledEnum.ENABLED.getCode(), ActivateEnum.ENABLED.getCode());
+    if (CollectionUtil.isNotEmpty(list)) {
+      for (EmployeeVo employeeVo : list){
+        employeeVo.setCertType(EnumUtil.getEnumBycode(CertificateType.class, employeeVo.getCertType()).getName());
+      }
+      return Result.success(list);
     }
     return Result.success(null);
   }
