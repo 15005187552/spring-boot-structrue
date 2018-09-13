@@ -1,6 +1,7 @@
 package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.base.model.dto.SpecailForm;
 import com.ljwm.gecko.client.model.dto.CompanyForm;
 import com.ljwm.gecko.client.service.CompanyService;
 import io.swagger.annotations.Api;
@@ -38,6 +39,11 @@ public class CompanyController {
   @ApiOperation("根据公司名搜索审核通过的公司")
   public Result findEmployee(@RequestParam("companyId") String companyId){
     return companyService.findEmployee(companyId);
+  }
+
+  @PostMapping("/postSpecial")
+  public Result postSpecial(@RequestBody SpecailForm specailForm){
+    return companyService.postSpecial(specailForm);
   }
 
 }

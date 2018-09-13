@@ -22,4 +22,5 @@ public class SpecialController {
   public Result getSpecial( @RequestParam("code") @ApiParam(value = "城市编码") String code) {
     return specialService.getSpecial(code);
   }
+
 }

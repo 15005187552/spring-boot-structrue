@@ -12,6 +12,7 @@ import com.ljwm.gecko.base.entity.CompanyUser;
 import com.ljwm.gecko.base.enums.*;
 import com.ljwm.gecko.base.mapper.CompanyMapper;
 import com.ljwm.gecko.base.mapper.CompanyUserMapper;
+import com.ljwm.gecko.base.model.dto.SpecailForm;
 import com.ljwm.gecko.base.model.vo.EmployeeVo;
 import com.ljwm.gecko.base.service.LocationService;
 import com.ljwm.gecko.base.utils.EnumUtil;
@@ -19,6 +20,7 @@ import com.ljwm.gecko.base.utils.Fileutil;
 import com.ljwm.gecko.client.model.dto.CompanyForm;
 import com.ljwm.gecko.client.model.vo.CompanyVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,9 +51,13 @@ public class CompanyService {
   CompanyUserMapper companyUserMapper;
 
   public Result commit(CompanyForm companyForm) {
-    Company company = new Company(null, companyForm.getName(), companyForm.getType(), new Date(),
-      IdentificationType.NO_IDENTI.getCode(), DisabledEnum.ENABLED.getCode(), companyForm.getPhoneNum(), companyForm.getCode(), SecurityKit.currentId(),
-    null, null, null, new Date(), null, companyForm.getProvCode(), companyForm.getCityCode(), companyForm.getAreaCode(), companyForm.getAddress());
+
+    Company company = new Company();
+    BeanUtils.copyProperties(companyForm, company);
+    Date date = new Date();
+    company.setValidateState(IdentificationType.NO_IDENTI.getCode())
+      .setUpdateTime(date).setCreaterId(SecurityKit.currentId())
+      .setDisabled(DisabledEnum.ENABLED.getCode());
     Map<String, Object> map = new HashMap<>();
     map.put("CODE", companyForm.getCode());
     map.put("DISABLED", DisabledEnum.ENABLED.getCode());
@@ -60,6 +66,7 @@ public class CompanyService {
       company.setId(list.get(0).getId());
       companyMapper.updateById(company);
     } else {
+      company.setCreateTime(date);
       companyMapper.insert(company);
       int codeLenth = RoleCodeType.values().length;
       String[] code = new String[codeLenth];
@@ -117,5 +124,16 @@ public class CompanyService {
       return Result.success(list);
     }
     return Result.success(null);
+  }
+
+  public Result postSpecial(SpecailForm specailForm) {
+    Company company = companyMapper.selectById(specailForm.getCompanyId());
+    if (company != null){
+      BeanUtil.copyProperties(specailForm, company);
+      company.setUpdateTime(new Date());
+      companyMapper.updateById(company);
+      return Result.success("成功！");
+    }
+    return Result.fail("请先提交公司信息！");
   }
 }

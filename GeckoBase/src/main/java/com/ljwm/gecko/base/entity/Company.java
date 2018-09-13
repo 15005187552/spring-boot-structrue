@@ -6,13 +6,12 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -21,14 +20,12 @@ import java.util.Date;
  * </p>
  *
  * @author Levis
- * @since 2018-09-07
+ * @since 2018-09-13
  */
 @Data
 @SuppressWarnings("ALL")
 @Accessors(chain = true)
 @TableName("`t_company`")
-@AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value = "入驻企业表", subTypes = {Company.class})
 public class Company implements Serializable {
@@ -108,6 +105,54 @@ public class Company implements Serializable {
     @TableField("`ADDRESS`")
     private String address;
 
+    @ApiModelProperty(value = "公司养老保险比例")
+    @TableField("`COM_PENSION`")
+    private BigDecimal comPension;
+
+    @ApiModelProperty(value = "公司医疗保险比例")
+    @TableField("`COM_MEDICAL`")
+    private BigDecimal comMedical;
+
+    @ApiModelProperty(value = "公司失业保险比例")
+    @TableField("`COM_UNEMPLOY`")
+    private BigDecimal comUnemploy;
+
+    @ApiModelProperty(value = "公司工伤保险比例")
+    @TableField("`COM_INJURY`")
+    private BigDecimal comInjury;
+
+    @ApiModelProperty(value = "公司生育保险比例")
+    @TableField("`COM_BIRTH`")
+    private BigDecimal comBirth;
+
+    @ApiModelProperty(value = "个人养老保险比例")
+    @TableField("`PERSON_PENSION`")
+    private BigDecimal personPension;
+
+    @ApiModelProperty(value = "个人医疗保险比例")
+    @TableField("`PERSON_MEDICAL`")
+    private BigDecimal personMedical;
+
+    @ApiModelProperty(value = "个人失业保险比例")
+    @TableField("`PERSON_UNEMPLOY`")
+    private BigDecimal personUnemploy;
+
+    @ApiModelProperty(value = "个人工伤比例")
+    @TableField("`PEESON_INJURY`")
+    private BigDecimal peesonInjury;
+
+    @ApiModelProperty(value = "个人生育比例")
+    @TableField("`PERSON_BIRTH`")
+    private BigDecimal personBirth;
+
+    @ApiModelProperty(value = "公司公积金比例")
+    @TableField("`FUND_COM`")
+    private BigDecimal fundCom;
+
+    @ApiModelProperty(value = "个人公积金比例")
+    @TableField("`FUND_PERSON`")
+    private BigDecimal fundPerson;
+
 
     public static final String ID = "`ID`";
 
@@ -144,5 +189,29 @@ public class Company implements Serializable {
     public static final String AREA_CODE = "`AREA_CODE`";
 
     public static final String ADDRESS = "`ADDRESS`";
+
+    public static final String COM_PENSION = "`COM_PENSION`";
+
+    public static final String COM_MEDICAL = "`COM_MEDICAL`";
+
+    public static final String COM_UNEMPLOY = "`COM_UNEMPLOY`";
+
+    public static final String COM_INJURY = "`COM_INJURY`";
+
+    public static final String COM_BIRTH = "`COM_BIRTH`";
+
+    public static final String PERSON_PENSION = "`PERSON_PENSION`";
+
+    public static final String PERSON_MEDICAL = "`PERSON_MEDICAL`";
+
+    public static final String PERSON_UNEMPLOY = "`PERSON_UNEMPLOY`";
+
+    public static final String PEESON_INJURY = "`PEESON_INJURY`";
+
+    public static final String PERSON_BIRTH = "`PERSON_BIRTH`";
+
+    public static final String FUND_COM = "`FUND_COM`";
+
+    public static final String FUND_PERSON = "`FUND_PERSON`";
 
 }
