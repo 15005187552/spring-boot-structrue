@@ -26,7 +26,9 @@ import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.model.vo.LoginVo;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.utils.Fileutil;
+import com.ljwm.gecko.base.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,11 +114,29 @@ public class MemberInfoService {
 
     member.setMemberIdcard(memberDto.getMemberIdcard());
     member.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
-    memberMapper.updateById(member);
     File file = new File(appInfo.getFilePath() + Constant.MEMBER + member.getId());
     if (!file.exists()) {
       file.mkdirs();
     }
+    if (StringUtils.isNotEmpty(memberDto.getPicFront())){
+      String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicFront();
+      String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
+      Fileutil.cutGeneralFile(srcPath, destDir);
+      member.setPicFront(Constant.MEMBER + member.getId() + "/" + memberDto.getPicFront());
+    }
+    if (StringUtils.isNotEmpty(memberDto.getPicBack())){
+      String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicBack();
+      String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
+      Fileutil.cutGeneralFile(srcPath, destDir);
+      member.setPicFront(Constant.MEMBER + member.getId() + "/" + memberDto.getPicBack());
+    }
+    if (StringUtils.isNotEmpty(memberDto.getPicPassport())){
+      String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicPassport();
+      String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
+      Fileutil.cutGeneralFile(srcPath, destDir);
+      member.setPicFront(Constant.MEMBER + member.getId() + "/" + memberDto.getPicPassport());
+    }
+    memberMapper.updateById(member);
     for (FileDto fileDto : fileDtoList) {
       if (fileDto.getId()!=null){
        MemberPaper memberPaper = memberPaperMapper.selectById(fileDto.getId());

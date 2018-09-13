@@ -22,6 +22,8 @@
 
     <resultMap id="memberPaperVo" type="com.ljwm.gecko.base.model.vo.MemberPaperVo" extends="BaseResultMap">
       <association property="paperVo" column="PAPER_ID" select="com.ljwm.gecko.base.mapper.PaperMapper.findPaperVoByPaperId"/>
+
+      <collection property="paperPathVoList" column="ID" select="com.ljwm.gecko.base.mapper.PaperPathMapper.findByMemberPaperId"/>
     </resultMap>
 
     <select id="findMemberPaperVoListByMemberId" parameterType="long" resultMap="memberPaperVo">

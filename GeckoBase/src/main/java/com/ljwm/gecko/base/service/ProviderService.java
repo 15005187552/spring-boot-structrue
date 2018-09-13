@@ -76,10 +76,6 @@ public class ProviderService {
       log.info("会员id:{} 服务类型不能为空!", providerDto.getMemberId());
       throw new LogicException(ResultEnum.DATA_ERROR, "服务类型不能为空!");
     }
-    if (CollectionUtils.isEmpty(providerDto.getFileDtoList())) {
-      log.info("会员id:{} 资质类型附件不能为空!", providerDto.getMemberId());
-      throw new LogicException(ResultEnum.DATA_ERROR, "资质类型附件不能为空!");
-    }
     List<Long> memberIds = Lists.newArrayList();
     memberIds.add(providerDto.getMemberId());
     if (CollectionUtils.isNotEmpty(providerDto.getMemberIds())) {
@@ -112,8 +108,9 @@ public class ProviderService {
     if (!file.exists()) {
       file.mkdirs();
     }
+    /*
     for (FileDto fileDto : providerDto.getFileDtoList()) {
-      /*
+
       String srcPath = appInfo.getFilePath() + Constant.CACHE + fileDto.getFileName();
       String destDir = appInfo.getFilePath() + Constant.PROVIDER + member.getId() + "/";
       Fileutil.cutGeneralFile(srcPath, destDir);
@@ -124,8 +121,8 @@ public class ProviderService {
       providerPaper.setCreateTime(DateUtil.date());
       providerPaper.setUpdateTime(DateUtil.date());
       providerPaperMapper.insert(providerPaper);
-      */
     }
+     */
 
   }
 

@@ -37,6 +37,6 @@ public class ProviderDto {
   @ApiModelProperty("认证人ids 如果创建人已经认证,可以不填")
   private List<Long> memberIds;
 
-  @ApiModelProperty("资质附件")
-  private List<FileDto> fileDtoList;
+  @ApiModelProperty("营业执照图片url")
+  private String picPath;
 }

@@ -16,8 +16,16 @@
           `ID`          ,`MEMBER_PAPER_ID`          ,`PIC_PATH`          ,`CREATE_TIME`          ,`UPDATE_TIME`
     </sql>
 
+    <resultMap id="paperPathVo" type="com.ljwm.gecko.base.model.vo.PaperPathVo" extends="BaseResultMap">
+
+    </resultMap>
+
     <delete id="delete" parameterType="long">
       delete from t_paper_path where MEMBER_PAPER_ID=#{memberPaperId}
     </delete>
+
+    <select id="findByMemberPaperId" parameterType="long" resultMap="paperPathVo">
+        select *  from  t_paper_path where MEMBER_PAPER_ID=#{memberPaperId}
+    </select>
 
 </mapper>
