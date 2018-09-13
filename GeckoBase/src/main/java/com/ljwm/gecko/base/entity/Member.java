@@ -73,6 +73,10 @@ public class Member implements Serializable {
     @TableField("`PIC_BACK`")
     private String picBack;
 
+    @ApiModelProperty(value = "个人证件照")
+    @TableField("`PIC_PASSPORT`")
+    private String picPassport;
+
 
     public static final String ID = "`ID`";
 
@@ -93,5 +97,7 @@ public class Member implements Serializable {
     public static final String PIC_FRONT = "`PIC_FRONT`";
 
     public static final String PIC_BACK = "`PIC_BACK`";
+
+    public static final String PIC_PASSPORT = "`PIC_PASSPORT`";
 
 }

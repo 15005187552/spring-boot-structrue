@@ -8,6 +8,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class FileDto {
 
+
+  private Long id;
+
   @ApiModelProperty("文件名称")
   private String fileName;
 

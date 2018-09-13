@@ -121,7 +121,7 @@ public class MemberInfoService {
       MemberPaper memberPaper = new MemberPaper();
       memberPaper.setMemberId(member.getId());
       memberPaper.setPaperId(fileDto.getPaperId());
-      memberPaper.setPicPath(Constant.MEMBER + member.getId() + "/" + fileDto.getFileName());
+      //memberPaper.setPicPath(Constant.MEMBER + member.getId() + "/" + fileDto.getFileName());
       memberPaper.setCreateTime(DateUtil.date());
       memberPaper.setUpdateTime(DateUtil.date());
       memberPaperMapper.insert(memberPaper);

@@ -14,13 +14,13 @@
         <result column="VALIDATE_STATE" property="validateState" />
         <result column="PIC_FRONT" property="picFront" />
         <result column="PIC_BACK" property="picBack" />
+        <result column="PIC_PASSPORT" property="picPassport" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATE_STATE`          ,`PIC_FRONT`          ,`PIC_BACK`
+          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATE_STATE`          ,`PIC_FRONT`          ,`PIC_BACK`          ,`PIC_PASSPORT`
     </sql>
-
   <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.MemberVo">
     <id column="ID" property="id"/>
     <result column="REG_MOBILE" property="regMobile"/>

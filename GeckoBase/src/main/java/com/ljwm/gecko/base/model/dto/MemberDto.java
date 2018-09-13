@@ -16,5 +16,12 @@ public class MemberDto {
   @ApiModelProperty("会员身份证号")
   private String memberIdcard;
 
+  @ApiModelProperty("身份证正面")
+  private String picFront;
+
+  @ApiModelProperty("身份证反面")
+  private String picBack;
+
+  @ApiModelProperty("资质文件上传")
   private List<FileDto> fileDtoList;
 }

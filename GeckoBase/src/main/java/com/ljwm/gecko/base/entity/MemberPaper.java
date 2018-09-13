@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
- * 服务商证书表
+ * 
  * </p>
  *
  * @author xixil
@@ -27,29 +27,17 @@ import io.swagger.annotations.ApiModelProperty;
 @Accessors(chain = true)
 @TableName("`t_member_paper`")
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "服务商证书表", subTypes = {MemberPaper.class})
+@ApiModel(value = "", subTypes = {MemberPaper.class})
 public class MemberPaper implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "`ID`", type = IdType.AUTO)
     private Long id;
-
-    @ApiModelProperty(value = "证件类型ID")
     @TableField("`PAPER_ID`")
     private Integer paperId;
-
-    @ApiModelProperty(value = "所属服务商")
     @TableField("`MEMBER_ID`")
     private Long memberId;
-
-    @ApiModelProperty(value = "证件文件路径")
-    @TableField("`PIC_PATH`")
-    private String picPath;
-    @TableField("`CREATE_TIME`")
-    private Date createTime;
-    @TableField("`UPDATE_TIME`")
-    private Date updateTime;
 
     @ApiModelProperty(value = "审核状态  1 待审核 2 审核通过 3 审核失败")
     @TableField("`VALIDATE_STATE`")
@@ -66,6 +54,10 @@ public class MemberPaper implements Serializable {
     @ApiModelProperty(value = "认证内容")
     @TableField("`VALIDATE_TEXT`")
     private String validateText;
+    @TableField("`CREATE_TIME`")
+    private Date createTime;
+    @TableField("`UPDATE_TIME`")
+    private Date updateTime;
 
 
     public static final String ID = "`ID`";
@@ -74,12 +66,6 @@ public class MemberPaper implements Serializable {
 
     public static final String MEMBER_ID = "`MEMBER_ID`";
 
-    public static final String PIC_PATH = "`PIC_PATH`";
-
-    public static final String CREATE_TIME = "`CREATE_TIME`";
-
-    public static final String UPDATE_TIME = "`UPDATE_TIME`";
-
     public static final String VALIDATE_STATE = "`VALIDATE_STATE`";
 
     public static final String VALIDATOR_ID = "`VALIDATOR_ID`";
@@ -87,5 +73,9 @@ public class MemberPaper implements Serializable {
     public static final String VALIDATE_TIME = "`VALIDATE_TIME`";
 
     public static final String VALIDATE_TEXT = "`VALIDATE_TEXT`";
+
+    public static final String CREATE_TIME = "`CREATE_TIME`";
+
+    public static final String UPDATE_TIME = "`UPDATE_TIME`";
 
 }
