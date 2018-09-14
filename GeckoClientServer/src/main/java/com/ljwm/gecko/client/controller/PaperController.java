@@ -4,6 +4,7 @@ import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.entity.Paper;
 import com.ljwm.gecko.base.service.PaperCommonService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/paper")
+@Api(tags = "")
 public class PaperController extends BaseController {
 
   @Autowired

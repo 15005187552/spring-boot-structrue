@@ -12,12 +12,14 @@ import com.ljwm.bootbase.mapper.CommonMapper;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.entity.Member;
+import com.ljwm.gecko.base.entity.MemberPaper;
 import com.ljwm.gecko.base.entity.Provider;
 import com.ljwm.gecko.base.entity.ProviderPaper;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.enums.ProviderStatEnum;
 import com.ljwm.gecko.base.enums.ValidateStatEnum;
 import com.ljwm.gecko.base.mapper.MemberMapper;
+import com.ljwm.gecko.base.mapper.MemberPaperMapper;
 import com.ljwm.gecko.base.mapper.ProviderMapper;
 import com.ljwm.gecko.base.mapper.ProviderPaperMapper;
 import com.ljwm.gecko.base.model.bean.AppInfo;
@@ -56,6 +58,9 @@ public class ProviderService {
   private CommonMapper commonMapper;
 
   @Autowired
+  private MemberPaperMapper memberPaperMapper;
+
+  @Autowired
   private AppInfo appInfo;
 
   @Autowired
@@ -68,6 +73,8 @@ public class ProviderService {
   public void saveProvider(ProviderDto providerDto) {
     Member member = memberMapper.selectById(providerDto.getMemberId());
     if (member != null && !Objects.equals(member.getValidateState(), ValidateStatEnum.CONFIRM_SUCCESS.getCode())) {
+
+      List<MemberPaper> memberPaperList = memberPaperMapper.selectByMap(Kv.by("MEMBER_ID",member.getId()));
       if (CollectionUtils.isEmpty(providerDto.getMemberIds())) {
         log.info("会员id：{} 没有添加资质认证人!", providerDto.getMemberId());
         throw new LogicException(ResultEnum.DATA_ERROR, "请添加资质认证人!");

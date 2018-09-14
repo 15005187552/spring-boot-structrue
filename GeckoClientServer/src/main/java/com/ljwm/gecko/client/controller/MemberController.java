@@ -53,7 +53,4 @@ public class MemberController extends BaseController {
   public Result<MemberVo> findMemberVoByRegMobile(@PathVariable String regMobile){
     return success(memberInfoService.findMemberVoByRegMobile(regMobile));
   }
-
-
-
 }

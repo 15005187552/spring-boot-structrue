@@ -32,7 +32,7 @@ public class ProviderDto {
   private String address;
 
   @ApiModelProperty("服务类型ids")
-  private List<Integer> serviceIds;
+  private List<ProviderServiceDto> providerServiceDtoList;
 
   @ApiModelProperty("认证人ids 如果创建人已经认证,可以不填")
   private List<Long> memberIds;
