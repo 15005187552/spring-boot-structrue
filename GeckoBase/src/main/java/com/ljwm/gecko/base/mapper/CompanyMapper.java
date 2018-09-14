@@ -1,11 +1,12 @@
 package com.ljwm.gecko.base.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.gecko.base.entity.Company;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ljwm.gecko.base.model.dto.AdminCompanyDto;
-import com.ljwm.gecko.base.model.vo.UnValidateCompanyVo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,4 +25,10 @@ public interface CompanyMapper extends BaseMapper<Company> {
 
 
   List<AdminCompanyDto> find(Page<AdminCompanyDto> page, @Param("params")Map map);
+
+  @Select({"SELECT a.* FROM t_company a, t_company_user b\n" ,
+    "WHERE a.ID = b.COMPANY_ID\n" ,
+    "AND b.MEMBER_ID = #{memberId}"})
+  @ResultMap("BaseResultMap")
+  List<Company> findCompany(Long memberId);
 }

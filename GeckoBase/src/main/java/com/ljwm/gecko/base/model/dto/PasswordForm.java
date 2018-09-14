@@ -21,6 +21,7 @@ public class PasswordForm {
   @NotBlank(message = "请输入验证码！")
   private String checkCode;
 
+  @Pattern(regexp="^.{6,}$",message="请输入6位以上！")
   @ApiModelProperty("密码")
   private String password;
 }

@@ -24,10 +24,10 @@ public class GeckoGeneratorTest {
         .url("jdbc:mysql://192.168.8.208:3306/geckodb?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8")
         .username("root")
         .password("root")
-        .created(true)    // 第一次建类用创建
+        .created(false)    // 第一次建类用创建
         .idType(IdType.AUTO)
         .tables(new String[]{
-          "t_qualification"})
+          "t_company"})
         .build()
     );
   }

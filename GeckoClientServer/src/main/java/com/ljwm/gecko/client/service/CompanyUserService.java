@@ -1,21 +1,26 @@
 package com.ljwm.gecko.client.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
+import com.ljwm.gecko.base.entity.Company;
 import com.ljwm.gecko.base.entity.CompanyUser;
 import com.ljwm.gecko.base.entity.NaturalPerson;
 import com.ljwm.gecko.base.enums.ActivateEnum;
+import com.ljwm.gecko.base.mapper.CompanyMapper;
 import com.ljwm.gecko.base.mapper.CompanyUserMapper;
 import com.ljwm.gecko.base.mapper.NaturalPersonMapper;
 import com.ljwm.gecko.base.model.dto.MemberComForm;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
 import com.ljwm.gecko.client.model.dto.InactiveForm;
 import com.ljwm.gecko.client.model.dto.MemberForm;
+import com.ljwm.gecko.client.model.vo.CompanyVo;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +38,9 @@ public class CompanyUserService {
   CompanyUserMapper companyUserMapper;
 
   @Autowired
+  CompanyMapper companyMapper;
+
+  @Autowired
   NaturalPersonMapper naturalPersonMapper;
 
   public Result memberEnterCom(MemberComForm memberComForm) {
@@ -42,7 +50,17 @@ public class CompanyUserService {
 
   public Result findCompany() {
     Long memberId = SecurityKit.currentId();
-    return Result.success(companyUserMapper.findCompany(memberId));
+    List<Company> list = companyMapper.findCompany(memberId);
+    if(CollectionUtil.isNotEmpty(list)){
+      List<CompanyVo> companyVoList = new ArrayList<>();
+      for (Company company: list) {
+        CompanyVo companyVo = new CompanyVo();
+        BeanUtil.copyProperties(company, companyVo);
+        companyVoList.add(companyVo);
+        return Result.success(companyVoList);
+      }
+    }
+    return Result.success(null);
   }
 
   public Result inactiveCompany(MemberForm memberForm) {

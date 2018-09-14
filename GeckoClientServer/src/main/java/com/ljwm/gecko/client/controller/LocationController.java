@@ -67,7 +67,7 @@ public class LocationController extends BaseController {
 
   @PostMapping("/findName")
   @ApiOperation("根据code返回name")
-  public  Result getNameByCode(@RequestParam Integer code){
+  public  Result getNameByCode(@RequestParam String code){
     return success(locationService.getNameByCode(code));
   }
 

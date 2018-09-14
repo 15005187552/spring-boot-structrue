@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.Date;
@@ -50,6 +51,7 @@ public class CompanyService {
   @Autowired
   CompanyUserMapper companyUserMapper;
 
+  @Transactional
   public Result commit(CompanyForm companyForm) {
 
     Company company = new Company();
@@ -103,9 +105,6 @@ public class CompanyService {
     if(CollectionUtil.isNotEmpty(list)){
       Company company = list.get(0);
       CompanyVo companyVo = new CompanyVo();
-      companyVo.setProvince(locationService.getNameByCode(company.getProvCode()));
-      companyVo.setCity(locationService.getNameByCode(company.getCityCode()));
-      companyVo.setArea(locationService.getNameByCode(company.getAreaCode()));
       BeanUtil.copyProperties(company, companyVo);
       if(StrUtil.isNotBlank(company.getPicPath())) {
         companyVo.setFilePath(appInfo.getWebPath() + company.getPicPath());

@@ -33,7 +33,7 @@ public class LocationService {
     return locationDao.getProvinceCode(name);
   }
 
-  public String getNameByCode(Integer code) {
+  public String getNameByCode(String code) {
     return locationDao.getNameByCode(code);
   }
 }
