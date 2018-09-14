@@ -1,13 +1,13 @@
-package com.ljwm.gecko.admin.enums;
+package com.ljwm.gecko.base.enums;
 
 import lombok.Getter;
 
 @Getter
-public enum  CompanyValidateEnum {
+public enum CompanyValidateEnum {
 
-  UNVALIDATE(0,"未认证"),
-  PASSVALIDATE(1,"认证通过"),
-  REJECTVALIDATE(1,"认证失败");
+  UN_VALIDATE(0,"未认证"),
+  PASS_VALIDATE(1,"认证通过"),
+  REJECT_VALIDATE(1,"认证失败");
 
   private Integer code;
   private String name;

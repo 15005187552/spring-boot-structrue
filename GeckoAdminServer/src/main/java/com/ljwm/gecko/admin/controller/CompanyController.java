@@ -3,22 +3,20 @@ package com.ljwm.gecko.admin.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.controller.BaseController;
-import com.ljwm.gecko.admin.enums.CompanyValidateEnum;
 import com.ljwm.gecko.admin.model.form.CompanyCheckForm;
 import com.ljwm.gecko.admin.model.form.CompanyQuery;
 import com.ljwm.gecko.admin.service.CompanyService;
 import com.ljwm.gecko.base.enums.CompanyType;
+import com.ljwm.gecko.base.enums.CompanyValidateEnum;
 import com.ljwm.gecko.base.model.dto.AdminCompanyDto;
 import com.ljwm.gecko.base.model.vo.UnValidateCompanyVo;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.ljwm.bootbase.dto.Result;
 
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,7 +30,7 @@ public class CompanyController extends BaseController {
   @PostMapping("findUnValidate")
   @ApiOperation("获取未审核公司--分页")
   public Result<Page<UnValidateCompanyVo>> findUnValidate(@RequestBody CompanyQuery query) {
-    query.setValidateStatus(CompanyValidateEnum.UNVALIDATE.getCode());
+    query.setValidateStatus(CompanyValidateEnum.UN_VALIDATE.getCode());
     return success(companyService.findUnValidate(query));
   }
 
