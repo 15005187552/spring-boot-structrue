@@ -38,6 +38,7 @@ public class Member implements Serializable {
     private Long id;
 
     @ApiModelProperty("会员姓名")
+    @TableField("`NAME`")
     private String name;
 
     @ApiModelProperty(value = "注册手机号")
