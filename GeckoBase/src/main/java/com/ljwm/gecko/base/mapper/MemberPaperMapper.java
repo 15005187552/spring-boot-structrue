@@ -18,4 +18,6 @@ import java.util.List;
 @Component
 public interface MemberPaperMapper extends BaseMapper<MemberPaper> {
   List<MemberPaperVo> findMemberPaperVoListByMemberId(Long memberId);
+
+  List<MemberPaperVo> findCheckedMemberPaperVoListByMemberId(Long memberId);
 }

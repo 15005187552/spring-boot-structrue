@@ -27,7 +27,11 @@
     </resultMap>
 
     <select id="findMemberPaperVoListByMemberId" parameterType="long" resultMap="memberPaperVo">
-      select t.*  from t_member_paper t where t.MEMBER_ID=#{memberId}
+      select  tmp.*  from t_member tm,t_member_paper tmp WHERE tm.MEMBER_ID=#{memberId} and tm.ID=tmp.MEMBER_ID and tm.VERSION=tmp.VERSION
+    </select>
+
+    <select id="findCheckedMemberPaperVoListByMemberId" parameterType="long" resultMap="memberPaperVo">
+      select  tmp.*  from t_member tm,t_member_paper tmp WHERE tm.MEMBER_ID=#{memberId} and tmp.VALIDATE_STATE=2 and tm.ID=tmp.MEMBER_ID and tm.VERSION=tmp.VERSION
     </select>
 
 </mapper>

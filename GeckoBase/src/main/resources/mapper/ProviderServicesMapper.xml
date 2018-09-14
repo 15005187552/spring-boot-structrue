@@ -20,4 +20,12 @@
           `ID`          ,`SERVICE_ID`          ,`PROVIDER_ID`          ,`VALIDATE_STATE`          ,`VALIDATOR_ID`          ,`VALIDATE_TIME`          ,`VALIDATE_TEXT`          ,`CREATE_TIME`          ,`UPDATE_TIME`
     </sql>
 
+    <resultMap id="providerServicesVo" type="com.ljwm.gecko.base.model.vo.ProviderServicesVo" extends="BaseResultMap">
+
+    </resultMap>
+
+    <select id="findByProviderId" parameterType="long" resultMap="providerServicesVo">
+      SELECT *  from t_provider tp,t_provider_services tps where tp.ID=#{providerId} and  tp.ID=tps.PROVIDER_ID and tp.VERSION = tps.VERSION
+    </select>
+
 </mapper>

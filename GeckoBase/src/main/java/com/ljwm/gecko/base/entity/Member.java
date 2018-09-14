@@ -108,4 +108,7 @@ public class Member implements Serializable {
 
     public static final String PIC_PASSPORT = "`PIC_PASSPORT`";
 
+    public static final String NAME = "`NAME`";
+
+
 }

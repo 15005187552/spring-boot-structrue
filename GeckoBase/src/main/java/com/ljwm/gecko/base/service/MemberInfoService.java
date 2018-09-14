@@ -105,7 +105,6 @@ public class MemberInfoService {
       throw new LogicException(ResultEnum.DATA_ERROR, "个人资质证件不能为空!");
     }
     member.setMemberIdcard(memberDto.getMemberIdcard());
-    member.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
     member.setName(memberDto.getName());
     File file = new File(appInfo.getFilePath() + Constant.MEMBER + member.getId());
     if (!file.exists()) {
@@ -142,7 +141,7 @@ public class MemberInfoService {
       }
     }
     member.setVersion(member.getVersion()+1);
-    memberMapper.updateById(member);
+    Integer validateStatus = member.getValidateState();
     for (FileDto fileDto : fileDtoList) {
       if (fileDto.getId()!=null){
        MemberPaper memberPaper = memberPaperMapper.selectById(fileDto.getId());
@@ -173,6 +172,7 @@ public class MemberInfoService {
          tempPaper.setVersion(member.getVersion());
          tempPaper.setId(null);
          tempPaper.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
+         validateStatus = ValidateStatEnum.WAIT_CONFIRM.getCode();
          memberPaperMapper.insert(tempPaper);
          for (String fileName : fileDto.getFileNameList()){
            PaperPath paperPath = new PaperPath();
@@ -203,6 +203,7 @@ public class MemberInfoService {
         memberPaper.setCreateTime(DateUtil.date());
         memberPaper.setUpdateTime(DateUtil.date());
         memberPaper.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
+        validateStatus = ValidateStatEnum.WAIT_CONFIRM.getCode();
         memberPaper.setVersion(member.getVersion());
         memberPaperMapper.insert(memberPaper);
         for (String fileName : fileNameList){
@@ -218,6 +219,8 @@ public class MemberInfoService {
         }
       }
     }
+    member.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
+    memberMapper.updateById(member);
   }
 
   public MemberVo findMemberVoByRegMobile(String regMobile) {

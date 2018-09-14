@@ -35,7 +35,7 @@ public class ProviderServices implements Serializable {
 
     @ApiModelProperty(value = "ID")
     @TableId(value = "`ID`", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     @ApiModelProperty(value = "服务分类ID")
     @TableField("`SERVICE_ID`")
@@ -43,11 +43,11 @@ public class ProviderServices implements Serializable {
 
     @ApiModelProperty(value = "服务商ID")
     @TableField("`PROVIDER_ID`")
-    private Integer providerId;
+    private Long providerId;
 
     @ApiModelProperty(value = "审核状态  1 待审核 2 审核通过 3 审核失败")
     @TableField("`VALIDATE_STATE`")
-    private Boolean validateState;
+    private Integer validateState;
 
     @ApiModelProperty(value = "认证人id")
     @TableField("`VALIDATOR_ID`")
@@ -64,6 +64,10 @@ public class ProviderServices implements Serializable {
     private Date createTime;
     @TableField("`UPDATE_TIME`")
     private Date updateTime;
+
+    @ApiModelProperty("版本号")
+    @TableField("`VERSION`")
+    private Integer version;
 
 
     public static final String ID = "`ID`";

@@ -10,6 +10,10 @@ import java.util.List;
 @Accessors(chain = true)
 public class ProviderDto {
 
+
+  @ApiModelProperty("服务商id")
+  private Long id;
+
   @ApiModelProperty(value = "会员id",hidden = true)
   private Long memberId;
 

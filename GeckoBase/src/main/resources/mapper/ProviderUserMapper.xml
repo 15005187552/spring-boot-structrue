@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.ProviderUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.ProviderUser">
+        <id column="ID" property="id" />
+        <result column="PROVIDER_ID" property="providerId" />
+        <result column="MEMBER_ID" property="memberId" />
+        <result column="ROLES_CODE" property="rolesCode" />
+        <result column="CREATE_TIME" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`PROVIDER_ID`          ,`MEMBER_ID`          ,`ROLES_CODE`          ,`CREATE_TIME`
+    </sql>
+
+    <delete id="delete" parameterType="long">
+      delete from t_provider_user where PROVIDER_ID=#{providerId}
+    </delete>
+
+</mapper>

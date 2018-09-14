@@ -35,7 +35,7 @@ public class Provider implements Serializable {
 
     @ApiModelProperty(value = "入驻服务商")
     @TableId(value = "ID", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     @ApiModelProperty(value = "服务商名称")
     @TableField("NAME")
@@ -97,6 +97,9 @@ public class Provider implements Serializable {
     @TableField("PIC_PATH")
     private String picPath;
 
+    @ApiModelProperty(value = "版本号")
+    @TableField("VERSION")
+    private Integer version;
 
     public static final String ID = "ID";
 

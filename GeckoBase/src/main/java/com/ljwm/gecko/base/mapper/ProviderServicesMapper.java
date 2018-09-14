@@ -2,6 +2,10 @@ package com.ljwm.gecko.base.mapper;
 
 import com.ljwm.gecko.base.entity.ProviderServices;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ljwm.gecko.base.model.vo.ProviderServicesVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2018-09-13
  */
 public interface ProviderServicesMapper extends BaseMapper<ProviderServices> {
-
+  List<ProviderServicesVo> findByProviderId(@Param("providerId") Long providerId);
 }

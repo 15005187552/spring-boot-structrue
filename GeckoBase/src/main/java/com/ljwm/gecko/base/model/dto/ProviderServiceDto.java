@@ -14,6 +14,7 @@ public class ProviderServiceDto {
   @ApiModelProperty("服务id")
   private Integer serviceId;
 
-  @ApiModelProperty("服务商id")
+  @ApiModelProperty(value = "服务商id",hidden = true)
   private Long providerId;
+
 }
