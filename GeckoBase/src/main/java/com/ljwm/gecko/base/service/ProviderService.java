@@ -80,10 +80,6 @@ public class ProviderService {
         throw new LogicException(ResultEnum.DATA_ERROR, "请添加资质认证人!");
       }
     }
-    if (CollectionUtils.isEmpty(providerDto.getServiceIds())) {
-      log.info("会员id:{} 服务类型不能为空!", providerDto.getMemberId());
-      throw new LogicException(ResultEnum.DATA_ERROR, "服务类型不能为空!");
-    }
     List<Long> memberIds = Lists.newArrayList();
     memberIds.add(providerDto.getMemberId());
     if (CollectionUtils.isNotEmpty(providerDto.getMemberIds())) {
@@ -114,15 +110,6 @@ public class ProviderService {
       provider.setPicPath(Constant.PROVIDER + member.getId() + "/" + providerDto.getPicPath());
     }
     providerMapper.insert(provider);
-
-
-
-    //插入服务商服务表
-    commonMapper.batchInsert(
-      Kv.by(SqlFactory.TABLE, "t_provider_service")
-        .set(SqlFactory.COLUMNS, new String[]{"SERVICE_ID", "PROVIDER_ID"})
-        .set(SqlFactory.VALUES, new HashSet<>(providerDto.getServiceIds()).stream().map(roleId -> new String[]{roleId + "", provider.getId() + ""}).collect(Collectors.toList()))
-    );
   }
 
   public Page<ProviderVo> findByPage(ProviderQueryDto query) {
