@@ -34,7 +34,7 @@ public interface CompanyUserMapper extends BaseMapper<CompanyUser> {
     "WHERE a.MEMBER_ID = b.MEMBER_ID\n" +
     "AND b.ID = c.COMPANY_USER_ID\n" +
     "AND b.DISABLED = #{disableCode}\n" +
-    "AND b.ACTIVATED = #{ActivateCode}\n" +
+    "AND b.ACTIVATED = #{activateCode}\n" +
     "AND b.COMPANY_ID = #{companyId}")
   @ResultMap("EmployeeVo")
   List<EmployeeVo> selectEmployee(@Param("companyId") String companyId, @Param("disableCode")Integer disableCode, @Param("activateCode")Integer activateCode);

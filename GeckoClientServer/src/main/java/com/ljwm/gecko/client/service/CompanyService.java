@@ -20,6 +20,7 @@ import com.ljwm.gecko.base.utils.Fileutil;
 import com.ljwm.gecko.client.model.dto.CompanyForm;
 import com.ljwm.gecko.client.model.vo.CompanyVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -134,5 +135,18 @@ public class CompanyService {
       return Result.success("成功！");
     }
     return Result.fail("请先提交公司信息！");
+  }
+
+  public Result findCompanyById(String companyId) {
+    Map<String, Object> map = new HashedMap();
+    map.put("ID", companyId);
+    List<Company> list = companyMapper.selectByMap(map);
+    if (CollectionUtil.isNotEmpty(list)) {
+      Company company = list.get(0);
+      CompanyVo companyVo = new CompanyVo();
+      BeanUtil.copyProperties(company, companyVo);
+      return Result.success(companyVo);
+    }
+    return Result.success("该公司不存在！");
   }
 }

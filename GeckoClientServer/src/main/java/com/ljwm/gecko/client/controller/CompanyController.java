@@ -5,6 +5,7 @@ import com.ljwm.gecko.base.model.dto.SpecailForm;
 import com.ljwm.gecko.client.model.dto.CompanyForm;
 import com.ljwm.gecko.client.service.CompanyService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,12 +37,19 @@ public class CompanyController {
   }
 
   @PostMapping("/findEmployee")
-  @ApiOperation("根据公司名搜索审核通过的公司")
+  @ApiOperation("根据公司名搜索员工")
   public Result findEmployee(@RequestParam("companyId") String companyId){
     return companyService.findEmployee(companyId);
   }
 
+  @PostMapping("/findCompanyById")
+  @ApiOperation("根据公司id搜索公司信息")
+  public Result findCompanyById(@RequestParam("companyId") String companyId){
+    return companyService.findCompanyById(companyId);
+  }
+
   @PostMapping("/postSpecial")
+  @ApiModelProperty("上传公司五险一金项")
   public Result postSpecial(@RequestBody SpecailForm specailForm){
     return companyService.postSpecial(specailForm);
   }
