@@ -1,13 +1,8 @@
 package com.ljwm.gecko.base.utils;
 
-import com.alibaba.fastjson.JSONObject;
-import com.ljwm.gecko.base.enums.CompanyType;
 import com.ljwm.gecko.base.listener.CommonEnum;
-import org.apache.commons.lang3.EnumUtils;
 
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Janiffy
@@ -26,6 +21,20 @@ public class EnumUtil {
         return _enum;
     return null;
   }
+
+  /**
+   * 返回指定编码的'枚举'
+   * @param code
+   * @return SharedObjTypeEnum
+   * @throws
+   */
+  public static <T extends CommonEnum> String getNameBycode(Class<T> clazz, int code) {
+    for(T _enum : clazz.getEnumConstants())
+      if(code == _enum.getCode())
+        return _enum.getName();
+    return null;
+  }
+
 
   /**
    * 返回指定编码的'枚举'

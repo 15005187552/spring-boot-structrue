@@ -1,5 +1,6 @@
 package com.ljwm.gecko.client.model.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class ResultMe {
 
   private Long id;
   private String username;
+  @JSONField(name = "regMobile")
   private String phoneNum;
   private String nickName;
   private String extInfo;

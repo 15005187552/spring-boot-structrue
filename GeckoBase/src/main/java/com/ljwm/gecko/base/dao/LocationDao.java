@@ -72,7 +72,7 @@ public class LocationDao {
     return null;
   }
 
-  public String getNameByCode(Integer code) {
+  public String getNameByCode(String code) {
     Map<String ,Object> map = new HashMap<>();
     map.put("CODE", code);
     List<Location> list = locationMapper.selectByMap(map);

@@ -91,15 +91,15 @@ public class Company implements Serializable {
 
     @ApiModelProperty(value = "省级代码")
     @TableField("`PROV_CODE`")
-    private Integer provCode;
+    private String provCode;
 
     @ApiModelProperty(value = "市级代码")
     @TableField("`CITY_CODE`")
-    private Integer cityCode;
+    private String cityCode;
 
     @ApiModelProperty(value = "区级代码")
     @TableField("`AREA_CODE`")
-    private Integer areaCode;
+    private String areaCode;
 
     @ApiModelProperty(value = "详细地址")
     @TableField("`ADDRESS`")

@@ -1,5 +1,6 @@
 package com.ljwm.gecko.client.model.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -26,7 +27,8 @@ public class CompanyForm {
   @ApiModelProperty(value = "手机号码")
   private String phoneNum;
 
-  @ApiModelProperty(value = "证照图片文件")
+  @ApiModelProperty(value = "证照图片文件", name = "picPath")
+  @JSONField(name = "picPath")
   private String filePath;
 
   @ApiModelProperty(value = "省级代码")
