@@ -19,6 +19,7 @@ import com.ljwm.gecko.client.model.vo.CompanyVo;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class CompanyUserService {
   @Autowired
   NaturalPersonMapper naturalPersonMapper;
 
+  @Transactional
   public Result memberEnterCom(MemberComForm memberComForm) {
     companyUserDao.insertOrUpdate(memberComForm.getMemberId(), memberComForm.getCompanyId(), memberComForm.getRoleCode());
     return Result.success("成功！");
@@ -71,6 +73,7 @@ public class CompanyUserService {
     return Result.success(list);
   }
 
+  @Transactional
   public Result enterCompany(InactiveForm inactiveForm) {
     Map<String, Object> map = new HashedMap();
     map.put("COMPANY_ID", inactiveForm.getCompanyId());

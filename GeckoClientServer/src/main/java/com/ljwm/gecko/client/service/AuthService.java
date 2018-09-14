@@ -52,7 +52,6 @@ public class AuthService {
 
   @Transactional
   public ResultMe login(GuestForm guestForm) {
-
     UserSource userSource = UserSource.codeOf(guestForm.getSource());
     Guest guest = null;
     if(guestForm.getSource() == null ||guestForm.getSource() != UserSource.WX_APP.getCode()) {
@@ -96,7 +95,6 @@ public class AuthService {
       resultMe.setToken(JwtKit.generateToken(jwtUser));
       return resultMe;
     }
-
     MemberVo memberVo = memberInfoService.selectMemberInfo(guest.getMemberId(), LoginType.WX_APP.getCode());
     JwtUser jwtUser = new JwtUser(memberVo);
     ResultMe resultMe = new ResultMe();

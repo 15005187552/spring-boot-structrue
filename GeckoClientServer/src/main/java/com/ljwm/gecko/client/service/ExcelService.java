@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
@@ -58,6 +59,7 @@ public class ExcelService {
   @Autowired
   LocationDao locationDao;
 
+  @Transactional
   public void improtPersonInfo(MultipartFile file, Long companyId) throws Exception {
     Map<String, Object> findMap = new HashedMap();
     findMap.put("MEMBER_ID", 3);
@@ -188,6 +190,7 @@ public class ExcelService {
   }
 
 
+  @Transactional
   public void improtAttendance(MultipartFile file, Long companyId, String date) throws Exception {
     Map<String, Object> findMap = new HashedMap();
     findMap.put("MEMBER_ID", 3);

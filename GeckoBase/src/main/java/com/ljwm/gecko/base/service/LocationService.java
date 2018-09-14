@@ -4,6 +4,7 @@ import com.ljwm.gecko.base.dao.LocationDao;
 import com.ljwm.gecko.base.entity.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class LocationService {
   @Autowired
   LocationDao locationDao;
 
+  @Transactional
   public void insertOrUpdate(Location location) {
     locationDao.insertOrUpdate(location);
   }

@@ -1,13 +1,10 @@
 package com.ljwm.gecko.base.service;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Kv;
-import com.ljwm.bootbase.dto.SqlFactory;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.mapper.CommonMapper;
@@ -27,7 +24,6 @@ import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.model.vo.LoginVo;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.utils.Fileutil;
-import com.ljwm.gecko.base.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +31,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author Janiffy
@@ -80,6 +74,7 @@ public class MemberInfoService {
     return memberInfoDao.selectMemberInfo(memberId, code);
   }
 
+  @Transactional
   public Long updateExt(String mpOpenId, String extInfo, Integer code) {
     return memberInfoDao.updateAccount(mpOpenId, extInfo, code);
   }
@@ -92,6 +87,7 @@ public class MemberInfoService {
     return memberInfoDao.selectMember(memberId);
   }
 
+  @Transactional
   public void updateMember(String nickName, Long memberId) {
     memberInfoDao.updateMember(nickName, memberId);
   }

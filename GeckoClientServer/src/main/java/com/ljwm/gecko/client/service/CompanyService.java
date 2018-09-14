@@ -126,6 +126,7 @@ public class CompanyService {
     return Result.success(null);
   }
 
+  @Transactional
   public Result postSpecial(SpecailForm specailForm) {
     Company company = companyMapper.selectById(specailForm.getCompanyId());
     if (company != null){

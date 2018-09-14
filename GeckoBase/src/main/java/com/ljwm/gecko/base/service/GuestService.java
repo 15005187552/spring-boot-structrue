@@ -7,6 +7,7 @@ import com.ljwm.gecko.base.mapper.GuestMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
@@ -23,6 +24,7 @@ public class GuestService {
   @Autowired
   private GuestMapper guestMapper;
 
+  @Transactional
   public Guest upsert(UserSource userSource, String guestId, String extInfo) {
 
     Guest guest = null;

@@ -14,6 +14,7 @@ import com.ljwm.gecko.client.model.dto.*;
 import com.ljwm.gecko.client.model.vo.TaxVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class TaxDeclarationService {
   @Autowired
   CommonService commonService;
 
+  @Transactional
   public Result commit(TaxForm taxForm) {
     Tax tax = new Tax();
     BeanUtil.copyProperties(taxForm, tax);
@@ -81,7 +83,6 @@ public class TaxDeclarationService {
   }
 
   public Result declareType(RecordForm recordForm) {
-
     return Result.success(commonService.find(recordForm, (p, q) -> taxInfoDao.selectByPage(p, BeanUtil.beanToMap(recordForm))));
   }
 

@@ -18,6 +18,7 @@ import com.ljwm.gecko.client.model.vo.CalcVo;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -43,6 +44,7 @@ public class CalcService {
   @Autowired
   GuestMapper guestMapper;
 
+  @Transactional
   public Result calc(CalcForm calcForm) {
     Integer code = calcForm.getCode();
     BigDecimal enterMoney = calcForm.getMoney();

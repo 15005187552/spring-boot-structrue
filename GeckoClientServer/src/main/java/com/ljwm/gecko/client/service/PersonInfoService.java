@@ -12,6 +12,7 @@ import com.ljwm.gecko.client.model.dto.PersonInfoForm;
 import com.ljwm.gecko.client.model.vo.NaturalPersonVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.Date;
@@ -28,6 +29,7 @@ public class PersonInfoService {
   @Autowired
   NaturalPersonMapper naturalPersonMapper;
 
+  @Transactional
   public Result commit(PersonInfoForm personInfoForm){
     NaturalPerson naturalPerson = new NaturalPerson();
     naturalPerson.setMemberId(personInfoForm.getMemberId())

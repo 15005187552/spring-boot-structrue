@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -51,6 +52,7 @@ public class RegisterService {
   @Autowired
   GuestMapper guestMapper;
 
+  @Transactional
   public Result getSMS(RegisterForm registerForm, HttpServletRequest request) {
     Long memberId = memberInfoDao.select(registerForm.getPhoneNum());
     if (memberId != null){
@@ -91,6 +93,7 @@ public class RegisterService {
     return "123456";
   }
 
+  @Transactional
   public Result register(RegisterMemberForm registerMemberForm) {
     //根据手机号跟验证码查询是否输入正确，正确即注册成为会员
     String code = registerMemberForm.getCheckCode();
@@ -134,6 +137,7 @@ public class RegisterService {
     return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");
   }
 
+  @Transactional
   public Result registerPC(RegisterPCForm registerPCForm) {
     //根据手机号跟验证码查询是否输入正确，正确即注册成为会员
     String code = registerPCForm.getCheckCode();
@@ -168,6 +172,7 @@ public class RegisterService {
     return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");
   }
 
+  @Transactional
   public Result setPasswordWX(PasswordForm passwordForm) {
     String code = passwordForm.getCheckCode();
     String phoneNum = passwordForm.getPhoneNum();
@@ -195,6 +200,7 @@ public class RegisterService {
     return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");
   }
 
+  @Transactional
   public Result modifyPassword(ModifyPasswordForm modifyPasswordForm) {
     String phoneNum = modifyPasswordForm.getPhoneNum();
     String oldPassword = modifyPasswordForm.getOldPassword();
