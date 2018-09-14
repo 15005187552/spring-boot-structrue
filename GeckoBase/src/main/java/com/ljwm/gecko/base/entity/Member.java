@@ -81,6 +81,10 @@ public class Member implements Serializable {
     @TableField("`PIC_PASSPORT`")
     private String picPassport;
 
+    @ApiModelProperty(value = "版本号")
+    @TableField("`VERSION`")
+    private Integer version;
+
 
     public static final String ID = "`ID`";
 

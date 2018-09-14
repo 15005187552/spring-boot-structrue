@@ -19,6 +19,9 @@ public class FileDto {
   @ApiModelProperty("证件类型id")
   private Integer paperId;
 
+  @ApiModelProperty("是否修改 0 未修改  1 已修改")
+  private Integer isChange;
+
   @ApiModelProperty("文件名称")
   private List<String> fileNameList;
 }

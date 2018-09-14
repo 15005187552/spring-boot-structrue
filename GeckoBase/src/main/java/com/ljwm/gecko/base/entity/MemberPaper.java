@@ -59,6 +59,10 @@ public class MemberPaper implements Serializable {
     @TableField("`UPDATE_TIME`")
     private Date updateTime;
 
+    @ApiModelProperty("版本号")
+    @TableField("VERSION")
+    private Integer version;
+
 
     public static final String ID = "`ID`";
 

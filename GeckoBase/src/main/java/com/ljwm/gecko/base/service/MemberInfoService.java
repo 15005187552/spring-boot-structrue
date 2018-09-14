@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -107,7 +108,6 @@ public class MemberInfoService {
       log.info("根据会员id:{}个人资质证件不能为空!", memberDto.getId());
       throw new LogicException(ResultEnum.DATA_ERROR, "个人资质证件不能为空!");
     }
-
     member.setMemberIdcard(memberDto.getMemberIdcard());
     member.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
     member.setName(memberDto.getName());
@@ -145,6 +145,7 @@ public class MemberInfoService {
         member.setPicPassport(Constant.MEMBER + member.getId() + "/" + memberDto.getPicPassport());
       }
     }
+    member.setVersion(member.getVersion()+1);
     memberMapper.updateById(member);
     for (FileDto fileDto : fileDtoList) {
       if (fileDto.getId()!=null){
@@ -153,28 +154,46 @@ public class MemberInfoService {
          log.info("会员{}资质认证详情查询不到该详情信息!",memberDto.getId());
          throw new LogicException(ResultEnum.DATA_ERROR,"查询不到该资质详情!");
        }
-       if (Objects.equals(memberPaper.getValidateState(),ValidateStatEnum.CONFIRM_SUCCESS.getCode())){
-         continue;
-       }
-       //如果为失败状态
-       if (Objects.equals(memberPaper.getValidateState(),ValidateStatEnum.CONFIRM_FAILED.getCode())|| Objects.equals(memberPaper.getValidateState(),ValidateStatEnum.WAIT_CONFIRM.getCode())){
-         paperPathMapper.delete(memberPaper.getId());
-          for (String fileName : fileDto.getFileNameList()){
-            PaperPath paperPath = new PaperPath();
-            if (fileName.contains(Constant.MEMBER)){
-              paperPath.setMemberPaperId(memberPaper.getId());
-              paperPath.setPicPath(fileName);
-            }else {
-              String srcPath = appInfo.getFilePath() + Constant.CACHE + fileName;
-              String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
-              Fileutil.cutGeneralFile(srcPath, destDir);
-              paperPath.setPicPath(Constant.MEMBER + member.getId() + "/" + fileName);
-            }
-            paperPath.setMemberPaperId(memberPaper.getId());
-            paperPath.setCreateTime(DateUtil.date());
-            paperPath.setUpdateTime(DateUtil.date());
-            paperPathMapper.insert(paperPath);
-          }
+       //如果没有修改
+       if (Objects.equals(fileDto.getIsChange(),0)){
+         MemberPaper tempPaper = new MemberPaper();
+         BeanUtil.copyProperties(memberPaper,tempPaper);
+         tempPaper.setVersion(member.getVersion());
+         tempPaper.setId(null);
+         memberPaperMapper.insert(tempPaper);
+         for (String fileName : fileDto.getFileNameList()){
+           PaperPath paperPath = new PaperPath();
+           paperPath.setMemberPaperId(tempPaper.getId());
+           paperPath.setPicPath(fileName);
+           paperPath.setMemberPaperId(memberPaper.getId());
+           paperPath.setCreateTime(DateUtil.date());
+           paperPath.setUpdateTime(DateUtil.date());
+           paperPathMapper.insert(paperPath);
+         }
+       }else {
+          //修改了信息
+         MemberPaper tempPaper = new MemberPaper();
+         BeanUtil.copyProperties(memberPaper,tempPaper);
+         tempPaper.setVersion(member.getVersion());
+         tempPaper.setId(null);
+         tempPaper.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
+         memberPaperMapper.insert(tempPaper);
+         for (String fileName : fileDto.getFileNameList()){
+           PaperPath paperPath = new PaperPath();
+           if (fileName.contains(Constant.MEMBER)){
+             paperPath.setMemberPaperId(tempPaper.getId());
+             paperPath.setPicPath(fileName);
+           }else {
+             String srcPath = appInfo.getFilePath() + Constant.CACHE + fileName;
+             String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
+             Fileutil.cutGeneralFile(srcPath, destDir);
+             paperPath.setPicPath(Constant.MEMBER + member.getId() + "/" + fileName);
+           }
+           paperPath.setMemberPaperId(tempPaper.getId());
+           paperPath.setCreateTime(DateUtil.date());
+           paperPath.setUpdateTime(DateUtil.date());
+           paperPathMapper.insert(paperPath);
+         }
        }
       }else {
         List<String> fileNameList = fileDto.getFileNameList();
@@ -188,6 +207,7 @@ public class MemberInfoService {
         memberPaper.setCreateTime(DateUtil.date());
         memberPaper.setUpdateTime(DateUtil.date());
         memberPaper.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
+        memberPaper.setVersion(member.getVersion());
         memberPaperMapper.insert(memberPaper);
         for (String fileName : fileNameList){
           String srcPath = appInfo.getFilePath() + Constant.CACHE + fileName;
