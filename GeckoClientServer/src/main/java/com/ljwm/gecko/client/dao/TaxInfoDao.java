@@ -3,6 +3,7 @@ package com.ljwm.gecko.client.dao;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
@@ -204,5 +205,10 @@ public class TaxInfoDao {
       return list;
     }
     return null;
+  }
+
+  public List<Tax> selectByPage(Page<Tax> taxPage, Map map) {
+
+    return taxMapper.selectByPage(taxPage,map);
   }
 }

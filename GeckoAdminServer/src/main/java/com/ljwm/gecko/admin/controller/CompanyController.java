@@ -40,7 +40,6 @@ public class CompanyController extends BaseController {
     return success(companyService.find(query));
   }
 
-
   @GetMapping("getCompanyType")
   @ApiOperation("获取公司类型")
   public Result getCompanyType() {

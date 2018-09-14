@@ -3,6 +3,7 @@ package com.ljwm.gecko.client.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.Tax;
 import com.ljwm.gecko.base.model.vo.TaxIncomeVo;
 import com.ljwm.gecko.base.model.vo.TaxOtherReduceVo;
@@ -24,6 +25,9 @@ import java.util.List;
 public class TaxDeclarationService {
   @Autowired
   TaxInfoDao taxInfoDao;
+
+  @Autowired
+  CommonService commonService;
 
   public Result commit(TaxForm taxForm) {
     Tax tax = new Tax();
@@ -75,4 +79,10 @@ public class TaxDeclarationService {
     }
     return  Result.success(null);
   }
+
+  public Result declareType(RecordForm recordForm) {
+
+    return Result.success(commonService.find(recordForm, (p, q) -> taxInfoDao.selectByPage(p, BeanUtil.beanToMap(recordForm))));
+  }
+
 }
