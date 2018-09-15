@@ -47,4 +47,6 @@ public interface MemberMapper extends BaseMapper<Member> {
   List<MemberVo> findByPage(Page<MemberVo> ret, @Param("params") Kv params);
 
   MemberVo findMemberVoByMemberId(@Param("memberId") Long memberId);
+
+  List<MemberVo> findMemberVoListByProviderId(@Param("providerId") Long providerId);
 }

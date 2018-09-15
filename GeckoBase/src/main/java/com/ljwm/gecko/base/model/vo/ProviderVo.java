@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.ljwm.gecko.base.entity.Provider;
+import com.ljwm.gecko.base.entity.ProviderUser;
 import com.ljwm.gecko.base.entity.ServiceType;
 import com.ljwm.gecko.base.model.vo.admin.ServiceTypeTree;
 import com.ljwm.gecko.base.serializer.StatusWithNameSerializer;
@@ -24,11 +25,11 @@ public class ProviderVo extends Provider {
   @JSONField(serializeUsing = StatusWithNameSerializer.ProviderValidateStatSerializer.class)
   private Integer validateState;
 
-  private List<ProviderPaperVo> providerPaperVoList;
+  private List<ProviderServicesVo> providerServicesVoList;
 
-  private List<ServiceType> serviceTypes;
+  private List<MemberPaperVo> memberPaperVoList;
 
-  private List<ServiceTypeTree> serviceTypeTrees;
+  private List<MemberVo> memberVoList;
 
 
 }

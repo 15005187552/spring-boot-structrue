@@ -34,4 +34,24 @@
       select  tmp.*  from t_member tm,t_member_paper tmp WHERE tm.ID=#{memberId} and tmp.VALIDATE_STATE=2 and tm.ID=tmp.MEMBER_ID and tm.VERSION=tmp.VERSION
     </select>
 
+    <select id="findMemberPaperVoByProviderId" parameterType="long" resultMap="memberPaperVo">
+      SELECT DISTINCT
+        tp.*
+        FROM
+        t_paper tp
+        LEFT JOIN t_member_paper tmp ON tp.ID = tmp.PAPER_ID
+        WHERE
+        tmp.VALIDATE_STATE = 2
+        AND tmp.MEMBER_ID IN (
+        SELECT DISTINCT
+        tpu.MEMBER_ID
+        FROM
+        t_provider tp,
+        t_provider_user tpu
+        WHERE
+        tp.ID = tpu.PROVIDER_ID
+        AND tp.ID = #{providerId}
+      )
+    </select>
+
 </mapper>

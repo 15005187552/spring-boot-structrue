@@ -7,4 +7,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class ProviderServicesVo extends ProviderServices {
+
+  private ServeSimpleVo serveSimpleVo;
 }

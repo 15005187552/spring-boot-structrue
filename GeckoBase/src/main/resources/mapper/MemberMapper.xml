@@ -110,4 +110,8 @@
   <select id="findMemberVoByMemberId" parameterType="long" resultMap="MemberVo">
     select *  from t_member where MEMBER_ID=#{memberId}
   </select>
+
+  <select id="findMemberVoListByProviderId" parameterType="long" resultMap="MemberVo">
+    SELECT DISTINCT tpu.MEMBER_ID  FROM t_provider tp, t_provider_user tpu  WHERE  tp.ID = tpu.PROVIDER_ID  AND tp.ID = #{providerId}
+  </select>
 </mapper>

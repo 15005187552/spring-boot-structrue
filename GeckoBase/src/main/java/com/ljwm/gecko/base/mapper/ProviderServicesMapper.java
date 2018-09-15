@@ -16,5 +16,5 @@ import java.util.List;
  * @since 2018-09-13
  */
 public interface ProviderServicesMapper extends BaseMapper<ProviderServices> {
-  List<ProviderServicesVo> findByProviderId(@Param("providerId") Long providerId);
+  List<ProviderServicesVo> findProviderServicesVoListByProviderId(@Param("providerId") Long providerId);
 }

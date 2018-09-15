@@ -21,11 +21,11 @@
     </sql>
 
     <resultMap id="providerServicesVo" type="com.ljwm.gecko.base.model.vo.ProviderServicesVo" extends="BaseResultMap">
-
+        <association property="serveSimpleVo" column="SERVICE_ID" select="com.ljwm.gecko.base.mapper.ServiceTypeMapper.findById"/>
     </resultMap>
 
-    <select id="findByProviderId" parameterType="long" resultMap="providerServicesVo">
-      SELECT *  from t_provider tp,t_provider_services tps where tp.ID=#{providerId} and  tp.ID=tps.PROVIDER_ID and tp.VERSION = tps.VERSION
+    <select id="findProviderServicesVoListByProviderId" parameterType="long" resultMap="providerServicesVo">
+      SELECT DISTINCT tps.*  from t_provider tp,t_provider_services tps where tp.ID=#{providerId} and  tp.ID=tps.PROVIDER_ID and tp.VERSION = tps.VERSION
     </select>
 
 </mapper>
