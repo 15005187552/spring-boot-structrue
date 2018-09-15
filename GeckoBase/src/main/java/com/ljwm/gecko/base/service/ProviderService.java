@@ -238,10 +238,7 @@ public class ProviderService {
   public Page<ProviderVo> findByPage(ProviderQueryDto query) {
     Page<ProviderVo> page = commonService.find(query, (p, q) ->
       providerMapper.findByPage(p, BeanUtil.beanToMap(query)));
-    page.setRecords(page.getRecords().stream().map(temp ->
-      temp.setServiceTypeTrees(
-        ServiceTypeTree.createServiceTree(temp.getServiceTypes())
-      )).collect(Collectors.toList())
+    page.setRecords(page.getRecords().stream().collect(Collectors.toList())
     );
     return page;
   }
@@ -279,7 +276,7 @@ public class ProviderService {
       providerServicesMapper.updateById(providerServices);
     }
 
-    List<ProviderServicesVo> providerServicesVoList = providerServicesMapper.findByProviderId(confirmProviderDto.getId());
+    List<ProviderServicesVo> providerServicesVoList = providerServicesMapper.findProviderServicesVoListByProviderId(confirmProviderDto.getId());
     Integer providerValidateStatus = ValidateStatEnum.CONFIRM_SUCCESS.getCode();
     for (ProviderServicesVo providerServicesVo: providerServicesVoList){
       if (Objects.equals(providerServicesVo.getValidateState(),ValidateStatEnum.WAIT_CONFIRM.getCode())){

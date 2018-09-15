@@ -111,7 +111,12 @@
     select *  from t_member where MEMBER_ID=#{memberId}
   </select>
 
-  <select id="findMemberVoListByProviderId" parameterType="long" resultMap="MemberVo">
-    SELECT DISTINCT tpu.MEMBER_ID  FROM t_provider tp, t_provider_user tpu  WHERE  tp.ID = tpu.PROVIDER_ID  AND tp.ID = #{providerId}
+  <resultMap id="memberCheckVo" type="com.ljwm.gecko.base.model.vo.MemberVo" extends="BaseResultMap">
+    <collection property="memberPaperVoList" column="ID"
+                select="com.ljwm.gecko.base.mapper.MemberPaperMapper.findCheckedMemberPaperVoListByMemberId"/>
+  </resultMap>
+
+  <select id="findMemberVoListByProviderId" parameterType="long" resultMap="memberCheckVo">
+    SELECT t.* FROM t_member t where t.ID IN ( SELECT DISTINCT tpu.MEMBER_ID  FROM t_provider tp, t_provider_user tpu  WHERE  tp.ID = tpu.PROVIDER_ID  AND tp.ID = #{providerId})
   </select>
 </mapper>
