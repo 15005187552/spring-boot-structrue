@@ -19,6 +19,9 @@ public class PersonInfoForm {
   @ApiModelProperty(value = "会员ID")
   private Long memberId;
 
+  @ApiModelProperty(value = "纳税公司ID")
+  private Long companyId;
+
   @ApiModelProperty(value = "国籍 0-中国大陆 1-港澳台 2-外籍")
   private Integer country;
 
@@ -30,9 +33,6 @@ public class PersonInfoForm {
 
   @ApiModelProperty(value = "证件号")
   private String certNum;
-
-  @ApiModelProperty(value = "纳税公司ID")
-  private Long companyId;
 
   @ApiModelProperty(value = "社保属性 0-公司代缴 1-个人缴纳")
   private Integer socialSecu;

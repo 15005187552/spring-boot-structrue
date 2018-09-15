@@ -27,9 +27,7 @@ public interface CityItemMapper extends BaseMapper<CityItem> {
   List<RateVo> findByLoCode(Integer code);
 
 
-  @Select("SELECT  b.`NAME`,a.COMPANY_PER, a.PERSON_PER\n" +
-    "FROM t_city_item a INNER JOIN t_special_deduction b\n" +
-    "ON a.ITEM_TYPE = b.ID\n" +
+  @Select("SELECT  b.`NAME`,a.COMPANY_PER, a.PERSON_PER FROM t_city_item a INNER JOIN t_special_deduction b ON a.ITEM_TYPE = b.ID\n" +
     "AND a.REGION_CODE = #{code}\n" +
     "AND a.DISABLED =#{disableCode}")
   @ResultMap("SpecialPercentVo")

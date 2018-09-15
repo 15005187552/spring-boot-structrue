@@ -6,7 +6,7 @@ swagger2:
   version: "V1.0"
 jwt:
   route:
-    freeRouters: "/template/*,/auth/login,/auth/loginSys,/registerWX,/registerPC,/sendSMS,/enum/*,/company/*,/uploadfile,/person/*,/reportData/*,/tax/*,/index/*,/excel/**"
+    freeRouters: "/template/*,/auth/login,/auth/loginSys,/registerWX,/registerPC,/sendSMS,/enum/*,/uploadfile,/person/*,/reportData/*,/tax/*,/index/*,/excel/**"
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

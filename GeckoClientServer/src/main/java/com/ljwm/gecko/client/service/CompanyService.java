@@ -3,24 +3,28 @@ package com.ljwm.gecko.client.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
+import com.ljwm.gecko.base.entity.CityItem;
 import com.ljwm.gecko.base.entity.Company;
+import com.ljwm.gecko.base.entity.CompanySpecial;
 import com.ljwm.gecko.base.entity.CompanyUser;
 import com.ljwm.gecko.base.enums.*;
+import com.ljwm.gecko.base.mapper.CityItemMapper;
 import com.ljwm.gecko.base.mapper.CompanyMapper;
+import com.ljwm.gecko.base.mapper.CompanySpecialMapper;
 import com.ljwm.gecko.base.mapper.CompanyUserMapper;
 import com.ljwm.gecko.base.model.dto.SpecailForm;
+import com.ljwm.gecko.base.model.vo.CompanyVo;
 import com.ljwm.gecko.base.model.vo.EmployeeVo;
 import com.ljwm.gecko.base.service.LocationService;
 import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.base.utils.Fileutil;
 import com.ljwm.gecko.client.model.dto.CompanyForm;
-import com.ljwm.gecko.client.model.vo.CompanyVo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,9 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Janiffy
@@ -52,6 +54,12 @@ public class CompanyService {
   @Autowired
   CompanyUserMapper companyUserMapper;
 
+  @Autowired
+  CityItemMapper cityItemMapper;
+
+  @Autowired
+  CompanySpecialMapper companySpecialMapper;
+
   @Transactional
   public Result commit(CompanyForm companyForm) {
 
@@ -59,22 +67,34 @@ public class CompanyService {
     BeanUtils.copyProperties(companyForm, company);
     Date date = new Date();
     company.setValidateState(IdentificationType.NO_IDENTI.getCode())
-      .setUpdateTime(date).setCreaterId(SecurityKit.currentId())
-      .setDisabled(DisabledEnum.ENABLED.getCode());
-    Map<String, Object> map = new HashMap<>();
-    map.put("CODE", companyForm.getCode());
-    map.put("DISABLED", DisabledEnum.ENABLED.getCode());
-    List<Company> list = companyMapper.selectByMap(map);
-    if(CollectionUtil.isNotEmpty(list)){
-      company.setId(list.get(0).getId());
+      .setUpdateTime(date).setDisabled(DisabledEnum.ENABLED.getCode());
+    if(companyForm.getCompanyId() != null){
+      //更新操作
       companyMapper.updateById(company);
+      List<CompanySpecial> list = companyForm.getCompanySpecialList();
+      for (CompanySpecial companySpecial : list){
+        if (companySpecial.getId() != null){
+          companySpecialMapper.updateById(companySpecial);
+        }else {
+          companySpecialMapper.insert(companySpecial);
+        }
+      }
     } else {
-      company.setCreateTime(date);
+      company.setCreateTime(date).setCreaterId(SecurityKit.currentId());
       companyMapper.insert(company);
+      List<CityItem> list = cityItemMapper.selectList(new QueryWrapper<CityItem>().eq(CityItem.REGION_CODE, companyForm.getCityCode()));
+      for (CityItem cityItem : list){
+        CompanySpecial companySpecial = new CompanySpecial();
+        companySpecial.setCompanyPer(cityItem.getCompanyPer()).setPersonPer(cityItem.getCompanyPer())
+          .setSpecialId(cityItem.getItemType()).setCompanyId(company.getId());
+        companySpecialMapper.insert(companySpecial);
+      }
+      //把创建人添加到t_company_user
       int codeLenth = RoleCodeType.values().length;
       String[] code = new String[codeLenth];
-      code[codeLenth-RoleCodeType.ADMIN.getDigit()] = String.valueOf(RoleCodeType.ADMIN.getValue());
-      code[codeLenth-RoleCodeType.CREATOR.getDigit()] = String.valueOf(RoleCodeType.CREATOR.getValue());
+      for (RoleCodeType roleCodeType: RoleCodeType.values()){
+        code[codeLenth-roleCodeType.getDigit()] = String.valueOf(roleCodeType.getValue());
+      }
       code[codeLenth-RoleCodeType.ITIN.getDigit()] = "0";
       StringBuffer s = new StringBuffer();
       for(String str :code){
@@ -88,31 +108,25 @@ public class CompanyService {
         file.mkdirs();
       }
     }
-    if(StrUtil.isNotBlank(companyForm.getFilePath())&&companyForm.getFilePath().indexOf(Constant.HTTP) == -1) {
+    if(StrUtil.isNotBlank(companyForm.getFilePath())) {
       String srcPath = appInfo.getFilePath() + Constant.CACHE + companyForm.getFilePath();
       String destDir = appInfo.getFilePath()+Constant.COMPANY + company.getId()+ "/";
       Fileutil.cutGeneralFile(srcPath, destDir);
       company.setPicPath(Constant.COMPANY + company.getId() + "/" + companyForm.getFilePath());
     }
     companyMapper.updateById(company);
-    return Result.success("成功！");
+    CompanyVo companyVo = new CompanyVo();
+    BeanUtil.copyProperties(company, companyVo);
+    return Result.success(companyVo);
   }
 
   public Result findByName(String name) {
-    Map<String, Object> map = new HashMap<>();
-    map.put("NAME", name);
-    map.put("VALIDATE_STATE", IdentificationType.PASS_IDENTI.getCode());
-    List<Company> list = companyMapper.selectByMap(map);
-    if(CollectionUtil.isNotEmpty(list)){
-      Company company = list.get(0);
-      CompanyVo companyVo = new CompanyVo();
-      BeanUtil.copyProperties(company, companyVo);
-      if(StrUtil.isNotBlank(company.getPicPath())) {
-        companyVo.setFilePath(appInfo.getWebPath() + company.getPicPath());
-      }
-      return Result.success(companyVo);
-    }
-    return Result.success(null);
+  //  List<CompanyVo> list = companyMapper.findCompanyByName(name);
+    Company company  = companyMapper.selectOne(new QueryWrapper<Company>().eq(Company.ID, 18));
+    /*if (CollectionUtil.isNotEmpty(list)) {
+      return Result.success(list.get(0));
+    }*/
+    return Result.success(company);
   }
 
   public Result findEmployee(String companyId) {
@@ -139,15 +153,10 @@ public class CompanyService {
   }
 
   public Result findCompanyById(String companyId) {
-    Map<String, Object> map = new HashedMap();
-    map.put("ID", companyId);
-    List<Company> list = companyMapper.selectByMap(map);
+    List<CompanyVo> list = companyMapper.findCompanyById(companyId);
     if (CollectionUtil.isNotEmpty(list)) {
-      Company company = list.get(0);
-      CompanyVo companyVo = new CompanyVo();
-      BeanUtil.copyProperties(company, companyVo);
-      return Result.success(companyVo);
+      return Result.success(list.get(0));
     }
-    return Result.success("该公司不存在！");
+    return Result.success(null);
   }
 }

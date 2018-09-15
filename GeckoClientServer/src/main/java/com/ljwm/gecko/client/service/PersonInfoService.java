@@ -32,17 +32,7 @@ public class PersonInfoService {
   @Transactional
   public Result commit(PersonInfoForm personInfoForm){
     NaturalPerson naturalPerson = new NaturalPerson();
-    naturalPerson.setMemberId(personInfoForm.getMemberId())
-                  .setCountry(personInfoForm.getCountry())
-                  .setName(personInfoForm.getName())
-                  .setCertificate(personInfoForm.getCertificate())
-                  .setCertNum(personInfoForm.getCertNum())
-                  .setSocialSecu(personInfoForm.getSocialSecu())
-                  .setDisablityNum(personInfoForm.getDisablityNum())
-                  .setMatrtyrNum(personInfoForm.getMatrtyrNum())
-                  .setAcademicNum(personInfoForm.getAcademicNum())
-                  .setOldNum(personInfoForm.getOldNum())
-                  .setProfessorNum(personInfoForm.getProfessorNum());
+    BeanUtil.copyProperties(personInfoForm, naturalPerson);
     NaturalPerson naturalPersonFind = naturalPersonMapper.selectById(personInfoForm.getMemberId());
     if (naturalPersonFind != null) {
     } else {
@@ -54,27 +44,27 @@ public class PersonInfoService {
       }
     }
     String destDir = appInfo.getFilePath() + Constant.PERSON + naturalPerson.getMemberId() + "/";
-    if (StrUtil.isNotBlank(personInfoForm.getDisablityPath()) && personInfoForm.getDisablityPath().indexOf(Constant.HTTP) == -1) {
+    if (StrUtil.isNotBlank(personInfoForm.getDisablityPath())) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getDisablityPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
       naturalPerson.setDisablityPath(Constant.PERSON+ naturalPerson.getMemberId() + "/" + personInfoForm.getDisablityPath());
     }
-    if (StrUtil.isNotBlank(personInfoForm.getAcademicPath()) && personInfoForm.getAcademicPath().indexOf(Constant.HTTP) == -1) {
+    if (StrUtil.isNotBlank(personInfoForm.getAcademicPath())) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getAcademicPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
       naturalPerson.setAcademicPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getAcademicPath());
     }
-    if (StrUtil.isNotBlank(personInfoForm.getOldPath()) && personInfoForm.getOldPath().indexOf(Constant.HTTP) == -1) {
+    if (StrUtil.isNotBlank(personInfoForm.getOldPath())) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getOldPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
       naturalPerson.setOldPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getOldPath());
     }
-    if (StrUtil.isNotBlank(personInfoForm.getMatrtyrPath()) && personInfoForm.getMatrtyrPath().indexOf(Constant.HTTP) == -1) {
+    if (StrUtil.isNotBlank(personInfoForm.getMatrtyrPath())) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getMatrtyrPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
       naturalPerson.setMatrtyrPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getMatrtyrPath());
     }
-    if (StrUtil.isNotBlank(personInfoForm.getProfessorPath()) && personInfoForm.getProfessorPath().indexOf(Constant.HTTP) == -1) {
+    if (StrUtil.isNotBlank(personInfoForm.getProfessorPath())) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getProfessorPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
       naturalPerson.setProfessorPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getProfessorPath());

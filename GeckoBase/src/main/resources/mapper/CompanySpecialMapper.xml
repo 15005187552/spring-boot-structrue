@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.CompanySpecialMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.CompanySpecial">
+        <id column="ID" property="id" />
+        <result column="COMPANY_ID" property="companyId" />
+        <result column="SPECIAL_ID" property="specialId" />
+        <result column="COMPANY_PER" property="companyPer" />
+        <result column="PERSON_PER" property="personPer" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`COMPANY_ID`          ,`SPECIAL_ID`          ,`COMPANY_PER`          ,`PERSON_PER`
+    </sql>
+
+</mapper>

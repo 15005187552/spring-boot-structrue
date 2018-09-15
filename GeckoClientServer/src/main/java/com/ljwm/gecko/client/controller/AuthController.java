@@ -2,6 +2,7 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.client.model.dto.GuestForm;
 import com.ljwm.gecko.client.model.dto.LoginForm;
 import com.ljwm.gecko.client.security.JwtUser;
@@ -28,19 +29,20 @@ public class AuthController extends BaseController {
   @PostMapping("/login")
   @ApiOperation("小程序登录")
   public Result login(@RequestBody GuestForm guestForm) {
+
     return success(authService.login(guestForm));
   }
 
   @PostMapping("/loginSys")
   @ApiOperation("登录")
   public Result loginSys(@RequestBody LoginForm loginForm) {
-    return authService.loginSys(loginForm);
+    return Result.success(authService.loginSys(loginForm));
   }
 
   @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @GetMapping("me")
   @ApiOperation("当前用户信息")
   public Result me() {
-    return success(authService.me());
+    return success(authService.me(SecurityKit.currentUser()));
   }
 }

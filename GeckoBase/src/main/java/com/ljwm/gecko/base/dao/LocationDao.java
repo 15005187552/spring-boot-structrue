@@ -39,8 +39,8 @@ public class LocationDao {
 
   public Integer getProvinceCode(String name) {
     Map<String, Object> map = new HashMap<>();
-    map.put("NAME", name);
-    map.put("LEVEL", "0");
+    map.put(Location.NAME, name);
+    map.put(Location.LEVEL, "0");
     List<Location> list = locationMapper.selectByMap(map);
     if(CollectionUtil.isNotEmpty(list)){
       return list.get(0).getCode();

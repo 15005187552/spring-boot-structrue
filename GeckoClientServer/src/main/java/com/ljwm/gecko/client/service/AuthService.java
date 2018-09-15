@@ -4,16 +4,14 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ljwm.bootbase.dto.Kv;
-import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.JwtKit;
 import com.ljwm.bootbase.security.LoginInfoHolder;
-import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.entity.Guest;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.enums.UserSource;
-import com.ljwm.gecko.base.model.vo.LoginVo;
+import com.ljwm.gecko.base.mapper.MemberAccountMapper;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.service.GuestService;
 import com.ljwm.gecko.base.service.MemberInfoService;
@@ -25,8 +23,13 @@ import com.ljwm.gecko.client.model.vo.ResultMe;
 import com.ljwm.gecko.client.security.JwtUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 
 /**
@@ -50,10 +53,39 @@ public class AuthService {
   @Autowired
   private MemberInfoService memberInfoService;
 
+  @Autowired
+  private MemberAccountMapper memberAccountMapper;
+
+  @Autowired
+  private AuthenticationManager authenticationManager;
+
+  /**
+   * 公共验证逻辑实现
+   *
+   * @param loginForm
+   * @return
+   */
+  private JwtUser validate(LoginForm loginForm) {
+    return Optional
+      .ofNullable(loginForm)
+      .map(form -> new UsernamePasswordAuthenticationToken(form.getPhoneNum(), form.getPassword()))
+      .map(upToken -> authenticationManager.authenticate(upToken))
+      .map(authentication -> {
+        if (!authentication.isAuthenticated())
+          throw new LogicException(ResultEnum.BAD_CREDENTIALS);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        log.debug("登陆成功, 为该用户创建Token: {} ", loginForm);
+        return (JwtUser) authentication.getPrincipal();
+      })
+      .get();
+  }
+
+
   @Transactional
   public ResultMe login(GuestForm guestForm) {
     UserSource userSource = UserSource.codeOf(guestForm.getSource());
     Guest guest = null;
+    String mpOpenId = null;
     if(guestForm.getSource() == null ||guestForm.getSource() != UserSource.WX_APP.getCode()) {
       guest = guestService.upsert(userSource, guestForm.getGuestId(), null);
     } else {
@@ -63,7 +95,7 @@ public class AuthService {
       if (StrUtil.isNotBlank(jsonObject.getString("errcode"))) // 认证出错
         throw new LogicException(ResultEnum.DATA_ERROR, jsonObject.getString("errcode"));
       String unionId = jsonObject.getString("unionid");
-      String mpOpenId = jsonObject.getString("openid");
+      mpOpenId = jsonObject.getString("openid");
       String sessionKey = jsonObject.getString("session_key");
       log.info("Json from code: {}", jsonObject.toJSONString());
       log.info("befor {}", LoginInfoHolder.getExtInfo());
@@ -87,6 +119,7 @@ public class AuthService {
       guest = guestService.upsert(UserSource.codeOf(UserSource.WX_APP.getCode()), mpOpenId, null);
     }
     if(guest.getMemberId() == null) {
+      LoginInfoHolder.setLoginType(LoginType.GUEST.getCode().toString());
       JwtUser jwtUser = new JwtUser(guest);
       ResultMe resultMe = new ResultMe();
       resultMe.setId(jwtUser.getId());
@@ -95,29 +128,22 @@ public class AuthService {
       resultMe.setToken(JwtKit.generateToken(jwtUser));
       return resultMe;
     }
-    MemberVo memberVo = memberInfoService.selectMemberInfo(guest.getMemberId(), LoginType.WX_APP.getCode());
-    JwtUser jwtUser = new JwtUser(memberVo);
-    ResultMe resultMe = new ResultMe();
-    resultMe.setId(jwtUser.getId());
-    resultMe.setIsGuest(false);
-    resultMe.setAvatarPath(memberVo.getAvatarPath());
-    resultMe.setPhoneNum(memberVo.getRegMobile());
-    resultMe.setUsername(jwtUser.getUsername());
-    resultMe.setExtInfo(memberVo.getAccount().getExtInfo());
-    resultMe.setNickName(memberVo.getNickName());
-    resultMe.setToken(JwtKit.generateToken(jwtUser));
-    return resultMe;
+    LoginInfoHolder.setLoginType(LoginType.WX_APP.getCode().toString());
+//    MemberVo memberVo = memberInfoService.selectMemberInfo(guest.getMemberId(), LoginType.WX_APP.getCode());
+   // MemberAccount account = memberAccountMapper.selectOne(new QueryWrapper<MemberAccount>().eq(MemberAccount.USERNAME,mpOpenId));
+    JwtUser jwtUser = validate(new LoginForm(mpOpenId,mpOpenId));
+
+    return  me(jwtUser).setToken(JwtKit.generateToken(jwtUser));
   }
 
-  public ResultMe me() {
-    Long id = SecurityKit.currentId();
+  public ResultMe me(JwtUser jwtUser) {
     //判断是否为会员
     String code = LoginInfoHolder.getLoginType();
     if (!LoginInfoHolder.getLoginType().equals(LoginType.GUEST.getCode().toString())){
-        MemberVo memberVo = memberInfoService.selectMemberInfo(id, LoginInfoHolder.getLoginType());
+        MemberVo memberVo = memberInfoService.selectMemberInfo(jwtUser.getId(), LoginInfoHolder.getLoginType());
         ResultMe resultMe = new ResultMe();
         resultMe.setIsGuest(false);
-        resultMe.setId(id);
+        resultMe.setId(jwtUser.getId());
         resultMe.setAvatarPath(memberVo.getAvatarPath());
         resultMe.setPhoneNum(memberVo.getRegMobile());
         resultMe.setUsername(memberVo.getAccount().getUsername());
@@ -128,8 +154,11 @@ public class AuthService {
     return null;
   }
 
-  public Result loginSys(LoginForm loginForm) {
-    String phoneNum = loginForm.getPhoneNum();
+  public ResultMe loginSys(LoginForm loginForm) {
+    LoginInfoHolder.setLoginType(LoginType.MOBILE.getCode().toString());
+    JwtUser jwtUser = validate(loginForm);
+    return me(jwtUser).setToken(JwtKit.generateToken(jwtUser));
+   /* String phoneNum = loginForm.getPhoneNum();
     String password = loginForm.getPassword();
     LoginVo loginVo = memberInfoService.selectByPhone(phoneNum);
     if(loginVo == null){
@@ -150,6 +179,6 @@ public class AuthService {
       resultMe.setToken(JwtKit.generateToken(jwtUser));
       return Result.success(resultMe);
     }
-    return Result.fail("密码错误!");
+    return Result.fail("密码错误!");*/
   }
 }
