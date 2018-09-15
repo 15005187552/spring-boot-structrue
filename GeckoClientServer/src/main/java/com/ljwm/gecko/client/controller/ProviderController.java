@@ -34,6 +34,6 @@ public class ProviderController extends BaseController {
   @PostMapping("findClient")
   @ApiOperation("小程序端查询服务商列表")
   public Result<ProviderVo> findClient(@RequestBody ProviderQueryDto providerQueryDto){
-    return success();
+    return success(providerService.findByPage(providerQueryDto));
   }
 }
