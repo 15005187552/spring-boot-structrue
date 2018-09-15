@@ -28,8 +28,9 @@
     </sql>
 
     <resultMap id="providerVo" type="com.ljwm.gecko.base.model.vo.ProviderVo" extends="BaseResultMap">
+        <association property="locationStr" column="AREA_CODE" select="com.ljwm.gecko.base.mapper.LocationMapper.getLocationByArea"/>
         <collection property="providerServicesVoList" column="ID" select="com.ljwm.gecko.base.mapper.ProviderServicesMapper.findProviderServicesVoListByProviderId"/>
-        <collection property="memberPaperVoList" column="ID" select="com.ljwm.gecko.base.mapper.MemberPaperMapper.findMemberPaperVoByProviderId"/>
+        <collection property="paperVoList" column="ID" select="com.ljwm.gecko.base.mapper.PaperMapper.findPaperVoListByProviderId"/>
         <collection property="memberVoList" column="ID" select="com.ljwm.gecko.base.mapper.MemberMapper.findMemberVoListByProviderId"/>
     </resultMap>
     <select id="findByPage" parameterType="map" resultMap="providerVo">

@@ -14,4 +14,7 @@ public class ProviderQueryDto extends CommonQuery {
 
   @ApiModelProperty("是否可用")
   private Integer disabled;
+
+  @ApiModelProperty("服务类型id")
+  private Integer serviceId;
 }

@@ -24,4 +24,6 @@ public interface PaperMapper extends BaseMapper<Paper> {
   List<PaperAdminVo> find(Page<PaperAdminVo> page, @Param("params")Map map);
 
   Boolean deleteAble(Integer id);
+
+  List<PaperVo> findPaperVoListByProviderId(@Param("providerId") Long providerId);
 }

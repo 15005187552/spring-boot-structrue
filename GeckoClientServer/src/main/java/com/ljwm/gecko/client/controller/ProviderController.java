@@ -4,6 +4,7 @@ import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.model.dto.ProviderDto;
+import com.ljwm.gecko.base.model.dto.ProviderQueryDto;
 import com.ljwm.gecko.base.model.vo.ProviderVo;
 import com.ljwm.gecko.base.service.ProviderService;
 import io.swagger.annotations.Api;
@@ -30,7 +31,9 @@ public class ProviderController extends BaseController {
     return success();
   }
 
-  public Result<ProviderVo> find(){
+  @PostMapping("findClient")
+  @ApiOperation("小程序端查询服务商列表")
+  public Result<ProviderVo> findClient(@RequestBody ProviderQueryDto providerQueryDto){
     return success();
   }
 }

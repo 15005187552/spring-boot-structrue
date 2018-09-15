@@ -54,4 +54,24 @@
             ) AS temp
         ]]>
   </select>
+
+  <select id="findPaperVoListByProviderId" parameterType="long" resultMap="paperVo">
+    select *  from t_paper where ID in (    SELECT DISTINCT
+      tmp.PAPER_ID
+      FROM
+      t_paper tp
+      LEFT JOIN t_member_paper tmp ON tp.ID = tmp.PAPER_ID
+      WHERE
+      tmp.VALIDATE_STATE = 2
+      AND tmp.MEMBER_ID IN (
+      SELECT DISTINCT
+      tpu.MEMBER_ID
+      FROM
+      t_provider tp,
+      t_provider_user tpu
+      WHERE
+      tp.ID = tpu.PROVIDER_ID
+      AND tp.ID = #{providerId}
+    ))
+  </select>
 </mapper>

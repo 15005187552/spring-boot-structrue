@@ -201,6 +201,7 @@ public class ProviderService {
         provider.setCreatorId(providerDto.getMemberId());
         provider.setUpdateTime(DateUtil.date());
         provider.setDisabled(DisabledEnum.ENABLED.getCode());
+        provider.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
         provider.setVersion(1);
         if (StringUtils.isNotEmpty(providerDto.getPicPath())) {
           File file = new File(appInfo.getFilePath() + Constant.PROVIDER + member.getId());

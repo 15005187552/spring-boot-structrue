@@ -25,9 +25,11 @@ public class ProviderVo extends Provider {
   @JSONField(serializeUsing = StatusWithNameSerializer.ProviderValidateStatSerializer.class)
   private Integer validateState;
 
+  private String locationStr;
+
   private List<ProviderServicesVo> providerServicesVoList;
 
-  private List<MemberPaperVo> memberPaperVoList;
+  private List<PaperVo> paperVoList;
 
   private List<MemberVo> memberVoList;
 
