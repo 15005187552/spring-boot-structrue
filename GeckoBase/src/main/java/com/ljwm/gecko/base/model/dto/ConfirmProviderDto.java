@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 @Data
 @Accessors(chain = true)
 public class ConfirmProviderDto {
@@ -11,12 +13,9 @@ public class ConfirmProviderDto {
   @ApiModelProperty("服务商id")
   private Long id;
 
-  @ApiModelProperty("是否同意")
-  private boolean isAgree=true;
-
   @ApiModelProperty(value = "认证人",hidden = true)
-  private Long validaterId;
+  private Long validatorId;
 
-  @ApiModelProperty("认证内容")
-  private String validateText;
+  @ApiModelProperty("服务商服务类型审批明细")
+  private List<ProviderServicesConfirmDto> providerServicesConfirmDtoList;
 }

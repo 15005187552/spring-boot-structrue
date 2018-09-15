@@ -21,6 +21,7 @@ import com.ljwm.gecko.base.model.bean.AppInfo;
 import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.model.vo.MemberPaperVo;
 import com.ljwm.gecko.base.model.vo.MemberVo;
+import com.ljwm.gecko.base.model.vo.ProviderServicesVo;
 import com.ljwm.gecko.base.model.vo.ProviderVo;
 import com.ljwm.gecko.base.model.vo.admin.ServiceTypeTree;
 import com.ljwm.gecko.base.utils.Fileutil;
@@ -252,14 +253,45 @@ public class ProviderService {
       log.info("服务商id:{} 服务商入驻信息不存在,或非待审核状态!", confirmProviderDto.getId());
       throw new LogicException(ResultEnum.DATA_ERROR, "服务商查询不到或非待审核状态!");
     }
-    if (confirmProviderDto.isAgree()) {
-      provider.setValidateState(ProviderStatEnum.CONFIRM_SUCCESS.getCode());
-    } else {
-      provider.setValidateState(ProviderStatEnum.CONFIRM_FAILED.getCode());
+
+    List<ProviderServicesConfirmDto> providerServicesConfirmDtoList = confirmProviderDto.getProviderServicesConfirmDtoList();
+    if (CollectionUtils.isEmpty(providerServicesConfirmDtoList)){
+      log.info("服务商{} ,服务商认证详情不能为空!",confirmProviderDto.getId());
+      throw new LogicException(ResultEnum.DATA_ERROR,"资质认证详情不能为空!");
     }
-    provider.setValidatorId(confirmProviderDto.getValidaterId());
-    provider.setValidateText(confirmProviderDto.getValidateText());
-    provider.setValidateTime(DateUtil.date());
+    Integer validateState = ValidateStatEnum.CONFIRM_SUCCESS.getCode();
+    for (ProviderServicesConfirmDto providerServicesConfirmDto: providerServicesConfirmDtoList){
+      ProviderServices providerServices = providerServicesMapper.selectById(confirmProviderDto.getId());
+      if (providerServices==null){
+        log.info("服务商类型查询不到此服务类型");
+        throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此服务类型!");
+      }
+      providerServices.setUpdateTime(DateUtil.date());
+      if (providerServicesConfirmDto.isAgree()) {
+        providerServices.setValidateState(ValidateStatEnum.CONFIRM_SUCCESS.getCode());
+      } else {
+        validateState = ValidateStatEnum.CONFIRM_FAILED.getCode();
+        providerServices.setValidateState(ValidateStatEnum.CONFIRM_FAILED.getCode());
+      }
+      providerServices.setValidateText(providerServicesConfirmDto.getValidateText());
+      providerServices.setValidateTime(DateUtil.date());
+      providerServices.setValidatorId(confirmProviderDto.getValidatorId());
+      providerServicesMapper.updateById(providerServices);
+    }
+
+    List<ProviderServicesVo> providerServicesVoList = providerServicesMapper.findByProviderId(confirmProviderDto.getId());
+    Integer providerValidateStatus = ValidateStatEnum.CONFIRM_SUCCESS.getCode();
+    for (ProviderServicesVo providerServicesVo: providerServicesVoList){
+      if (Objects.equals(providerServicesVo.getValidateState(),ValidateStatEnum.WAIT_CONFIRM.getCode())){
+        providerValidateStatus = ValidateStatEnum.WAIT_CONFIRM.getCode();
+        break;
+      }
+      if (Objects.equals(providerServicesVo.getValidateState(),ValidateStatEnum.CONFIRM_FAILED.getCode())){
+        providerValidateStatus = ValidateStatEnum.CONFIRM_FAILED.getCode();
+        break;
+      }
+    }
+    provider.setValidateState(providerValidateStatus);
     providerMapper.updateById(provider);
   }
 }
