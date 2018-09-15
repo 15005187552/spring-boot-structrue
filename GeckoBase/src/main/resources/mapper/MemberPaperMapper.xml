@@ -36,7 +36,7 @@
 
     <select id="findMemberPaperVoByProviderId" parameterType="long" resultMap="memberPaperVo">
       SELECT DISTINCT
-        tp.*
+        tmp.*
         FROM
         t_paper tp
         LEFT JOIN t_member_paper tmp ON tp.ID = tmp.PAPER_ID

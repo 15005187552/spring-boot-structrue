@@ -4,6 +4,7 @@ import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.model.dto.ProviderDto;
+import com.ljwm.gecko.base.model.vo.ProviderVo;
 import com.ljwm.gecko.base.service.ProviderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +27,10 @@ public class ProviderController extends BaseController {
   public Result saveProvider(@RequestBody ProviderDto providerDto){
     providerDto.setMemberId(SecurityKit.currentId());
     providerService.saveProvider(providerDto);
+    return success();
+  }
+
+  public Result<ProviderVo> find(){
     return success();
   }
 }
