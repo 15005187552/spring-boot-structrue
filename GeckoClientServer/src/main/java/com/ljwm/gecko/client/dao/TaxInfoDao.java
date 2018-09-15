@@ -101,7 +101,7 @@ public class TaxInfoDao {
       TaxOtherReduce taxOtherReduce = list.get(0);
       taxOtherReduce.setUpdateTime(new Date());
       taxOtherReduce.setUpdater(currentId);
-      if (StrUtil.isNotBlank(taxOtherReduceForm.getTaxDocPath()) && taxOtherReduceForm.getTaxDocPath().indexOf(Constant.HTTP) == -1) {
+      if (StrUtil.isNotBlank(taxOtherReduceForm.getTaxDocPath())) {
         String destDir = appInfo.getFilePath() + Constant.TAX + memberId + "/";
         String srcPath = appInfo.getFilePath()+Constant.CACHE + taxOtherReduceForm.getTaxDocPath();
         Fileutil.cutGeneralFile(srcPath, destDir);
@@ -112,7 +112,7 @@ public class TaxInfoDao {
       Date date = new Date();
       TaxOtherReduce taxOtherReduce = new TaxOtherReduce();
       BeanUtil.copyProperties(taxOtherReduceForm, taxOtherReduce);
-      if (StrUtil.isNotBlank(taxOtherReduceForm.getTaxDocPath()) && taxOtherReduceForm.getTaxDocPath().indexOf(Constant.HTTP) == -1) {
+      if (StrUtil.isNotBlank(taxOtherReduceForm.getTaxDocPath())) {
         String destDir = appInfo.getFilePath() + Constant.TAX + memberId + "/";
         File file = new File(destDir);
         if(!file.exists()){

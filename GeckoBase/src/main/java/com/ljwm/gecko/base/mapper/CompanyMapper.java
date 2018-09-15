@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.gecko.base.entity.Company;
 import com.ljwm.gecko.base.model.dto.AdminCompanyDto;
+import com.ljwm.gecko.base.model.vo.CompanyVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
@@ -31,4 +32,12 @@ public interface CompanyMapper extends BaseMapper<Company> {
     "AND b.MEMBER_ID = #{memberId}"})
   @ResultMap("BaseResultMap")
   List<Company> findCompany(Long memberId);
+
+  @Select("SELECT *, b.ID as S_ID FROM t_company a, t_company_special b WHERE a.ID = b.COMPANY_ID AND a.ID=#{companyId}")
+  @ResultMap("CompanyVo")
+  List<CompanyVo> findCompanyById(String companyId);
+
+  @Select("SELECT *, b.ID as S_ID FROM t_company a, t_company_special b WHERE a.ID = b.COMPANY_ID AND a.NAME=#{name}")
+  @ResultMap("CompanyVo")
+  List<CompanyVo> findCompanyByName(String name);
 }

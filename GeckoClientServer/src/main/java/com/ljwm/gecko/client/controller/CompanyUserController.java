@@ -35,7 +35,6 @@ public class CompanyUserController {
     return companyUserService.memberEnterCom(memberComForm);
   }
 
-
   @PostMapping("/inactiveCompany")
   @ApiOperation("已邀请你加入的公司列表（未激活的）")
   public Result inactiveCompany(@RequestBody MemberForm memberForm){
@@ -43,7 +42,7 @@ public class CompanyUserController {
   }
 
   @PostMapping("/enterCompany")
-  @ApiOperation("已邀请你加入的公司（未激活的）")
+  @ApiOperation("加入公司")
   public Result enterCompany(@RequestBody InactiveForm inactiveForm){
     return companyUserService.enterCompany(inactiveForm);
   }

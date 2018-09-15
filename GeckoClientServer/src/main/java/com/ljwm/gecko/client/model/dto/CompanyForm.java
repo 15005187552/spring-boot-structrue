@@ -1,10 +1,13 @@
 package com.ljwm.gecko.client.model.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.ljwm.gecko.base.entity.CompanySpecial;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 
 /**
  * @author Janiffy
@@ -14,6 +17,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @ApiModel("公司信息表单")
 public class CompanyForm {
+
+  @ApiModelProperty(value = "企业id")
+  private String companyId;
 
   @ApiModelProperty(value = "企业名称")
   private String name;
@@ -27,7 +33,7 @@ public class CompanyForm {
   @ApiModelProperty(value = "手机号码")
   private String phoneNum;
 
-  @ApiModelProperty(value = "证照图片文件", name = "picPath")
+  @ApiModelProperty(value = "证照图片文件",name = "picPath")
   @JSONField(name = "picPath")
   private String filePath;
 
@@ -42,4 +48,6 @@ public class CompanyForm {
 
   @ApiModelProperty(value = "详细地址")
   private String address;
+
+  List<CompanySpecial> companySpecialList;
 }

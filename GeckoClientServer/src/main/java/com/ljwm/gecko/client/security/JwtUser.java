@@ -5,7 +5,8 @@ import com.ljwm.bootbase.security.IJwtAndSecurityAble;
 import com.ljwm.gecko.base.entity.Guest;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.model.vo.MemberVo;
-import lombok.Getter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -18,7 +19,8 @@ import java.util.Map;
 /**
  * Created by yuzhou on 2018/8/22.
  */
-@Getter
+@Data
+@Accessors(chain = true)
 public class JwtUser implements IJwtAndSecurityAble {
 
   public static final String ROLE_GUEST = "ROLE_GUEST";
@@ -95,17 +97,17 @@ public class JwtUser implements IJwtAndSecurityAble {
 
   @Override
   public boolean isAccountNonExpired() {
-    return false;
+    return isEnabled();
   }
 
   @Override
   public boolean isAccountNonLocked() {
-    return false;
+    return isEnabled();
   }
 
   @Override
   public boolean isCredentialsNonExpired() {
-    return false;
+    return isEnabled();
   }
 
   @Override

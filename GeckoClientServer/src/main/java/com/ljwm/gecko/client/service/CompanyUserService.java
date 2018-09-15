@@ -2,6 +2,7 @@ package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.entity.Company;
@@ -12,10 +13,11 @@ import com.ljwm.gecko.base.mapper.CompanyMapper;
 import com.ljwm.gecko.base.mapper.CompanyUserMapper;
 import com.ljwm.gecko.base.mapper.NaturalPersonMapper;
 import com.ljwm.gecko.base.model.dto.MemberComForm;
+import com.ljwm.gecko.base.model.vo.CompanyVo;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
 import com.ljwm.gecko.client.model.dto.InactiveForm;
 import com.ljwm.gecko.client.model.dto.MemberForm;
-import com.ljwm.gecko.client.model.vo.CompanyVo;
+import com.ljwm.gecko.client.model.vo.CompanyInfoVo;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,13 +54,22 @@ public class CompanyUserService {
 
   public Result findCompany() {
     Long memberId = SecurityKit.currentId();
+    NaturalPerson naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.MEMBER_ID,memberId));
+    Long companyId = null;
+    if (naturalPerson != null){
+      companyId = naturalPerson.getCompanyId();
+    }
     List<Company> list = companyMapper.findCompany(memberId);
     if(CollectionUtil.isNotEmpty(list)){
       List<CompanyVo> companyVoList = new ArrayList<>();
       for (Company company: list) {
-        CompanyVo companyVo = new CompanyVo();
-        BeanUtil.copyProperties(company, companyVo);
-        companyVoList.add(companyVo);
+        CompanyInfoVo companyInfoVo = new CompanyInfoVo();
+        BeanUtil.copyProperties(company, companyInfoVo);
+        companyInfoVo.setFlag(false);
+        if (companyId.equals(companyInfoVo.getId())){
+          companyInfoVo.setFlag(true);
+        }
+        companyVoList.add(companyInfoVo);
         return Result.success(companyVoList);
       }
     }

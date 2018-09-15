@@ -1,8 +1,10 @@
 package com.ljwm.gecko.client.security;
 
 import com.ljwm.bootbase.security.LoginInfoHolder;
+import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.dao.MemberInfoDao;
 import com.ljwm.gecko.base.entity.Guest;
+import com.ljwm.gecko.base.entity.MemberPassword;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.mapper.GuestMapper;
 import com.ljwm.gecko.base.model.vo.MemberVo;
@@ -31,6 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     log.debug("load user with username: {} in userDetailsServiceImpl", username);
     LoginType loginType = LoginType.codeOf(LoginInfoHolder.getLoginType());
+    MemberVo memberVo = memberInfoDao.selectByUserName(username);
     switch (loginType) {
       case GUEST:
         Guest guest = guestMapper.findByGuestId(username);
@@ -38,11 +41,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
           throw new UsernameNotFoundException("用户不存在");
         }
         return new JwtUser(guest);
-      default:
-        MemberVo memberVo = memberInfoDao.selectByUserName(username);
+      case WX_APP:
         if(memberVo == null) {
           throw new UsernameNotFoundException("用户不存在");
         }
+        memberVo.getAccount().setPassword(new MemberPassword().setPassword(SecurityKit.passwordMD5(username,username)));
+        LoginInfoHolder.setSalt(username);
+        return new JwtUser(memberVo);
+      default:
+        if(memberVo == null) {
+          throw new UsernameNotFoundException("用户不存在");
+        }
+        LoginInfoHolder.setSalt(memberVo.getAccount().getPassword().getSalt());
         return new JwtUser(memberVo);
     }
   }
