@@ -45,4 +45,6 @@ public interface MemberMapper extends BaseMapper<Member> {
   MemberVo findMemberVoByPhone(@Param("regMobile") String regMobile);
 
   List<MemberVo> findByPage(Page<MemberVo> ret, @Param("params") Kv params);
+
+  MemberVo findMemberVoByMemberId(@Param("memberId") Long memberId);
 }

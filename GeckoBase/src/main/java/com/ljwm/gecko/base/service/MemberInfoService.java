@@ -22,6 +22,7 @@ import com.ljwm.gecko.base.mapper.PaperPathMapper;
 import com.ljwm.gecko.base.model.bean.AppInfo;
 import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.model.vo.LoginVo;
+import com.ljwm.gecko.base.model.vo.MemberPaperVo;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.utils.Fileutil;
 import lombok.extern.slf4j.Slf4j;
@@ -69,6 +70,7 @@ public class MemberInfoService {
 
   @Autowired
   private MemberInfoService memberInfoService;
+
 
   public MemberVo selectMemberInfo(Long memberId, Integer code) {
     return memberInfoDao.selectMemberInfo(memberId, code);
@@ -249,9 +251,6 @@ public class MemberInfoService {
       if (memberPaper==null){
         throw new LogicException(ResultEnum.DATA_ERROR,"会员资质信息不存在!");
       }
-      if (Objects.equals(memberPaper.getValidateState(),ValidateStatEnum.CONFIRM_SUCCESS.getCode())){
-        continue;
-      }
       memberPaper.setUpdateTime(DateUtil.date());
       if (memberPaperConfirmDto.isAgree()) {
         memberPaper.setValidateState(ValidateStatEnum.CONFIRM_SUCCESS.getCode());
@@ -264,7 +263,19 @@ public class MemberInfoService {
       memberPaper.setValidatorId(memberConfirmDto.getValidatorId());
       memberPaperMapper.updateById(memberPaper);
     }
-    member.setValidateState(validateState);
+    List<MemberPaperVo> memberPaperVoList = memberPaperMapper.findMemberPaperVoListByMemberId(memberConfirmDto.getMemberId());
+    Integer memberValidateStatus = ValidateStatEnum.CONFIRM_SUCCESS.getCode();
+    for (MemberPaperVo memberPaperVo: memberPaperVoList){
+      if (Objects.equals(memberPaperVo.getValidateState(),ValidateStatEnum.WAIT_CONFIRM.getCode())){
+        memberValidateStatus = ValidateStatEnum.WAIT_CONFIRM.getCode();
+        break;
+      }
+      if (Objects.equals(memberPaperVo.getValidateState(),ValidateStatEnum.CONFIRM_FAILED.getCode())){
+        memberValidateStatus = ValidateStatEnum.CONFIRM_FAILED.getCode();
+        break;
+      }
+    }
+    member.setValidateState(memberValidateStatus);
     memberMapper.updateById(member);
   }
 
@@ -276,5 +287,9 @@ public class MemberInfoService {
       return list.get(0);
     }
     return null;
+  }
+
+  public MemberVo findMemberVoByMemberId(Long memberId){
+    return memberMapper.findMemberVoByMemberId(memberId);
   }
 }

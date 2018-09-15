@@ -106,4 +106,8 @@
       DESC
     </if>
   </select>
+
+  <select id="findMemberVoByMemberId" parameterType="long" resultMap="MemberVo">
+    select *  from t_member where MEMBER_ID=#{memberId}
+  </select>
 </mapper>

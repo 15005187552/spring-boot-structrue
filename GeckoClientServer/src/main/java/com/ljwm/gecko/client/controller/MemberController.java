@@ -53,4 +53,10 @@ public class MemberController extends BaseController {
   public Result<MemberVo> findMemberVoByRegMobile(@PathVariable String regMobile){
     return success(memberInfoService.findMemberVoByRegMobile(regMobile));
   }
+
+  @GetMapping("findMemberVoByMemberId")
+  @ApiOperation("查询当前登录会员认证信息")
+  public Result<MemberVo> findMemberVoByMemberId(){
+    return success(memberInfoService.findMemberVoByMemberId(SecurityKit.currentId()));
+  }
 }
