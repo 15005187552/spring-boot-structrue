@@ -1,8 +1,11 @@
 package com.ljwm.gecko.base.utils;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.URLUtil;
+import com.ljwm.bootbase.enums.ResultEnum;
+import com.ljwm.bootbase.exception.LogicException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -63,7 +66,6 @@ public class FileKit {
    * @param file
    * @param uploadPath
    * @param folder
-   * Created by Janiffy
    * @return
    */
   public static String saveUploadFile(MultipartFile file, String cachePath) {
@@ -73,7 +75,7 @@ public class FileKit {
       log.debug("上传的文件名为：" + fileName);
       String suffixName = fileName.substring(fileName.lastIndexOf("."));
       log.debug("上传的后缀名为：" + suffixName);
-      fileName = RandomUtil.randomUUID() + suffixName;
+      fileName = TimeUtil.getCurrentTime() + suffixName;
       File dest = new File(cachePath + fileName);
       if (!dest.getParentFile().exists()) {
         dest.getParentFile().mkdirs();
