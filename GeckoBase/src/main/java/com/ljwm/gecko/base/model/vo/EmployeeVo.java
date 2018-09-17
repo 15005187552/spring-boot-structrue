@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.model.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -23,6 +24,7 @@ public class EmployeeVo {
   private String certType;
 
   @ApiModelProperty("证件号")
+  @JSONField(name = "memberIdCard")
   private String certNum;
 
   @ApiModelProperty("姓名")
