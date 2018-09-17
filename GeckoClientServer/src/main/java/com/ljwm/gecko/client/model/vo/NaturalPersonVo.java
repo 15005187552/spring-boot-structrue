@@ -1,5 +1,6 @@
 package com.ljwm.gecko.client.model.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ljwm.gecko.base.entity.NaturalPerson;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,7 @@ public class NaturalPersonVo extends NaturalPerson {
   private Integer certificate;
 
   @ApiModelProperty(value = "证件号")
+  @JSONField(name = "memberIdCard")
   private String certNum;
 
   @ApiModelProperty(value = "残疾人证件号")
