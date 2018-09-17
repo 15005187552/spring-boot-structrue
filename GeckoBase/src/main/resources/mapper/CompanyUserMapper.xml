@@ -37,4 +37,54 @@
     <result column="NAME" property="name"/>
   </resultMap>
 
+  <resultMap id="EmployeeInfo" type="com.ljwm.gecko.base.model.dto.EmployeeDto">
+    <id column="ID" property="id" />
+    <result column="COMPANY_ID" property="companyId" />
+    <result column="MEMBER_ID" property="memberId" />
+    <result column="ROLES_CODE" property="rolesCode" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="DISABLED" property="disabled" />
+    <result column="ACTIVATED" property="activated" />
+    <collection property="companyUserInfo" resultMap="CompanyUserInfo"></collection>
+  </resultMap>
+
+  <resultMap id="CompanyUserInfo" type="com.ljwm.gecko.base.entity.CompanyUserInfo">
+    <id column="COMPANY_USER_ID" property="companyUserId" />
+    <result column="JOB_NUM" property="jobNum" />
+    <result column="EDUCATION" property="education" />
+    <result column="PERSON_STATE" property="personState" />
+    <result column="EMPLOYEE" property="employee" />
+    <result column="HIRE_DATE" property="hireDate" />
+    <result column="EMPLOYEE_TYPE" property="employeeType" />
+    <result column="DEPARTMENT" property="department" />
+    <result column="STATION" property="station" />
+    <result column="TERM_DATE" property="termDate" />
+    <result column="SOCIAL_BASE" property="socialBase" />
+    <result column="SOCIAL_COM_PER" property="socialComPer" />
+    <result column="COM_PENSION" property="comPension" />
+    <result column="COM_MEDICAL" property="comMedical" />
+    <result column="COM_UNEMPLOY" property="comUnemploy" />
+    <result column="COM_INJURY" property="comInjury" />
+    <result column="COM_BIRTH" property="comBirth" />
+    <result column="SOCIAL_PERSON_PER" property="socialPersonPer" />
+    <result column="PERSON_PENSION" property="personPension" />
+    <result column="PERSON_MEDICAL" property="personMedical" />
+    <result column="PERSON_UNEMPLOY" property="personUnemploy" />
+    <result column="FUND_BASE" property="fundBase" />
+    <result column="FUND_COM" property="fundCom" />
+    <result column="FUND_PERSON" property="fundPerson" />
+    <result column="WORK_CITY" property="workCity" />
+    <result column="MARITAL_STATUS" property="maritalStatus" />
+    <result column="NTRODUCE_TALENTS" property="ntroduceTalents" />
+    <result column="BANK" property="bank" />
+    <result column="BANK_NUM" property="bankNum" />
+    <result column="SOCIAL_NUM" property="socialNum" />
+    <result column="FUND_NUM" property="fundNum" />
+    <result column="SPECIAL_INDUSTRY" property="specialIndustry" />
+    <result column="IS_INVESTOR" property="isInvestor" />
+    <result column="EMAIL" property="email" />
+    <result column="REMARK" property="remark" />
+  </resultMap>
+
 </mapper>

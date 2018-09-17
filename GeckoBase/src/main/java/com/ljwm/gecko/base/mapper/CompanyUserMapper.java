@@ -2,6 +2,7 @@ package com.ljwm.gecko.base.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ljwm.gecko.base.entity.CompanyUser;
+import com.ljwm.gecko.base.model.dto.EmployeeDto;
 import com.ljwm.gecko.base.model.vo.EmployeeVo;
 import com.ljwm.gecko.base.model.vo.admin.CompanyUserVo;
 import org.apache.ibatis.annotations.Param;
@@ -38,4 +39,10 @@ public interface CompanyUserMapper extends BaseMapper<CompanyUser> {
     "AND b.COMPANY_ID = #{companyId}")
   @ResultMap("EmployeeVo")
   List<EmployeeVo> selectEmployee(@Param("companyId") String companyId, @Param("disableCode")Integer disableCode, @Param("activateCode")Integer activateCode);
+
+
+  @Select("SELECT * FROM t_company_user a, t_company_user_info b\n" +
+    "WHERE a.COMPANY_ID =#{companyId} AND MEMBER_ID=#{memberId} AND a.ID = b.COMPANY_USER_ID")
+  @ResultMap("EmployeeInfo")
+  List<EmployeeDto> selectEmployeeList(@Param("companyId") Long companyId, @Param("memberId") Long memberId);
 }

@@ -38,4 +38,7 @@
           `MEMBER_ID`          ,`COMPANY_ID`          ,`COUNTRY`          ,`NAME`          ,`GENDER`          ,`BIRTHDAY`          ,`CERTIFICATE`          ,`PROVINCE`          ,`CITY`          ,`AREA`          ,`ADDRESS`          ,`CERT_NUM`          ,`CERT_POS_PATH`          ,`CERT_OPPO_PATH`          ,`DISABLITY_NUM`          ,`DISABLITY_PATH`          ,`MATRTYR_NUM`          ,`MATRTYR_PATH`          ,`OLD_NUM`          ,`OLD_PATH`          ,`PROFESSOR_NUM`          ,`PROFESSOR_PATH`          ,`ACADEMIC_NUM`          ,`ACADEMIC_PATH`          ,`SOCIAL_SECU`          ,`CREAT_TIME`          ,`UPDATE_TIME`
     </sql>
 
+  <resultMap id="NaturalPersonDto" type="com.ljwm.gecko.base.model.dto.NaturalPersonDto" extends="BaseResultMap">
+    <result column="REG_MOBILE" property="regMobile" />
+  </resultMap>
 </mapper>

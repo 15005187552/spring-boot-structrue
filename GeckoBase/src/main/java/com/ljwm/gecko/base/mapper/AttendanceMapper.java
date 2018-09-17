@@ -2,6 +2,7 @@ package com.ljwm.gecko.base.mapper;
 
 import com.ljwm.gecko.base.entity.Attendance;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -9,8 +10,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author Levis
- * @since 2018-09-12
+ * @since 2018-09-17
  */
+@Repository
 public interface AttendanceMapper extends BaseMapper<Attendance> {
 
 }

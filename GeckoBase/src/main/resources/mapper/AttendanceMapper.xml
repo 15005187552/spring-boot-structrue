@@ -8,7 +8,7 @@
         <result column="DATE" property="date" />
         <result column="COMPANY__USER_ID" property="companyUserId" />
         <result column="OVERTIME" property="overtime" />
-        <result column="BONUSES" property="bonuses" />
+        <result column="BONUS" property="bonus" />
         <result column="APPRAISAL" property="appraisal" />
         <result column="OTHER_INCOME" property="otherIncome" />
         <result column="AFFAIR_DAY" property="affairDay" />
@@ -19,11 +19,30 @@
         <result column="DIMISSION" property="dimission" />
         <result column="FINE" property="fine" />
         <result column="OTHER_FINE" property="otherFine" />
+        <result column="SALARY" property="salary" />
+        <result column="SALARY_ADJUST" property="salaryAdjust" />
+        <result column="SALARY_REMARK" property="salaryRemark" />
+        <result column="BONUS_YEAR" property="bonusYear" />
+        <result column="COMPENSATION" property="compensation" />
+        <result column="SICK_REMARK" property="sickRemark" />
+        <result column="PUNISH_REMARK" property="punishRemark" />
+        <result column="SOCIAL_BASE" property="socialBase" />
+        <result column="SOCIAL_COM_PER" property="socialComPer" />
+        <result column="SOCIAL_PER_PER" property="socialPerPer" />
+        <result column="SOCIAL_COM_AJUST" property="socialComAjust" />
+        <result column="SOCIAL_PER_AJUST" property="socialPerAjust" />
+        <result column="SOCIAL_REMARK" property="socialRemark" />
+        <result column="FUND_BASE" property="fundBase" />
+        <result column="FUND_COM_PER" property="fundComPer" />
+        <result column="FUND_PER_PER" property="fundPerPer" />
+        <result column="FUND_COM_AJUST" property="fundComAjust" />
+        <result column="FUND_PER_AJUST" property="fundPerAjust" />
+        <result column="FUND_REMARK" property="fundRemark" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`DATE`          ,`COMPANY__USER_ID`          ,`OVERTIME`          ,`BONUSES`          ,`APPRAISAL`          ,`OTHER_INCOME`          ,`AFFAIR_DAY`          ,`SICK_LEAVE`          ,`TARDINESS`          ,`OTHER_ABSENCE`          ,`ABSENTEEISM`          ,`DIMISSION`          ,`FINE`          ,`OTHER_FINE`
+          `ID`          ,`DATE`          ,`COMPANY__USER_ID`          ,`OVERTIME`          ,`BONUS`          ,`APPRAISAL`          ,`OTHER_INCOME`          ,`AFFAIR_DAY`          ,`SICK_LEAVE`          ,`TARDINESS`          ,`OTHER_ABSENCE`          ,`ABSENTEEISM`          ,`DIMISSION`          ,`FINE`          ,`OTHER_FINE`          ,`SALARY`          ,`SALARY_ADJUST`          ,`SALARY_REMARK`          ,`BONUS_YEAR`          ,`COMPENSATION`          ,`SICK_REMARK`          ,`PUNISH_REMARK`          ,`SOCIAL_BASE`          ,`SOCIAL_COM_PER`          ,`SOCIAL_PER_PER`          ,`SOCIAL_COM_AJUST`          ,`SOCIAL_PER_AJUST`          ,`SOCIAL_REMARK`          ,`FUND_BASE`          ,`FUND_COM_PER`          ,`FUND_PER_PER`          ,`FUND_COM_AJUST`          ,`FUND_PER_AJUST`          ,`FUND_REMARK`
     </sql>
 
 </mapper>

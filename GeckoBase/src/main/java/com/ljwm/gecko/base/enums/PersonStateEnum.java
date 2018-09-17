@@ -9,7 +9,8 @@ import lombok.Getter;
  */
 @Getter
 public enum PersonStateEnum implements CommonEnum {
-  NOMAl(0, "正常");
+  NOMAl(0, "正常"),
+  INNOMAl(1, "非正常");
 
   private Integer code;
   private String name;

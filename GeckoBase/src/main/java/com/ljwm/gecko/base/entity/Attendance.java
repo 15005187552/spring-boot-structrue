@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author Levis
- * @since 2018-09-12
+ * @since 2018-09-17
  */
 @Data
 @SuppressWarnings("ALL")
@@ -50,8 +50,8 @@ public class Attendance implements Serializable {
     private BigDecimal overtime;
 
     @ApiModelProperty(value = "定期奖金")
-    @TableField("`BONUSES`")
-    private BigDecimal bonuses;
+    @TableField("`BONUS`")
+    private BigDecimal bonus;
 
     @ApiModelProperty(value = "考勤绩效")
     @TableField("`APPRAISAL`")
@@ -93,6 +93,82 @@ public class Attendance implements Serializable {
     @TableField("`OTHER_FINE`")
     private BigDecimal otherFine;
 
+    @ApiModelProperty(value = "薪资")
+    @TableField("`SALARY`")
+    private BigDecimal salary;
+
+    @ApiModelProperty(value = "薪资调整")
+    @TableField("`SALARY_ADJUST`")
+    private BigDecimal salaryAdjust;
+
+    @ApiModelProperty(value = "薪资说明")
+    @TableField("`SALARY_REMARK`")
+    private String salaryRemark;
+
+    @ApiModelProperty(value = "全年一次性奖金补贴")
+    @TableField("`BONUS_YEAR`")
+    private BigDecimal bonusYear;
+
+    @ApiModelProperty(value = "解除劳动关系一次性经济补偿金")
+    @TableField("`COMPENSATION`")
+    private BigDecimal compensation;
+
+    @ApiModelProperty(value = "病事假说明")
+    @TableField("`SICK_REMARK`")
+    private String sickRemark;
+
+    @ApiModelProperty(value = "处罚说明")
+    @TableField("`PUNISH_REMARK`")
+    private String punishRemark;
+
+    @ApiModelProperty(value = "社保缴费基数")
+    @TableField("`SOCIAL_BASE`")
+    private BigDecimal socialBase;
+
+    @ApiModelProperty(value = "社保公司比例")
+    @TableField("`SOCIAL_COM_PER`")
+    private BigDecimal socialComPer;
+
+    @ApiModelProperty(value = "社保个人比例")
+    @TableField("`SOCIAL_PER_PER`")
+    private BigDecimal socialPerPer;
+
+    @ApiModelProperty(value = "社保公司调整")
+    @TableField("`SOCIAL_COM_AJUST`")
+    private BigDecimal socialComAjust;
+
+    @ApiModelProperty(value = "社保个人调整")
+    @TableField("`SOCIAL_PER_AJUST`")
+    private BigDecimal socialPerAjust;
+
+    @ApiModelProperty(value = "社保说明")
+    @TableField("`SOCIAL_REMARK`")
+    private String socialRemark;
+
+    @ApiModelProperty(value = "公积金基数")
+    @TableField("`FUND_BASE`")
+    private BigDecimal fundBase;
+
+    @ApiModelProperty(value = "公积金公司缴费比例")
+    @TableField("`FUND_COM_PER`")
+    private BigDecimal fundComPer;
+
+    @ApiModelProperty(value = "公积金个人缴费比例")
+    @TableField("`FUND_PER_PER`")
+    private BigDecimal fundPerPer;
+
+    @ApiModelProperty(value = "公积金公司调整")
+    @TableField("`FUND_COM_AJUST`")
+    private BigDecimal fundComAjust;
+
+    @ApiModelProperty(value = "公积金个人调整")
+    @TableField("`FUND_PER_AJUST`")
+    private BigDecimal fundPerAjust;
+
+    @ApiModelProperty(value = "调整说明")
+    @TableField("`FUND_REMARK`")
+    private String fundRemark;
+
 
     public static final String ID = "`ID`";
 
@@ -102,7 +178,7 @@ public class Attendance implements Serializable {
 
     public static final String OVERTIME = "`OVERTIME`";
 
-    public static final String BONUSES = "`BONUSES`";
+    public static final String BONUS = "`BONUS`";
 
     public static final String APPRAISAL = "`APPRAISAL`";
 
@@ -123,5 +199,43 @@ public class Attendance implements Serializable {
     public static final String FINE = "`FINE`";
 
     public static final String OTHER_FINE = "`OTHER_FINE`";
+
+    public static final String SALARY = "`SALARY`";
+
+    public static final String SALARY_ADJUST = "`SALARY_ADJUST`";
+
+    public static final String SALARY_REMARK = "`SALARY_REMARK`";
+
+    public static final String BONUS_YEAR = "`BONUS_YEAR`";
+
+    public static final String COMPENSATION = "`COMPENSATION`";
+
+    public static final String SICK_REMARK = "`SICK_REMARK`";
+
+    public static final String PUNISH_REMARK = "`PUNISH_REMARK`";
+
+    public static final String SOCIAL_BASE = "`SOCIAL_BASE`";
+
+    public static final String SOCIAL_COM_PER = "`SOCIAL_COM_PER`";
+
+    public static final String SOCIAL_PER_PER = "`SOCIAL_PER_PER`";
+
+    public static final String SOCIAL_COM_AJUST = "`SOCIAL_COM_AJUST`";
+
+    public static final String SOCIAL_PER_AJUST = "`SOCIAL_PER_AJUST`";
+
+    public static final String SOCIAL_REMARK = "`SOCIAL_REMARK`";
+
+    public static final String FUND_BASE = "`FUND_BASE`";
+
+    public static final String FUND_COM_PER = "`FUND_COM_PER`";
+
+    public static final String FUND_PER_PER = "`FUND_PER_PER`";
+
+    public static final String FUND_COM_AJUST = "`FUND_COM_AJUST`";
+
+    public static final String FUND_PER_AJUST = "`FUND_PER_AJUST`";
+
+    public static final String FUND_REMARK = "`FUND_REMARK`";
 
 }

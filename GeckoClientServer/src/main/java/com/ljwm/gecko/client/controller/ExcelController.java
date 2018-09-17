@@ -2,6 +2,7 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.client.service.ExcelService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 /**
  * @author Janiffy
  * @date 2018/9/10 15:05
@@ -17,21 +21,27 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RequestMapping("/excel")
 @RestController
+@Api(tags = "excel相关 API")
 public class ExcelController {
 
   @Autowired
   ExcelService excelService;
 
   @PostMapping("/personInfo/import")
-  public Result importExcel(@RequestParam("file")MultipartFile file, @RequestParam("companyId")Long companyId) throws Exception {
+  public Result improtPersonInfo(@RequestParam("file")MultipartFile file, @RequestParam("companyId")Long companyId) throws Exception {
     excelService.improtPersonInfo(file, companyId);
     return Result.success("导入成功！");
   }
 
-  @PostMapping("/attendance/import")
+ /* @PostMapping("/attendance/import")
   public Result importAttendance(@RequestParam("file")MultipartFile file, @RequestParam("companyId")Long companyId,
                                  @RequestParam("date")String date) throws Exception {
     excelService.improtAttendance(file, companyId, date);
     return Result.success("导入成功！");
+  }*/
+
+  @PostMapping("/personInfo/export")
+  public Result exportPersonInfoExcel(HttpServletResponse response, @RequestParam("companyId")Long companyId)throws IOException {
+    return Result.success(excelService.exportPersonInfoExcel(response, companyId));
   }
 }

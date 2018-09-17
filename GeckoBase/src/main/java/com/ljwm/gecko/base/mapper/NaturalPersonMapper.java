@@ -1,8 +1,13 @@
 package com.ljwm.gecko.base.mapper;
 
-import com.ljwm.gecko.base.entity.NaturalPerson;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ljwm.gecko.base.entity.NaturalPerson;
+import com.ljwm.gecko.base.model.dto.NaturalPersonDto;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +20,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NaturalPersonMapper extends BaseMapper<NaturalPerson> {
 
+  @ResultMap("NaturalPersonDto")
+  @Select("SELECT a.*, b.REG_MOBILE FROM t_natural_person a LEFT JOIN t_member b ON a.COMPANY_ID = #{companyId} AND a.MEMBER_ID = b.ID")
+  List<NaturalPersonDto> selectByCompanyId(Long companyId);
 }
