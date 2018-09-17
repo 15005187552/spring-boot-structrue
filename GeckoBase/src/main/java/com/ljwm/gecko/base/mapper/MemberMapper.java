@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.Member;
+import com.ljwm.gecko.base.model.vo.MemberInfo;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
@@ -38,7 +39,7 @@ public interface MemberMapper extends BaseMapper<Member> {
   List<MemberVo> selectByMeVoAndCode(@Param("memberId") Long memberId, @Param("code")Integer code);
 
 
-  @Select("SELECT * FROM t_member a, t_member_account b, t_member_password c WHERE b.TYPE=#{type} AND b.MEMBER_ID = a.ID AND a.ID=#{memberId} AND b.PASSWORD_ID =c.ID")
+  @Select("SELECT * FROM t_member a, t_member_account b, t_member_password c WHERE b.TYPE=#{type} AND b.MEMBER_ID = a.ID AND a.ID=#{memberId}")
   @ResultMap("BaseMap")
   List<MemberVo> selectByMeVoAndType(@Param("memberId")Long memberId, @Param("type")String type);
 
@@ -49,4 +50,8 @@ public interface MemberMapper extends BaseMapper<Member> {
   MemberVo findMemberVoByMemberId(@Param("memberId") Long memberId);
 
   List<MemberVo> findMemberVoListByProviderId(@Param("providerId") Long providerId);
+
+  @Select("SELECT * FROM t_member a, t_member_account b WHERE b.USERNAME = #{username} AND b.MEMBER_ID = a.ID")
+  @ResultMap("MemberInfo")
+  MemberInfo selectAccountByUserName(String username);
 }

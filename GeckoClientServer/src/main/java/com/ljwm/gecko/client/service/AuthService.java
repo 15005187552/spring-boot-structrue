@@ -83,12 +83,8 @@ public class AuthService {
 
   @Transactional
   public ResultMe login(GuestForm guestForm) {
-    UserSource userSource = UserSource.codeOf(guestForm.getSource());
     Guest guest = null;
     String mpOpenId = null;
-    if(guestForm.getSource() == null ||guestForm.getSource() != UserSource.WX_APP.getCode()) {
-      guest = guestService.upsert(userSource, guestForm.getGuestId(), null);
-    } else {
       // 1. 验证CODE 并换取用户信息
       JSONObject jsonObject = new JSONObject();
       FunctionUtil.retryOnException(3, () -> wechatXCXService.doCodeLogin(guestForm.getCode(), jsonObject));
@@ -117,7 +113,6 @@ public class AuthService {
         }
       }
       guest = guestService.upsert(UserSource.codeOf(UserSource.WX_APP.getCode()), mpOpenId, null);
-    }
     if(guest.getMemberId() == null) {
       LoginInfoHolder.setLoginType(LoginType.GUEST.getCode().toString());
       JwtUser jwtUser = new JwtUser(guest);

@@ -31,6 +31,24 @@
     <collection property="account" resultMap="AccountMap"/>
   </resultMap>
 
+  <resultMap id="MemberInfo" type="com.ljwm.gecko.base.model.vo.MemberInfo">
+    <id column="ID" property="id"/>
+    <result column="REG_MOBILE" property="regMobile"/>
+    <result column="NICK_NAME" property="nickName"/>
+    <result column="CREATE_TIME" property="createTime"/>
+    <result column="DISABLED" property="disabled"/>
+    <collection property="account" resultMap="AccountInfo"/>
+  </resultMap>
+
+  <resultMap id="AccountInfo" type="com.ljwm.gecko.base.entity.MemberAccount">
+    <id column="ID" property="id" />
+    <result column="USERNAME" property="username" />
+    <result column="TYPE" property="type" />
+    <result column="MEMBER_ID" property="memberId" />
+    <result column="PASSWORD_ID" property="passwordId" />
+    <result column="EXT_INFO" property="extInfo" />
+  </resultMap>
+
   <resultMap id="AccountMap" type="com.ljwm.gecko.base.model.vo.AccountVo">
     <id column="ID" property="id" />
     <result column="USERNAME" property="username" />

@@ -1,5 +1,10 @@
 package com.ljwm.gecko.client.security;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import com.ljwm.bootbase.security.LoginInfoHolder;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.dao.MemberInfoDao;
@@ -7,8 +12,10 @@ import com.ljwm.gecko.base.entity.Guest;
 import com.ljwm.gecko.base.entity.MemberPassword;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.mapper.GuestMapper;
+import com.ljwm.gecko.base.model.vo.MemberInfo;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.xmlbeans.impl.jam.mutable.MMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,7 +40,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     log.debug("load user with username: {} in userDetailsServiceImpl", username);
     LoginType loginType = LoginType.codeOf(LoginInfoHolder.getLoginType());
-    MemberVo memberVo = memberInfoDao.selectByUserName(username);
     switch (loginType) {
       case GUEST:
         Guest guest = guestMapper.findByGuestId(username);
@@ -41,15 +47,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
           throw new UsernameNotFoundException("用户不存在");
         }
         return new JwtUser(guest);
+
       case WX_APP:
-        if(memberVo == null) {
+        MemberInfo memberInfo = memberInfoDao.selectAccountByUserName(username);
+        if(memberInfo == null) {
           throw new UsernameNotFoundException("用户不存在");
         }
-        memberVo.getAccount().setPassword(new MemberPassword().setPassword(SecurityKit.passwordMD5(username,username)));
+        MemberVo memberVo = new MemberVo();
+        BeanUtil.copyProperties(memberInfo, memberVo);
+        memberVo.getAccount().setPassword(new MemberPassword().setLastModifyTime(DateUtil.offset(DateTime.now(), DateField.YEAR,10)).setPassword(SecurityKit.passwordMD5(username,username)));
         LoginInfoHolder.setSalt(username);
         return new JwtUser(memberVo);
       default:
-        if(memberVo == null) {
+        memberVo = memberInfoDao.selectByUserName(username);
+        if(memberVo.getAccount() == null) {
           throw new UsernameNotFoundException("用户不存在");
         }
         LoginInfoHolder.setSalt(memberVo.getAccount().getPassword().getSalt());

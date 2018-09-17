@@ -8,6 +8,7 @@ import com.ljwm.gecko.base.mapper.CompanyUserMapper;
 import com.ljwm.gecko.base.mapper.MemberAccountMapper;
 import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.mapper.MemberPasswordMapper;
+import com.ljwm.gecko.base.model.vo.MemberInfo;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,6 +127,10 @@ public class MemberInfoDao {
     map.put("MEMBER_ID", memberId);
     List<MemberAccount> list = memberAccountMapper.selectByMap(map);
     return list;
+  }
+
+  public MemberInfo selectAccountByUserName(String username) {
+    return memberMapper.selectAccountByUserName(username);
   }
 }
 
