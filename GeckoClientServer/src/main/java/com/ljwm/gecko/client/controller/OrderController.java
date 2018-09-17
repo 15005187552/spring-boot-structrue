@@ -4,6 +4,7 @@ import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.model.dto.OrderDto;
 import com.ljwm.gecko.base.model.dto.OrderItemDto;
+import com.ljwm.gecko.base.model.vo.OrderVo;
 import com.ljwm.gecko.base.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,9 +24,8 @@ public class OrderController extends BaseController {
 
   @PostMapping("createOrder")
   @ApiOperation("创建支付订单")
-  public Result createOrder(@RequestBody OrderDto orderDto){
-    orderService.createOrder(orderDto);
-    return success();
+  public Result<OrderVo> placeOrder(@RequestBody OrderDto orderDto){
+    return success(orderService.placeOrder(orderDto));
   }
 
   @PostMapping("createOrderItem")

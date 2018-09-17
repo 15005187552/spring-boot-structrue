@@ -8,6 +8,7 @@ import com.ljwm.gecko.base.model.dto.ConfirmProviderDto;
 import com.ljwm.gecko.base.model.dto.ProviderQueryDto;
 import com.ljwm.gecko.base.model.dto.ServeDto;
 import com.ljwm.gecko.base.model.form.ServiceTypeQuery;
+import com.ljwm.gecko.base.model.vo.ProviderServicesVo;
 import com.ljwm.gecko.base.model.vo.ProviderVo;
 import com.ljwm.gecko.base.model.vo.ServeSimpleVo;
 import com.ljwm.gecko.base.model.vo.ServiceVo;
@@ -40,9 +41,8 @@ public class ProviderController extends BaseController {
 
   @PostMapping("confirmProvider")
   @ApiOperation("审核服务商入驻申请")
-  public Result confirmProvider(@RequestBody ConfirmProviderDto confirmProviderDto) {
-    providerService.confirmProvider(confirmProviderDto);
-    return success();
+  public Result<List<ProviderServicesVo>> confirmProvider(@RequestBody ConfirmProviderDto confirmProviderDto) {
+    return success( providerService.confirmProvider(confirmProviderDto));
   }
 
   @GetMapping("find")

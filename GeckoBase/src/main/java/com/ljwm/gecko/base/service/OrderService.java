@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.SecurityKit;
+import com.ljwm.gecko.base.annotation.*;
 import com.ljwm.gecko.base.entity.Order;
 import com.ljwm.gecko.base.entity.OrderItem;
 import com.ljwm.gecko.base.enums.OrderStatusEnum;
@@ -14,6 +15,7 @@ import com.ljwm.gecko.base.mapper.OrderItemMapper;
 import com.ljwm.gecko.base.mapper.OrderMapper;
 import com.ljwm.gecko.base.model.dto.OrderDto;
 import com.ljwm.gecko.base.model.dto.OrderItemDto;
+import com.ljwm.gecko.base.model.vo.OrderVo;
 import com.ljwm.gecko.base.utils.IdWorkerUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -42,9 +44,9 @@ public class OrderService {
 
   private static final String SUB_ORDER="SUB";
 
+  @OrderLogger
   @Transactional
-  public void  createOrder(OrderDto orderDto){
-
+  public synchronized OrderVo placeOrder(OrderDto orderDto){
     OrderItemDto orderItemDto = orderDto.getOrderItemDto();
     if (orderItemDto!=null){
       OrderItem orderItem = new OrderItem();
@@ -52,9 +54,9 @@ public class OrderService {
       orderItem.setOrderItemNo(SUB_ORDER+idWorkerUtil.nextId());
       orderItem.setCreateTime(DateUtil.date());
       orderItem.setUpdateTime(DateUtil.date());
+      Order order = new Order();
       if (orderItemDto.getProductServiceId()!=null){
         //立即支付
-        Order order = new Order();
         order.setMemberId(SecurityKit.currentId());
         order.setOrderNo(MAIN_ORDER+idWorkerUtil.nextId());
         order.setPaymentType(PaymentTypeEnum.ONLINE_PAY.getCode());
@@ -69,6 +71,7 @@ public class OrderService {
         orderItem.setOrderItemStatus(OrderStatusEnum.WAIT.getCode());
       }
       orderItemMapper.insert(orderItem);
+      return new OrderVo(order);
     }else {
       //多服务支付
       List<String> orderItemOrderList = orderDto.getOrderItemNoList();
@@ -100,6 +103,7 @@ public class OrderService {
         orderItem.setUpdateTime(DateUtil.date());
         orderItemMapper.updateById(orderItem);
       }
+      return new OrderVo(order);
     }
   }
 
