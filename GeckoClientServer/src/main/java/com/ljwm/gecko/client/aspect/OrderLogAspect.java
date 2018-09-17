@@ -1,24 +1,21 @@
-package com.ljwm.gecko.base.aspect;
+package com.ljwm.gecko.client.aspect;
 
 import cn.hutool.core.date.DateUtil;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.Order;
 import com.ljwm.gecko.base.entity.OrderLog;
-import com.ljwm.gecko.base.enums.OrderLoggerActionEnum;
 import com.ljwm.gecko.base.enums.OrderStatusEnum;
 import com.ljwm.gecko.base.mapper.OrderLogMapper;
-import com.ljwm.gecko.base.model.vo.ResultMe;
 import com.ljwm.gecko.base.service.OrderService;
 import com.ljwm.gecko.base.utils.UtilKit;
+import com.ljwm.gecko.client.security.JwtUser;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.ljwm.gecko.base.annotation.*;
 
 import java.util.Map;
 
@@ -37,7 +34,7 @@ public class OrderLogAspect {
   @Autowired
   private OrderLogMapper orderLogMapper;
 
-  @AfterReturning(pointcut = "@annotation(com.ljwm.gecko.base.annotation.OrderLogger)", returning = "retVal")
+  @AfterReturning(pointcut = "@annotation(com.ljwm.gecko.client.annotation.OrderLogger)", returning = "retVal")
   public void log(JoinPoint pjp, Object retVal) throws Throwable {
     // 1. 验证日志是否记录
     if (retVal == null) return;  // 空对象不记录日志
@@ -59,14 +56,14 @@ public class OrderLogAspect {
     Integer status = UtilKit.getTargetByExpression("status", retVal);
 
     // 3. 验证是系统还是人工操作
-    ResultMe resultMe = SecurityKit.currentUser();
+    JwtUser resultMe = SecurityKit.currentUser();
 
     // 4. 构造通用日志对象
     OrderLog orderLog = new OrderLog()
       .setCreateTime(DateUtil.date())
       .setToStatus(status)
       .setOrderId(num)
-      .setOperator(resultMe == null ? "系统自动" : resultMe.getUserName())
+      .setOperator(resultMe == null ? "系统自动" : resultMe.getUsername())
       .setOperatorId(resultMe == null ? null : resultMe.getId());
 
     // 5. 分析注解中的枚举类型，进行日志分发

@@ -5,7 +5,7 @@ import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.model.dto.OrderDto;
 import com.ljwm.gecko.base.model.dto.OrderItemDto;
 import com.ljwm.gecko.base.model.vo.OrderVo;
-import com.ljwm.gecko.base.service.OrderService;
+import com.ljwm.gecko.client.service.ClientOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +20,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController extends BaseController {
 
   @Autowired
-  private OrderService orderService;
+  private ClientOrderService clientOrderService;
 
-  @PostMapping("createOrder")
+  @PostMapping("placeOrder")
   @ApiOperation("创建支付订单")
   public Result<OrderVo> placeOrder(@RequestBody OrderDto orderDto){
-    return success(orderService.placeOrder(orderDto));
+    return success(clientOrderService.placeOrder(orderDto));
   }
 
   @PostMapping("createOrderItem")
   @ApiOperation("创建子订单")
   public Result createOrderItem(@RequestBody OrderItemDto orderItemDto){
-    orderService.createOrderItem(orderItemDto);
+    clientOrderService.createOrderItem(orderItemDto);
     return success();
   }
 }

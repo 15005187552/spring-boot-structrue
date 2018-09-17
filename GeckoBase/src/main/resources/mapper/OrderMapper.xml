@@ -23,4 +23,27 @@
           `id`          ,`order_no`          ,`member_id`          ,`shipping_id`          ,`payment`          ,`payment_type`          ,`status`          ,`payment_time`          ,`end_time`          ,`close_time`          ,`create_time`          ,`update_time`
     </sql>
 
+    <resultMap id="orderVo" type="com.ljwm.gecko.base.model.vo.OrderVo" extends="BaseResultMap">
+
+    </resultMap>
+
+    <select id="findPage" parameterType="map" resultMap="orderVo">
+      select *  from t_order t
+      <where>
+        <if test="params.text != null and params.text != ''">
+          AND t.`ORDER_NO` LIKE CONCAT('%',#{params.text},'%')
+        </if>
+        <if test="params.status != null ">
+          AND t.`STATUS` = #{params.status}
+        </if>
+      </where>
+      ORDER BY t.CREATE_TIME
+      <if test="params.asc">
+        ASC
+      </if>
+      <if test="!params.asc">
+        DESC
+      </if>
+    </select>
+
 </mapper>
