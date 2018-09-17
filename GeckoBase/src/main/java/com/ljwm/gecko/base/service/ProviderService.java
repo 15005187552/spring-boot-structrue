@@ -247,7 +247,7 @@ public class ProviderService {
   @Transactional
   public List<ProviderServicesVo> confirmProvider(ConfirmProviderDto confirmProviderDto) {
     Provider provider = providerMapper.selectById(confirmProviderDto.getId());
-    if (provider == null || Objects.equals(provider.getValidateState(), ProviderStatEnum.WAIT_CONFIRM.getCode())) {
+    if (provider == null || !Objects.equals(provider.getValidateState(), ProviderStatEnum.WAIT_CONFIRM.getCode())) {
       log.info("服务商id:{} 服务商入驻信息不存在,或非待审核状态!", confirmProviderDto.getId());
       throw new LogicException(ResultEnum.DATA_ERROR, "服务商查询不到或非待审核状态!");
     }
@@ -259,7 +259,7 @@ public class ProviderService {
     }
     Integer validateState = ValidateStatEnum.CONFIRM_SUCCESS.getCode();
     for (ProviderServicesConfirmDto providerServicesConfirmDto: providerServicesConfirmDtoList){
-      ProviderServices providerServices = providerServicesMapper.selectById(confirmProviderDto.getId());
+      ProviderServices providerServices = providerServicesMapper.selectById(providerServicesConfirmDto.getId());
       if (providerServices==null){
         log.info("服务商类型查询不到此服务类型");
         throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此服务类型!");
