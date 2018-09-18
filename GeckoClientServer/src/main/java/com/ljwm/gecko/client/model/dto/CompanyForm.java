@@ -19,7 +19,7 @@ import java.util.List;
 public class CompanyForm {
 
   @ApiModelProperty(value = "企业id")
-  private String companyId;
+  private Long companyId;
 
   @ApiModelProperty(value = "企业名称")
   private String name;
@@ -49,5 +49,5 @@ public class CompanyForm {
   @ApiModelProperty(value = "详细地址")
   private String address;
 
-  List<CompanySpecial> companySpecialList;
+  List<CompanySpecialForm> companySpecialList;
 }

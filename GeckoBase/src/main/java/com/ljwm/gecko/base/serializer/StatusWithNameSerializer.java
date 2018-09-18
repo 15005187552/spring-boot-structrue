@@ -51,7 +51,7 @@ public abstract class StatusWithNameSerializer implements ObjectSerializer {
   public static class LocationSerializer extends StatusWithNameSerializer{
     @Override
     public String getNameByCode(Object code) {
-      return SpringKit.getBean(LocationService.class).getNameByCode((String)code);
+      return SpringKit.getBean(LocationService.class).getNameByCode(code.toString());
     }
   }
 

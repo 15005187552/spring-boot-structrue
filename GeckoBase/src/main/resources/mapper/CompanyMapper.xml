@@ -45,9 +45,8 @@
     <collection property="companySpecialList" resultMap="CompanySpecialMap"/>
   </resultMap>
 
-  <resultMap id="CompanySpecialMap" type="com.ljwm.gecko.base.entity.CompanySpecial">
+  <resultMap id="CompanySpecialMap" type="com.ljwm.gecko.base.model.vo.CompanySpecialVo">
     <id column="S_ID" property="id" />
-    <result column="COMPANY_ID" property="companyId" />
     <result column="SPECIAL_ID" property="specialId" />
     <result column="COMPANY_PER" property="companyPer" />
     <result column="PERSON_PER" property="personPer" />

@@ -5,6 +5,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
@@ -24,6 +25,7 @@ import com.ljwm.gecko.base.service.LocationService;
 import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.base.utils.Fileutil;
 import com.ljwm.gecko.client.model.dto.CompanyForm;
+import com.ljwm.gecko.client.model.dto.CompanySpecialForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +64,6 @@ public class CompanyService {
 
   @Transactional
   public Result commit(CompanyForm companyForm) {
-
     Company company = new Company();
     BeanUtils.copyProperties(companyForm, company);
     Date date = new Date();
@@ -71,8 +72,11 @@ public class CompanyService {
     if(companyForm.getCompanyId() != null){
       //更新操作
       companyMapper.updateById(company);
-      List<CompanySpecial> list = companyForm.getCompanySpecialList();
-      for (CompanySpecial companySpecial : list){
+      List<CompanySpecialForm> list = companyForm.getCompanySpecialList();
+      for (CompanySpecialForm companySpecialForm : list){
+        CompanySpecial companySpecial = new CompanySpecial();
+        BeanUtil.copyProperties(companySpecialForm, companySpecial);
+        companySpecial.setCompanyId(companyForm.getCompanyId());
         if (companySpecial.getId() != null){
           companySpecialMapper.updateById(companySpecial);
         }else {
@@ -80,8 +84,14 @@ public class CompanyService {
         }
       }
     } else {
-      company.setCreateTime(date).setCreaterId(SecurityKit.currentId());
-      companyMapper.insert(company);
+      company = companyMapper.selectOne(new QueryWrapper<Company>().eq(Company.NAME, company.getName()).eq(Company.CODE, company.getCode()));
+      if(company != null){
+        company.setUpdateTime(new Date());
+        companyMapper.updateById(company);
+      }else {
+        company.setCreateTime(date).setCreaterId(SecurityKit.currentId()).setUpdateTime(new Date());
+        companyMapper.insert(company);
+      }
       List<CityItem> list = cityItemMapper.selectList(new QueryWrapper<CityItem>().eq(CityItem.REGION_CODE, companyForm.getCityCode()));
       for (CityItem cityItem : list){
         CompanySpecial companySpecial = new CompanySpecial();
@@ -121,12 +131,11 @@ public class CompanyService {
   }
 
   public Result findByName(String name) {
-  //  List<CompanyVo> list = companyMapper.findCompanyByName(name);
-    Company company  = companyMapper.selectOne(new QueryWrapper<Company>().eq(Company.ID, 18));
-    /*if (CollectionUtil.isNotEmpty(list)) {
-      return Result.success(list.get(0));
-    }*/
-    return Result.success(company);
+    List<CompanyVo> list = companyMapper.findCompanyByName(name, CompanyValidateEnum.PASS_VALIDATE.getCode());
+    if (CollectionUtil.isEmpty(list)) {
+      throw new LogicException("无搜索结果！");
+    }
+    return Result.success(list.get(0));
   }
 
   public Result findEmployee(String companyId) {
@@ -154,9 +163,9 @@ public class CompanyService {
 
   public Result findCompanyById(String companyId) {
     List<CompanyVo> list = companyMapper.findCompanyById(companyId);
-    if (CollectionUtil.isNotEmpty(list)) {
-      return Result.success(list.get(0));
+    if (CollectionUtil.isEmpty(list)) {
+      throw new LogicException("无搜索结果！");
     }
-    return Result.success(null);
+    return Result.success(list.get(0));
   }
 }

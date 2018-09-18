@@ -66,7 +66,7 @@ public class CompanyUserService {
         CompanyInfoVo companyInfoVo = new CompanyInfoVo();
         BeanUtil.copyProperties(company, companyInfoVo);
         companyInfoVo.setFlag(false);
-        if (companyId.equals(companyInfoVo.getId())){
+        if (companyId != null && companyId.equals(companyInfoVo.getId())){
           companyInfoVo.setFlag(true);
         }
         companyVoList.add(companyInfoVo);

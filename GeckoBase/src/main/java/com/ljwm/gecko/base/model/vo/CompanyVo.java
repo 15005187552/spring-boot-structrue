@@ -2,6 +2,7 @@ package com.ljwm.gecko.base.model.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ljwm.gecko.base.entity.CompanySpecial;
+import com.ljwm.gecko.base.serializer.PathToUrlSerializer;
 import com.ljwm.gecko.base.serializer.StatusWithNameSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -46,6 +47,7 @@ public class CompanyVo {
   private Long createrId;
 
   @ApiModelProperty(value = "证照图片路径")
+  @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
   private String picPath;
 
   @ApiModelProperty(value = "审核人ID")
@@ -62,18 +64,18 @@ public class CompanyVo {
 
   @JSONField(serializeUsing = StatusWithNameSerializer.LocationSerializer.class)
   @ApiModelProperty(value = "省级代码")
-  private Integer provCode;
+  private String provCode;
 
   @JSONField(serializeUsing = StatusWithNameSerializer.LocationSerializer.class)
   @ApiModelProperty(value = "市级代码")
-  private Integer cityCode;
+  private String cityCode;
 
   @JSONField(serializeUsing = StatusWithNameSerializer.LocationSerializer.class)
   @ApiModelProperty(value = "区级代码")
-  private Integer areaCode;
+  private String areaCode;
 
   @ApiModelProperty(value = "详细地址")
   private String address;
 
-  List<CompanySpecial> companySpecialList;
+  List<CompanySpecialVo> companySpecialList;
 }

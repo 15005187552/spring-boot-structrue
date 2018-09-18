@@ -60,7 +60,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new JwtUser(memberVo);
       default:
         memberVo = memberInfoDao.selectByUserName(username);
-        if(memberVo.getAccount() == null) {
+        if(memberVo == null) {
           throw new UsernameNotFoundException("用户不存在");
         }
         LoginInfoHolder.setSalt(memberVo.getAccount().getPassword().getSalt());
