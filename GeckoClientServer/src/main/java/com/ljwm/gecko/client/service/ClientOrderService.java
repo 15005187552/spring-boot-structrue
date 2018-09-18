@@ -8,16 +8,25 @@ import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
+import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.entity.Order;
+import com.ljwm.gecko.base.entity.OrderComments;
+import com.ljwm.gecko.base.entity.OrderCommentsPath;
 import com.ljwm.gecko.base.entity.OrderItem;
 import com.ljwm.gecko.base.enums.OrderStatusEnum;
 import com.ljwm.gecko.base.enums.PaymentTypeEnum;
+import com.ljwm.gecko.base.mapper.OrderCommentsMapper;
+import com.ljwm.gecko.base.mapper.OrderCommentsPathMapper;
 import com.ljwm.gecko.base.mapper.OrderItemMapper;
 import com.ljwm.gecko.base.mapper.OrderMapper;
+import com.ljwm.gecko.base.model.bean.AppInfo;
+import com.ljwm.gecko.base.model.dto.OrderCommentsDto;
 import com.ljwm.gecko.base.model.dto.OrderDto;
+import com.ljwm.gecko.base.model.dto.OrderItemCommentsDto;
 import com.ljwm.gecko.base.model.dto.OrderItemDto;
 import com.ljwm.gecko.base.model.vo.OrderSimpleVo;
 import com.ljwm.gecko.base.model.vo.OrderVo;
+import com.ljwm.gecko.base.utils.Fileutil;
 import com.ljwm.gecko.base.utils.IdWorkerUtil;
 import com.ljwm.gecko.base.utils.MoneyKit;
 import com.ljwm.gecko.base.utils.UtilKit;
@@ -52,6 +61,15 @@ public class ClientOrderService {
 
   @Autowired
   private WeiXinXcxService weiXinXcxService;
+
+  @Autowired
+  private OrderCommentsMapper orderCommentsMapper;
+
+  @Autowired
+  private OrderCommentsPathMapper orderCommentsPathMapper;
+
+  @Autowired
+  private AppInfo appInfo;
 
   private static final String MAIN_ORDER="MN";
 
@@ -176,5 +194,49 @@ public class ClientOrderService {
     );
     // 4. 构造返回值
     return new OrderPaymentVo(id, map);
+  }
+
+  public OrderSimpleVo comments(OrderCommentsDto orderCommentsDto){
+    Order order = orderMapper.selectById(orderCommentsDto.getId());
+    if (order==null){
+      log.info("订单id{},查询不到该订单!",orderCommentsDto.getId());
+      throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此订单!");
+    }
+    if (!Objects.equals(order.getStatus(),OrderStatusEnum.PAID.getCode())){
+      log.info("订单号{},非已付款状态!",order.getOrderNo());
+      throw new LogicException(ResultEnum.DATA_ERROR,"订单为非已付款状态!");
+    }
+    order.setStatus(OrderStatusEnum.ORDER_SUCCESS.getCode());
+    order.setEndTime(DateUtil.date());
+    orderMapper.updateById(order);
+    List<OrderItemCommentsDto> commentsList = orderCommentsDto.getComments();
+    if (CollectionUtils.isEmpty(commentsList)){
+      log.info("评价列表不能为空!");
+      throw new LogicException(ResultEnum.DATA_ERROR,"评价列表不能为空!");
+    }
+    for (OrderItemCommentsDto orderItemCommentsDto: commentsList){
+      OrderComments orderComments = new OrderComments();
+      orderComments.setMemberId(SecurityKit.currentId());
+      orderComments.setOrderId(orderCommentsDto.getId());
+      orderComments.setOrderItemId(orderItemCommentsDto.getId());
+      orderComments.setName(SecurityKit.currentUser().getUsername());
+      orderComments.setStar(orderItemCommentsDto.getStar());
+      orderComments.setCreateTime(DateUtil.date());
+      orderCommentsMapper.insert(orderComments);
+      if (CollectionUtils.isNotEmpty(orderItemCommentsDto.getPictures())){
+        for (String picPath:orderItemCommentsDto.getPictures() ){
+          OrderCommentsPath orderCommentsPath = new OrderCommentsPath();
+          String srcPath = appInfo.getFilePath() + Constant.CACHE + picPath;
+          String destDir = appInfo.getFilePath() + Constant.MEMBER + SecurityKit.currentId() + "/";
+          Fileutil.cutGeneralFile(srcPath, destDir);
+          orderCommentsPath.setPicPath(Constant.MEMBER + SecurityKit.currentId() + "/" + picPath);
+          orderCommentsPath.setCommentId(orderComments.getId());
+          orderCommentsPath.setCreateTime(DateUtil.date());
+          orderCommentsPathMapper.insert(orderCommentsPath);
+        }
+
+      }
+    }
+    return new OrderSimpleVo(order);
   }
 }

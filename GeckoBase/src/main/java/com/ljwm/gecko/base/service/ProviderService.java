@@ -294,4 +294,8 @@ public class ProviderService {
     List<ProviderServicesVo> servicesVoList = providerServicesMapper.findProviderServicesVoListByProviderId(provider.getId());
     return servicesVoList;
   }
+
+  public ProviderVo findProviderByMemberId(Long memberId){
+    return providerMapper.findProviderByMemberId(memberId);
+  }
 }

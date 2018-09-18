@@ -2,6 +2,7 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.base.model.dto.OrderCommentsDto;
 import com.ljwm.gecko.base.model.dto.OrderDto;
 import com.ljwm.gecko.base.model.dto.OrderItemDto;
 import com.ljwm.gecko.base.model.vo.OrderSimpleVo;
@@ -45,7 +46,12 @@ public class OrderController extends BaseController {
   @GetMapping("payOrder/{id}")
   @ApiOperation("客户端 测试/正式 (小程序) 对未付款的订单唤起微信支付")
   public Result<OrderPaymentVo> payOrderXcx(@PathVariable @Valid Long id) {
-
     return success(clientOrderService.payOrderXcx(id));
+  }
+
+  @PostMapping("comments")
+  @ApiOperation("客户端 --- 评论订单")
+  public Result<OrderSimpleVo> comments(@RequestBody @Valid OrderCommentsDto orderCommentsForm) {
+    return success(clientOrderService.comments(orderCommentsForm));
   }
 }

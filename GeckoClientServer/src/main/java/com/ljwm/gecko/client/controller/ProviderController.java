@@ -10,10 +10,7 @@ import com.ljwm.gecko.base.service.ProviderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/provider")
@@ -35,5 +32,11 @@ public class ProviderController extends BaseController {
   @ApiOperation("小程序端查询服务商列表")
   public Result<ProviderVo> findClient(@RequestBody ProviderQueryDto providerQueryDto){
     return success(providerService.findByPage(providerQueryDto));
+  }
+
+  @GetMapping("findProvider")
+  @ApiOperation("根据会员id查询服务商信息")
+  public Result<ProviderVo> findProviderByMemberId(){
+    return success(providerService.findProviderByMemberId(SecurityKit.currentId()));
   }
 }

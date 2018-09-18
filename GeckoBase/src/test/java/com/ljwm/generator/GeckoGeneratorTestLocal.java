@@ -27,7 +27,7 @@ public class GeckoGeneratorTestLocal {
         .created(true)    // 第一次建类用创建
         .idType(IdType.AUTO)
         .tables(new String[]{
-          "t_order_item"})
+          "t_order_comments","t_order_comments_path"})
         .build()
     );
   }

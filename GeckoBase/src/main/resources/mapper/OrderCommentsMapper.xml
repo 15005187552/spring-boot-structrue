@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.OrderCommentsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.OrderComments">
+        <id column="ID" property="id" />
+        <result column="ORDER_ID" property="orderId" />
+        <result column="ORDER_ITEM_ID" property="orderItemId" />
+        <result column="MEMBER_ID" property="memberId" />
+        <result column="NAME" property="name" />
+        <result column="STAR" property="star" />
+        <result column="CREATE_TIME" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`ORDER_ID`          ,`ORDER_ITEM_ID`          ,`MEMBER_ID`          ,`NAME`          ,`STAR`          ,`CREATE_TIME`
+    </sql>
+
+</mapper>
