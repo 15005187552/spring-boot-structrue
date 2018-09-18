@@ -39,7 +39,7 @@ public class MemberAccount implements Serializable {
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "账号ID")
+    @ApiModelProperty(value = "账号名称")
     @TableField("USERNAME")
     private String username;
 
@@ -58,6 +58,10 @@ public class MemberAccount implements Serializable {
     @ApiModelProperty(value = "账号扩展信息")
     @TableField("EXT_INFO")
     private String extInfo;
+
+    @ApiModelProperty(value = "用户账号")
+    @TableField("ACCOUNT")
+    private String account;
 
 
     public static final String ID = "ID";

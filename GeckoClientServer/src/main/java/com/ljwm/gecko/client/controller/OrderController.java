@@ -6,6 +6,7 @@ import com.ljwm.gecko.base.model.dto.OrderDto;
 import com.ljwm.gecko.base.model.dto.OrderItemDto;
 import com.ljwm.gecko.base.model.vo.OrderSimpleVo;
 import com.ljwm.gecko.base.model.vo.OrderVo;
+import com.ljwm.gecko.client.model.vo.OrderPaymentVo;
 import com.ljwm.gecko.client.service.ClientOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,10 +42,10 @@ public class OrderController extends BaseController {
     return success(clientOrderService.setOrderPaid(id));
   }
 
-/*  @GetMapping("payOrder/{id}")
-  @ApiOperation("前台--③-1 测试/正式 (小程序) 对未付款的订单唤起微信支付")
+  @GetMapping("payOrder/{id}")
+  @ApiOperation("客户端 测试/正式 (小程序) 对未付款的订单唤起微信支付")
   public Result<OrderPaymentVo> payOrderXcx(@PathVariable @Valid Long id) {
 
-    return success(orderService.payOrderXcx(id));
-  }*/
+    return success(clientOrderService.payOrderXcx(id));
+  }
 }

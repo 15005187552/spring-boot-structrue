@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public interface ServiceTypeMapper extends BaseMapper<ServiceType> {
 
-  List<ServiceVo> find();
+  List<ServiceVo> findTree();
 
   List<ServiceVo> find(Page<ServiceVo> page, @Param("params")Map map);
 

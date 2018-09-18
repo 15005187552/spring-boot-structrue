@@ -8,7 +8,14 @@ wx:
   xcx:                  #小程序
     appId: wx02c093bdfb8fba13
     appSecret: b11358f00ef7ac5b946d4aa1ab488575
-
+  gzh:
+    appId: wx32f9a57c9a3c31ac
+    appSecret: d58316dc8bba2eba740c09213bf5072c
+  mch:
+    mchId: 1500209732
+    paySecret: d58316dc8bba2eba740c09213bf5072c
+    notifyUrl: "https://mhs.1322.com/asm/order/weixin/notify"
+    notifyVipUrl: "https://mhs.1322.com/asm/vip/weixin/notifyVip"
 appInfo:
   webRoot: "E://upload/"
   webPath: "https://mhs.1322.com"

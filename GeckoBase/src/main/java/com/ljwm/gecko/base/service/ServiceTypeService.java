@@ -34,7 +34,7 @@ public class ServiceTypeService {
   private ServiceTypeMapper serviceTypeMapper;
 
   public List<ServiceVo> find() {
-    return serviceTypeMapper.find();
+    return serviceTypeMapper.findTree();
   }
 
   public Page<ServiceVo> findByPage(ServiceTypeQuery query) {

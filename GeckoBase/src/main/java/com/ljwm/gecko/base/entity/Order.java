@@ -79,6 +79,10 @@ public class Order implements Serializable {
     @TableField("`update_time`")
     private Date updateTime;
 
+    @ApiModelProperty(value = "微信订单号")
+    @TableField("`WX_ORDER_NO`")
+    private String wxOrderNo;
+
 
     public static final String ID = "`id`";
 

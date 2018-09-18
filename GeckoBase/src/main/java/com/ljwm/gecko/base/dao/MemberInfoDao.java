@@ -66,7 +66,7 @@ public class MemberInfoDao {
   }
 
   public MemberAccount insertAccount(String userName, Integer code, Long memberId, Long passwordId) {
-    MemberAccount memberAccount = new MemberAccount(null, userName, code, memberId, passwordId, null);
+    MemberAccount memberAccount = new MemberAccount(null, userName, code, memberId, passwordId, null,null);
     memberAccountMapper.insert(memberAccount);
     return memberAccount;
   }

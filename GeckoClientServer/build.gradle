@@ -3,6 +3,7 @@ dependencies {
 
   // 开发环境热部署支持
   compile('org.springframework.boot:spring-boot-devtools')
-
+  // WeiXin SDK
+  compile('com.jfinal:jfinal-weixin:1.9')
   compile("mysql:mysql-connector-java:8.0.11")
 }

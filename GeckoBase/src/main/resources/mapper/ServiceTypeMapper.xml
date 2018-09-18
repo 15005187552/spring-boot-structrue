@@ -20,6 +20,12 @@
     <collection property="children" column="ID" select="com.ljwm.gecko.base.mapper.ServiceTypeMapper.children"/>
   </resultMap>
 
+  <select id="findTree" resultMap="serviceVo">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM t_service_type WHERE `PID` is null ORDER BY `ID`
+  </select>
+
   <select id="find" resultMap="serviceVo">
     SELECT
     <include refid="Base_Column_List"/>

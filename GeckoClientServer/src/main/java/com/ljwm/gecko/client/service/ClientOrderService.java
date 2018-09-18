@@ -19,6 +19,11 @@ import com.ljwm.gecko.base.model.dto.OrderItemDto;
 import com.ljwm.gecko.base.model.vo.OrderSimpleVo;
 import com.ljwm.gecko.base.model.vo.OrderVo;
 import com.ljwm.gecko.base.utils.IdWorkerUtil;
+import com.ljwm.gecko.base.utils.MoneyKit;
+import com.ljwm.gecko.base.utils.UtilKit;
+import com.ljwm.gecko.client.model.vo.OrderPaymentVo;
+import com.ljwm.gecko.client.security.JwtUser;
+import com.ljwm.gecko.client.webservice.WeiXinXcxService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import com.ljwm.gecko.client.annotation.*;
 
@@ -43,6 +49,9 @@ public class ClientOrderService {
 
   @Autowired
   private CommonService commonService;
+
+  @Autowired
+  private WeiXinXcxService weiXinXcxService;
 
   private static final String MAIN_ORDER="MN";
 
@@ -140,5 +149,32 @@ public class ClientOrderService {
     order.setPaymentTime(DateUtil.date());
     orderMapper.updateById(order);
     return new OrderSimpleVo(order);
+  }
+
+  public OrderPaymentVo payOrderXcx(Long id){
+    Order order = orderMapper.selectById(id);
+    if (order==null){
+      log.info("订单id{},查询不到该订单!",id);
+      throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此订单!");
+    }
+
+    // 2. 生成推送微信单号
+    String wxNum = UtilKit.createNum("WX");
+    order.setWxOrderNo(wxNum);
+    orderMapper.updateById(order);
+    JwtUser jwtUser = SecurityKit.currentUser();
+    assert jwtUser != null;
+    // 3. 下单
+    Map map = weiXinXcxService.weixinPay(
+      UtilKit.currentIp(),                    // ip
+      wxNum,                                  // 微信单号
+      MoneyKit.getFen(order.getPayment()),    // 金额
+      jwtUser.getMember().getAccount().getAccount(),      // OPEN ID
+      orderMapper.getOrderInfo(order.getOrderNo()),// 构造商品明细
+      true,
+      false
+    );
+    // 4. 构造返回值
+    return new OrderPaymentVo(id, map);
   }
 }
