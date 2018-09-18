@@ -66,7 +66,7 @@
     </select>
 
     <select id="findProviderByMemberId" parameterType="long" resultMap="providerVo">
-      select t.*  from t_provider where t.CREATOR_ID =#{id}
+      select t.*  from t_provider t where t.CREATOR_ID =#{id}
     </select>
 
 </mapper>
