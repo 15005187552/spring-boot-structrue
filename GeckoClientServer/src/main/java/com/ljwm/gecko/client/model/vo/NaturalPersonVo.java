@@ -35,7 +35,7 @@ public class NaturalPersonVo extends NaturalPerson {
   private Integer certificate;
 
   @ApiModelProperty(value = "证件号")
-  @JSONField(name = "memberIdCard")
+  @JSONField(name = "memberIdcard")
   private String certNum;
 
   @ApiModelProperty(value = "残疾人证件号")
