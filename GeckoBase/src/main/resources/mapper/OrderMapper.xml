@@ -34,7 +34,9 @@
     <select id="findPage" parameterType="map" resultMap="orderVo">
       select DISTINCT t.* from t_order t LEFT JOIN t_order_item toi on t.ORDER_NO=toi.ORDER_NO
       <where>
+        <if test="params.providerId != null">
         AND toi.`PROVIDER_ID` = #{params.providerId}
+        </if>
         <if test="params.text != null and params.text != ''">
           AND t.`ORDER_NO` LIKE CONCAT('%',#{params.text},'%')
         </if>
