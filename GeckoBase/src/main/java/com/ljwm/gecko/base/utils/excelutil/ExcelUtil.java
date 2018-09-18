@@ -12,6 +12,7 @@ import org.apache.poi.ss.util.CellReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -132,8 +133,8 @@ public class ExcelUtil {
      *                javabean属性的数据类型有基本数据类型及String,Date,String[],Double[]
      * @param out     与输出设备关联的流对象，可以将EXCEL文档导出到本地文件或者网络中
      */
-    public static <T> void exportExcel(Map<String,String> headers, Collection<T> dataset, OutputStream out) {
-        exportExcel(headers, dataset, out, null);
+    public static <T> void exportExcel(Map<String,String> headers, Collection<T> dataset, OutputStream out, HttpServletResponse response) {
+        exportExcel(headers, dataset, out, null,  response);
     }
 
     /**
@@ -148,7 +149,7 @@ public class ExcelUtil {
      * @param pattern 如果有时间数据，设定输出格式。默认为"yyy-MM-dd"
      */
     public static <T> void exportExcel(Map<String,String> headers, Collection<T> dataset, OutputStream out,
-                                       String pattern) {
+                                       String pattern, HttpServletResponse response) {
         // 声明一个工作薄
         HSSFWorkbook workbook = new HSSFWorkbook();
         // 生成一个表格

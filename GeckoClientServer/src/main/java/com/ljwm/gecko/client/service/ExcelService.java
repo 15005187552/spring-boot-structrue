@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -265,10 +266,12 @@ public class ExcelService {
       }
 
     }
-    File file = new File("sa.xlsx");
-    OutputStream out = new FileOutputStream(file);
-    ExcelUtil.exportExcel(map, objectList, out);
-    out.close();
+    response.reset();
+    response.setContentType("multipart/form-data");
+    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("人员信息.xls","UTF-8"));
+    OutputStream output = response.getOutputStream();
+    ExcelUtil.exportExcel(map, objectList, output, response);
+    output.close();
     return "导出成功！";
   }
 }
