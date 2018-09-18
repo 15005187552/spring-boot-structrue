@@ -22,8 +22,8 @@ public class PersonInfoDto implements Serializable {
   @ApiModelProperty(value = "证件类型")
   private String certificate;
 
-  @ApiModelProperty(value = "证件号,此处参数为memberIdCard")
-  @JSONField(name = "memberIdCard")
+  @ApiModelProperty(value = "证件号,此处参数为memberIdcard")
+  @JSONField(name = "memberIdcard")
   private String certNum;
 
   @ApiModelProperty(value = "国籍 0-中国大陆 1-港澳台 2-外籍")

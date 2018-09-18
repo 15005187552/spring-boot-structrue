@@ -16,5 +16,5 @@ public class CompanyUserVo extends CompanyUser {
 
   private String regMobile;
 
-  private String memberIdCard;
+  private String memberIdcard;
 }

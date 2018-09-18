@@ -23,7 +23,7 @@
       <result column="NICK_NAME" property="nickName"/>
       <result column="REG_MOBILE" property="regMobile"/>
       <result column="AVATAR_PATH" property="avatarPath"/>
-      <result column="MEMBER_IDCARD" property="memberIdCard"/>
+      <result column="MEMBER_IDCARD" property="memberIdcard"/>
       <result column="memberDisabled" property="memberDisabled"/>
     </resultMap>
 
