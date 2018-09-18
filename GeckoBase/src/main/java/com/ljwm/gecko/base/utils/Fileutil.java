@@ -1,9 +1,11 @@
 package com.ljwm.gecko.base.utils;
 
-import com.ljwm.bootbase.exception.LogicException;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * @author Janiffy
@@ -86,7 +88,8 @@ public class Fileutil {
       log.info("复制文件成功!");
       return flag;
     }else {
-      throw new LogicException("复制文件失败!");
+      log.info("复制文件失败!");
+      return false;
     }
 
   }

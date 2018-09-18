@@ -32,7 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
@@ -264,12 +266,14 @@ public class ExcelService {
       if(StrUtil.isNotBlank(personExportVo.getEmployee())){
         personExportVo.setPersonState(EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personExportVo.getEmployee())));
       }
-
+      objectList.add(personExportVo);
     }
     response.reset();
     response.setContentType("multipart/form-data");
-    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("人员信息.xls","UTF-8"));
+    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("人员信息.xlsx","UTF-8"));
     OutputStream output = response.getOutputStream();
+   /* File file = new File("C:\\Users\\Administrator\\Desktop\\a.xlsx");
+    OutputStream output = new FileOutputStream(file);*/
     ExcelUtil.exportExcel(map, objectList, output);
     output.close();
     return "导出成功！";

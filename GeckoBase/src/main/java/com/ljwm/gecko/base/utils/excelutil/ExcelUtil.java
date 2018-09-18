@@ -7,7 +7,6 @@ import org.apache.commons.collections.comparators.ComparableComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.slf4j.Logger;
@@ -264,7 +263,7 @@ public class ExcelUtil {
                 cell.setCellValue(text);
                 if (headers.get(key).contains("*")){
                   HSSFFont font = workbook.createFont();
-                  font.setColor(HSSFColor.RED.index);//HSSFColor.VIOLET.index //字体颜色
+                  font.setColor(IndexedColors.RED.getIndex());//HSSFColor.VIOLET.index //字体颜色
                 }
                 c++;
             }
