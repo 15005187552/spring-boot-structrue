@@ -7,12 +7,12 @@ import org.apache.commons.collections.comparators.ComparableComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -133,8 +133,8 @@ public class ExcelUtil {
      *                javabean属性的数据类型有基本数据类型及String,Date,String[],Double[]
      * @param out     与输出设备关联的流对象，可以将EXCEL文档导出到本地文件或者网络中
      */
-    public static <T> void exportExcel(Map<String,String> headers, Collection<T> dataset, OutputStream out, HttpServletResponse response) {
-        exportExcel(headers, dataset, out, null,  response);
+    public static <T> void exportExcel(Map<String,String> headers, Collection<T> dataset, OutputStream out) {
+        exportExcel(headers, dataset, out, null);
     }
 
     /**
@@ -149,13 +149,13 @@ public class ExcelUtil {
      * @param pattern 如果有时间数据，设定输出格式。默认为"yyy-MM-dd"
      */
     public static <T> void exportExcel(Map<String,String> headers, Collection<T> dataset, OutputStream out,
-                                       String pattern, HttpServletResponse response) {
+                                       String pattern) {
         // 声明一个工作薄
         HSSFWorkbook workbook = new HSSFWorkbook();
         // 生成一个表格
         HSSFSheet sheet = workbook.createSheet();
 
-        write2Sheet(sheet, headers, dataset, pattern);
+        write2Sheet(sheet, headers, dataset, pattern, workbook);
         try {
             workbook.write(out);
         } catch (IOException e) {
@@ -226,7 +226,7 @@ public class ExcelUtil {
         for (ExcelSheet<T> sheet : sheets) {
             // 生成一个表格
             HSSFSheet hssfSheet = workbook.createSheet(sheet.getSheetName());
-            write2Sheet(hssfSheet, sheet.getHeaders(), sheet.getDataset(), pattern);
+            write2Sheet(hssfSheet, sheet.getHeaders(), sheet.getDataset(), pattern, workbook);
         }
         try {
             workbook.write(out);
@@ -244,7 +244,7 @@ public class ExcelUtil {
      * @param pattern 日期格式
      */
     private static <T> void write2Sheet(HSSFSheet sheet, Map<String,String> headers, Collection<T> dataset,
-                                        String pattern) {
+                                        String pattern, HSSFWorkbook workbook) {
         //时间格式默认"yyyy-MM-dd"
         if (StringUtils.isEmpty(pattern)){
             pattern = "yyyy-MM-dd";
@@ -262,6 +262,10 @@ public class ExcelUtil {
                 HSSFCell cell = row.createCell(c);
                 HSSFRichTextString text = new HSSFRichTextString(headers.get(key));
                 cell.setCellValue(text);
+                if (headers.get(key).contains("*")){
+                  HSSFFont font = workbook.createFont();
+                  font.setColor(HSSFColor.RED.index);//HSSFColor.VIOLET.index //字体颜色
+                }
                 c++;
             }
         }

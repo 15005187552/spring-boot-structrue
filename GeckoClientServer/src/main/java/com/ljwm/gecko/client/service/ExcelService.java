@@ -270,7 +270,7 @@ public class ExcelService {
     response.setContentType("multipart/form-data");
     response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("人员信息.xls","UTF-8"));
     OutputStream output = response.getOutputStream();
-    ExcelUtil.exportExcel(map, objectList, output, response);
+    ExcelUtil.exportExcel(map, objectList, output);
     output.close();
     return "导出成功！";
   }
