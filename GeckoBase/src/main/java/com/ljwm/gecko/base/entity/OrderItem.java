@@ -17,11 +17,11 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
- * @author Levis
- * @since 2018-09-11
+ * @author Livis
+ * @since 2018-09-18
  */
 @Data
 @SuppressWarnings("ALL")
@@ -35,87 +35,88 @@ public class OrderItem implements Serializable {
 
 
     @ApiModelProperty(value = "订单子表id")
-    @TableId(value = "`id`", type = IdType.AUTO)
+    @TableId(value = "`ID`", type = IdType.AUTO)
     private Long id;
-
-    @ApiModelProperty(value = "会员id")
-    @TableField("`member_id`")
-    private Long memberId;
-    @TableField("`order_no`")
+    @TableField("`ORDER_NO`")
     private String orderNo;
 
     @ApiModelProperty(value = "服务id")
-    @TableField("`service_id`")
+    @TableField("`SERVICE_ID`")
     private Integer serviceId;
 
     @ApiModelProperty(value = "商品服务明细id")
-    @TableField("`product_service_id`")
+    @TableField("`PRODUCT_SERVICE_ID`")
     private Long productServiceId;
 
     @ApiModelProperty(value = "商品名称")
-    @TableField("`service_name`")
+    @TableField("`SERVICE_NAME`")
     private String serviceName;
 
     @ApiModelProperty(value = "商品图片地址")
-    @TableField("`service_image`")
+    @TableField("`SERVICE_IMAGE`")
     private String serviceImage;
 
     @ApiModelProperty(value = "生成订单时的商品单价，单位是元,保留两位小数")
-    @TableField("`current_unit_price`")
+    @TableField("`CURRENT_UNIT_PRICE`")
     private BigDecimal currentUnitPrice;
 
     @ApiModelProperty(value = "商品数量")
+    @TableField("`QUANTITY`")
     private Integer quantity;
 
     @ApiModelProperty(value = "商品总价,单位是元,保留两位小数")
-    @TableField("`total_price`")
+    @TableField("`TOTAL_PRICE`")
     private BigDecimal totalPrice;
 
     @ApiModelProperty(value = "服务订单备注")
-    @TableField("`service_content`")
+    @TableField("`SERVICE_CONTENT`")
     private String serviceContent;
-    @TableField("`create_time`")
+    @TableField("`CREATE_TIME`")
     private Date createTime;
-    @TableField("`update_time`")
+    @TableField("`UPDATE_TIME`")
     private Date updateTime;
 
     @ApiModelProperty(value = "子订单号")
-    @TableField("`order_item_no`")
+    @TableField("`ORDER_ITEM_NO`")
     private String orderItemNo;
 
     @ApiModelProperty(value = "订单状态:0-已取消,5-待服务定价,10-未付款,20-已付款,50-交易成功,60-交易关闭")
-    @TableField("`order_item_status`")
+    @TableField("`ORDER_ITEM_STATUS`")
     private Integer orderItemStatus;
 
+    @ApiModelProperty(value = "服务商id")
+    @TableField("`PROVIDER_ID`")
+    private Long providerId;
 
-    public static final String ID = "`id`";
 
-    public static final String MEMBER_ID = "`member_id`";
+    public static final String ID = "`ID`";
 
-    public static final String ORDER_NO = "`order_no`";
+    public static final String ORDER_NO = "`ORDER_NO`";
 
-    public static final String SERVICE_ID = "`service_id`";
+    public static final String SERVICE_ID = "`SERVICE_ID`";
 
-    public static final String PRODUCT_SERVICE_ID = "`product_service_id`";
+    public static final String PRODUCT_SERVICE_ID = "`PRODUCT_SERVICE_ID`";
 
-    public static final String SERVICE_NAME = "`service_name`";
+    public static final String SERVICE_NAME = "`SERVICE_NAME`";
 
-    public static final String SERVICE_IMAGE = "`service_image`";
+    public static final String SERVICE_IMAGE = "`SERVICE_IMAGE`";
 
-    public static final String CURRENT_UNIT_PRICE = "`current_unit_price`";
+    public static final String CURRENT_UNIT_PRICE = "`CURRENT_UNIT_PRICE`";
 
-    public static final String QUANTITY = "`quantity`";
+    public static final String QUANTITY = "`QUANTITY`";
 
-    public static final String TOTAL_PRICE = "`total_price`";
+    public static final String TOTAL_PRICE = "`TOTAL_PRICE`";
 
-    public static final String SERVICE_CONTENT = "`service_content`";
+    public static final String SERVICE_CONTENT = "`SERVICE_CONTENT`";
 
-    public static final String CREATE_TIME = "`create_time`";
+    public static final String CREATE_TIME = "`CREATE_TIME`";
 
-    public static final String UPDATE_TIME = "`update_time`";
+    public static final String UPDATE_TIME = "`UPDATE_TIME`";
 
-    public static final String ORDER_ITEM_NO = "`order_item_no`";
+    public static final String ORDER_ITEM_NO = "`ORDER_ITEM_NO`";
 
-    public static final String ORDER_ITEM_STATUS = "`order_item_status`";
+    public static final String ORDER_ITEM_STATUS = "`ORDER_ITEM_STATUS`";
+
+    public static final String PROVIDER_ID = "`PROVIDER_ID`";
 
 }

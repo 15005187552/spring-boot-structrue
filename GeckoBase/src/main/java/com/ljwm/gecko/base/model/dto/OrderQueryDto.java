@@ -11,4 +11,7 @@ public class OrderQueryDto extends CommonQuery {
 
   @ApiModelProperty("订单状态")
   private Integer status;
+
+  @ApiModelProperty(value = "服务商id",hidden = true)
+  private Long providerId;
 }

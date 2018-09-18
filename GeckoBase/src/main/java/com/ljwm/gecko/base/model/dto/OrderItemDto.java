@@ -28,4 +28,7 @@ public class OrderItemDto {
   @ApiModelProperty(value = "服务订单备注")
   private String serviceContent;
 
+  @ApiModelProperty("服务商id")
+  private Long providerId;
+
 }

@@ -5,15 +5,11 @@ import com.ljwm.gecko.base.entity.Order;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
-
 @Data
 @Accessors(chain = true)
-public class OrderVo extends Order {
+public class OrderSimpleVo extends Order {
 
-  private List<OrderItemVo> orderItemVoList;
-
-  public OrderVo(Order order){
+  public OrderSimpleVo(Order order){
     if (order!=null){
       BeanUtil.copyProperties(order,this);
     }

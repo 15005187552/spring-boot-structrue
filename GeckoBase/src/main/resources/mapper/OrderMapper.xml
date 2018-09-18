@@ -24,12 +24,17 @@
     </sql>
 
     <resultMap id="orderVo" type="com.ljwm.gecko.base.model.vo.OrderVo" extends="BaseResultMap">
+      <collection property="orderItemVoList" column="ORDER_NO" select="com.ljwm.gecko.base.mapper.OrderItemMapper.findOrderItemVoList"/>
+    </resultMap>
 
+    <resultMap id="orderProviderVo" type="com.ljwm.gecko.base.model.vo.OrderVo" extends="BaseResultMap">
+        <collection property="orderItemVoList" column="{orderNo=ORDER_NO,providerId=providerId}" select="com.ljwm.gecko.base.mapper.OrderItemMapper.findOrderItemVoList"/>
     </resultMap>
 
     <select id="findPage" parameterType="map" resultMap="orderVo">
-      select *  from t_order t
+      select DISTINCT t.* from t_order t LEFT JOIN t_order_item toi on t.ORDER_NO=toi.ORDER_NO
       <where>
+        AND toi.`PROVIDER_ID` = #{params.providerId}
         <if test="params.text != null and params.text != ''">
           AND t.`ORDER_NO` LIKE CONCAT('%',#{params.text},'%')
         </if>
@@ -46,4 +51,23 @@
       </if>
     </select>
 
+    <select id="findProviderPage" parameterType="map" resultMap="orderProviderVo">
+      select DISTINCT t.*,#{params.providerId} AS `providerId`  from t_order t LEFT JOIN t_order_item toi on t.ORDER_NO=toi.ORDER_NO
+      <where>
+        AND toi.`PROVIDER_ID` = #{params.providerId}
+        <if test="params.text != null and params.text != ''">
+          AND t.`ORDER_NO` LIKE CONCAT('%',#{params.text},'%')
+        </if>
+        <if test="params.status != null ">
+          AND t.`STATUS` = #{params.status}
+        </if>
+      </where>
+      ORDER BY t.CREATE_TIME
+      <if test="params.asc">
+        ASC
+      </if>
+      <if test="!params.asc">
+        DESC
+      </if>
+    </select>
 </mapper>

@@ -7,6 +7,7 @@ import com.ljwm.gecko.base.entity.Provider;
 import com.ljwm.gecko.base.entity.ProviderUser;
 import com.ljwm.gecko.base.entity.ServiceType;
 import com.ljwm.gecko.base.model.vo.admin.ServiceTypeTree;
+import com.ljwm.gecko.base.serializer.PathToUrlSerializer;
 import com.ljwm.gecko.base.serializer.StatusWithNameSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -24,6 +25,9 @@ public class ProviderVo extends Provider {
 
   @JSONField(serializeUsing = StatusWithNameSerializer.ProviderValidateStatSerializer.class)
   private Integer validateState;
+
+  @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
+  private String picPath;
 
   private String locationStr;
 

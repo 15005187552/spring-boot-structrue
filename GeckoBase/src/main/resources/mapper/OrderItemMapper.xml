@@ -4,30 +4,42 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.OrderItem">
-        <id column="id" property="id" />
-        <result column="member_id" property="memberId" />
-        <result column="order_no" property="orderNo" />
-        <result column="service_id" property="serviceId" />
-        <result column="product_service_id" property="productServiceId" />
-        <result column="service_name" property="serviceName" />
-        <result column="service_image" property="serviceImage" />
-        <result column="current_unit_price" property="currentUnitPrice" />
-        <result column="quantity" property="quantity" />
-        <result column="total_price" property="totalPrice" />
-        <result column="service_content" property="serviceContent" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-        <result column="order_item_no" property="orderItemNo" />
-        <result column="order_item_status" property="orderItemStatus" />
+        <id column="ID" property="id" />
+        <result column="ORDER_NO" property="orderNo" />
+        <result column="SERVICE_ID" property="serviceId" />
+        <result column="PRODUCT_SERVICE_ID" property="productServiceId" />
+        <result column="SERVICE_NAME" property="serviceName" />
+        <result column="SERVICE_IMAGE" property="serviceImage" />
+        <result column="CURRENT_UNIT_PRICE" property="currentUnitPrice" />
+        <result column="QUANTITY" property="quantity" />
+        <result column="TOTAL_PRICE" property="totalPrice" />
+        <result column="SERVICE_CONTENT" property="serviceContent" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="ORDER_ITEM_NO" property="orderItemNo" />
+        <result column="ORDER_ITEM_STATUS" property="orderItemStatus" />
+        <result column="PROVIDER_ID" property="providerId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `id`          ,`member_id`          ,`order_no`          ,`service_id`          ,`product_service_id`          ,`service_name`          ,`service_image`          ,`current_unit_price`          ,`quantity`          ,`total_price`          ,`service_content`          ,`create_time`          ,`update_time`          ,`order_item_no`          ,`order_item_status`
+          `ID`          ,`ORDER_NO`          ,`SERVICE_ID`          ,`PRODUCT_SERVICE_ID`          ,`SERVICE_NAME`          ,`SERVICE_IMAGE`          ,`CURRENT_UNIT_PRICE`          ,`QUANTITY`          ,`TOTAL_PRICE`          ,`SERVICE_CONTENT`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`ORDER_ITEM_NO`          ,`ORDER_ITEM_STATUS`          ,`PROVIDER_ID`
     </sql>
 
+    <resultMap id="orderItemVo" type="com.ljwm.gecko.base.model.vo.OrderItemVo" extends="BaseResultMap">
+
+    </resultMap>
+
     <select id="findByOrderItemNo" parameterType="string" resultMap="BaseResultMap">
-      select *  from t_order_item where order_item_no=#{orderItemNo}
+      select *  from t_order_item where order_no_item=#{orderItemNo}
+    </select>
+
+    <select id="findProviderOrderItemVoList" parameterType="map" resultMap="orderItemVo">
+      select t.*  from t_order_item t where t.ORDER_NO=#{orderNo} and t.PROVIDER_ID=#{providerId}
+    </select>
+
+    <select id="findOrderItemVoList" parameterType="string" resultMap="orderItemVo">
+      select t.*  from t_order_item t where t.ORDER_NO=#{orderNo}
     </select>
 
 </mapper>

@@ -18,5 +18,7 @@ import java.util.List;
  * @since 2018-09-10
  */
 public interface OrderMapper extends BaseMapper<Order> {
+  List<OrderVo> findProviderPage(Page<OrderVo> page, @Param("params")Kv kv);
+
   List<OrderVo> findPage(Page<OrderVo> page, @Param("params")Kv kv);
 }

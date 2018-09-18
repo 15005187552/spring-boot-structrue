@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.ljwm.gecko.base.config.FilePathAppend;
 import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.entity.MemberAccount;
+import com.ljwm.gecko.base.serializer.PathToUrlSerializer;
 import com.ljwm.gecko.base.serializer.StatusWithNameSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,13 +24,13 @@ public class MemberVo extends Member {
 
   List<MemberAccount> memberAccounts;
 
-  @JSONField(serializeUsing = FilePathAppend.class)
+  @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
   private String picFront;
 
-  @JSONField(serializeUsing = FilePathAppend.class)
+  @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
   private String picBack;
 
-  @JSONField(serializeUsing = FilePathAppend.class)
+  @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
   private String picPassport;
 
   @JSONField(serializeUsing = StatusWithNameSerializer.ValidateStatSerializer.class)

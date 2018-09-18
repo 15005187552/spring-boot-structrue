@@ -16,6 +16,7 @@ import com.ljwm.gecko.base.mapper.OrderItemMapper;
 import com.ljwm.gecko.base.mapper.OrderMapper;
 import com.ljwm.gecko.base.model.dto.OrderDto;
 import com.ljwm.gecko.base.model.dto.OrderItemDto;
+import com.ljwm.gecko.base.model.vo.OrderSimpleVo;
 import com.ljwm.gecko.base.model.vo.OrderVo;
 import com.ljwm.gecko.base.utils.IdWorkerUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -123,5 +124,21 @@ public class ClientOrderService {
       orderItem.setOrderItemStatus(OrderStatusEnum.WAIT.getCode());
     }
     orderItemMapper.insert(orderItem);
+  }
+
+  public OrderSimpleVo setOrderPaid(Long id){
+    Order order = orderMapper.selectById(id);
+    if (order==null){
+      log.info("订单id{},查询不到该订单!",id);
+      throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此订单!");
+    }
+    if (!Objects.equals(order.getStatus(),OrderStatusEnum.NO_PAID.getCode())){
+      log.info("订单号{},非待付款状态!",order.getOrderNo());
+      throw new LogicException(ResultEnum.DATA_ERROR,"订单为非待付款状态1");
+    }
+    order.setStatus(OrderStatusEnum.PAID.getCode());
+    order.setPaymentTime(DateUtil.date());
+    orderMapper.updateById(order);
+    return new OrderSimpleVo(order);
   }
 }
