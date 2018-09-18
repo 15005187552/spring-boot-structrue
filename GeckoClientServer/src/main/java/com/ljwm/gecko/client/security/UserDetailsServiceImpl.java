@@ -55,7 +55,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         MemberVo memberVo = new MemberVo();
         BeanUtil.copyProperties(memberInfo, memberVo);
-        memberVo.getAccount().setPassword(new MemberPassword().setLastModifyTime(DateUtil.offset(DateTime.now(), DateField.YEAR,10)).setPassword(SecurityKit.passwordMD5(username,username)));
+        memberVo.getAccount().setPassword(new MemberPassword().setLastModifyTime(DateUtil.offset(DateTime.now(), DateField.YEAR,-10)).setPassword(SecurityKit.passwordMD5(username,username)));
         LoginInfoHolder.setSalt(username);
         return new JwtUser(memberVo);
       default:
