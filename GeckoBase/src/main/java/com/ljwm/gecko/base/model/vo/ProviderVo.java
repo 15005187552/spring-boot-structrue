@@ -31,6 +31,9 @@ public class ProviderVo extends Provider {
 
   private String locationStr;
 
+  @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
+  private String logo;
+
   private List<ProviderServicesVo> providerServicesVoList;
 
   private List<PaperVo> paperVoList;
