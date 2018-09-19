@@ -22,6 +22,7 @@ import com.ljwm.gecko.base.mapper.PaperPathMapper;
 import com.ljwm.gecko.base.model.bean.AppInfo;
 import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.model.vo.LoginVo;
+import com.ljwm.gecko.base.model.vo.MemberInfo;
 import com.ljwm.gecko.base.model.vo.MemberPaperVo;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.utils.Fileutil;
@@ -81,7 +82,7 @@ public class MemberInfoService {
     return memberInfoDao.updateAccount(mpOpenId, extInfo, code);
   }
 
-  public MemberVo selectMemberInfo(Long memberId, String type) {
+  public MemberInfo selectMemberInfo(Long memberId, String type) {
     return memberInfoDao.selectMemberInfo(memberId, type);
   }
 

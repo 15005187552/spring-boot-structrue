@@ -79,12 +79,9 @@ public class MemberInfoDao {
     return null;
   }
 
-  public MemberVo selectMemberInfo(Long memberId, String type) {
-    List<MemberVo> list = memberMapper.selectByMeVoAndType(memberId, type);
-    if(CollectionUtil.isNotEmpty(list)){
-      return list.get(0);
-    }
-    return null;
+  public MemberInfo selectMemberInfo(Long memberId, String type) {
+    MemberInfo memberInfo = memberMapper.selectAccountByType(memberId, type);
+    return memberInfo;
   }
   public Long updateAccount(String mpOpenId, String extInfo, Integer code) {
     Map<String, Object> map = new HashedMap();

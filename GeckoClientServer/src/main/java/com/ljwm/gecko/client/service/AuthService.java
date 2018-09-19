@@ -12,6 +12,7 @@ import com.ljwm.gecko.base.entity.Guest;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.enums.UserSource;
 import com.ljwm.gecko.base.mapper.MemberAccountMapper;
+import com.ljwm.gecko.base.model.vo.MemberInfo;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.service.GuestService;
 import com.ljwm.gecko.base.service.MemberInfoService;
@@ -135,15 +136,15 @@ public class AuthService {
     //判断是否为会员
     String code = LoginInfoHolder.getLoginType();
     if (!LoginInfoHolder.getLoginType().equals(LoginType.GUEST.getCode().toString())){
-        MemberVo memberVo = memberInfoService.selectMemberInfo(jwtUser.getId(), LoginInfoHolder.getLoginType());
+        MemberInfo memberInfo = memberInfoService.selectMemberInfo(jwtUser.getId(), LoginInfoHolder.getLoginType());
         ResultMe resultMe = new ResultMe();
         resultMe.setIsGuest(false);
         resultMe.setId(jwtUser.getId());
-        resultMe.setAvatarPath(memberVo.getAvatarPath());
-        resultMe.setPhoneNum(memberVo.getRegMobile());
-        resultMe.setUsername(memberVo.getAccount().getUsername());
-        resultMe.setExtInfo(memberVo.getAccount().getExtInfo());
-        resultMe.setNickName(memberVo.getNickName());
+        resultMe.setAvatarPath(memberInfo.getAvatarPath());
+        resultMe.setPhoneNum(memberInfo.getRegMobile());
+        resultMe.setUsername(memberInfo.getAccount().getUsername());
+        resultMe.setExtInfo(memberInfo.getAccount().getExtInfo());
+        resultMe.setNickName(memberInfo.getNickName());
         return resultMe;
     }
     return null;
