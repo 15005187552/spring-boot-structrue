@@ -32,6 +32,5 @@ public interface AdminMapper extends BaseMapper<Admin> {
   List<AdminVo> find(Page<AdminVo> page, @Param("disabled") Integer disabled, @Param("text") String text,@Param("asc") Boolean asc);
 
   @Insert("INSERT INTO `t_admin` ( `ID`,`USERNAME`,`PASSWORD`,`NICK_NAME`,`CREATE_TIME`,`UPDATE_TIME`,`DISABLED` ) VALUES ( #{id},#{username},#{password},#{nickName},#{createTime},#{updateTime},#{disabled} )")
-  @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "ID")
   Integer insertAll(Admin admin);
 }
