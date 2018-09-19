@@ -58,7 +58,7 @@ public interface MemberMapper extends BaseMapper<Member> {
   @ResultMap("MemberInfo")
   MemberInfo selectAccountByUserName(String username);
 
-  @Select("SELECT * FROM t_member a, t_member_account b WHERE b.TYPE = #{type} AND b.MEMBER_ID = a.ID")
+  @Select("SELECT * FROM t_member a, t_member_account b WHERE b.TYPE = #{type} AND b.MEMBER_ID = a.ID AND b.MEMBER_ID=#{memberId}")
   @ResultMap("MemberInfo")
-  MemberInfo selectAccountByType(@Param("memberId")Long memberId, @Param("type")String type);
+  List<MemberInfo> selectAccountByType(@Param("memberId")Long memberId, @Param("type")String type);
 }

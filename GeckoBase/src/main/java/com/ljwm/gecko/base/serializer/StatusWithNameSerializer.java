@@ -3,6 +3,7 @@ package com.ljwm.gecko.base.serializer;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.ljwm.bootbase.kit.SpringKit;
+import com.ljwm.gecko.base.dao.SpecialDuctionDao;
 import com.ljwm.gecko.base.enums.*;
 import com.ljwm.gecko.base.service.LocationService;
 import com.ljwm.gecko.base.utils.EnumUtil;
@@ -52,6 +53,13 @@ public abstract class StatusWithNameSerializer implements ObjectSerializer {
     @Override
     public String getNameByCode(Object code) {
       return SpringKit.getBean(LocationService.class).getNameByCode(code.toString());
+    }
+  }
+
+  public static class SpecialDeductionSerializer extends StatusWithNameSerializer{
+    @Override
+    public String getNameByCode(Object code) {
+      return SpringKit.getBean(SpecialDuctionDao.class).idToName((Long)code);
     }
   }
 
