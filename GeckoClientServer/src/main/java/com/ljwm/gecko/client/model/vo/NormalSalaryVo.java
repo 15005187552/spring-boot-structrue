@@ -3,12 +3,14 @@ package com.ljwm.gecko.client.model.vo;
 import com.ljwm.gecko.base.utils.excelutil.ExcelCell;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @author Janiffy
  * @date 2018/9/18 15:25
  */
 @Data
+@Accessors(chain = true)
 public class NormalSalaryVo {
 
   @ExcelCell(index = 0)

@@ -35,7 +35,7 @@ public interface CompanyMapper extends BaseMapper<Company> {
 
   @Select("SELECT *, b.ID as S_ID FROM t_company a, t_company_special b WHERE a.ID = b.COMPANY_ID AND a.ID=#{companyId}")
   @ResultMap("CompanyVo")
-  List<CompanyVo> findCompanyById(String companyId);
+  List<CompanyVo> findCompanyById(Long companyId);
 
   @Select("SELECT *, b.ID as S_ID FROM t_company a, t_company_special b WHERE a.ID = b.COMPANY_ID AND a.NAME=#{name} AND a.VALIDATE_STATE = #{validateState}")
   @ResultMap("CompanyVo")

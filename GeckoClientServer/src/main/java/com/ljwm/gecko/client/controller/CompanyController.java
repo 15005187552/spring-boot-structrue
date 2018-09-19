@@ -36,13 +36,13 @@ public class CompanyController {
 
   @PostMapping("/findEmployee")
   @ApiOperation("根据公司名搜索员工")
-  public Result findEmployee(@RequestParam("companyId") String companyId){
+  public Result findEmployee(@RequestParam("companyId") Long companyId){
     return companyService.findEmployee(companyId);
   }
 
   @PostMapping("/findCompanyById")
   @ApiOperation("根据公司id搜索公司信息")
-  public Result findCompanyById(@RequestParam("companyId") String companyId){
+  public Result findCompanyById(@RequestParam("companyId") Long companyId){
     return Result.success(companyService.findCompanyById(companyId));
   }
 

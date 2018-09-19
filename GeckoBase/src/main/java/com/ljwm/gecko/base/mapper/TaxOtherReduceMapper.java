@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -28,4 +29,9 @@ public interface TaxOtherReduceMapper extends BaseMapper<TaxOtherReduce> {
            "AND b.OTHER_REDUCE_ID = c.ID ORDER BY c.SORT")
   @ResultMap("BaseMap")
   List<TaxOtherReduceVo> selectOther(@Param("memberId") Long memberId, @Param("declareTime")String declareTime, @Param("declareType")Integer declareType);
+
+
+  @Select("SELECT TAX_MONEY FROM t_tax_other_reduce WHERE TAX_ID = (SELECT ID FROM t_tax WHERE MEMBER_ID = #{memberId} AND DECLARE_TIME = #{declareTime}) \n" +
+    "AND OTHER_REDUCE_ID = (SELECT ID FROM t_other_reduce WHERE `NAME` LIKE \"%#{name}%\"\t)")
+  BigDecimal selectTaxMoney(@Param("memberId") Long memberId, @Param("name") String name, @Param("declareTime") String declareTime);
 }

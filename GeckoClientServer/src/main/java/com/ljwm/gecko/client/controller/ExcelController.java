@@ -1,15 +1,13 @@
 package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.client.model.dto.NormalSalaryForm;
 import com.ljwm.gecko.client.service.ExcelService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -50,7 +48,7 @@ public class ExcelController {
 
   @PostMapping("/normalSalary/export")
   @ApiOperation("正常工资薪金")
-  public Result exportNormalSalary(HttpServletResponse response, @RequestParam("companyId")Long companyId)throws IOException {
-    return Result.success(excelService.exportNormalSalary(response, companyId));
+  public Result exportNormalSalary(HttpServletResponse response, @RequestBody NormalSalaryForm normalSalaryForm)throws IOException {
+    return Result.success(excelService.exportNormalSalary(response, normalSalaryForm));
   }
 }

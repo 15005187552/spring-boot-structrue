@@ -19,6 +19,7 @@ import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.base.utils.excelutil.ExcelLogs;
 import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
+import com.ljwm.gecko.client.model.dto.NormalSalaryForm;
 import com.ljwm.gecko.client.model.dto.PersonInfoDto;
 import com.ljwm.gecko.client.model.vo.NormalSalaryVo;
 import com.ljwm.gecko.client.model.vo.PersonExportVo;
@@ -66,6 +67,9 @@ public class ExcelService {
 
   @Autowired
   CompanySpecialMapper companySpecialMapper;
+
+  @Autowired
+  TaxOtherReduceMapper taxOtherReduceMapper;
 
   @Transactional
   public void improtPersonInfo(MultipartFile file, Long companyId) throws Exception {
@@ -270,12 +274,24 @@ public class ExcelService {
     return "导出成功！";
   }
 
-  public String exportNormalSalary(HttpServletResponse response, Long companyId) {
+  public String exportNormalSalary(HttpServletResponse response, NormalSalaryForm normalSalaryForm) throws IOException {
+    Long companyId = normalSalaryForm.getCompanyId();
+    String declareTime = normalSalaryForm.getDeclareTime();
     isHasProperty(companyId);
     List<NaturalPerson> list = naturalPersonMapper.selectList(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.COMPANY_ID, companyId));
     if (CollectionUtil.isEmpty(list)){
       throw new LogicException("该公司下没有要导出的员工");
     }
+    Map<String, String> map = new LinkedHashMap<>();
+    int i = 0;
+    String[] str = new String[]{"工号", "*姓名", "*证照类型", "*证照号码", "税款负担方式", "*收入额", "免税所得", "基本养老保险费",
+      "基本医疗保险费", "失业保险费", "住房公积金", "允许扣除的税费", "年金", "商业健康保险费", "税延养老保险费", "其他扣除", "减除费用",
+      "实际捐赠额", "允许列支的捐赠比例","准予扣除的捐赠额", "减免税额", "已扣缴税额", "备注"};
+    for (String string: str) {
+      map.put(String.valueOf(i), string);
+      i++;
+    }
+    List<Object> dataList = new ArrayList<>();
     for (NaturalPerson naturalPerson : list) {
       NormalSalaryVo normalSalaryVo = new NormalSalaryVo();
       BeanUtil.copyProperties(naturalPerson, normalSalaryVo);
@@ -294,7 +310,20 @@ public class ExcelService {
       normalSalaryVo.setMedicalInsurance(socialBase.multiply(medical).toString());
       normalSalaryVo.setUnemployeeInsurance(socialBase.multiply(unemployee).toString());
       normalSalaryVo.setFund(fundBase.multiply(fund).toString());
+      BigDecimal annuity = taxOtherReduceMapper.selectTaxMoney(memberId, "年金", declareTime);
+      BigDecimal commercialInsurance = taxOtherReduceMapper.selectTaxMoney(memberId, "商业健康保险费", declareTime);
+      BigDecimal otherEntireInsurance = taxOtherReduceMapper.selectTaxMoney(memberId, "养老保险", declareTime);
+      normalSalaryVo.setAnnuity(annuity.toString()).setCommercialInsurance(commercialInsurance.toString()).setOtherEntireInsurance(otherEntireInsurance.toString());
+      dataList.add(normalSalaryVo);
     }
+    response.reset();
+    response.setContentType("multipart/form-data");
+    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("人员信息.xlsx","UTF-8"));
+    OutputStream output = response.getOutputStream();
+   /* File file = new File("C:\\Users\\Administrator\\Desktop\\a.xlsx");
+    OutputStream output = new FileOutputStream(file);*/
+    ExcelUtil.exportExcel(map, dataList, output);
+    output.close();
     return "导出成功！";
   }
 

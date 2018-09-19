@@ -38,7 +38,7 @@ public interface CompanyUserMapper extends BaseMapper<CompanyUser> {
     "AND b.ACTIVATED = #{activateCode}\n" +
     "AND b.COMPANY_ID = #{companyId}")
   @ResultMap("EmployeeVo")
-  List<EmployeeVo> selectEmployee(@Param("companyId") String companyId, @Param("disableCode")Integer disableCode, @Param("activateCode")Integer activateCode);
+  List<EmployeeVo> selectEmployee(@Param("companyId") Long companyId, @Param("disableCode")Integer disableCode, @Param("activateCode")Integer activateCode);
 
 
   @Select("SELECT * FROM t_company_user a, t_company_user_info b\n" +

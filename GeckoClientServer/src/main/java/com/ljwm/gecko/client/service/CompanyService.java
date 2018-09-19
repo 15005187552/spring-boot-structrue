@@ -89,8 +89,10 @@ public class CompanyService {
         company.setUpdateTime(new Date());
         companyMapper.updateById(company);
       }else {
+        company = new Company();
+        BeanUtils.copyProperties(companyForm, company);
         company.setCreateTime(date).setCreaterId(SecurityKit.currentId()).setUpdateTime(date).setValidateState(IdentificationType.NO_IDENTI.getCode())
-          .setUpdateTime(date).setDisabled(DisabledEnum.ENABLED.getCode());;
+          .setUpdateTime(date).setDisabled(DisabledEnum.ENABLED.getCode());
         companyMapper.insert(company);
       }
       List<CityItem> list = cityItemMapper.selectList(new QueryWrapper<CityItem>().eq(CityItem.REGION_CODE, companyForm.getCityCode()));
@@ -126,9 +128,7 @@ public class CompanyService {
       company.setPicPath(Constant.COMPANY + company.getId() + "/" + companyForm.getFilePath());
     }
     companyMapper.updateById(company);
-    CompanyVo companyVo = new CompanyVo();
-    BeanUtil.copyProperties(company, companyVo);
-    return Result.success(companyVo);
+    return Result.success(findCompanyById(company.getId()));
   }
 
   public CompanyVo findByName(String name) {
@@ -139,7 +139,7 @@ public class CompanyService {
     return list.get(0);
   }
 
-  public Result findEmployee(String companyId) {
+  public Result findEmployee(Long companyId) {
     List<EmployeeVo> list = companyUserMapper.selectEmployee(companyId, DisabledEnum.ENABLED.getCode(), ActivateEnum.ENABLED.getCode());
     if (CollectionUtil.isNotEmpty(list)) {
       for (EmployeeVo employeeVo : list){
@@ -162,7 +162,7 @@ public class CompanyService {
     return Result.fail("请先提交公司信息！");
   }
 
-  public CompanyVo findCompanyById(String companyId) {
+  public CompanyVo findCompanyById(Long companyId) {
     List<CompanyVo> list = companyMapper.findCompanyById(companyId);
     if (CollectionUtil.isEmpty(list)) {
       throw new LogicException("无搜索结果！");
