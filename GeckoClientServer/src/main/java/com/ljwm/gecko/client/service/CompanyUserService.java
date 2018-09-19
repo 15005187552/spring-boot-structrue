@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.entity.Company;
 import com.ljwm.gecko.base.entity.CompanyUser;
@@ -46,6 +47,9 @@ public class CompanyUserService {
   @Autowired
   NaturalPersonMapper naturalPersonMapper;
 
+  @Autowired
+  CompanyService companyService;
+
   @Transactional
   public Result memberEnterCom(MemberComForm memberComForm) {
     companyUserDao.insertOrUpdate(memberComForm.getMemberId(), memberComForm.getCompanyId(), memberComForm.getRoleCode());
@@ -86,25 +90,33 @@ public class CompanyUserService {
 
   @Transactional
   public Result enterCompany(InactiveForm inactiveForm) {
+    Long memberId = SecurityKit.currentId();
     Map<String, Object> map = new HashedMap();
     map.put("COMPANY_ID", inactiveForm.getCompanyId());
-    map.put("MEMBER_ID", inactiveForm.getMemberId());
+    map.put("MEMBER_ID", memberId);
     List<CompanyUser> list = companyUserMapper.selectByMap(map);
     if(CollectionUtil.isEmpty(list)){
       return Result.fail("传入的参数有误!");
     }
     CompanyUser companyUser = list.get(0);
     if(inactiveForm.isFlag()){
-      NaturalPerson naturalPerson = naturalPersonMapper.selectById(inactiveForm.getMemberId());
+      NaturalPerson naturalPerson = naturalPersonMapper.selectById(memberId);
       if(naturalPerson != null) {
         naturalPerson.setCompanyId(inactiveForm.getCompanyId());
         naturalPersonMapper.updateById(naturalPerson);
       }
     }
-    if(inactiveForm.getActivated() != null){
-      companyUser.setActivated(inactiveForm.getActivated());
-    }
+    companyUser.setActivated(ActivateEnum.ENABLED.getCode());
     companyUserMapper.updateById(companyUser);
     return Result.success("成功！");
+  }
+
+  public Result taxCompany() {
+    Long memberId = SecurityKit.currentId();
+    NaturalPerson naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.MEMBER_ID, memberId));
+    if(naturalPerson != null){
+      return Result.success(companyService.findCompanyById(naturalPerson.getCompanyId()));
+    }
+    throw new LogicException("该用户不是会员");
   }
 }

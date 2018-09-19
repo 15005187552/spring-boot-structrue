@@ -47,4 +47,10 @@ public class CompanyUserController {
     return companyUserService.enterCompany(inactiveForm);
   }
 
+  @PostMapping("/taxCompany")
+  @ApiOperation("当前纳税的公司信息")
+  public Result taxCompany(){
+    return companyUserService.taxCompany();
+  }
+
 }

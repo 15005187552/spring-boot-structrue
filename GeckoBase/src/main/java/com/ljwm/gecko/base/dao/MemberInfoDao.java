@@ -130,7 +130,11 @@ public class MemberInfoDao {
   }
 
   public MemberInfo selectAccountByUserName(String username) {
-    return memberMapper.selectAccountByUserName(username);
+    List<MemberInfo> list = memberMapper.selectAccountByUserName(username);
+    if (CollectionUtil.isEmpty(list)){
+      return list.get(0);
+    }
+    return null;
   }
 }
 

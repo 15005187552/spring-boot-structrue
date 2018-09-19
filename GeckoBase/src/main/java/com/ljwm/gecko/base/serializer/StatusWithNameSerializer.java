@@ -73,7 +73,7 @@ public abstract class StatusWithNameSerializer implements ObjectSerializer {
       return;
     }
 
-    if (object instanceof Integer  || object instanceof String) {
+    if (object instanceof Integer  || object instanceof String|| object instanceof Long) {
 //      Integer code = (Integer) object;
       String statusName = fieldName + "Name";
       serializer.getWriter()
