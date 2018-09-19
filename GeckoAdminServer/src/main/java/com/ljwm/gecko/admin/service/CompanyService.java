@@ -17,6 +17,7 @@ import com.ljwm.gecko.base.model.vo.UnValidateCompanyVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -42,6 +43,7 @@ public class CompanyService {
   }
 
 
+  @Transactional
   public Company checkCompany(CompanyCheckForm form) {
     if (Objects.isNull(form.getId())) throw new LogicException(ResultEnum.DATA_ERROR, "企业ID不能未空");
     Company company = companyMapper.selectById(form.getId());
