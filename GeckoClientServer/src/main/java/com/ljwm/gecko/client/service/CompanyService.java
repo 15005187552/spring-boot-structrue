@@ -128,7 +128,7 @@ public class CompanyService {
       company.setPicPath(Constant.COMPANY + company.getId() + "/" + companyForm.getFilePath());
     }
     companyMapper.updateById(company);
-    return Result.success(findCompanyById(company.getId()));
+    return Result.success("成功！");
   }
 
   public CompanyVo findByName(String name) {
