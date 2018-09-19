@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.List;
 
@@ -37,12 +38,15 @@ public class CompanyForm {
   private String filePath;
 
   @ApiModelProperty(value = "省级代码")
+  @NotBlank(message = "请填写省份")
   private Integer provCode;
 
   @ApiModelProperty(value = "市级代码")
+  @NotBlank(message = "请填写市")
   private Integer cityCode;
 
   @ApiModelProperty(value = "区级代码")
+  @NotBlank(message = "请填写区")
   private Integer areaCode;
 
   @ApiModelProperty(value = "详细地址")
