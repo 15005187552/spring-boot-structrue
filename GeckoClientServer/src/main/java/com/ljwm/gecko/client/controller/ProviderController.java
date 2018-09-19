@@ -42,6 +42,10 @@ public class ProviderController extends BaseController {
     return success(clientProviderService.findProviderByMemberId(SecurityKit.currentId()));
   }
 
-
+  @GetMapping("findProviderByProviderId/{id}")
+  @ApiOperation("客户端根据服务商id查询服务商详情")
+  public Result<ProviderVo> findProviderByProviderId(@PathVariable Long id){
+    return success(clientProviderService.findProviderByProviderId(id));
+  }
 
 }

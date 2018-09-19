@@ -88,6 +88,10 @@
       select t.*  from t_provider t where t.CREATOR_ID =#{memberId} limit 1
     </select>
 
+    <select id="findProviderByProviderId" parameterType="long" resultMap="providerVo">
+      select t.*  from t_provider t where t.ID =#{providerId} limit 1
+    </select>
+
     <select id="findClientByPage" parameterType="map" resultMap="providerSimple">
       SELECT DISTINCT tp.*  from t_provider tp,t_provider_services tps
       <where>

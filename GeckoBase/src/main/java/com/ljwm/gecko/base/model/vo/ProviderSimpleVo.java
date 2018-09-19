@@ -1,9 +1,7 @@
 package com.ljwm.gecko.base.model.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.ljwm.gecko.base.entity.Provider;
 import com.ljwm.gecko.base.serializer.PathToUrlSerializer;
-import com.ljwm.gecko.base.serializer.StatusWithNameSerializer;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
