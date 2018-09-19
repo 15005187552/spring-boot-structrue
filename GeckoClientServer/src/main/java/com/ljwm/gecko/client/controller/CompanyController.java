@@ -31,7 +31,7 @@ public class CompanyController {
   @PostMapping("/findByName")
   @ApiOperation("根据公司名搜索审核通过的公司")
   public Result findByName(@RequestParam("name") String name){
-    return companyService.findByName(name);
+    return Result.success(companyService.findByName(name));
   }
 
   @PostMapping("/findEmployee")
@@ -43,7 +43,7 @@ public class CompanyController {
   @PostMapping("/findCompanyById")
   @ApiOperation("根据公司id搜索公司信息")
   public Result findCompanyById(@RequestParam("companyId") String companyId){
-    return companyService.findCompanyById(companyId);
+    return Result.success(companyService.findCompanyById(companyId));
   }
 
   /*@PostMapping("/postSpecial")

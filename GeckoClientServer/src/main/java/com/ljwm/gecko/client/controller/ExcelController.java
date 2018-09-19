@@ -3,6 +3,7 @@ package com.ljwm.gecko.client.controller;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.client.service.ExcelService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,7 @@ public class ExcelController {
   ExcelService excelService;
 
   @PostMapping("/personInfo/import")
+  @ApiOperation("人员信息导入")
   public Result improtPersonInfo(@RequestParam("file")MultipartFile file, @RequestParam("companyId")Long companyId) throws Exception {
     excelService.improtPersonInfo(file, companyId);
     return Result.success("导入成功！");
@@ -41,7 +43,14 @@ public class ExcelController {
   }*/
 
   @PostMapping("/personInfo/export")
+  @ApiOperation("人员信息导出")
   public Result exportPersonInfoExcel(HttpServletResponse response, @RequestParam("companyId")Long companyId)throws IOException {
     return Result.success(excelService.exportPersonInfoExcel(response, companyId));
+  }
+
+  @PostMapping("/normalSalary/export")
+  @ApiOperation("正常工资薪金")
+  public Result exportNormalSalary(HttpServletResponse response, @RequestParam("companyId")Long companyId)throws IOException {
+    return Result.success(excelService.exportNormalSalary(response, companyId));
   }
 }

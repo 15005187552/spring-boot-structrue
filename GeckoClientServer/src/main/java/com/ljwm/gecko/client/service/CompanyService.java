@@ -89,14 +89,15 @@ public class CompanyService {
         company.setUpdateTime(new Date());
         companyMapper.updateById(company);
       }else {
-        company.setCreateTime(date).setCreaterId(SecurityKit.currentId()).setUpdateTime(new Date());
+        company.setCreateTime(date).setCreaterId(SecurityKit.currentId()).setUpdateTime(date).setValidateState(IdentificationType.NO_IDENTI.getCode())
+          .setUpdateTime(date).setDisabled(DisabledEnum.ENABLED.getCode());;
         companyMapper.insert(company);
       }
       List<CityItem> list = cityItemMapper.selectList(new QueryWrapper<CityItem>().eq(CityItem.REGION_CODE, companyForm.getCityCode()));
       for (CityItem cityItem : list){
         CompanySpecial companySpecial = new CompanySpecial();
-        companySpecial.setCompanyPer(cityItem.getCompanyPer()).setPersonPer(cityItem.getCompanyPer())
-          .setSpecialId(cityItem.getItemType()).setCompanyId(company.getId());
+        companySpecial.setCompanyPer(cityItem.getCompanyPer()).setPersonPer(cityItem.getPersonPer())
+          .setSpecialId(cityItem.getItemType()).setCompanyId(company.getId()).setCompanyId(company.getId());
         companySpecialMapper.insert(companySpecial);
       }
       //把创建人添加到t_company_user
@@ -130,12 +131,12 @@ public class CompanyService {
     return Result.success(companyVo);
   }
 
-  public Result findByName(String name) {
+  public CompanyVo findByName(String name) {
     List<CompanyVo> list = companyMapper.findCompanyByName(name, CompanyValidateEnum.PASS_VALIDATE.getCode());
     if (CollectionUtil.isEmpty(list)) {
       throw new LogicException("无搜索结果！");
     }
-    return Result.success(list.get(0));
+    return list.get(0);
   }
 
   public Result findEmployee(String companyId) {
@@ -161,11 +162,11 @@ public class CompanyService {
     return Result.fail("请先提交公司信息！");
   }
 
-  public Result findCompanyById(String companyId) {
+  public CompanyVo findCompanyById(String companyId) {
     List<CompanyVo> list = companyMapper.findCompanyById(companyId);
     if (CollectionUtil.isEmpty(list)) {
       throw new LogicException("无搜索结果！");
     }
-    return Result.success(list.get(0));
+    return list.get(0);
   }
 }

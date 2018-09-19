@@ -21,6 +21,7 @@ public class CalTaxDao {
     CalTax cal = calTaxMapper.selectById(calTax.getGuestId());
     if(cal != null){
       if(diff.compareTo(BigDecimal.ZERO)>=0){
+        calTax.setCreateTime(cal.getCreateTime());
         calTaxMapper.updateById(calTax);
       }
     } else {

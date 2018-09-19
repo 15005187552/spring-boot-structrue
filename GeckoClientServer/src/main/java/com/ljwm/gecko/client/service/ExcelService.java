@@ -12,10 +12,7 @@ import com.ljwm.gecko.base.entity.CompanyUserInfo;
 import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.entity.NaturalPerson;
 import com.ljwm.gecko.base.enums.*;
-import com.ljwm.gecko.base.mapper.CompanyUserInfoMapper;
-import com.ljwm.gecko.base.mapper.CompanyUserMapper;
-import com.ljwm.gecko.base.mapper.MemberMapper;
-import com.ljwm.gecko.base.mapper.NaturalPersonMapper;
+import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.dto.EmployeeDto;
 import com.ljwm.gecko.base.model.dto.NaturalPersonDto;
 import com.ljwm.gecko.base.utils.EnumUtil;
@@ -23,6 +20,7 @@ import com.ljwm.gecko.base.utils.excelutil.ExcelLogs;
 import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
 import com.ljwm.gecko.client.model.dto.PersonInfoDto;
+import com.ljwm.gecko.client.model.vo.NormalSalaryVo;
 import com.ljwm.gecko.client.model.vo.PersonExportVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.map.HashedMap;
@@ -66,23 +64,12 @@ public class ExcelService {
   @Autowired
   LocationDao locationDao;
 
+  @Autowired
+  CompanySpecialMapper companySpecialMapper;
+
   @Transactional
   public void improtPersonInfo(MultipartFile file, Long companyId) throws Exception {
-    Map<String, Object> findMap = new HashedMap();
-    findMap.put("MEMBER_ID", SecurityKit.currentId());
-    findMap.put("COMPANY_ID", companyId);
-    findMap.put("DISABLED", DisabledEnum.ENABLED.getCode());
-    findMap.put("ACTIVATED", ActivateEnum.ENABLED.getCode());
-    List<CompanyUser> companyUserList = companyUserMapper.selectByMap(findMap);
-    if(CollectionUtil.isEmpty(companyUserList)){
-      throw new LogicException("你没有该操作的权限");
-    }
-    String roleCode = companyUserList.get(0).getRolesCode();
-    int c = roleCode.length()- RoleCodeType.ITIN.getDigit();
-    Integer code = Integer.valueOf(roleCode.substring(c, c+1));
-    if (!code.equals(RoleCodeType.ITIN.getValue())){
-      throw new LogicException("你没有该操作的权限");
-    }
+    isHasProperty(companyId);
     InputStream inputStream = file.getInputStream();
     ExcelLogs logs =new ExcelLogs();
     Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs , 0);
@@ -197,7 +184,7 @@ public class ExcelService {
   }
 
   public String exportPersonInfoExcel(HttpServletResponse response, Long companyId) throws IOException {
-    Long memberId = SecurityKit.currentId();
+    /*Long memberId = SecurityKit.currentId();
     List<CompanyUser> list = companyUserMapper.selectList(new QueryWrapper<CompanyUser>()
         .eq(CompanyUser.COMPANY_ID, companyId).eq(CompanyUser.MEMBER_ID, memberId)
         .eq(CompanyUser.DISABLED, DisabledEnum.ENABLED.getCode()).eq(CompanyUser.ACTIVATED, DisabledEnum.ENABLED.getCode()));
@@ -210,7 +197,8 @@ public class ExcelService {
     Integer code = Integer.valueOf(roleCode.substring(c, c+1));
     if (!code.equals(RoleCodeType.ITIN.getValue())){
       throw new LogicException("你没有该操作的权限");
-    }
+    }*/
+    Long memberId = isHasProperty(companyId);
     List<NaturalPersonDto> naturalPersonDtoList = naturalPersonMapper.selectByCompanyId(companyId);
     if(CollectionUtil.isEmpty(naturalPersonDtoList)){
       throw new LogicException("该公司下没有要导出的员工");
@@ -256,6 +244,9 @@ public class ExcelService {
         personExportVo.setFamilyArea(locationDao.getNameByCode(personExportVo.getFamilyArea()));
       }
       List<EmployeeDto> employeeDtoList = companyUserMapper.selectEmployeeList(companyId, memberId);
+      if (CollectionUtil.isEmpty(employeeDtoList)){
+        throw new LogicException("该公司下没有对应员工");
+      }
       BeanUtil.copyProperties(employeeDtoList.get(0).getCompanyUserInfo(), personExportVo);
       if(StrUtil.isNotBlank(personExportVo.getEducation())){
         personExportVo.setEducation(EnumUtil.getNameBycode(EducationEnum.class, Integer.valueOf(personExportVo.getEducation())));
@@ -278,4 +269,56 @@ public class ExcelService {
     output.close();
     return "导出成功！";
   }
+
+  public String exportNormalSalary(HttpServletResponse response, Long companyId) {
+    isHasProperty(companyId);
+    List<NaturalPerson> list = naturalPersonMapper.selectList(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.COMPANY_ID, companyId));
+    if (CollectionUtil.isEmpty(list)){
+      throw new LogicException("该公司下没有要导出的员工");
+    }
+    for (NaturalPerson naturalPerson : list) {
+      NormalSalaryVo normalSalaryVo = new NormalSalaryVo();
+      BeanUtil.copyProperties(naturalPerson, normalSalaryVo);
+      Long memberId = naturalPerson.getMemberId();
+      List<EmployeeDto> employeeDtoList = companyUserMapper.selectEmployeeList(companyId, memberId);
+      if (CollectionUtil.isEmpty(employeeDtoList)){
+        throw new LogicException("该公司下没有对应员工");
+      }
+      BigDecimal socialBase = employeeDtoList.get(0).getCompanyUserInfo().getSocialBase();
+      BigDecimal fundBase = employeeDtoList.get(0).getCompanyUserInfo().getFundBase();
+      BigDecimal entire = companySpecialMapper.selectByName("养老保险");
+      BigDecimal medical = companySpecialMapper.selectByName("医疗保险");
+      BigDecimal unemployee = companySpecialMapper.selectByName("失业保险");
+      BigDecimal fund = companySpecialMapper.selectByName("公积金");
+      normalSalaryVo.setEntireInsurance(socialBase.multiply(entire).toString());
+      normalSalaryVo.setMedicalInsurance(socialBase.multiply(medical).toString());
+      normalSalaryVo.setUnemployeeInsurance(socialBase.multiply(unemployee).toString());
+      normalSalaryVo.setFund(fundBase.multiply(fund).toString());
+    }
+    return "导出成功！";
+  }
+
+  /**
+   * 判断当前角色是否是报税员
+   * @param companyId
+   * @return
+   */
+  public Long isHasProperty(Long companyId){
+    Long memberId = SecurityKit.currentId();
+    List<CompanyUser> list = companyUserMapper.selectList(new QueryWrapper<CompanyUser>()
+      .eq(CompanyUser.COMPANY_ID, companyId).eq(CompanyUser.MEMBER_ID, memberId)
+      .eq(CompanyUser.DISABLED, DisabledEnum.ENABLED.getCode()).eq(CompanyUser.ACTIVATED, DisabledEnum.ENABLED.getCode()));
+    if(CollectionUtil.isEmpty(list)){
+      throw new LogicException("你没有该操作的权限");
+    }
+    CompanyUser companyUser = list.get(0);
+    String roleCode = companyUser.getRolesCode();
+    int c = roleCode.length()- RoleCodeType.ITIN.getDigit();
+    Integer code = Integer.valueOf(roleCode.substring(c, c+1));
+    if (!code.equals(RoleCodeType.ITIN.getValue())){
+      throw new LogicException("你没有该操作的权限");
+    }
+    return memberId;
+  }
+
 }
