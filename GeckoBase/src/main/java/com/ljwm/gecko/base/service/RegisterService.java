@@ -12,6 +12,7 @@ import com.ljwm.gecko.base.entity.MemberPassword;
 import com.ljwm.gecko.base.entity.MobileCode;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.mapper.GuestMapper;
+import com.ljwm.gecko.base.mapper.MemberAccountMapper;
 import com.ljwm.gecko.base.mapper.MemberPasswordMapper;
 import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.utils.IpUtil;
@@ -48,6 +49,9 @@ public class RegisterService {
 
   @Autowired
   MemberPasswordMapper memberPasswordMapper;
+  
+  @Autowired
+  MemberAccountMapper memberAccountMapper;
 
   @Autowired
   GuestMapper guestMapper;
@@ -184,16 +188,29 @@ public class RegisterService {
       password = SecurityKit.passwordMD5(password, salt);
       if(memberId != null){
         List<MemberAccount> list = memberInfoDao.selectAccount(phoneNum, memberId);
+        MemberPassword memberPassword;
         if (CollectionUtil.isNotEmpty(list)){
-          Long passwordId = list.get(0).getPasswordId();
-          MemberPassword memberPassword = memberPasswordMapper.selectById(passwordId);
-          memberPassword.setSalt(salt).setPassword(password).setLastModifyTime(new Date());
-          memberPasswordMapper.updateById(memberPassword);
-        } else {
-          MemberPassword memberPassword = new MemberPassword();
-          memberPassword.setSalt(salt).setPassword(password).setLastModifyTime(new Date());
-          memberPasswordMapper.insert(memberPassword);
+          MemberAccount memberAccount = list.get(0);
+          if (memberAccount.getPasswordId() != null) {
+            memberPassword = memberPasswordMapper.selectById(memberAccount.getPasswordId());
+            memberPassword.setSalt(salt).setPassword(password).setLastModifyTime(new Date());
+            memberPasswordMapper.updateById(memberPassword);
+          }else {
+            memberPassword = new MemberPassword();
+            memberPassword.setSalt(salt).setPassword(password).setLastModifyTime(new Date());
+            memberPasswordMapper.insert(memberPassword);
+          }
+          memberAccount.setPasswordId(memberPassword.getId());
+          memberAccountMapper.updateById(memberAccount);
         }
+        /*List<MemberAccount> accountList = memberAccountMapper.selectList(new QueryWrapper<MemberAccount>().eq(MemberAccount.MEMBER_ID, memberId));
+        if(CollectionUtil.isEmpty(accountList)){
+          throw new LogicException("该用户不是会员");
+        }
+        for (MemberAccount memberAccount :accountList){
+          memberAccount.setPasswordId(memberPassword.getId());
+          memberAccountMapper.updateById(memberAccount);
+        }*/
       }
       return success("成功！");
     }
@@ -219,6 +236,7 @@ public class RegisterService {
       }
       String salt = StringUtil.salt();
       memberPassword.setSalt(salt).setPassword(SecurityKit.passwordMD5(newPassword, salt)).setLastModifyTime(new Date());
+      memberPasswordMapper.updateById(memberPassword);
       return success("成功！");
     }
     return fail(ResultEnum.DATA_ERROR.getCode(), "该手机号未注册！");
