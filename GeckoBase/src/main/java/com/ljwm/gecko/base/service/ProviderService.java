@@ -19,10 +19,7 @@ import com.ljwm.gecko.base.enums.ValidateStatEnum;
 import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.bean.AppInfo;
 import com.ljwm.gecko.base.model.dto.*;
-import com.ljwm.gecko.base.model.vo.MemberPaperVo;
-import com.ljwm.gecko.base.model.vo.MemberVo;
-import com.ljwm.gecko.base.model.vo.ProviderServicesVo;
-import com.ljwm.gecko.base.model.vo.ProviderVo;
+import com.ljwm.gecko.base.model.vo.*;
 import com.ljwm.gecko.base.model.vo.admin.ServiceTypeTree;
 import com.ljwm.gecko.base.utils.Fileutil;
 import lombok.extern.slf4j.Slf4j;
@@ -295,7 +292,7 @@ public class ProviderService {
     return servicesVoList;
   }
 
-  public ProviderVo findProviderByMemberId(Long memberId){
-    return providerMapper.findProviderByMemberId(memberId);
+  public ProviderSimpleVo findProviderByMemberId(Long memberId){
+    return providerMapper.findProviderSimpleVoByMemberId(memberId);
   }
 }

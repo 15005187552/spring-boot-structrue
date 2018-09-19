@@ -5,6 +5,7 @@ import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.model.dto.ProviderDto;
 import com.ljwm.gecko.base.model.dto.ProviderQueryDto;
+import com.ljwm.gecko.base.model.vo.ProviderSimpleVo;
 import com.ljwm.gecko.base.model.vo.ProviderVo;
 import com.ljwm.gecko.base.service.ProviderService;
 import io.swagger.annotations.Api;
@@ -36,7 +37,7 @@ public class ProviderController extends BaseController {
 
   @GetMapping("findProvider")
   @ApiOperation("根据会员id查询服务商信息")
-  public Result<ProviderVo> findProviderByMemberId(){
+  public Result<ProviderSimpleVo> findProviderByMemberId(){
     return success(providerService.findProviderByMemberId(SecurityKit.currentId()));
   }
 }

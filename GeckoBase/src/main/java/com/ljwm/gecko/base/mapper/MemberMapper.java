@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.model.vo.MemberInfo;
+import com.ljwm.gecko.base.model.vo.MemberSimpleVo;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
@@ -50,6 +51,8 @@ public interface MemberMapper extends BaseMapper<Member> {
   MemberVo findMemberVoByMemberId(@Param("memberId") Long memberId);
 
   List<MemberVo> findMemberVoListByProviderId(@Param("providerId") Long providerId);
+
+  List<MemberSimpleVo> findMemberSimpleByProviderId(@Param("providerId") Long providerId);
 
   @Select("SELECT * FROM t_member a, t_member_account b WHERE b.USERNAME = #{username} AND b.MEMBER_ID = a.ID")
   @ResultMap("MemberInfo")

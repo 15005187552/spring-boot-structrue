@@ -135,6 +135,14 @@
   </resultMap>
 
   <select id="findMemberVoListByProviderId" parameterType="long" resultMap="memberCheckVo">
-    SELECT t.* FROM t_member t where t.ID IN ( SELECT DISTINCT tpu.MEMBER_ID  FROM t_provider tp, t_provider_user tpu  WHERE  tp.ID = tpu.PROVIDER_ID  AND tp.ID = #{providerId})
+    SELECT DISTINCT t.* FROM t_member t where t.ID IN ( SELECT DISTINCT tpu.MEMBER_ID  FROM t_provider tp, t_provider_user tpu  WHERE  tp.ID = tpu.PROVIDER_ID  AND tp.ID = #{providerId})
+  </select>
+
+  <resultMap id="memberSimpleVo" type="com.ljwm.gecko.base.model.vo.MemberSimpleVo" extends="BaseResultMap">
+
+  </resultMap>
+
+  <select id="findMemberSimpleByProviderId" parameterType="long" resultMap="memberSimpleVo">
+    SELECT DISTINCT t.* FROM t_member t where t.ID IN ( SELECT DISTINCT tpu.MEMBER_ID  FROM t_provider tp, t_provider_user tpu  WHERE  tp.ID = tpu.PROVIDER_ID  AND tp.ID = #{providerId})
   </select>
 </mapper>

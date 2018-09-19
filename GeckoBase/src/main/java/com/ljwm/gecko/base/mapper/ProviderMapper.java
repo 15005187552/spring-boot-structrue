@@ -5,6 +5,7 @@ import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.Provider;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ljwm.gecko.base.model.vo.MemberVo;
+import com.ljwm.gecko.base.model.vo.ProviderSimpleVo;
 import com.ljwm.gecko.base.model.vo.ProviderVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,5 +27,7 @@ public interface ProviderMapper extends BaseMapper<Provider> {
 
   List<ProviderVo> findByPage(Page<ProviderVo> ret, @Param("params")Map map);
 
-  ProviderVo findProviderByMemberId(@Param("id") Long id);
+  ProviderVo findProviderByMemberId(@Param("memberId") Long memberId);
+
+  ProviderSimpleVo findProviderSimpleVoByMemberId(@Param("memberId") Long memberId);
 }
