@@ -20,6 +20,7 @@
         <result column="AREA_CODE" property="areaCode" />
         <result column="ADDRESS" property="address" />
         <result column="PIC_PATH" property="picPath" />
+        <result column="LOGO" property="logo" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -69,14 +70,51 @@
       select t.*  from t_provider t where t.CREATOR_ID =#{memberId}
     </select>
 
-    <resultMap id="providerSimple" type="com.ljwm.gecko.base.model.vo.ProviderSimpleVo" extends="BaseResultMap">
+    <resultMap id="providerSimple" type="com.ljwm.gecko.base.model.vo.ProviderSimpleVo">
+      <id column="ID" property="id" />
+      <result column="NAME" property="name" />
+      <result column="TYPE" property="type" />
+      <result column="PROV_CODE" property="provCode" />
+      <result column="CITY_CODE" property="cityCode" />
+      <result column="AREA_CODE" property="areaCode" />
+      <result column="ADDRESS" property="address" />
+      <result column="PIC_PATH" property="picPath" />
+      <result column="LOGO" property="logo" />
       <association property="locationStr" column="AREA_CODE" select="com.ljwm.gecko.base.mapper.LocationMapper.getLocationByArea"/>
-      <collection property="providerServicesVoList" column="ID" select="com.ljwm.gecko.base.mapper.ProviderServicesMapper.findProviderServicesVoListByProviderId"/>
-      <collection property="memberVoList" column="ID" select="com.ljwm.gecko.base.mapper.MemberMapper.findMemberSimpleByProviderId"/>
+      <collection property="providerServicesVoList" column="ID" select="com.ljwm.gecko.base.mapper.ProviderServicesMapper.findClienProviderServicesListByProviderId"/>
     </resultMap>
 
-    <select id="findProviderSimpleVoByMemberId" parameterType="long" resultMap="providerSimple">
-      select t.*  from t_provider t where t.CREATOR_ID =#{memberId}
+    <select id="findProviderSimpleVoByMemberId" parameterType="long" resultMap="providerVo">
+      select t.*  from t_provider t where t.CREATOR_ID =#{memberId} limit 1
+    </select>
+
+    <select id="findClientByPage" parameterType="map" resultMap="providerSimple">
+      SELECT DISTINCT tp.*  from t_provider tp,t_provider_services tps
+      <where>
+        tp.ID=tps.PROVIDER_ID and tp.VERSION = tps.VERSION
+        and tps.VALIDATE_STATE =2
+        <if test="params.text != null and params.text != ''">
+          AND (
+          tp.`NAME` LIKE CONCAT('%',#{params.text},'%')
+          )
+        </if>
+        <if test="params.disabled != null ">
+          AND tp.`DISABLED` = #{params.disabled}
+        </if>
+        <if test="params.validateState != null ">
+          AND tp.`VALIDATE_STATE` = #{params.validateState}
+        </if>
+        <if test="params.serviceId != null ">
+          AND tps.`SERVICE_ID` = #{params.serviceId}
+        </if>
+      </where>
+      ORDER BY tp.ID
+      <if test="params.asc">
+        ASC
+      </if>
+      <if test="!params.asc">
+        DESC
+      </if>
     </select>
 
 </mapper>

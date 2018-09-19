@@ -101,6 +101,10 @@ public class Provider implements Serializable {
     @TableField("VERSION")
     private Integer version;
 
+    @ApiModelProperty("服务商logo")
+    @TableField("LOGO")
+    private String logo;
+
     public static final String ID = "ID";
 
     public static final String NAME = "NAME";

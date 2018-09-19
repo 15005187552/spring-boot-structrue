@@ -11,17 +11,28 @@ import java.util.List;
 
 @Data
 @Accessors(chain = true)
-public class ProviderSimpleVo extends Provider {
+public class ProviderSimpleVo {
 
-  @JSONField(serializeUsing = StatusWithNameSerializer.ProviderValidateStatSerializer.class)
-  private Integer validateState;
+  private Long id;
+
+  private String name;
+
+  private Integer type;
+
+  private Integer provCode;
+
+  private Integer cityCode;
+
+  private Integer areaCode;
+
+  private String address;
+
+  private String logo;
 
   @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
   private String picPath;
 
   private String locationStr;
+  private List<ProviderServicesSimpleVo> providerServicesVoList;
 
-  private List<ProviderServicesVo> providerServicesVoList;
-
-  private List<MemberSimpleVo> memberVoList;
 }

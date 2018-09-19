@@ -28,4 +28,24 @@
       SELECT DISTINCT tps.*  from t_provider tp,t_provider_services tps where tp.ID=#{providerId} and  tp.ID=tps.PROVIDER_ID and tp.VERSION = tps.VERSION
     </select>
 
+    <resultMap id="providerServicesSimpleVo" type="com.ljwm.gecko.base.model.vo.ProviderServicesSimpleVo">
+      <id column="ID" property="id" />
+      <result column="SERVICE_ID" property="serviceId" />
+      <result column="NAME" property="name" />
+    </resultMap>
+
+    <select id="findClienProviderServicesListByProviderId" resultType="long" resultMap="providerServicesSimpleVo">
+      SELECT DISTINCT
+      tps.*, tst.`NAME`
+      FROM
+      t_provider tp,
+      t_provider_services tps,
+      t_service_type tst
+      WHERE
+      tps.SERVICE_ID = tst.ID
+      AND tp.ID = tps.PROVIDER_ID
+      AND tp.VERSION = tps.VERSION
+      AND tps.VALIDATE_STATE = 2
+      AND tp.ID = #{providerId}
+    </select>
 </mapper>
