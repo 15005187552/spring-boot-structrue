@@ -131,7 +131,7 @@ public class MemberInfoDao {
 
   public MemberInfo selectAccountByUserName(String username) {
     List<MemberInfo> list = memberMapper.selectAccountByUserName(username);
-    if (CollectionUtil.isEmpty(list)){
+    if (CollectionUtil.isNotEmpty(list)){
       return list.get(0);
     }
     return null;
