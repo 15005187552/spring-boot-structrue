@@ -1,5 +1,6 @@
 package com.ljwm.gecko.client.service;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -8,16 +9,21 @@ import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.JwtKit;
 import com.ljwm.bootbase.security.LoginInfoHolder;
+import com.ljwm.bootbase.security.SecurityKit;
+import com.ljwm.bootbase.service.CommonService;
+import com.ljwm.gecko.base.entity.FormId;
 import com.ljwm.gecko.base.entity.Guest;
+import com.ljwm.gecko.base.enums.FormIdStatusEnum;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.enums.UserSource;
+import com.ljwm.gecko.base.mapper.FormIdMapper;
 import com.ljwm.gecko.base.mapper.MemberAccountMapper;
 import com.ljwm.gecko.base.model.vo.MemberInfo;
-import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.service.GuestService;
 import com.ljwm.gecko.base.service.MemberInfoService;
 import com.ljwm.gecko.base.service.WechatXCXService;
 import com.ljwm.gecko.base.utils.FunctionUtil;
+import com.ljwm.gecko.client.model.dto.FormIdForm;
 import com.ljwm.gecko.client.model.dto.GuestForm;
 import com.ljwm.gecko.client.model.dto.LoginForm;
 import com.ljwm.gecko.client.model.vo.ResultMe;
@@ -55,10 +61,13 @@ public class AuthService {
   private MemberInfoService memberInfoService;
 
   @Autowired
-  private MemberAccountMapper memberAccountMapper;
+  private CommonService commonService;
 
   @Autowired
   private AuthenticationManager authenticationManager;
+
+  @Autowired
+  private FormIdMapper formIdMapper;
 
   /**
    * 公共验证逻辑实现
@@ -134,7 +143,6 @@ public class AuthService {
 
   public ResultMe me(JwtUser jwtUser) {
     //判断是否为会员
-    String code = LoginInfoHolder.getLoginType();
     if (!LoginInfoHolder.getLoginType().equals(LoginType.GUEST.getCode().toString())){
         MemberInfo memberInfo = memberInfoService.selectMemberInfo(jwtUser.getId(), LoginInfoHolder.getLoginType());
         ResultMe resultMe = new ResultMe();
@@ -176,5 +184,18 @@ public class AuthService {
       return Result.success(resultMe);
     }
     return Result.fail("密码错误!");*/
+  }
+
+  public ResultMe uploadFormId(FormIdForm formIdForm) {
+    if(!formIdForm.getFormId().equals("the formId is a mock one")) {
+      FormId formId = new FormId()
+        .setCreateTime(DateUtil.date())                               // 创建时间
+        .setFormId(formIdForm.getFormId())                            // 表单ID
+        .setMemberId(SecurityKit.currentId())                           // 用户ID
+        .setStatus(FormIdStatusEnum.USE_ABLE.getCode())               // 状态
+        ;
+      commonService.insertOrUpdate(formId, formIdMapper);
+    }
+    return me(SecurityKit.currentUser());
   }
 }
