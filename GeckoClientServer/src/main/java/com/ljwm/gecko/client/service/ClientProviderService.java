@@ -305,8 +305,6 @@ public class ClientProviderService {
     return providerMapper.findProviderSimpleVoByMemberId(memberId);
   }
 
-
-
   public Page<ProviderSimpleVo> findClientByPage(ProviderQueryDto query) {
     Page<ProviderSimpleVo> page = commonService.find(query, (p, q) ->
       providerMapper.findClientByPage(p, BeanUtil.beanToMap(query)));

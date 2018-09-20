@@ -115,10 +115,14 @@ public class ProviderService {
         providerValidateStatus = ValidateStatEnum.WAIT_CONFIRM.getCode();
         break;
       }
-      if (Objects.equals(providerServicesVo.getValidateState(),ValidateStatEnum.CONFIRM_FAILED.getCode())){
-        providerValidateStatus = ValidateStatEnum.CONFIRM_FAILED.getCode();
-        break;
-      }
+    }
+    if (!Objects.equals(providerValidateStatus,ValidateStatEnum.WAIT_CONFIRM.getCode())){
+        for (ProviderServicesVo providerServicesVo: providerServicesVoList){
+          if (Objects.equals(providerServicesVo.getValidateState(),ValidateStatEnum.CONFIRM_FAILED.getCode())){
+            providerValidateStatus = ValidateStatEnum.CONFIRM_FAILED.getCode();
+            break;
+          }
+        }
     }
     provider.setValidateState(providerValidateStatus);
     providerMapper.updateById(provider);
