@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.enums;
 
+import com.ljwm.gecko.base.listener.CommonEnum;
 import lombok.Getter;
 
 /**
@@ -7,7 +8,7 @@ import lombok.Getter;
  * @date 2018/9/20 17:23
  */
 @Getter
-public enum TableNameEnum {
+public enum TableNameEnum implements CommonEnum {
 
   T_INCOME_TYPE(0, "t_income_type"),
   T_OTHER_REDUCE(1, "t_other_reduce"),

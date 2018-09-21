@@ -14,6 +14,7 @@ import com.ljwm.gecko.base.dao.MemberInfoDao;
 import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.entity.MemberPaper;
 import com.ljwm.gecko.base.entity.PaperPath;
+import com.ljwm.gecko.base.enums.InfoValidateStateEnum;
 import com.ljwm.gecko.base.enums.ValidateStatEnum;
 import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.mapper.MemberPaperMapper;
@@ -121,6 +122,7 @@ public class MemberInfoService {
         String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
         Fileutil.cutGeneralFile(srcPath, destDir);
         member.setPicFront(Constant.MEMBER + member.getId() + "/" + memberDto.getPicFront());
+        member.setInfoValidateState(0);
       }
     }
     if (StringUtils.isNotEmpty(memberDto.getPicBack())){
@@ -131,6 +133,7 @@ public class MemberInfoService {
         String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
         Fileutil.cutGeneralFile(srcPath, destDir);
         member.setPicBack(Constant.MEMBER + member.getId() + "/" + memberDto.getPicBack());
+        member.setInfoValidateState(0);
       }
     }
     if (StringUtils.isNotEmpty(memberDto.getPicPassport())){
@@ -141,6 +144,7 @@ public class MemberInfoService {
         String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
         Fileutil.cutGeneralFile(srcPath, destDir);
         member.setPicPassport(Constant.MEMBER + member.getId() + "/" + memberDto.getPicPassport());
+        member.setInfoValidateState(0);
       }
     }
     member.setVersion(member.getVersion()+1);
@@ -280,7 +284,26 @@ public class MemberInfoService {
     memberMapper.updateById(member);
   }
 
-
+  @Transactional
+  public void checkMemberInfo(MemberInfoConfirmDto memberInfoConfirmDto){
+    Member member = memberMapper.selectById(memberInfoConfirmDto.getMemberId());
+    if (member == null) {
+      log.info("会员id:{} 会员信息不存在!", memberInfoConfirmDto.getMemberId());
+      throw new LogicException(ResultEnum.DATA_ERROR, "会员查询不到");
+    }
+    if (!Objects.equals(member.getInfoValidateState(), InfoValidateStateEnum.INIT.getCode())){
+      log.info("会员基本信息非待认证状态!");
+      throw new LogicException(ResultEnum.DATA_ERROR,"会员基本信息非待认证状态!");
+    }
+    if (memberInfoConfirmDto.isAgree()){
+      member.setInfoValidateState(InfoValidateStateEnum.CONFIRM_SUCCESS.getCode());
+    }else {
+      member.setInfoValidateState(InfoValidateStateEnum.CONFIRM_FAILED.getCode());
+      member.setValidateText(memberInfoConfirmDto.getValidateText());
+    }
+    member.setValidatorId(memberInfoConfirmDto.getValidatorId());
+    memberMapper.updateById(member);
+  }
 
   public LoginVo selectByPhone(String phoneNum) {
     List<LoginVo> list = memberPasswordMapper.selectByPhone(phoneNum);

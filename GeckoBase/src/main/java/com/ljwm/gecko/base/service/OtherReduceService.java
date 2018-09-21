@@ -7,6 +7,7 @@ import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.OtherReduce;
 import com.ljwm.gecko.base.mapper.OtherReduceMapper;
+import com.ljwm.gecko.base.model.form.AttributeForm;
 import com.ljwm.gecko.base.model.form.OtherReduceForm;
 import com.ljwm.gecko.base.model.form.OtherReduceQuery;
 import com.ljwm.gecko.base.model.vo.OtherReduceVo;
@@ -29,6 +30,9 @@ public class OtherReduceService {
 
   @Autowired
   private OtherReduceMapper otherReduceMapper;
+
+  @Autowired
+  private AttributeAdminService attributeAdminService;
 
   /**
    * 分页查询
@@ -55,16 +59,22 @@ public class OtherReduceService {
 
   @Transactional
   public OtherReduce save(OtherReduceForm form) {
-    return Optional.ofNullable(form).map(f -> {
-      OtherReduce otherReduce = null;
-      if (!Objects.isNull(f.getId()))
-        otherReduce = otherReduceMapper.selectById(f.getId());
-      if (otherReduce == null)
-        otherReduce = new OtherReduce();
-      BeanUtil.copyProperties(f, otherReduce);
-      commonService.insertOrUpdate(otherReduce, otherReduceMapper);
-      return otherReduce;
-    }).get();
+    return
+      Optional
+        .ofNullable(form)
+        .map(f -> {
+          OtherReduce otherReduce = null;
+          if (!Objects.isNull(f.getId()))
+            otherReduce = otherReduceMapper.selectById(f.getId());
+          if (otherReduce == null)
+            otherReduce = new OtherReduce();
+          BeanUtil.copyProperties(f, otherReduce);
+          commonService.insertOrUpdate(otherReduce, otherReduceMapper);
+          return otherReduce;
+        }).map(bean -> {
+          attributeAdminService.save(bean.getClass(), new AttributeForm().setItemId(bean.getId()).setName(bean.getName()));
+          return bean;
+        }).get();
   }
 
   @Transactional

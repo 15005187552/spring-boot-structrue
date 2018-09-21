@@ -44,12 +44,12 @@ public class ReportDataController extends BaseController {
 
   @ApiOperation(value = "查询收入类型---带分页")
   @PostMapping("findIncomeTypePage")
-  public Result<Page<IncomeTypeVo>> findIncomeTypePage(@RequestBody IncomeTypeQueryDto incomeTypeQueryDto){
+  public Result<Page<IncomeTypeVo>> findIncomeTypePage(@RequestBody IncomeTypeQueryDto incomeTypeQueryDto) {
     return success(incomeTypeService.findPage(incomeTypeQueryDto));
   }
 
   @PostMapping("saveIncomeType")
-  @ApiOperation(value ="保存收入类型" )
+  @ApiOperation(value = "保存收入类型")
   public Result<IncomeTypeSimpleVo> saveIncomeType(@RequestBody IncomeTypeDto incomeTypeDto) {
     return success(incomeTypeService.save(incomeTypeDto));
   }
@@ -81,32 +81,32 @@ public class ReportDataController extends BaseController {
 
   @GetMapping("/deleteSpecialDeduction/{id}")
   @ApiOperation(value = "删除专项扣除")
-  public Result deleteSpecialDeduction(@PathVariable Long id){
+  public Result deleteSpecialDeduction(@PathVariable Long id) {
     specialDeductionService.delete(id);
     return success();
   }
 
   @PostMapping("saveAddSpecial")
   @ApiOperation(value = "专项附加扣除添加")
-  public Result<AddSpecialVo> saveAddSpecial(@RequestBody AddSpecialDto addSpecialDto){
+  public Result<AddSpecialVo> saveAddSpecial(@RequestBody AddSpecialDto addSpecialDto) {
     return success(addSpecialService.save(addSpecialDto));
   }
 
   @GetMapping("findAddSpecial")
   @ApiOperation(value = "查询专项附加扣除---不带分页")
-  public Result<List<AddSpecialVo>> findAddSpecial(){
+  public Result<List<AddSpecialVo>> findAddSpecial() {
     return success(addSpecialService.find());
   }
 
   @PostMapping("findAddSpecialPage")
   @ApiOperation(value = "查询专项附加扣除---带分页")
-  public Result<Page<AddSpecialVo>> findAddSpecialPage(@RequestBody AddSpecialQueryDto addSpecialQueryDto){
+  public Result<Page<AddSpecialVo>> findAddSpecialPage(@RequestBody AddSpecialQueryDto addSpecialQueryDto) {
     return success(addSpecialService.findPage(addSpecialQueryDto));
   }
 
   @GetMapping("/deleteAddSpecial/{id}")
   @ApiOperation(value = "删除专项附加扣除")
-  public Result deleteAddSpecial(@PathVariable Long id){
+  public Result deleteAddSpecial(@PathVariable Long id) {
     addSpecialService.delete(id);
     return success();
   }
@@ -138,7 +138,8 @@ public class ReportDataController extends BaseController {
 
   @GetMapping("exportReportData")
   @ApiOperation("导出所有申报数据的excel模块")
-  public void exportReportData(){
+  public void exportReportData() {
 
   }
+
 }

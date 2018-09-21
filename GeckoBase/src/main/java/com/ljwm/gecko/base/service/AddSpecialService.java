@@ -10,6 +10,7 @@ import com.ljwm.gecko.base.entity.AddSpecial;
 import com.ljwm.gecko.base.mapper.AddSpecialMapper;
 import com.ljwm.gecko.base.model.dto.AddSpecialDto;
 import com.ljwm.gecko.base.model.dto.AddSpecialQueryDto;
+import com.ljwm.gecko.base.model.form.AttributeForm;
 import com.ljwm.gecko.base.model.vo.AddSpecialVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,18 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@SuppressWarnings("all")
 public class AddSpecialService {
+
+  @Autowired
+  private CommonService commonService;
 
   @Autowired
   private AddSpecialMapper addSpecialMapper;
 
   @Autowired
-  private CommonService commonService;
+  private AttributeAdminService attributeAdminService;
+
 
   @Transactional
   public AddSpecialVo save(AddSpecialDto addSpecialDto) {
@@ -41,8 +47,14 @@ public class AddSpecialService {
         } else {
           addSpecialMapper.insert(addSpecial);
         }
-        return new AddSpecialVo(addSpecial);
-      }).map(AddSpecialVo::new).get();
+        return addSpecial;
+      })
+      // TODO 简化添加 重复添加冗余数据 为客服端版服务
+      .map(bean -> {
+        attributeAdminService.save(bean.getClass(), new AttributeForm().setItemId(bean.getId()).setName(bean.getName()));
+        return bean;
+      })
+      .map(AddSpecialVo::new).get();
   }
 
   public List<AddSpecialVo> find() {

@@ -10,12 +10,14 @@ import com.ljwm.gecko.base.entity.Company;
 import com.ljwm.gecko.base.entity.CompanyUser;
 import com.ljwm.gecko.base.entity.NaturalPerson;
 import com.ljwm.gecko.base.enums.ActivateEnum;
+import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.CompanyMapper;
 import com.ljwm.gecko.base.mapper.CompanyUserMapper;
 import com.ljwm.gecko.base.mapper.NaturalPersonMapper;
 import com.ljwm.gecko.base.model.dto.MemberComForm;
 import com.ljwm.gecko.base.model.vo.CompanyVo;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
+import com.ljwm.gecko.client.model.dto.CompanyDto;
 import com.ljwm.gecko.client.model.dto.InactiveForm;
 import com.ljwm.gecko.client.model.dto.MemberForm;
 import com.ljwm.gecko.client.model.vo.CompanyInfoVo;
@@ -118,5 +120,25 @@ public class CompanyUserService {
       return Result.success(companyService.findCompanyById(naturalPerson.getCompanyId()));
     }
     throw new LogicException("该用户不是会员");
+  }
+
+  public Result roleInCompany(CompanyDto companyDto) {
+    Long memberId = SecurityKit.currentId();
+    CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.MEMBER_ID, memberId)
+      .eq(CompanyUser.COMPANY_ID, companyDto.getCompanyId()).eq(CompanyUser.DISABLED, DisabledEnum.ENABLED.getCode())
+      .eq(CompanyUser.ACTIVATED, ActivateEnum.ENABLED.getCode()));
+    if(companyUser != null){
+      return Result.success(companyUser.getRolesCode());
+    }
+    throw new LogicException("公司ID有误！");
+  }
+
+  public Result memberRoleList(CompanyDto companyDto) {
+    List<CompanyUser> list = companyUserMapper.selectList(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, companyDto.getCompanyId()).
+      eq(CompanyUser.DISABLED, DisabledEnum.ENABLED.getCode()).eq(CompanyUser.ACTIVATED, ActivateEnum.ENABLED.getCode()));
+    if (list != null){
+      return Result.success(list);
+    }
+    throw new LogicException("该公司不存在!");
   }
 }
