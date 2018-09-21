@@ -5,6 +5,7 @@ import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.model.dto.MemberConfirmDto;
+import com.ljwm.gecko.base.model.dto.MemberInfoConfirmDto;
 import com.ljwm.gecko.base.model.dto.MemberQueryDto;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.service.MemberInfoService;
@@ -32,10 +33,18 @@ public class MemberController extends BaseController {
   }
 
   @PostMapping("checkMember")
-  @ApiModelProperty("会员审核")
+  @ApiOperation("会员审核")
   public Result checkMember(@RequestBody MemberConfirmDto memberConfirmDto){
     memberConfirmDto.setValidatorId(SecurityKit.currentId());
     memberInfoService.checkMember(memberConfirmDto);
+    return success();
+  }
+
+  @PostMapping("checkMemberInfo")
+  @ApiOperation("审核会员基本信息")
+  public Result checkMemberInfo(@RequestBody MemberInfoConfirmDto memberInfoConfirmDto){
+    memberInfoConfirmDto.setValidatorId(SecurityKit.currentId());
+    memberInfoService.checkMemberInfo(memberInfoConfirmDto);
     return success();
   }
 }

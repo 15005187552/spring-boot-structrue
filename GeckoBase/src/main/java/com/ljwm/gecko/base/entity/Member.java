@@ -85,6 +85,18 @@ public class Member implements Serializable {
     @TableField("`VERSION`")
     private Integer version;
 
+    @ApiModelProperty(value = "会员基本信息认证状态  0  未认证  1 已认证")
+    @TableField("INFO_VALIDATE_STATE")
+    private Integer infoValidateState;
+
+    @ApiModelProperty(value = "会员info认证信息")
+    @TableField("VALIDATE_TEXT")
+    private String validateText;
+
+    @ApiModelProperty(value = "认证人")
+    @TableField("VALIDATOR_ID")
+    private Long validatorId;
+
 
     public static final String ID = "`ID`";
 
