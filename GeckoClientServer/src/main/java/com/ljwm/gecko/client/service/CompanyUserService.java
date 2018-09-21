@@ -119,7 +119,7 @@ public class CompanyUserService {
       return Result.success(companyService.findCompanyById(naturalPerson.getCompanyId()));
     }
 //    throw new LogicException("该用户不是会员");
-    return null;
+    return Result.success(null);
   }
 
   public Result roleInCompany(CompanyDto companyDto) {
@@ -131,7 +131,7 @@ public class CompanyUserService {
       return Result.success(companyUser.getRolesCode());
     }
 //    throw new LogicException("公司ID有误！");
-    return null;
+    return Result.success(null);
   }
 
   public Result memberRoleList(CompanyDto companyDto) {
@@ -141,6 +141,6 @@ public class CompanyUserService {
       return Result.success(list);
     }
 //    throw new LogicException("该公司不存在!");
-    return null;
+    return Result.success(null);
   }
 }
