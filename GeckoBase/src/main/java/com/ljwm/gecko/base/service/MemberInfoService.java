@@ -134,6 +134,7 @@ public class MemberInfoService {
         Fileutil.cutGeneralFile(srcPath, destDir);
         member.setPicBack(Constant.MEMBER + member.getId() + "/" + memberDto.getPicBack());
         member.setInfoValidateState(0);
+        member.setValidateText(StringUtils.EMPTY);
       }
     }
     if (StringUtils.isNotEmpty(memberDto.getPicPassport())){
@@ -145,6 +146,7 @@ public class MemberInfoService {
         Fileutil.cutGeneralFile(srcPath, destDir);
         member.setPicPassport(Constant.MEMBER + member.getId() + "/" + memberDto.getPicPassport());
         member.setInfoValidateState(0);
+        member.setValidateText(StringUtils.EMPTY);
       }
     }
     member.setVersion(member.getVersion()+1);

@@ -199,6 +199,8 @@ public class ClientProviderService {
             String destDir = appInfo.getFilePath() + Constant.PROVIDER + member.getId() + "/";
             Fileutil.cutGeneralFile(srcPath, destDir);
             provider.setPicPath(Constant.PROVIDER + member.getId() + "/" + providerDto.getPicPath());
+            provider.setInfoValidateState(0);
+            provider.setValidateText(StringUtils.EMPTY);
           }
         }
         if (StringUtils.isNotEmpty(providerDto.getLogo())){

@@ -105,6 +105,14 @@ public class Provider implements Serializable {
     @TableField("LOGO")
     private String logo;
 
+    @ApiModelProperty("服务商简介")
+    @TableField("INSTRO")
+    private String instro;
+
+    @ApiModelProperty(value = "会员基本信息认证状态  0  未认证  1 已认证")
+    @TableField("INFO_VALIDATE_STATE")
+    private Integer infoValidateState;
+
     public static final String ID = "ID";
 
     public static final String NAME = "NAME";

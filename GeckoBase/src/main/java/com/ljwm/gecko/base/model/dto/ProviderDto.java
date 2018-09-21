@@ -38,6 +38,9 @@ public class ProviderDto {
   @ApiModelProperty("服务商logo")
   private String logo;
 
+  @ApiModelProperty("服务商简介")
+  private String instro;
+
   @ApiModelProperty("服务类型ids")
   private List<ProviderServiceDto> providerServiceDtoList;
 
