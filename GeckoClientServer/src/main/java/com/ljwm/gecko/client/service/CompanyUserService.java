@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
-import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.entity.Company;
 import com.ljwm.gecko.base.entity.CompanyUser;
@@ -119,7 +118,8 @@ public class CompanyUserService {
     if(naturalPerson != null){
       return Result.success(companyService.findCompanyById(naturalPerson.getCompanyId()));
     }
-    throw new LogicException("该用户不是会员");
+//    throw new LogicException("该用户不是会员");
+    return null;
   }
 
   public Result roleInCompany(CompanyDto companyDto) {
@@ -130,7 +130,8 @@ public class CompanyUserService {
     if(companyUser != null){
       return Result.success(companyUser.getRolesCode());
     }
-    throw new LogicException("公司ID有误！");
+//    throw new LogicException("公司ID有误！");
+    return null;
   }
 
   public Result memberRoleList(CompanyDto companyDto) {
@@ -139,6 +140,7 @@ public class CompanyUserService {
     if (list != null){
       return Result.success(list);
     }
-    throw new LogicException("该公司不存在!");
+//    throw new LogicException("该公司不存在!");
+    return null;
   }
 }

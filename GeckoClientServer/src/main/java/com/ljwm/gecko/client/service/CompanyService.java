@@ -5,7 +5,6 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
-import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
@@ -165,7 +164,7 @@ public class CompanyService {
   public CompanyVo findCompanyById(Long companyId) {
     List<CompanyVo> list = companyMapper.findCompanyById(companyId);
     if (CollectionUtil.isEmpty(list)) {
-      throw new LogicException("无搜索结果！");
+      return null;
     }
     return list.get(0);
   }
