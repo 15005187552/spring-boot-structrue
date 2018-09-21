@@ -50,7 +50,7 @@ public class GuestService {
           .setCreateTime(now)
           .setLastActiveTime(now);
       }
-      guestMapper.insert(guest);
+        guestMapper.insert(guest);
     } else {
       guest.setLastActiveTime(new Date());
       guestMapper.updateById(guest);

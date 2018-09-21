@@ -39,15 +39,15 @@ public class CompanyForm {
 
   @ApiModelProperty(value = "省级代码")
   @NotBlank(message = "请填写省份")
-  private Integer provCode;
+  private String provCode;
 
   @ApiModelProperty(value = "市级代码")
   @NotBlank(message = "请填写市")
-  private Integer cityCode;
+  private String cityCode;
 
   @ApiModelProperty(value = "区级代码")
   @NotBlank(message = "请填写区")
-  private Integer areaCode;
+  private String areaCode;
 
   @ApiModelProperty(value = "详细地址")
   private String address;
