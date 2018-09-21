@@ -49,7 +49,7 @@ public class RegisterService {
 
   @Autowired
   MemberPasswordMapper memberPasswordMapper;
-  
+
   @Autowired
   MemberAccountMapper memberAccountMapper;
 
@@ -58,9 +58,11 @@ public class RegisterService {
 
   @Transactional
   public Result getSMS(RegisterForm registerForm, HttpServletRequest request) {
-    Long memberId = memberInfoDao.select(registerForm.getPhoneNum());
-    if (memberId != null){
-      return fail(ResultEnum.DATA_ERROR.getCode(),"该用户已注册！");
+    if(registerForm.getAction() == 1) {
+      Long memberId = memberInfoDao.select(registerForm.getPhoneNum());
+      if (memberId != null) {
+        return fail(ResultEnum.DATA_ERROR.getCode(), "该用户已注册！");
+      }
     }
     Long currentTime = System.currentTimeMillis();//获取当前时间
     String phoneNum = registerForm.getPhoneNum();
