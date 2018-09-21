@@ -1,9 +1,14 @@
 package com.ljwm.gecko.client.service;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.entity.Template;
+import com.ljwm.gecko.base.mapper.AttributeMapper;
 import com.ljwm.gecko.base.mapper.TemplateMapper;
+import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
+import com.ljwm.gecko.client.model.dto.CompanyDto;
 import com.ljwm.gecko.client.model.dto.TemplateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +16,14 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Janiffy
@@ -28,6 +37,9 @@ public class TemplateService {
 
   @Autowired
   TemplateMapper templateMapper;
+
+  @Autowired
+  AttributeMapper attributeMapper;
 
   public Result uploadTemplate(TemplateForm templateForm) {
     int sort = 1;
@@ -64,5 +76,26 @@ public class TemplateService {
       e.printStackTrace();
     }
     return Result.success("下载完成");
+  }
+
+  public Result downloadTemplate(HttpServletResponse response, CompanyDto companyDto) throws IOException {
+    List<Template> list = templateMapper.selectList(new QueryWrapper<Template>()
+      .eq(Template.COMPANY_ID, companyDto.getCompanyId())
+      .orderByAsc(true,Template.SORT));
+    if (CollectionUtil.isNotEmpty(list)){
+      int i = 0;
+      Map<String, String> map = new LinkedHashMap<>();
+      for (Template template : list) {
+        map.put(String.valueOf(i), template.getName());
+      }
+      response.reset();
+      response.setContentType("multipart/form-data");
+      response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("模板表.xlsx","UTF-8"));
+      OutputStream output = response.getOutputStream();
+      ExcelUtil.exportExcel(map, null, output);
+      output.close();
+      return Result.success("导出成功！");
+    }
+    return Result.fail("该公司没有模板！");
   }
 }

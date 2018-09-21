@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.utils.excelutil;
 
+import cn.hutool.core.collection.CollectionUtil;
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ComparatorUtils;
@@ -269,50 +270,52 @@ public class ExcelUtil {
             }
         }
 
-        // 遍历集合数据，产生数据行
-        Iterator<T> it = dataset.iterator();
-        int index = 0;
-        while (it.hasNext()) {
+        if(CollectionUtil.isNotEmpty(dataset)) {
+          // 遍历集合数据，产生数据行
+          Iterator<T> it = dataset.iterator();
+          int index = 0;
+          while (it.hasNext()) {
             index++;
             row = sheet.createRow(index);
             T t = it.next();
             try {
-                if (t instanceof Map) {
-                    @SuppressWarnings("unchecked")
-                    Map<String, Object> map = (Map<String, Object>) t;
-                    int cellNum = 0;
-                    //遍历列名
-                    Iterator<String> it2 = keys.iterator();
-                    while (it2.hasNext()){
-                        key = it2.next();
-                        if (!headers.containsKey(key)) {
-                            LG.error("Map 中 不存在 key [" + key + "]");
-                            continue;
-                        }
-                        Object value = map.get(key);
-                        HSSFCell cell = row.createCell(cellNum);
+              if (t instanceof Map) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> map = (Map<String, Object>) t;
+                int cellNum = 0;
+                //遍历列名
+                Iterator<String> it2 = keys.iterator();
+                while (it2.hasNext()) {
+                  key = it2.next();
+                  if (!headers.containsKey(key)) {
+                    LG.error("Map 中 不存在 key [" + key + "]");
+                    continue;
+                  }
+                  Object value = map.get(key);
+                  HSSFCell cell = row.createCell(cellNum);
 
-                        cellNum = setCellValue(cell,value,pattern,cellNum,null,row);
+                  cellNum = setCellValue(cell, value, pattern, cellNum, null, row);
 
-                        cellNum++;
-                    }
-                } else {
-                    List<FieldForSortting> fields = sortFieldByAnno(t.getClass());
-                    int cellNum = 0;
-                    for (int i = 0; i < fields.size(); i++) {
-                        HSSFCell cell = row.createCell(cellNum);
-                        Field field = fields.get(i).getField();
-                        field.setAccessible(true);
-                        Object value = field.get(t);
-
-                        cellNum = setCellValue(cell,value,pattern,cellNum,field,row);
-
-                        cellNum++;
-                    }
+                  cellNum++;
                 }
+              } else {
+                List<FieldForSortting> fields = sortFieldByAnno(t.getClass());
+                int cellNum = 0;
+                for (int i = 0; i < fields.size(); i++) {
+                  HSSFCell cell = row.createCell(cellNum);
+                  Field field = fields.get(i).getField();
+                  field.setAccessible(true);
+                  Object value = field.get(t);
+
+                  cellNum = setCellValue(cell, value, pattern, cellNum, field, row);
+
+                  cellNum++;
+                }
+              }
             } catch (Exception e) {
-                LG.error(e.toString(), e);
+              LG.error(e.toString(), e);
             }
+          }
         }
         // 设定自动宽度
         for (int i = 0; i < headers.size(); i++) {

@@ -35,5 +35,9 @@ public class EnumService {
   public Result roleType() {
     return Result.success(Arrays.stream(RoleCodeType.values()).map(roleCodeType -> Kv.by("digit",roleCodeType.getDigit()).set("role",roleCodeType.getRole()).set("value",roleCodeType.getValue())).toArray());
   }
+
+  public Result smsmTemplateType() {
+    return Result.success(Arrays.stream(SMSTemplateEnum.values()).map(smsTemplateEnum -> Kv.by("code",smsTemplateEnum.getCode()).set("value",smsTemplateEnum.getName())).toArray());
+  }
 }
 

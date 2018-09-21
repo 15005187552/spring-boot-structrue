@@ -32,7 +32,6 @@ public class AuthController extends BaseController {
   @PostMapping("/login")
   @ApiOperation("小程序登录")
   public Result login(@RequestBody GuestForm guestForm) {
-
     return success(authService.login(guestForm));
   }
 
@@ -52,7 +51,6 @@ public class AuthController extends BaseController {
   @PostMapping("getFormId")
   @ApiOperation("获取formId")
   public Result getFormId(@RequestBody @Valid FormIdForm formIdForm){
-
     return success(authService.uploadFormId(formIdForm));
   }
 }

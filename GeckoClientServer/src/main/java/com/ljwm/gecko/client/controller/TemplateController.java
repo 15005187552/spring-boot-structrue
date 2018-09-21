@@ -1,9 +1,11 @@
 package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.client.model.dto.CompanyDto;
 import com.ljwm.gecko.client.model.dto.TemplateForm;
 import com.ljwm.gecko.client.service.TemplateService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,14 +32,21 @@ public class TemplateController {
 
 
   @PostMapping("/downloadEmployee")
+  @ApiModelProperty("下载员工信息模板")
   public Result downloadEmployee(HttpServletResponse response) throws IOException {
     return templateService.downloadEmployee(response);
   }
 
 
   @PostMapping("/uploadTemplate")
+  @ApiModelProperty("自定义模板要加的字段")
   public Result uploadTemplate(@RequestBody @Valid TemplateForm templateForm){
     return  templateService.uploadTemplate(templateForm);
   }
 
+  @PostMapping("/downloadTemplate")
+  @ApiModelProperty("下载模板")
+  public Result downloadTemplate(HttpServletResponse response, @RequestBody @Valid CompanyDto companyDto) throws IOException {
+    return templateService.downloadTemplate(response, companyDto);
+  }
 }

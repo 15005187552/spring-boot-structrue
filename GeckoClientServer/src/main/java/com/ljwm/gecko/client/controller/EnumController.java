@@ -55,5 +55,9 @@ public class EnumController extends BaseController {
     return enumService.roleType();
   }
 
-
+  @PostMapping("/smsmTemplateType")
+  @ApiOperation("公司角色类型")
+  public Result smsmTemplateType(){
+    return enumService.smsmTemplateType();
+  }
 }
