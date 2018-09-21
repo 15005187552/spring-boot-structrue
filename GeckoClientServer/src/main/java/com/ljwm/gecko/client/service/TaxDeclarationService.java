@@ -3,6 +3,7 @@ package com.ljwm.gecko.client.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.Tax;
 import com.ljwm.gecko.base.model.vo.TaxIncomeVo;
@@ -16,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Janiffy
@@ -83,7 +86,10 @@ public class TaxDeclarationService {
   }
 
   public Result declareType(RecordForm recordForm) {
-    return Result.success(commonService.find(recordForm, (p, q) -> taxInfoDao.selectByPage(p, BeanUtil.beanToMap(recordForm))));
+    Map<String, Object> map = new HashMap<>();
+    map.put("memberId", SecurityKit.currentId());
+    map.put("declareType", recordForm.getDeclareType());
+    return Result.success(commonService.find(recordForm, (p, q) -> taxInfoDao.selectByPage(p, map)));
   }
 
 }

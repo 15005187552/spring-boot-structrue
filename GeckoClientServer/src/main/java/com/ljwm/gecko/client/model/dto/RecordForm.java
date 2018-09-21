@@ -11,14 +11,7 @@ import lombok.Data;
 @Data
 public class RecordForm extends CommonQuery {
 
-  @ApiModelProperty("会员id")
-  private Long memberId;
-
   @ApiModelProperty("申报类型")
   private Integer declareType;
-
-//  private Integer page;
-//
-//  private Integer size;
 
 }
