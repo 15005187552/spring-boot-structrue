@@ -12,10 +12,7 @@ import com.ljwm.bootbase.mapper.CommonMapper;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.entity.*;
-import com.ljwm.gecko.base.enums.DisabledEnum;
-import com.ljwm.gecko.base.enums.ProviderStatEnum;
-import com.ljwm.gecko.base.enums.ProviderTypeEnum;
-import com.ljwm.gecko.base.enums.ValidateStatEnum;
+import com.ljwm.gecko.base.enums.*;
 import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.bean.AppInfo;
 import com.ljwm.gecko.base.model.dto.*;
@@ -128,6 +125,27 @@ public class ProviderService {
     providerMapper.updateById(provider);
     List<ProviderServicesVo> servicesVoList = providerServicesMapper.findProviderServicesVoListByProviderId(provider.getId());
     return servicesVoList;
+  }
+
+  @Transactional
+  public void confirmProviderInfo(ConfirmProviderInfoDto confirmProviderInfoDto){
+    Provider provider = providerMapper.selectById(confirmProviderInfoDto.getId());
+    if (provider == null ) {
+      log.info("服务商id:{} 服务商入驻信息不存在", confirmProviderInfoDto.getId());
+      throw new LogicException(ResultEnum.DATA_ERROR, "服务商查询不到");
+    }
+    if (!Objects.equals(provider.getInfoValidateState(), InfoValidateStateEnum.INIT.getCode())){
+      log.info("服务商id{},非待审核基本信息状态!",confirmProviderInfoDto.getId());
+      throw new LogicException(ResultEnum.DATA_ERROR,"非待审核基本信息状态!");
+    }
+    if (confirmProviderInfoDto.isAgree()){
+      provider.setInfoValidateState(InfoValidateStateEnum.CONFIRM_SUCCESS.getCode());
+    }else {
+      provider.setInfoValidateState(InfoValidateStateEnum.CONFIRM_FAILED.getCode());
+      provider.setValidateText(confirmProviderInfoDto.getValidateText());
+    }
+    provider.setValidatorId(confirmProviderInfoDto.getValidatorId());
+    providerMapper.updateById(provider);
   }
 
 

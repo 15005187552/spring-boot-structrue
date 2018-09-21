@@ -18,11 +18,12 @@
         <result column="PIC_PASSPORT" property="picPassport" />
         <result column="VERSION" property="version" />
         <result column="INFO_VALIDATE_STATE" property="infoValidateState" />
+        <result column="VALIDATE_TEXT" property="validateText" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATE_STATE`          ,`PIC_FRONT`          ,`PIC_BACK`          ,`PIC_PASSPORT`, `NAME`,`INFO_VALIDATE_STATE`
+          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATE_STATE`          ,`PIC_FRONT`          ,`PIC_BACK`          ,`PIC_PASSPORT`, `NAME`,`INFO_VALIDATE_STATE`,`VALIDATE_TEXT`
     </sql>
   <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.MemberVo">
     <id column="ID" property="id"/>

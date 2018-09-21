@@ -3,8 +3,10 @@ package com.ljwm.gecko.admin.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.config.LikeFormatter;
 import com.ljwm.gecko.base.model.dto.ConfirmProviderDto;
+import com.ljwm.gecko.base.model.dto.ConfirmProviderInfoDto;
 import com.ljwm.gecko.base.model.dto.ProviderQueryDto;
 import com.ljwm.gecko.base.model.dto.ServeDto;
 import com.ljwm.gecko.base.model.form.ServiceTypeQuery;
@@ -43,6 +45,14 @@ public class ProviderController extends BaseController {
   @ApiOperation("审核服务商入驻申请")
   public Result<List<ProviderServicesVo>> confirmProvider(@RequestBody ConfirmProviderDto confirmProviderDto) {
     return success( providerService.confirmProvider(confirmProviderDto));
+  }
+
+  @PostMapping("confirmProviderInfo")
+  @ApiOperation("服务商审核服务商基本信息")
+  public Result confirmProviderInfo(@RequestBody ConfirmProviderInfoDto confirmProviderInfoDto){
+    confirmProviderInfoDto.setValidatorId(SecurityKit.currentId());
+    providerService.confirmProviderInfo(confirmProviderInfoDto);
+    return success();
   }
 
   @GetMapping("find")
