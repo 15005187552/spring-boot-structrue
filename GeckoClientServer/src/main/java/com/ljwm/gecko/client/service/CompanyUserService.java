@@ -76,8 +76,8 @@ public class CompanyUserService {
           companyInfoVo.setFlag(true);
         }
         companyVoList.add(companyInfoVo);
-        return Result.success(companyVoList);
       }
+      return Result.success(companyVoList);
     }
     return Result.success(null);
   }
