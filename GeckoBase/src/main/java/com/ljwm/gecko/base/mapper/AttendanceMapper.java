@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
  * </p>
  *
  * @author Levis
- * @since 2018-09-17
+ * @since 2018-09-21
  */
 @Repository
 public interface AttendanceMapper extends BaseMapper<Attendance> {

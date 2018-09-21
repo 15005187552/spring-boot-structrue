@@ -134,7 +134,7 @@ public class CompanyService {
   public CompanyVo findByName(String name) {
     List<CompanyVo> list = companyMapper.findCompanyByName(name, CompanyValidateEnum.PASS_VALIDATE.getCode());
     if (CollectionUtil.isEmpty(list)) {
-      throw new LogicException("无搜索结果！");
+      return null;
     }
     return list.get(0);
   }
