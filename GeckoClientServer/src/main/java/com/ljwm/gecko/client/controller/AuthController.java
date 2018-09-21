@@ -50,6 +50,7 @@ public class AuthController extends BaseController {
   }
 
   @PostMapping("getFormId")
+  @ApiOperation("获取formId")
   public Result getFormId(@RequestBody @Valid FormIdForm formIdForm){
 
     return success(authService.uploadFormId(formIdForm));
