@@ -63,7 +63,7 @@ public class CompanyUserController {
   }
 
   @PostMapping("memberRoleList")
-  @ApiModelProperty("当前会员在公司的角色")
+  @ApiModelProperty("公司员工角色列表")
   public Result memberRoleList(@RequestBody CompanyDto companyDto){
     return companyUserService.memberRoleList(companyDto);
   }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -39,7 +40,7 @@ public class TemplateService {
     return Result.success("模板上传成功！");
   }
 
-  public Result downloadEmployee(HttpServletResponse response) {
+  public Result downloadEmployee(HttpServletResponse response) throws MalformedURLException {
     // 下载网络文件
     int bytesum = 0;
     int byteread = 0;
