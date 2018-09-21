@@ -2,28 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljwm.gecko.base.mapper.MemberMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Member">
-        <id column="ID" property="id" />
-        <result column="REG_MOBILE" property="regMobile" />
-        <result column="NAME" property="name" />
-        <result column="NICK_NAME" property="nickName" />
-        <result column="AVATAR_PATH" property="avatarPath" />
-        <result column="MEMBER_IDCARD" property="memberIdcard" />
-        <result column="CREATE_TIME" property="createTime" />
-        <result column="DISABLED" property="disabled" />
-        <result column="VALIDATE_STATE" property="validateState" />
-        <result column="PIC_FRONT" property="picFront" />
-        <result column="PIC_BACK" property="picBack" />
-        <result column="PIC_PASSPORT" property="picPassport" />
-        <result column="VERSION" property="version" />
-        <result column="INFO_VALIDATE_STATE" property="infoValidateState" />
-        <result column="VALIDATE_TEXT" property="validateText" />
-    </resultMap>
+  <!-- 通用查询映射结果 -->
+  <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Member">
+    <id column="ID" property="id"/>
+    <result column="REG_MOBILE" property="regMobile"/>
+    <result column="NAME" property="name"/>
+    <result column="NICK_NAME" property="nickName"/>
+    <result column="AVATAR_PATH" property="avatarPath"/>
+    <result column="MEMBER_IDCARD" property="memberIdcard"/>
+    <result column="CREATE_TIME" property="createTime"/>
+    <result column="DISABLED" property="disabled"/>
+    <result column="VALIDATE_STATE" property="validateState"/>
+    <result column="PIC_FRONT" property="picFront"/>
+    <result column="PIC_BACK" property="picBack"/>
+    <result column="PIC_PASSPORT" property="picPassport"/>
+    <result column="VERSION" property="version"/>
+    <result column="INFO_VALIDATE_STATE" property="infoValidateState"/>
+  </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATE_STATE`          ,`PIC_FRONT`          ,`PIC_BACK`          ,`PIC_PASSPORT`, `NAME`,`INFO_VALIDATE_STATE`,`VALIDATE_TEXT`
+  <!-- 通用查询结果列 -->
+  <sql id="Base_Column_List">
+          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATE_STATE`          ,`PIC_FRONT`          ,`PIC_BACK`          ,`PIC_PASSPORT`, `NAME`,`INFO_VALIDATE_STATE`
     </sql>
   <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.MemberVo">
     <id column="ID" property="id"/>
@@ -44,33 +43,34 @@
   </resultMap>
 
   <resultMap id="AccountInfo" type="com.ljwm.gecko.base.entity.MemberAccount">
-    <id column="ID" property="id" />
-    <result column="USERNAME" property="username" />
-    <result column="TYPE" property="type" />
-    <result column="MEMBER_ID" property="memberId" />
-    <result column="PASSWORD_ID" property="passwordId" />
-    <result column="EXT_INFO" property="extInfo" />
+    <id column="ID" property="id"/>
+    <result column="USERNAME" property="username"/>
+    <result column="TYPE" property="type"/>
+    <result column="MEMBER_ID" property="memberId"/>
+    <result column="PASSWORD_ID" property="passwordId"/>
+    <result column="EXT_INFO" property="extInfo"/>
   </resultMap>
 
   <resultMap id="AccountMap" type="com.ljwm.gecko.base.model.vo.AccountVo">
-    <id column="ID" property="id" />
-    <result column="USERNAME" property="username" />
-    <result column="TYPE" property="type" />
-    <result column="MEMBER_ID" property="memberId" />
-    <result column="PASSWORD_ID" property="passwordId" />
-    <result column="EXT_INFO" property="extInfo" />
+    <id column="ID" property="id"/>
+    <result column="USERNAME" property="username"/>
+    <result column="TYPE" property="type"/>
+    <result column="MEMBER_ID" property="memberId"/>
+    <result column="PASSWORD_ID" property="passwordId"/>
+    <result column="EXT_INFO" property="extInfo"/>
     <collection property="password" resultMap="PasswordMap"/>
   </resultMap>
 
   <resultMap id="PasswordMap" type="com.ljwm.gecko.base.entity.MemberPassword">
-    <id column="ID" property="id" />
-    <result column="PASSWORD" property="password" />
-    <result column="SALT" property="salt" />
-    <result column="LAST_MODIFY_TIME" property="lastModifyTime" />
+    <id column="ID" property="id"/>
+    <result column="PASSWORD" property="password"/>
+    <result column="SALT" property="salt"/>
+    <result column="LAST_MODIFY_TIME" property="lastModifyTime"/>
   </resultMap>
 
 
   <resultMap id="MemberVo" type="com.ljwm.gecko.base.model.vo.MemberVo" extends="BaseResultMap">
+    <association property="naturalPerson" column="ID" select="com.ljwm.gecko.base.mapper.NaturalPersonMapper.findById"/>
     <collection property="memberAccounts" column="ID"
                 select="com.ljwm.gecko.base.mapper.MemberAccountMapper.findByMember"/>
     <collection property="memberPaperVoList" column="ID"
@@ -103,13 +103,13 @@
   </select>
 
   <select id="findByPage" parameterType="map" resultMap="MemberVo">
-    select t.*  from t_member t
+    SELECT t.* FROM t_member t
     <where>
       <if test="params.text != null and params.text != ''">
         AND (
         t.`REG_MOBILE` LIKE CONCAT('%',#{params.text},'%')
-        OR t.`NICK_NAME` LIKE  CONCAT('%',#{params.text},'%')
-        OR t.`MEMBER_IDCARD` LIKE  CONCAT('%',#{params.text},'%')
+        OR t.`NICK_NAME` LIKE CONCAT('%',#{params.text},'%')
+        OR t.`MEMBER_IDCARD` LIKE CONCAT('%',#{params.text},'%')
         )
       </if>
       <if test="params.disabled != null ">

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.ljwm.gecko.base.config.FilePathAppend;
 import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.entity.MemberAccount;
+import com.ljwm.gecko.base.entity.NaturalPerson;
 import com.ljwm.gecko.base.serializer.PathToUrlSerializer;
 import com.ljwm.gecko.base.serializer.StatusWithNameSerializer;
 import lombok.Data;
@@ -21,6 +22,8 @@ import java.util.List;
 public class MemberVo extends Member {
 
   private AccountVo account;
+
+  NaturalPersonVo naturalPerson;
 
   List<MemberAccount> memberAccounts;
 

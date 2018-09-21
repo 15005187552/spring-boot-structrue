@@ -1,0 +1,9 @@
+swagger2:
+  basePackage: "com.ljwm.gecko.im"
+  authorization: "Authorization"
+  title: "壁虎个税IM服务API"
+  description: ""
+  version: "V1.0"
+jwt:
+  route:
+    freeRouters: "/**"

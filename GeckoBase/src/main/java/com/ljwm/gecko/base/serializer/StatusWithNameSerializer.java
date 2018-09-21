@@ -14,52 +14,73 @@ import java.lang.reflect.Type;
 
 public abstract class StatusWithNameSerializer implements ObjectSerializer {
 
+  public static class SocialInsuranceTypeSerializer extends StatusWithNameSerializer {
+    @Override
+    public String getNameByCode(Object code) {
+      return EnumUtil.getNameBycode(SocialInsuranceType.class, (Integer) code);
+    }
+  }
+
+  public static class CountryTypeSerializer extends StatusWithNameSerializer {
+    @Override
+    public String getNameByCode(Object code) {
+      return EnumUtil.getNameBycode(CountryType.class, (Integer) code);
+    }
+  }
+
+  public static class CertificateSerializer extends StatusWithNameSerializer {
+    @Override
+    public String getNameByCode(Object code) {
+      return EnumUtil.getNameBycode(CertificateType.class, (Integer) code);
+    }
+  }
+
   public static class ValidateStatSerializer extends StatusWithNameSerializer {
     @Override
     public String getNameByCode(Object code) {
-      return ValidateStatEnum.getName((Integer)code);
+      return ValidateStatEnum.getName((Integer) code);
     }
   }
 
   public static class ProviderValidateStatSerializer extends StatusWithNameSerializer {
     @Override
     public String getNameByCode(Object code) {
-      return ProviderStatEnum.getName((Integer)code);
+      return ProviderStatEnum.getName((Integer) code);
     }
   }
 
   public static class CompanyTypeSerializer extends StatusWithNameSerializer {
     @Override
     public String getNameByCode(Object code) {
-      return EnumUtil.getNameBycode(CompanyType.class, (Integer)code);
+      return EnumUtil.getNameBycode(CompanyType.class, (Integer) code);
     }
   }
 
   public static class CompanyValidateSerializer extends StatusWithNameSerializer {
     @Override
     public String getNameByCode(Object code) {
-      return EnumUtil.getNameBycode(CompanyValidateEnum.class, (Integer)code);
+      return EnumUtil.getNameBycode(CompanyValidateEnum.class, (Integer) code);
     }
   }
 
   public static class DeclaretypeSerializer extends StatusWithNameSerializer {
     @Override
     public String getNameByCode(Object code) {
-      return EnumUtil.getNameBycode(DeclareType.class, (Integer)code);
+      return EnumUtil.getNameBycode(DeclareType.class, (Integer) code);
     }
   }
 
-  public static class LocationSerializer extends StatusWithNameSerializer{
+  public static class LocationSerializer extends StatusWithNameSerializer {
     @Override
     public String getNameByCode(Object code) {
       return SpringKit.getBean(LocationService.class).getNameByCode(code.toString());
     }
   }
 
-  public static class SpecialDeductionSerializer extends StatusWithNameSerializer{
+  public static class SpecialDeductionSerializer extends StatusWithNameSerializer {
     @Override
     public String getNameByCode(Object code) {
-      return SpringKit.getBean(SpecialDuctionDao.class).idToName((Long)code);
+      return SpringKit.getBean(SpecialDuctionDao.class).idToName((Long) code);
     }
   }
 
@@ -73,7 +94,7 @@ public abstract class StatusWithNameSerializer implements ObjectSerializer {
       return;
     }
 
-    if (object instanceof Integer  || object instanceof String|| object instanceof Long) {
+    if (object instanceof Integer || object instanceof String || object instanceof Long) {
 //      Integer code = (Integer) object;
       String statusName = fieldName + "Name";
       serializer.getWriter()

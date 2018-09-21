@@ -41,4 +41,6 @@
   <resultMap id="NaturalPersonDto" type="com.ljwm.gecko.base.model.dto.NaturalPersonDto" extends="BaseResultMap">
     <result column="REG_MOBILE" property="regMobile" />
   </resultMap>
+
+  <resultMap id="NaturalPersonVo" type="com.ljwm.gecko.base.model.vo.NaturalPersonVo" extends="BaseResultMap"/>
 </mapper>

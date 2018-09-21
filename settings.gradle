@@ -3,4 +3,5 @@ include 'GeckoBase'
 include 'GeckoClientServer'
 include 'GeckoProviderServer'
 include 'GeckoAdminServer'
+include 'GeckoIMServer'
 
