@@ -16,11 +16,13 @@
         <result column="PIC_FRONT" property="picFront" />
         <result column="PIC_BACK" property="picBack" />
         <result column="PIC_PASSPORT" property="picPassport" />
+        <result column="VERSION" property="version" />
+        <result column="INFO_VALIDATE_STATE" property="infoValidateState" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATE_STATE`          ,`PIC_FRONT`          ,`PIC_BACK`          ,`PIC_PASSPORT`, `NAME`
+          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATE_STATE`          ,`PIC_FRONT`          ,`PIC_BACK`          ,`PIC_PASSPORT`, `NAME`,`INFO_VALIDATE_STATE`
     </sql>
   <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.MemberVo">
     <id column="ID" property="id"/>
