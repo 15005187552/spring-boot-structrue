@@ -26,8 +26,8 @@ public class ShowcaseWsMsgHandler implements IWsMsgHandler {
   private ShowcaseServerConfig showcaseServerConfig;
 
 	/**
-	 * 握手时走这个方法，业务可以在这里获取cookie，request参数等
-	 */
+   * 握手时走这个方法，业务可以在这里获取cookie，request参数等
+   */
 	@Override
 	public HttpResponse handshake(HttpRequest request, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {
 		String clientip = request.getClientIp();

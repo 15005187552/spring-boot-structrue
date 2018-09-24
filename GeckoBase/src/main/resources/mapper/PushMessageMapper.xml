@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.PushMessageMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.PushMessage">
+        <id column="ID" property="id" />
+        <result column="MESSAGE" property="message" />
+        <result column="RECEVIER_ID" property="recevierId" />
+        <result column="TYPE" property="type" />
+        <result column="STATUS" property="status" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="PUSH_TIME" property="pushTime" />
+        <result column="READ_TIME" property="readTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`MESSAGE`          ,`RECEVIER_ID`          ,`TYPE`          ,`STATUS`          ,`CREATE_TIME`          ,`PUSH_TIME`          ,`READ_TIME`
+    </sql>
+
+</mapper>

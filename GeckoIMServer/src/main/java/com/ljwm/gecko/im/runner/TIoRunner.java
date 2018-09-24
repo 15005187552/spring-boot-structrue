@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import org.tio.server.ServerGroupContext;
 import org.tio.websocket.server.WsServerStarter;
 
+/**
+ * T-IO RUNNER
+ */
 @Slf4j
 @Component
 public class TIoRunner implements ApplicationRunner {
@@ -70,6 +73,6 @@ public class TIoRunner implements ApplicationRunner {
 
     wsServerStarter.start();
 
-    log.info("Tio Started On Port : {}",showcaseServerConfig.getSERVER_PORT());
+    log.info("Tio Started On Port : {}", showcaseServerConfig.getSERVER_PORT());
   }
 }

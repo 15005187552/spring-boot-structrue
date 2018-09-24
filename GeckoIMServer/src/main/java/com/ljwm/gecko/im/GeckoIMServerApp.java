@@ -1,5 +1,6 @@
 package com.ljwm.gecko.im;
 
+import cn.hutool.core.date.DateTime;
 import com.ljwm.gecko.im.kafka.KafkaSender;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
@@ -27,7 +28,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class GeckoIMServerApp {
 
   public static void main(String[] args) {
-   SpringApplication.run(GeckoIMServerApp.class, args);
+
+    SpringApplication.run(GeckoIMServerApp.class, args);
+    log.info("BootGeckoIMServerApp Run Finished: {}", DateTime.now());
   }
 
 }

@@ -3,19 +3,4 @@ server:
 spring:
   profiles:
     active: dev,devLocal
-    include: base,common,gecko
-  kafka:
-    bootstrap-servers: 127.0.0.1:9092
-    producer:
-      retries: 3
-      batch-size: 16384
-      buffer-memory: 33554432
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    consumer:
-      group-id: test-consumer-group
-      auto-offset-reset: earliest
-      enable-auto-commit: true
-      auto-commit-interval: 100
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    include: base,common,gecko,kafka
