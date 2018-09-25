@@ -2,6 +2,7 @@ package com.ljwm.gecko.base.model.vo;
 
 import com.ljwm.gecko.base.entity.Tax;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
 public class TaxVo extends Tax {
 
   List<TaxIncomeVo> incomeVoList;
