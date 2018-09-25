@@ -6,13 +6,13 @@
     <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Template">
         <id column="ID" property="id" />
         <result column="COMPANY_ID" property="companyId" />
-        <result column="NAME" property="name" />
+        <result column="ATTRIBUTE_ID" property="attributeId" />
         <result column="SORT" property="sort" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`COMPANY_ID`          ,`NAME`          ,`SORT`
+          `ID`          ,`COMPANY_ID`          ,`ATTRIBUTE_ID`          ,`SORT`
     </sql>
 
 </mapper>

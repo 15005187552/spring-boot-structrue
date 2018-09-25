@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
  * </p>
  *
  * @author Levis
- * @since 2018-09-20
+ * @since 2018-09-25
  */
 @Repository
 public interface TemplateMapper extends BaseMapper<Template> {

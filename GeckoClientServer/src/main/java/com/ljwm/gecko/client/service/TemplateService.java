@@ -3,12 +3,14 @@ package com.ljwm.gecko.client.service;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.entity.Template;
 import com.ljwm.gecko.base.mapper.AttributeMapper;
 import com.ljwm.gecko.base.mapper.TemplateMapper;
 import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
 import com.ljwm.gecko.client.model.dto.CompanyDto;
+import com.ljwm.gecko.client.model.dto.TemplateDto;
 import com.ljwm.gecko.client.model.dto.TemplateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,13 +43,15 @@ public class TemplateService {
   @Autowired
   AttributeMapper attributeMapper;
 
+  @Autowired
+  CommonService commonService;
+
   public Result uploadTemplate(TemplateForm templateForm) {
-    int sort = 1;
-    String[] name = templateForm.getName();
-    for(String str : name){
+    List<TemplateDto> list = templateForm.getList();
+    for(TemplateDto templateDto : list){
       Template template = new Template();
-      template.setSort(sort).setCompanyId(templateForm.getCompanyId()).setName(str);
-      templateMapper.insert(template);
+      template.setSort(templateDto.getSort()).setCompanyId(templateForm.getCompanyId()).setAttributeId(templateDto.getId());
+      commonService.insertOrUpdate(template, templateMapper);
     }
     return Result.success("模板上传成功！");
   }
@@ -86,7 +90,7 @@ public class TemplateService {
       int i = 0;
       Map<String, String> map = new LinkedHashMap<>();
       for (Template template : list) {
-        map.put(String.valueOf(i), template.getName());
+        map.put(String.valueOf(i), attributeMapper.selectById(template.getId()).getName());
       }
       response.reset();
       response.setContentType("multipart/form-data");
