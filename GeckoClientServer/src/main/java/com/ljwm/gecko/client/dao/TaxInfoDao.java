@@ -9,10 +9,7 @@ import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.mapper.*;
-import com.ljwm.gecko.base.model.vo.TaxIncomeVo;
-import com.ljwm.gecko.base.model.vo.TaxOtherReduceVo;
-import com.ljwm.gecko.base.model.vo.TaxSpecialAddVo;
-import com.ljwm.gecko.base.model.vo.TaxSpecialVo;
+import com.ljwm.gecko.base.model.vo.*;
 import com.ljwm.gecko.base.utils.Fileutil;
 import com.ljwm.gecko.client.model.dto.TaxIncomeForm;
 import com.ljwm.gecko.client.model.dto.TaxOtherReduceForm;
@@ -210,5 +207,9 @@ public class TaxInfoDao {
   public List<Tax> selectByPage(Page<Tax> taxPage, Map map) {
 
     return taxMapper.selectByPage(taxPage,map);
+  }
+
+  public List<NaturalPersonTaxVo> selectTaxByList(Page<NaturalPersonTaxVo> naturalPersonTaxVoPage, Map map) {
+    return taxMapper.selectTaxByList(naturalPersonTaxVoPage, map);
   }
 }

@@ -17,4 +17,53 @@
           `ID`          ,`MEMBER_ID`          ,`DECLARE_TYPE`          ,`DECLARE_TIME`          ,`CREATE_TIME`          ,`UPDATE_TIME`
     </sql>
 
+  <resultMap id="NaturalResultMap" type="com.ljwm.gecko.base.model.vo.NaturalPersonTaxVo">
+    <id column="MEMBER_ID" property="memberId" />
+    <result column="COMPANY_ID" property="companyId" />
+    <result column="COUNTRY" property="country" />
+    <result column="NAME" property="name" />
+    <result column="GENDER" property="gender" />
+    <result column="BIRTHDAY" property="birthday" />
+    <result column="CERTIFICATE" property="certificate" />
+    <result column="PROVINCE" property="province" />
+    <result column="CITY" property="city" />
+    <result column="AREA" property="area" />
+    <result column="ADDRESS" property="address" />
+    <result column="CERT_NUM" property="certNum" />
+    <result column="CERT_POS_PATH" property="certPosPath" />
+    <result column="CERT_OPPO_PATH" property="certOppoPath" />
+    <result column="DISABLITY_NUM" property="disablityNum" />
+    <result column="DISABLITY_PATH" property="disablityPath" />
+    <result column="MATRTYR_NUM" property="matrtyrNum" />
+    <result column="MATRTYR_PATH" property="matrtyrPath" />
+    <result column="OLD_NUM" property="oldNum" />
+    <result column="OLD_PATH" property="oldPath" />
+    <result column="PROFESSOR_NUM" property="professorNum" />
+    <result column="PROFESSOR_PATH" property="professorPath" />
+    <result column="ACADEMIC_NUM" property="academicNum" />
+    <result column="ACADEMIC_PATH" property="academicPath" />
+    <result column="SOCIAL_SECU" property="socialSecu" />
+    <result column="CREAT_TIME" property="creatTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <collection property="taxVo" resultMap="ResultMap"></collection>
+  </resultMap>
+  <resultMap id="ResultMap" type="com.ljwm.gecko.base.model.vo.TaxVo">
+    <id column="ID" property="id" />
+    <result column="MEMBER_ID" property="memberId" />
+    <result column="DECLARE_TYPE" property="declareType" />
+    <result column="DECLARE_TIME" property="declareTime" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+  </resultMap>
+
+  <select id="selectTaxByList" resultMap="NaturalResultMap">
+    SELECT *
+    FROM t_natural_person a, t_tax b
+    <where>
+      a.COMPANY_ID = #{map.companyId} AND b.MEMBER_ID = a.MEMBER_ID
+      <if test="map.name!=null and map.name != ''">AND a.`NAME` = #{map.name}</if>
+      <if test="map.declareTime!=null and map.declareTime != ''">AND b.DECLARE_TIME = #{map.declareTime}</if>
+    </where>
+  </select>
+
 </mapper>

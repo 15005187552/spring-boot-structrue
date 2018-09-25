@@ -1,9 +1,6 @@
-package com.ljwm.gecko.client.model.vo;
+package com.ljwm.gecko.base.model.vo;
 
-import com.ljwm.gecko.base.model.vo.TaxIncomeVo;
-import com.ljwm.gecko.base.model.vo.TaxOtherReduceVo;
-import com.ljwm.gecko.base.model.vo.TaxSpecialAddVo;
-import com.ljwm.gecko.base.model.vo.TaxSpecialVo;
+import com.ljwm.gecko.base.entity.Tax;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -12,12 +9,12 @@ import java.util.List;
 
 /**
  * @author Janiffy
- * @date 2018/9/6 14:36
+ * @date 2018/9/25 10:23
  */
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-public class TaxVo {
+public class TaxVo extends Tax {
 
   List<TaxIncomeVo> incomeVoList;
 
