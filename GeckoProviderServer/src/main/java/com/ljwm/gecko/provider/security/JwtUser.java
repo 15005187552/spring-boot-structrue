@@ -2,7 +2,10 @@ package com.ljwm.gecko.provider.security;
 
 import com.ljwm.bootbase.security.IJwtAndSecurityAble;
 import com.ljwm.bootbase.security.LoginInfoHolder;
+import com.ljwm.gecko.base.entity.Guest;
 import com.ljwm.gecko.base.model.dto.AdminDto;
+import com.ljwm.gecko.base.model.vo.MemberVo;
+import com.ljwm.gecko.base.model.vo.ProviderVo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -18,43 +21,47 @@ import java.util.Map;
 @AllArgsConstructor
 public class JwtUser implements IJwtAndSecurityAble {
 
-  private AdminDto admin;
+  private MemberVo member;
 
-  private Collection<? extends GrantedAuthority> grantedAuthorities;
+  private ProviderVo provider;
+
+  public JwtUser(MemberVo member) {
+    this.member = member;
+  }
 
   @Override
   public <T extends Serializable> T getId() {
-    return (T) admin.getId();
+    return (T) member.getId();
   }
 
   @Override
   public Date getLastModifyPasswordTime() {
-    return admin.getUpdateTime();
+    return member.getAccount().getPassword().getLastModifyTime();
   }
 
   @Override
   public String getLoginType() {
-    return LoginInfoHolder.getLoginType();
+    return member.getAccount().getType().toString();
   }
 
   @Override
   public Map<String, String> extInfo() {
-    return LoginInfoHolder.getExtInfo();
+    return null;
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return grantedAuthorities;
+    return null;
   }
 
   @Override
   public String getPassword() {
-    return admin.getPassword();
+    return null;
   }
 
   @Override
   public String getUsername() {
-    return admin.getUsername();
+    return member.getAccount().getUsername();
   }
 
   @Override
@@ -74,6 +81,6 @@ public class JwtUser implements IJwtAndSecurityAble {
 
   @Override
   public boolean isEnabled() {
-    return true;
+    return !member.getDisabled();
   }
 }

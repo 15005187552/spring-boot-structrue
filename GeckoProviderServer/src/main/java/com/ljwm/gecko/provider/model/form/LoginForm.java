@@ -4,14 +4,14 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * stoa Created by yunqisong on 2018/7/7/007.
+ * Levis
  * FOR: 登录表单
  */
 @Data
 @Accessors(chain = true)
 public class LoginForm {
 
-  private String username;
+  private String phoneNum;
 
   private String password;
 }

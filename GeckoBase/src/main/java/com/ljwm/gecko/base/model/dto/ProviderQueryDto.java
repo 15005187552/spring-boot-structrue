@@ -19,4 +19,7 @@ public class ProviderQueryDto extends CommonQuery {
 
   @ApiModelProperty("服务类型id")
   private Integer serviceId;
+
+  @ApiModelProperty("状态 0 待审核 1 审核通过 2 审核失败")
+  private Integer infoValidateState;
 }
