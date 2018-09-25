@@ -33,10 +33,12 @@ public class PersonInfoService {
   public Result commit(PersonInfoForm personInfoForm){
     NaturalPerson naturalPerson = new NaturalPerson();
     BeanUtil.copyProperties(personInfoForm, naturalPerson);
+    Date date = new Date();
+    naturalPerson.setUpdateTime(date);
     NaturalPerson naturalPersonFind = naturalPersonMapper.selectById(personInfoForm.getMemberId());
     if (naturalPersonFind != null) {
     } else {
-      naturalPerson.setCreatTime(new Date());
+      naturalPerson.setCreatTime(date);
       naturalPersonMapper.insert(naturalPerson);
       File file = new File(appInfo.getFilePath()+ Constant.PERSON + personInfoForm.getMemberId());
       if(!file.exists()){

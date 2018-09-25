@@ -2,17 +2,16 @@ package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.Tax;
-import com.ljwm.gecko.base.model.vo.TaxIncomeVo;
-import com.ljwm.gecko.base.model.vo.TaxOtherReduceVo;
-import com.ljwm.gecko.base.model.vo.TaxSpecialAddVo;
-import com.ljwm.gecko.base.model.vo.TaxSpecialVo;
+import com.ljwm.gecko.base.mapper.TaxMapper;
+import com.ljwm.gecko.base.model.vo.*;
 import com.ljwm.gecko.client.dao.TaxInfoDao;
 import com.ljwm.gecko.client.model.dto.*;
-import com.ljwm.gecko.client.model.vo.TaxVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +31,9 @@ public class TaxDeclarationService {
 
   @Autowired
   CommonService commonService;
+
+  @Autowired
+  TaxMapper taxMapper;
 
   @Transactional
   public Result commit(TaxForm taxForm) {
@@ -67,10 +69,12 @@ public class TaxDeclarationService {
     return Result.success("提交成功!");
   }
 
-  public Result find(TaxInfoForm taxInfoForm) {
+  public TaxVo find(TaxInfoForm taxInfoForm) {
     Long memberId = taxInfoForm.getMemberId();
     String declareTime = taxInfoForm.getDeclareTime();
     Integer declareType = taxInfoForm.getDeclareType();
+    Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>()
+        .eq(Tax.MEMBER_ID, memberId).eq(Tax.DECLARE_TIME, declareTime).eq(Tax.DECLARE_TYPE, declareType));
     List<TaxIncomeVo> incomeVoList = taxInfoDao.selectIncomeInfo(memberId, declareTime ,declareType);
     List<TaxOtherReduceVo> taxOtherReduceList = taxInfoDao.selectOther(memberId, declareTime ,declareType);
     List<TaxSpecialVo> taxSpecialVoList = taxInfoDao.selectSpecial(memberId, declareTime ,declareType);
@@ -78,11 +82,12 @@ public class TaxDeclarationService {
     if(CollectionUtil.isNotEmpty(incomeVoList)||CollectionUtil.isNotEmpty(taxOtherReduceList)||
       CollectionUtil.isNotEmpty(taxSpecialVoList)||CollectionUtil.isNotEmpty(taxSpecialAddVoList)){
       TaxVo taxVo = new TaxVo();
+      BeanUtil.copyProperties(tax, taxVo);
       taxVo.setIncomeVoList(incomeVoList).setOtherReduceVoList(taxOtherReduceList)
       .setSpecialVoList(taxSpecialVoList).setSpecialAddVoList(taxSpecialAddVoList);
-      return Result.success(taxVo);
+      return taxVo;
     }
-    return  Result.success(null);
+    return  null;
   }
 
   public Result declareType(RecordForm recordForm) {
@@ -92,4 +97,14 @@ public class TaxDeclarationService {
     return Result.success(commonService.find(recordForm, (p, q) -> taxInfoDao.selectByPage(p, map)));
   }
 
+  public Result findTaxList(TaxListForm taxListForm) {
+    Page<NaturalPersonTaxVo> page = commonService.find(taxListForm, (p, q) -> taxInfoDao.selectTaxByList(p, BeanUtil.beanToMap(taxListForm)));
+    List<NaturalPersonTaxVo> list = page.getRecords();
+    for(NaturalPersonTaxVo naturalPersonTaxVo:list){
+      TaxVo taxVo = naturalPersonTaxVo.getTaxVo();
+      TaxInfoForm taxInfoForm = new TaxInfoForm().setMemberId(taxVo.getMemberId()).setDeclareTime(taxVo.getDeclareTime()).setDeclareType(taxVo.getDeclareType());
+      naturalPersonTaxVo.setTaxVo(find(taxInfoForm));
+    }
+    return Result.success(page);
+  }
 }

@@ -29,14 +29,14 @@ public class PersonInfoDto implements Serializable {
   @ApiModelProperty(value = "国籍 0-中国大陆 1-港澳台 2-外籍")
   private String country;
 
- /* @ApiModelProperty(value = "性别 0-男  1-女")
+  @ApiModelProperty(value = "性别 0-男  1-女")
   private String gender;
 
   @ApiModelProperty(value = "出生年月")
   private String birthday;
 
   @ApiModelProperty(value = "学历")
-  private String education;*/
+  private String education;
 
   @ApiModelProperty(value = "人员状态")
   private String personState;
@@ -46,7 +46,7 @@ public class PersonInfoDto implements Serializable {
 
   @ApiModelProperty(value = "注册手机号")
   private String regMobile;
-/*
+
   @ApiModelProperty(value = "任职日期")
   private String hireDate;
 
@@ -60,7 +60,7 @@ public class PersonInfoDto implements Serializable {
   private String station;
 
   @ApiModelProperty(value = "离职日期")
-  private String termDate;*/
+  private String termDate;
 
   @ApiModelProperty(value = "社保缴费基数")
   private String socialBase;
@@ -97,7 +97,7 @@ public class PersonInfoDto implements Serializable {
 
   @ApiModelProperty(value = "公积金基数")
   private String fundBase;
-/*
+
   @ApiModelProperty(value = "公司公积金比例")
   private String fundCom;
 
@@ -162,5 +162,5 @@ public class PersonInfoDto implements Serializable {
   private String address;
 
   @ApiModelProperty(value = "备注")
-  private String remark;*/
+  private String remark;
 }
