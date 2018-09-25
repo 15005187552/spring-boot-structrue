@@ -7,13 +7,11 @@ import com.ljwm.gecko.client.model.dto.TaxInfoForm;
 import com.ljwm.gecko.client.model.dto.TaxListForm;
 import com.ljwm.gecko.client.service.TaxDeclarationService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -53,5 +51,12 @@ public class TaxDeclarationController {
   public Result findTaxList(@RequestBody @Valid TaxListForm taxListForm){
     return taxDeclarationService.findTaxList(taxListForm);
   }
+
+  @PostMapping("findTaxById/{taxId}")
+  @ApiOperation("查看账单详情")
+  public Result findTaxById(@PathVariable Long taxId){
+    return taxDeclarationService.findTaxById(taxId);
+  }
+
 
 }

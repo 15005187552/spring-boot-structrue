@@ -107,4 +107,16 @@ public class TaxDeclarationService {
     }
     return Result.success(page);
   }
+
+  public Result findTaxById(Long taxId) {
+    List<NaturalPersonTaxVo> list = taxMapper.selectTaxInfo(taxId);
+    if(CollectionUtil.isNotEmpty(list)){
+      NaturalPersonTaxVo naturalPersonTaxVo = list.get(0);
+      TaxVo taxVo = naturalPersonTaxVo.getTaxVo();
+      TaxInfoForm taxInfoForm = new TaxInfoForm().setMemberId(taxVo.getMemberId()).setDeclareTime(taxVo.getDeclareTime()).setDeclareType(taxVo.getDeclareType());
+      naturalPersonTaxVo.setTaxVo(find(taxInfoForm));
+      return Result.success(naturalPersonTaxVo);
+    }
+    return Result.success(null);
+  }
 }

@@ -2,6 +2,7 @@ package com.ljwm.gecko.base.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Kv;
@@ -317,5 +318,9 @@ public class MemberInfoService {
 
   public MemberVo findMemberVoByMemberId(Long memberId){
     return memberMapper.findMemberVoByMemberId(memberId);
+  }
+
+  public Member findMemberByMobile(String regMobile) {
+    return memberMapper.selectOne(new QueryWrapper<Member>().eq(Member.REG_MOBILE, regMobile));
   }
 }

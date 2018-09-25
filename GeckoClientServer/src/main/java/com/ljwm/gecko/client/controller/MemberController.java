@@ -59,4 +59,10 @@ public class MemberController extends BaseController {
   public Result<MemberVo> findMemberVoByMemberId(){
     return success(memberInfoService.findMemberVoByMemberId(SecurityKit.currentId()));
   }
+
+  @PostMapping("/findMemberByMobile/{regMobile}")
+  public Result findMemberByMobile(@PathVariable String regMobile){
+    return success(memberInfoService.findMemberByMobile(regMobile));
+  }
+
 }
