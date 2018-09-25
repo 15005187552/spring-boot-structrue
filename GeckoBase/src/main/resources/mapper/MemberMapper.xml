@@ -2,28 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljwm.gecko.base.mapper.MemberMapper">
 
-  <!-- 通用查询映射结果 -->
-  <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Member">
-    <id column="ID" property="id"/>
-    <result column="REG_MOBILE" property="regMobile"/>
-    <result column="NAME" property="name"/>
-    <result column="NICK_NAME" property="nickName"/>
-    <result column="AVATAR_PATH" property="avatarPath"/>
-    <result column="MEMBER_IDCARD" property="memberIdcard"/>
-    <result column="CREATE_TIME" property="createTime"/>
-    <result column="DISABLED" property="disabled"/>
-    <result column="VALIDATE_STATE" property="validateState"/>
-    <result column="PIC_FRONT" property="picFront"/>
-    <result column="PIC_BACK" property="picBack"/>
-    <result column="PIC_PASSPORT" property="picPassport"/>
-    <result column="VERSION" property="version"/>
-    <result column="INFO_VALIDATE_STATE" property="infoValidateState"/>
-  </resultMap>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Member">
+        <id column="ID" property="id" />
+        <result column="REG_MOBILE" property="regMobile" />
+        <result column="NICK_NAME" property="nickName" />
+        <result column="NAME" property="name" />
+        <result column="AVATAR_PATH" property="avatarPath" />
+        <result column="MEMBER_IDCARD" property="memberIdcard" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="DISABLED" property="disabled" />
+        <result column="VALIDATE_STATE" property="validateState" />
+        <result column="PIC_FRONT" property="picFront" />
+        <result column="PIC_BACK" property="picBack" />
+        <result column="PIC_PASSPORT" property="picPassport" />
+        <result column="VERSION" property="version" />
+        <result column="INFO_VALIDATE_STATE" property="infoValidateState" />
+        <result column="VALIDATOR_ID" property="validatorId" />
+        <result column="VALIDATE_TEXT" property="validateText" />
+    </resultMap>
 
-  <!-- 通用查询结果列 -->
-  <sql id="Base_Column_List">
-          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATE_STATE`          ,`PIC_FRONT`          ,`PIC_BACK`          ,`PIC_PASSPORT`, `NAME`,`INFO_VALIDATE_STATE`
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`REG_MOBILE`          ,`NICK_NAME`          ,`NAME`          ,`AVATAR_PATH`          ,`MEMBER_IDCARD`          ,`CREATE_TIME`          ,`DISABLED`          ,`VALIDATE_STATE`          ,`PIC_FRONT`          ,`PIC_BACK`          ,`PIC_PASSPORT`          ,`VERSION`          ,`INFO_VALIDATE_STATE`          ,`VALIDATOR_ID`          ,`VALIDATE_TEXT`
     </sql>
+
   <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.MemberVo">
     <id column="ID" property="id"/>
     <result column="REG_MOBILE" property="regMobile"/>
@@ -148,4 +151,5 @@
   <select id="findMemberSimpleByProviderId" parameterType="long" resultMap="memberSimpleVo">
     SELECT DISTINCT t.* FROM t_member t where t.ID IN ( SELECT DISTINCT tpu.MEMBER_ID  FROM t_provider tp, t_provider_user tpu  WHERE  tp.ID = tpu.PROVIDER_ID  AND tp.ID = #{providerId})
   </select>
+
 </mapper>

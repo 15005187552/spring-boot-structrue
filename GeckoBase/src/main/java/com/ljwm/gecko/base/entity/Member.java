@@ -8,8 +8,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,7 +22,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author xixil
- * @since 2018-09-12
+ * @since 2018-09-25
  */
 @Data
 @SuppressWarnings("ALL")
@@ -37,10 +39,6 @@ public class Member implements Serializable {
     @TableId(value = "`ID`", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty("会员姓名")
-    @TableField("`NAME`")
-    private String name;
-
     @ApiModelProperty(value = "注册手机号")
     @TableField("`REG_MOBILE`")
     private String regMobile;
@@ -48,6 +46,8 @@ public class Member implements Serializable {
     @ApiModelProperty(value = "会员昵称")
     @TableField("`NICK_NAME`")
     private String nickName;
+    @TableField("`NAME`")
+    private String name;
 
     @ApiModelProperty(value = "头像路径")
     @TableField("`AVATAR_PATH`")
@@ -80,22 +80,18 @@ public class Member implements Serializable {
     @ApiModelProperty(value = "个人证件照")
     @TableField("`PIC_PASSPORT`")
     private String picPassport;
-
-    @ApiModelProperty(value = "版本号")
     @TableField("`VERSION`")
     private Integer version;
 
-    @ApiModelProperty(value = "会员基本信息认证状态  0  未认证  1 已认证")
-    @TableField("INFO_VALIDATE_STATE")
+    @ApiModelProperty(value = "会员基本信息认证状态  0  未认证  1 已认证  2  认证失败")
+    @TableField("`INFO_VALIDATE_STATE`")
     private Integer infoValidateState;
-
-    @ApiModelProperty(value = "会员info认证信息")
-    @TableField("VALIDATE_TEXT")
-    private String validateText;
-
-    @ApiModelProperty(value = "认证人")
-    @TableField("VALIDATOR_ID")
+    @TableField("`VALIDATOR_ID`")
     private Long validatorId;
+
+    @ApiModelProperty(value = "认证内容")
+    @TableField("`VALIDATE_TEXT`")
+    private String validateText;
 
 
     public static final String ID = "`ID`";
@@ -103,6 +99,8 @@ public class Member implements Serializable {
     public static final String REG_MOBILE = "`REG_MOBILE`";
 
     public static final String NICK_NAME = "`NICK_NAME`";
+
+    public static final String NAME = "`NAME`";
 
     public static final String AVATAR_PATH = "`AVATAR_PATH`";
 
@@ -120,7 +118,12 @@ public class Member implements Serializable {
 
     public static final String PIC_PASSPORT = "`PIC_PASSPORT`";
 
-    public static final String NAME = "`NAME`";
+    public static final String VERSION = "`VERSION`";
 
+    public static final String INFO_VALIDATE_STATE = "`INFO_VALIDATE_STATE`";
+
+    public static final String VALIDATOR_ID = "`VALIDATOR_ID`";
+
+    public static final String VALIDATE_TEXT = "`VALIDATE_TEXT`";
 
 }
