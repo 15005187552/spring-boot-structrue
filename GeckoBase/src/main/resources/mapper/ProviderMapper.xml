@@ -52,6 +52,9 @@
         <if test="params.serviceId != null ">
           AND tps.`SERVICE_ID` = #{params.serviceId}
         </if>
+        <if test="params.infoValidateState != null ">
+          or tp.`INFO_VALIDATE_STATE` = #{params.infoValidateState}
+        </if>
       </where>
       ORDER BY tp.ID
       <if test="params.asc">

@@ -121,6 +121,9 @@
       <if test="params.validateState != null ">
         AND t.`VALIDATE_STATE` = #{params.validateState}
       </if>
+      <if test="params.infoValidateState != null ">
+        or t.`INFO_VALIDATE_STATE` = #{params.infoValidateState}
+      </if>
     </where>
     ORDER BY t.ID
     <if test="params.asc">

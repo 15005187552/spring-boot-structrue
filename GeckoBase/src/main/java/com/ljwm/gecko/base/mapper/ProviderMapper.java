@@ -33,6 +33,5 @@ public interface ProviderMapper extends BaseMapper<Provider> {
 
   ProviderVo findProviderByProviderId(@Param("providerId") Long providerId);
 
-
   List<ProviderSimpleVo> findClientByPage(Page<ProviderVo> ret, @Param("params")Map map);
 }

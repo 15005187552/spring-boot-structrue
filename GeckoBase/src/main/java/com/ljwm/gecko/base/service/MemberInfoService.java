@@ -238,7 +238,7 @@ public class MemberInfoService {
   }
 
   public Page<MemberVo> findByPage(MemberQueryDto memberQueryDto) {
-    return commonService.find(memberQueryDto, (p, q) -> memberMapper.findByPage(p, Kv.by("text", memberQueryDto.getText()).set("disabled", memberQueryDto.getDisabled()).set("validateState", memberQueryDto.getValidateState())));
+    return commonService.find(memberQueryDto, (p, q) -> memberMapper.findByPage(p, Kv.by("text", memberQueryDto.getText()).set("disabled", memberQueryDto.getDisabled()).set("validateState", memberQueryDto.getValidateState()).set("infoValidateState",memberQueryDto.getInfoValidateState())));
   }
 
   @Transactional

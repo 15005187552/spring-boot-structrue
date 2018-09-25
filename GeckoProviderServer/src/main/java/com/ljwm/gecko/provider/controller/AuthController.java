@@ -25,9 +25,6 @@ public class AuthController extends BaseController {
   @PostMapping("login")
   @ApiOperation("登录接口")
   public Result login(@RequestBody LoginForm loginForm) {
-
-    LoginInfoHolder.setLoginType(loginType);
-
     return success(authService.login(loginForm));
   }
 

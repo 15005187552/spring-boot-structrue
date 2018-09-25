@@ -1,68 +1,30 @@
 package com.ljwm.gecko.provider.security;
 
-import cn.hutool.cache.CacheUtil;
-import cn.hutool.cache.impl.TimedCache;
 import com.ljwm.bootbase.security.LoginInfoHolder;
-import com.ljwm.gecko.base.mapper.AdminMapper;
-import com.ljwm.gecko.base.model.bean.FunctionTree;
-import com.ljwm.gecko.base.model.dto.AdminDto;
+import com.ljwm.gecko.base.mapper.MemberMapper;
+import com.ljwm.gecko.base.model.vo.MemberVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.stream.Collectors;
-
-/**
- * @author Janiffy
- * @date 2018/8/24 11:33
- */
 @Slf4j
 @Component("userDetailsServiceImpl")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-  private static final TimedCache<String, JwtUser> userPool = CacheUtil.newTimedCache(1000L * 60L * 10L);
-
-  public static void removeCache() {
-    userPool.clear();
-  }
-
-  private static final String loginType = "PROVIDER";
 
   @Autowired
-  private AdminMapper adminMapper;
+  private MemberMapper memberMapper;
+
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    try {
-//      JwtUser jwtUser = userPool.get(username);
-      JwtUser jwtUser = null ;
-      if (jwtUser == null) {
-        AdminDto admin = adminMapper.login(username);
-        LoginInfoHolder.setLoginType(loginType);
-        jwtUser = new JwtUser(admin, getGrantedAuthorities(admin));
-        userPool.put(username, jwtUser);
-      }
-      LoginInfoHolder.setSalt(jwtUser.getAdmin().getUsername());
-      LoginInfoHolder.setExtInfo(jwtUser.extInfo());
-      LoginInfoHolder.setLoginType(jwtUser.getLoginType());
-      return jwtUser;
-    } catch (Exception e) {
-      log.info("用户登录失败:\n", e);
-      throw new UsernameNotFoundException("用户名或密码错误!");
+        MemberVo memberVo = memberMapper.selectByUserName(username);
+        if (memberVo == null) {
+          throw new UsernameNotFoundException("用户不存在");
+        }
+        LoginInfoHolder.setSalt(memberVo.getAccount().getPassword().getSalt());
+        return new JwtUser(memberVo);
     }
-  }
-
-  private Collection<SimpleGrantedAuthority> getGrantedAuthorities(AdminDto admin) {
-    return FunctionTree
-      .createByRoles(admin.getRoles())
-      .stream()
-      .map(FunctionTree::getChildren)
-      .map(functionTrees -> functionTrees.stream().map(FunctionTree::getTitle).map(SimpleGrantedAuthority::new).collect(Collectors.toList()))
-      .collect(ArrayList::new, ArrayList::addAll, ArrayList::addAll);
-  }
 }
