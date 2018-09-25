@@ -21,6 +21,7 @@ import com.ljwm.gecko.client.dao.CompanyUserDao;
 import com.ljwm.gecko.client.model.dto.CompanyDto;
 import com.ljwm.gecko.client.model.dto.InactiveForm;
 import com.ljwm.gecko.client.model.dto.MemberForm;
+import com.ljwm.gecko.client.model.dto.MemberIdDto;
 import com.ljwm.gecko.client.model.vo.CompanyInfoVo;
 import com.ljwm.gecko.client.model.vo.CompanyUserVo;
 import org.apache.commons.collections.map.HashedMap;
@@ -159,5 +160,12 @@ public class CompanyUserService {
     }
 //    throw new LogicException("该公司不存在!");
     return Result.success(null);
+  }
+
+  public Result memberRole(MemberIdDto memberIdDto) {
+    return Result.success(companyUserMapper.selectList(new QueryWrapper<CompanyUser>()
+      .eq(CompanyUser.MEMBER_ID, memberIdDto.getMemberId())
+      .eq(CompanyUser.DISABLED, DisabledEnum.ENABLED.getCode())
+      .eq(CompanyUser.ACTIVATED, ActivateEnum.ENABLED.getCode())));
   }
 }
