@@ -4,12 +4,14 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.ljwm.gecko.base.entity.NaturalPerson;
 import com.ljwm.gecko.base.serializer.StatusWithNameSerializer;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
 
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
 public class NaturalPersonVo extends NaturalPerson {
 
   @JSONField(serializeUsing = StatusWithNameSerializer.CertificateSerializer.class)

@@ -6,12 +6,14 @@ import com.ljwm.gecko.base.entity.Admin;
 import com.ljwm.gecko.base.entity.Company;
 import com.ljwm.gecko.base.model.vo.admin.CompanyUserVo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.List;
 
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
 public class AdminCompanyDto extends Company {
 
   private Admin validator;

@@ -3,6 +3,7 @@ package com.ljwm.gecko.base.model.vo.admin;
 import cn.hutool.core.bean.BeanUtil;
 import com.ljwm.gecko.base.entity.ServiceType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class ServiceTypeTree extends ServiceType {
 
   private List<ServiceType> children;

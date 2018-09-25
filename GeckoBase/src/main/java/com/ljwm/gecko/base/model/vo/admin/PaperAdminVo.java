@@ -3,12 +3,14 @@ package com.ljwm.gecko.base.model.vo.admin;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ljwm.gecko.base.entity.Paper;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
 
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
 public class PaperAdminVo extends Paper {
 
   @JSONField(format = "yyyy-MM-dd HH:mm:ss")
