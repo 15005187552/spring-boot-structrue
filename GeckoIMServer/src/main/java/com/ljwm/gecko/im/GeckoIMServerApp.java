@@ -3,6 +3,7 @@ package com.ljwm.gecko.im;
 import cn.hutool.core.date.DateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -29,6 +30,8 @@ public class GeckoIMServerApp {
 
     SpringApplication.run(GeckoIMServerApp.class, args);
     log.info("BootGeckoIMServerApp Run Finished: {}", DateTime.now());
+
   }
+
 
 }
