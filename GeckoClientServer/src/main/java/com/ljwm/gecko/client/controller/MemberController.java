@@ -34,12 +34,14 @@ public class MemberController extends BaseController {
   @Autowired
   CompanyUserService companyUserService;
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("company")
   @ApiOperation("会员所在企业")
   public Result myCompany() {
     return companyUserService.findCompany();
   }
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("validateMember")
   @ApiOperation("会员认证")
   public Result validateMember(@RequestBody @Valid MemberDto memberDto){
@@ -48,18 +50,21 @@ public class MemberController extends BaseController {
     return success();
   }
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @GetMapping("findMemberVoByRegMobile/{regMobile}")
   @ApiOperation("根据手机号查询资质认证人信息")
   public Result<MemberVo> findMemberVoByRegMobile(@PathVariable String regMobile){
     return success(memberInfoService.findMemberVoByRegMobile(regMobile));
   }
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @GetMapping("findMemberVoByMemberId")
   @ApiOperation("查询当前登录会员认证信息")
   public Result<MemberVo> findMemberVoByMemberId(){
     return success(memberInfoService.findMemberVoByMemberId(SecurityKit.currentId()));
   }
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("/findMemberByMobile/{regMobile}")
   public Result findMemberByMobile(@PathVariable String regMobile){
     return success(memberInfoService.findMemberByMobile(regMobile));

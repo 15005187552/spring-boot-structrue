@@ -1,6 +1,5 @@
 package com.ljwm.gecko.client.service;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.service.CommonService;
@@ -86,20 +85,41 @@ public class TemplateService {
     List<Template> list = templateMapper.selectList(new QueryWrapper<Template>()
       .eq(Template.COMPANY_ID, companyDto.getCompanyId())
       .orderByAsc(true,Template.SORT));
-    if (CollectionUtil.isNotEmpty(list)){
-      int i = 0;
-      Map<String, String> map = new LinkedHashMap<>();
-      for (Template template : list) {
-        map.put(String.valueOf(i), attributeMapper.selectById(template.getId()).getName());
-      }
-      response.reset();
-      response.setContentType("multipart/form-data");
-      response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("模板表.xlsx","UTF-8"));
-      OutputStream output = response.getOutputStream();
-      ExcelUtil.exportExcel(map, null, output);
-      output.close();
-      return Result.success("导出成功！");
+    String[] str = {"工号", "*姓名", "*证照类型", "*证照号码", "*国籍(地区)", "*人员状态", "*是否雇员", "*手机号码", "社保缴费基数", "公积金缴费基数", "公积金缴费比例"};
+    Map<String, String> map = new LinkedHashMap<>();
+    int i = 0;
+    for (String string : str){
+      map.put(String.valueOf(i), string);
+      i++;
     }
-    return Result.fail("该公司没有模板！");
+    for (Template template : list) {
+      map.put(String.valueOf(i), attributeMapper.selectById(template.getId()).getName());
+      i++;
+    }
+    response.reset();
+    response.setContentType("multipart/form-data");
+    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("模板表.xlsx","UTF-8"));
+    OutputStream output = response.getOutputStream();
+    ExcelUtil.exportExcel(map, null, output);
+    output.close();
+    return Result.success("导出成功！");
+  }
+
+  public Result getEmployeeTem(CompanyDto companyDto) {
+    List<Template> list = templateMapper.selectList(new QueryWrapper<Template>()
+      .eq(Template.COMPANY_ID, companyDto.getCompanyId())
+      .orderByAsc(true,Template.SORT));
+    String[] str = {"工号", "*姓名", "*证照类型", "*证照号码", "*国籍(地区)", "*人员状态", "*是否雇员", "*手机号码", "社保缴费基数", "公积金缴费基数", "公积金缴费比例"};
+    Map<String, String> map = new LinkedHashMap<>();
+    int i = 0;
+    for (String string : str){
+      map.put(String.valueOf(i), string);
+      i++;
+    }
+    for (Template template : list) {
+      map.put(String.valueOf(i), attributeMapper.selectById(template.getId()).getName());
+      i++;
+    }
+    return Result.success(map);
   }
 }

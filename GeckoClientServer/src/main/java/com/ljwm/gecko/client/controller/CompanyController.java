@@ -2,10 +2,12 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.client.model.dto.CompanyForm;
+import com.ljwm.gecko.client.security.JwtUser;
 import com.ljwm.gecko.client.service.CompanyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,12 +24,14 @@ public class CompanyController {
   @Autowired
   CompanyService companyService;
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("/commit")
   @ApiOperation("提交公司信息（包含修改）")
   public Result commit(@RequestBody @Valid CompanyForm companyForm){
     return companyService.commit(companyForm);
   }
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("/findByName")
   @ApiOperation("根据公司名搜索审核通过的公司")
   public Result findByName(@RequestParam("name") String name){

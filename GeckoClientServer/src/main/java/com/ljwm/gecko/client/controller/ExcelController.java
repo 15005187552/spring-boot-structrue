@@ -2,11 +2,13 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.client.model.dto.NormalSalaryForm;
+import com.ljwm.gecko.client.security.JwtUser;
 import com.ljwm.gecko.client.service.ExcelService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +28,7 @@ public class ExcelController {
   @Autowired
   ExcelService excelService;
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("/personInfo/import")
   @ApiOperation("人员信息导入")
   public Result improtPersonInfo(@RequestParam("file")MultipartFile file, @RequestParam("companyId")Long companyId) throws Exception {
@@ -40,15 +43,19 @@ public class ExcelController {
     return Result.success("导入成功！");
   }*/
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("/personInfo/export")
   @ApiOperation("人员信息导出")
   public Result exportPersonInfoExcel(HttpServletResponse response, @RequestParam("companyId")Long companyId)throws IOException {
     return Result.success(excelService.exportPersonInfoExcel(response, companyId));
   }
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("/normalSalary/export")
   @ApiOperation("正常工资薪金")
   public Result exportNormalSalary(HttpServletResponse response, @RequestBody NormalSalaryForm normalSalaryForm)throws IOException {
     return Result.success(excelService.exportNormalSalary(response, normalSalaryForm));
   }
+
+
 }
