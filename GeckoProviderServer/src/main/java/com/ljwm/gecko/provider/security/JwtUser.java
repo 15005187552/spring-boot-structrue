@@ -1,17 +1,21 @@
 package com.ljwm.gecko.provider.security;
 
+import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.security.IJwtAndSecurityAble;
 import com.ljwm.bootbase.security.LoginInfoHolder;
 import com.ljwm.gecko.base.entity.Guest;
 import com.ljwm.gecko.base.model.dto.AdminDto;
 import com.ljwm.gecko.base.model.vo.MemberVo;
+import com.ljwm.gecko.base.model.vo.ProviderSimpleVo;
 import com.ljwm.gecko.base.model.vo.ProviderVo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
@@ -21,9 +25,13 @@ import java.util.Map;
 @AllArgsConstructor
 public class JwtUser implements IJwtAndSecurityAble {
 
+  public static final String ROLE_MEMBER = "ROLE_MEMBER";
+
+  private static final String loginType = "PROVIDER";
+
   private MemberVo member;
 
-  private ProviderVo provider;
+  private ProviderSimpleVo provider;
 
   public JwtUser(MemberVo member) {
     this.member = member;
@@ -41,22 +49,22 @@ public class JwtUser implements IJwtAndSecurityAble {
 
   @Override
   public String getLoginType() {
-    return member.getAccount().getType().toString();
+    return loginType;
   }
 
   @Override
   public Map<String, String> extInfo() {
-    return null;
+    return Kv.create();
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return null;
+    return Arrays.asList(new SimpleGrantedAuthority(ROLE_MEMBER));
   }
 
   @Override
   public String getPassword() {
-    return null;
+    return member.getAccount().getPassword().getPassword();
   }
 
   @Override

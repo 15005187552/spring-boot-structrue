@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.SpecItemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.SpecItem">
+        <id column="ID" property="id" />
+        <result column="SPEC_ID" property="specId" />
+        <result column="ITEM" property="item" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="SORT" property="sort" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`SPEC_ID`          ,`ITEM`          ,`CREATE_TIME`          ,`SORT`
+    </sql>
+    <resultMap id="specItemVo" type="com.ljwm.gecko.base.model.vo.SpecItemVo" extends="BaseResultMap">
+        <association property="specSimpleVo" column="SPEC_ID" select="com.ljwm.gecko.base.mapper.SpecMapper.findSpecSimpleVoById"/>
+    </resultMap>
+
+    <resultMap id="specItemSimpleVo" type="com.ljwm.gecko.base.model.vo.SpecItemSimpleVo" extends="BaseResultMap">
+
+    </resultMap>
+
+    <select id="findByPage" parameterType="map" resultMap="specItemVo">
+        select t.*  from t_spec_item t
+        <where>
+          <if test="params.text != null and params.text != ''">
+            AND (
+            t.`ITEM` LIKE CONCAT('%',#{params.text},'%')
+            )
+          </if>
+          <if test="params.specId != null ">
+            AND t.`SPEC_ID` = #{params.specId}
+          </if>
+        </where>
+        ORDER BY t.SPEC_ID
+        <if test="params.asc">
+          ASC
+        </if>
+        <if test="!params.asc">
+          DESC
+        </if>
+        ,t.SORT ASC
+    </select>
+
+    <select id="find" parameterType="map" resultMap="specItemSimpleVo">
+      select t.*  from t_spec_item t
+      <where>
+        <if test="params.text != null and params.text != ''">
+          AND (
+          t.`ITEM` LIKE CONCAT('%',#{params.text},'%')
+          )
+        </if>
+        <if test="params.specId != null ">
+          AND t.`SPEC_ID` = #{params.specId}
+        </if>
+      </where>
+      ORDER BY t.SPEC_ID
+      <if test="params.asc">
+        ASC
+      </if>
+      <if test="!params.asc">
+        DESC
+      </if>
+      ,t.SORT ASC
+    </select>
+
+    <select id="findByMap" parameterType="map" resultMap="specItemSimpleVo">
+      select t.*  from t_spec t
+      <where>
+        <if test="params.item != null and params.item != ''">
+          AND t.`ITEM`=#{params.item}
+        </if>
+        <if test="params.id != null ">
+          <![CDATA[
+            AND t.`ID` !=#{params.id}
+          ]]>
+        </if>
+        <if test="params.specId != null ">
+          AND t.`SERVICE_ID` =#{params.specId}
+        </if>
+      </where>
+    </select>
+
+</mapper>

@@ -3,7 +3,11 @@ server:
 spring:
   profiles:
     active: dev,devLocal
+<<<<<<< Updated upstream
     include: base,common,gecko,kafka
+=======
+    include: base,common,gecko
+>>>>>>> Stashed changes
 dict:
   # ID:用户名:密码:(属于角色1,属于角色2)
   sysAdmin: "-1:admin:ljwm2018:(10000)"

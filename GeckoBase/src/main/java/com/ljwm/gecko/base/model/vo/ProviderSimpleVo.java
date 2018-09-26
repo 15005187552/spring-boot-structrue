@@ -25,6 +25,8 @@ public class ProviderSimpleVo {
 
   private String address;
 
+  private Integer infoValidateState;
+
   @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
   private String logo;
 

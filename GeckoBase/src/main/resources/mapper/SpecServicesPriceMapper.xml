@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.SpecServicesPriceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.SpecServicesPrice">
+        <id column="ID" property="id" />
+        <result column="KEY" property="key" />
+        <result column="KEY_NAME" property="keyName" />
+        <result column="PRICE" property="price" />
+        <result column="DOWN_PAYMENT_RATE" property="downPaymentRate" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="PROVIDER_ID" property="providerId" />
+        <result column="DISABLED" property="disabled" />
+        <result column="GOOD_ID" property="goodId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`KEY`          ,`KEY_NAME`          ,`PRICE`          ,`DOWN_PAYMENT_RATE`          ,`CREATE_TIME`          ,`PROVIDER_ID`          ,`DISABLED`          ,`GOOD_ID`
+    </sql>
+
+</mapper>

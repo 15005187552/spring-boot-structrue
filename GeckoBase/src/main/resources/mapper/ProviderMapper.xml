@@ -87,7 +87,7 @@
       <collection property="providerServicesVoList" column="ID" select="com.ljwm.gecko.base.mapper.ProviderServicesMapper.findClienProviderServicesListByProviderId"/>
     </resultMap>
 
-    <select id="findProviderSimpleVoByMemberId" parameterType="long" resultMap="providerVo">
+    <select id="findProviderSimpleVoByMemberId" parameterType="long" resultMap="providerSimple">
       select t.*  from t_provider t where t.CREATOR_ID =#{memberId} limit 1
     </select>
 

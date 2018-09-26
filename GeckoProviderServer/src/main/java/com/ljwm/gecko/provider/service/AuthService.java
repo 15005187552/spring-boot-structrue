@@ -8,6 +8,7 @@ import com.ljwm.gecko.base.enums.InfoValidateStateEnum;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.mapper.ProviderMapper;
 import com.ljwm.gecko.base.model.vo.MemberInfo;
+import com.ljwm.gecko.base.model.vo.ProviderSimpleVo;
 import com.ljwm.gecko.base.model.vo.ProviderVo;
 import com.ljwm.gecko.base.service.MemberInfoService;
 import com.ljwm.gecko.provider.model.form.LoginForm;
@@ -81,7 +82,7 @@ public class AuthService {
     resultMe.setExtInfo(memberInfo.getAccount().getExtInfo());
     resultMe.setNickName(memberInfo.getNickName());
     if (LoginInfoHolder.getLoginType().equals(loginType)){
-      ProviderVo providerVo = providerMapper.findProviderSimpleVoByMemberId(jwtUser.getId());
+      ProviderSimpleVo providerVo = providerMapper.findProviderSimpleVoByMemberId(jwtUser.getId());
       if (providerVo!=null && Objects.equals(providerVo.getInfoValidateState(),InfoValidateStateEnum.CONFIRM_SUCCESS.getCode())){
         resultMe.setIsProvider(true);
         resultMe.setProvider(providerVo);
