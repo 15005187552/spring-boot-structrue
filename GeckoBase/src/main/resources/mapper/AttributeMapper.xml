@@ -15,4 +15,18 @@
           `ID`          ,`TABLE_NAME`          ,`ITEM_ID`          ,`NAME`
     </sql>
 
+  <resultMap id="ResultMap" type="com.ljwm.gecko.base.model.vo.AttributeCompanyVo">
+    <id column="ID" property="id" />
+    <result column="TABLE_NAME" property="tableName" />
+    <result column="ITEM_ID" property="itemId" />
+    <result column="NAME" property="name" />
+    <association property="templateVo" resultMap="TemplateMap"/>
+  </resultMap>
+
+  <resultMap id="TemplateMap" type="com.ljwm.gecko.base.model.vo.TemplateVo">
+    <id column="ID" property="id" />
+    <result column="COMPANY_ID" property="companyId" />
+    <result column="ATTRIBUTE_ID" property="attributeId" />
+    <result column="SORT" property="sort" />
+  </resultMap>
 </mapper>

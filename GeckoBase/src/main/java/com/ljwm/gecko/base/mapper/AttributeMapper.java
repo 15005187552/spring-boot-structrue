@@ -1,8 +1,13 @@
 package com.ljwm.gecko.base.mapper;
 
-import com.ljwm.gecko.base.entity.Attribute;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ljwm.gecko.base.entity.Attribute;
+import com.ljwm.gecko.base.model.vo.AttributeCompanyVo;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +19,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AttributeMapper extends BaseMapper<Attribute> {
+
+  @Select("SELECT * FROM t_attribute b LEFT JOIN t_template a\n" +
+    "ON a.COMPANY_ID = #{companyId} AND a.ATTRIBUTE_ID = b.ID")
+  @ResultMap("ResultMap")
+  List<AttributeCompanyVo> selectAllAttribute(Long companyId);
+
 
 }

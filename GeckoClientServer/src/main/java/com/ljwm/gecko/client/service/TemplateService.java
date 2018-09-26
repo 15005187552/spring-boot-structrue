@@ -50,7 +50,14 @@ public class TemplateService {
     for(TemplateDto templateDto : list){
       Template template = new Template();
       template.setSort(templateDto.getSort()).setCompanyId(templateForm.getCompanyId()).setAttributeId(templateDto.getId());
-      commonService.insertOrUpdate(template, templateMapper);
+      Template templateFind = templateMapper.selectOne(new QueryWrapper<Template>()
+        .eq(Template.COMPANY_ID, template.getCompanyId()).eq(Template.ATTRIBUTE_ID, template.getAttributeId()));
+      if (templateFind != null){
+        template.setId(templateFind.getId());
+        templateMapper.updateById(template);
+      } else {
+        templateMapper.insert(template);
+      }
     }
     return Result.success("模板上传成功！");
   }

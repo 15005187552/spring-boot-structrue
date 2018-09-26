@@ -38,7 +38,7 @@ public class TemplateController {
   }*/
 
 
-  @PostMapping("/uploadTemplate")
+  @PostMapping("/uploadEmployeeTemplate")
   @ApiOperation("自定义模板要加的字段")
   public Result uploadTemplate(@RequestBody @Valid TemplateForm templateForm){
     return  templateService.uploadTemplate(templateForm);
