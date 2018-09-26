@@ -124,7 +124,7 @@ public class TemplateService {
       i++;
     }
     for (Template template : list) {
-      map.put(String.valueOf(i), attributeMapper.selectById(template.getId()).getName());
+      map.put(String.valueOf(i), attributeMapper.selectById(template.getAttributeId()).getName());
       i++;
     }
     return Result.success(map);
