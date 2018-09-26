@@ -1,14 +1,15 @@
 package com.ljwm.gecko.client.service;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.entity.Template;
 import com.ljwm.gecko.base.mapper.AttributeMapper;
 import com.ljwm.gecko.base.mapper.TemplateMapper;
 import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
 import com.ljwm.gecko.client.model.dto.CompanyDto;
+import com.ljwm.gecko.client.model.dto.TemplateDto;
 import com.ljwm.gecko.client.model.dto.TemplateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,13 +42,22 @@ public class TemplateService {
   @Autowired
   AttributeMapper attributeMapper;
 
+  @Autowired
+  CommonService commonService;
+
   public Result uploadTemplate(TemplateForm templateForm) {
-    int sort = 1;
-    String[] name = templateForm.getName();
-    for(String str : name){
+    List<TemplateDto> list = templateForm.getList();
+    for(TemplateDto templateDto : list){
       Template template = new Template();
-      template.setSort(sort).setCompanyId(templateForm.getCompanyId()).setName(str);
-      templateMapper.insert(template);
+      template.setSort(templateDto.getSort()).setCompanyId(templateForm.getCompanyId()).setAttributeId(templateDto.getId());
+      Template templateFind = templateMapper.selectOne(new QueryWrapper<Template>()
+        .eq(Template.COMPANY_ID, template.getCompanyId()).eq(Template.ATTRIBUTE_ID, template.getAttributeId()));
+      if (templateFind != null){
+        template.setId(templateFind.getId());
+        templateMapper.updateById(template);
+      } else {
+        templateMapper.insert(template);
+      }
     }
     return Result.success("模板上传成功！");
   }
@@ -82,20 +92,41 @@ public class TemplateService {
     List<Template> list = templateMapper.selectList(new QueryWrapper<Template>()
       .eq(Template.COMPANY_ID, companyDto.getCompanyId())
       .orderByAsc(true,Template.SORT));
-    if (CollectionUtil.isNotEmpty(list)){
-      int i = 0;
-      Map<String, String> map = new LinkedHashMap<>();
-      for (Template template : list) {
-        map.put(String.valueOf(i), template.getName());
-      }
-      response.reset();
-      response.setContentType("multipart/form-data");
-      response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("模板表.xlsx","UTF-8"));
-      OutputStream output = response.getOutputStream();
-      ExcelUtil.exportExcel(map, null, output);
-      output.close();
-      return Result.success("导出成功！");
+    String[] str = {"工号", "*姓名", "*证照类型", "*证照号码", "*国籍(地区)", "*人员状态", "*是否雇员", "*手机号码", "社保缴费基数", "公积金缴费基数", "公积金缴费比例"};
+    Map<String, String> map = new LinkedHashMap<>();
+    int i = 0;
+    for (String string : str){
+      map.put(String.valueOf(i), string);
+      i++;
     }
-    return Result.fail("该公司没有模板！");
+    for (Template template : list) {
+      map.put(String.valueOf(i), attributeMapper.selectById(template.getId()).getName());
+      i++;
+    }
+    response.reset();
+    response.setContentType("multipart/form-data");
+    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("模板表.xlsx","UTF-8"));
+    OutputStream output = response.getOutputStream();
+    ExcelUtil.exportExcel(map, null, output);
+    output.close();
+    return Result.success("导出成功！");
+  }
+
+  public Result getEmployeeTem(CompanyDto companyDto) {
+    List<Template> list = templateMapper.selectList(new QueryWrapper<Template>()
+      .eq(Template.COMPANY_ID, companyDto.getCompanyId())
+      .orderByAsc(true,Template.SORT));
+    String[] str = {"工号", "*姓名", "*证照类型", "*证照号码", "*国籍(地区)", "*人员状态", "*是否雇员", "*手机号码", "社保缴费基数", "公积金缴费基数", "公积金缴费比例"};
+    Map<String, String> map = new LinkedHashMap<>();
+    int i = 0;
+    for (String string : str){
+      map.put(String.valueOf(i), string);
+      i++;
+    }
+    for (Template template : list) {
+      map.put(String.valueOf(i), attributeMapper.selectById(template.getAttributeId()).getName());
+      i++;
+    }
+    return Result.success(map);
   }
 }

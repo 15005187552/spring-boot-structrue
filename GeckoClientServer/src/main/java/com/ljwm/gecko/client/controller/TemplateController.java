@@ -31,22 +31,28 @@ public class TemplateController {
   TemplateService templateService;
 
 
-  @PostMapping("/downloadEmployee")
+ /* @PostMapping("/downloadEmployee")
   @ApiOperation("下载员工信息模板")
   public Result downloadEmployee(HttpServletResponse response) throws IOException {
     return templateService.downloadEmployee(response);
-  }
+  }*/
 
 
-  @PostMapping("/uploadTemplate")
+  @PostMapping("/uploadEmployeeTemplate")
   @ApiOperation("自定义模板要加的字段")
   public Result uploadTemplate(@RequestBody @Valid TemplateForm templateForm){
     return  templateService.uploadTemplate(templateForm);
   }
 
-  @PostMapping("/downloadTemplate")
+  @PostMapping("/downloadEmployee")
   @ApiOperation("下载模板")
   public Result downloadTemplate(HttpServletResponse response, @RequestBody @Valid CompanyDto companyDto) throws IOException {
     return templateService.downloadTemplate(response, companyDto);
+  }
+
+  @PostMapping("/getEmployeeTem")
+  @ApiOperation("获取员工要填写的字段")
+  public Result getEmployeeTem(@RequestBody @Valid CompanyDto companyDto){
+    return templateService.getEmployeeTem(companyDto);
   }
 }

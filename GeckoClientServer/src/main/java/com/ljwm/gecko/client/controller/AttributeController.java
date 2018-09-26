@@ -1,10 +1,17 @@
 package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.client.model.dto.CompanyDto;
+import com.ljwm.gecko.client.security.JwtUser;
 import com.ljwm.gecko.client.service.AttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * @author Janiffy
@@ -16,9 +23,9 @@ public class AttributeController {
   @Autowired
   AttributeService attributeService;
 
-
-  @GetMapping("/getAllAttribute")
-  public Result getAllAttribute(){
-    return  attributeService.getAllAttribute();
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @RequestMapping(value = "/getAllAttribute", method = RequestMethod.POST)
+  public Result getAllAttribute(@RequestBody @Valid CompanyDto companyDto){
+    return  attributeService.getAllAttribute(companyDto);
   }
 }

@@ -7,11 +7,13 @@ import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.entity.Company;
 import com.ljwm.gecko.base.entity.CompanyUser;
+import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.entity.NaturalPerson;
 import com.ljwm.gecko.base.enums.ActivateEnum;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.CompanyMapper;
 import com.ljwm.gecko.base.mapper.CompanyUserMapper;
+import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.mapper.NaturalPersonMapper;
 import com.ljwm.gecko.base.model.dto.MemberComForm;
 import com.ljwm.gecko.base.model.vo.CompanyVo;
@@ -19,7 +21,9 @@ import com.ljwm.gecko.client.dao.CompanyUserDao;
 import com.ljwm.gecko.client.model.dto.CompanyDto;
 import com.ljwm.gecko.client.model.dto.InactiveForm;
 import com.ljwm.gecko.client.model.dto.MemberForm;
+import com.ljwm.gecko.client.model.dto.MemberIdDto;
 import com.ljwm.gecko.client.model.vo.CompanyInfoVo;
+import com.ljwm.gecko.client.model.vo.CompanyUserVo;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +54,9 @@ public class CompanyUserService {
 
   @Autowired
   CompanyService companyService;
+
+  @Autowired
+  MemberMapper memberMapper;
 
   @Transactional
   public Result memberEnterCom(MemberComForm memberComForm) {
@@ -137,10 +144,28 @@ public class CompanyUserService {
   public Result memberRoleList(CompanyDto companyDto) {
     List<CompanyUser> list = companyUserMapper.selectList(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, companyDto.getCompanyId()).
       eq(CompanyUser.DISABLED, DisabledEnum.ENABLED.getCode()).eq(CompanyUser.ACTIVATED, ActivateEnum.ENABLED.getCode()));
-    if (list != null){
-      return Result.success(list);
+    List<CompanyUserVo> companyUserVoList = new ArrayList<>();
+    for (CompanyUser companyUser:
+         list) {
+      CompanyUserVo companyUserVo = new CompanyUserVo();
+      BeanUtil.copyProperties(companyUser, companyUserVo);
+      companyUserVo.setName(naturalPersonMapper.selectById(companyUser.getMemberId()).getName());
+      Member member = memberMapper.selectById(companyUser.getMemberId());
+      companyUserVo.setNickName(member.getNickName());
+      companyUserVo.setAvatarPath(member.getAvatarPath());
+      companyUserVoList.add(companyUserVo);
+    }
+    if (CollectionUtil.isNotEmpty(companyUserVoList)){
+      return Result.success(companyUserVoList);
     }
 //    throw new LogicException("该公司不存在!");
     return Result.success(null);
+  }
+
+  public Result memberRole(MemberIdDto memberIdDto) {
+    return Result.success(companyUserMapper.selectList(new QueryWrapper<CompanyUser>()
+      .eq(CompanyUser.MEMBER_ID, memberIdDto.getMemberId())
+      .eq(CompanyUser.DISABLED, DisabledEnum.ENABLED.getCode())
+      .eq(CompanyUser.ACTIVATED, ActivateEnum.ENABLED.getCode())));
   }
 }

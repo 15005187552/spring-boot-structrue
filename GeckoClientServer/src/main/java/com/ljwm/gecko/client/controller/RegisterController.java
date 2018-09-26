@@ -4,10 +4,12 @@ import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.service.RegisterService;
+import com.ljwm.gecko.client.security.JwtUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,6 +42,7 @@ public class RegisterController extends BaseController {
     return registerService.register(registerMemberForm);
   }
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("/setPasswordWX")
   @ApiOperation("小程序设置或修改密码（短信验证码方式）")
   public Result setPasswordWX(@RequestBody @Valid PasswordForm passwordForm){
@@ -52,6 +55,7 @@ public class RegisterController extends BaseController {
     return registerService.registerPC(registerPCForm);
   }
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("/modifyPassword")
   @ApiOperation("修改密码")
   public Result modifyPassword(@RequestBody @Valid ModifyPasswordForm modifyPasswordForm){

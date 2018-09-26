@@ -183,6 +183,7 @@ public class ClientProviderService {
           log.info("企业服务商入驻，查询不到此服务商信息!");
           throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此服务商信息!");
         }
+        BeanUtil.copyProperties(providerDto,provider);
         List<ProviderServiceDto> providerServiceDtoList = providerDto.getProviderServiceDtoList();
         if (CollectionUtils.isEmpty(providerServiceDtoList)){
           log.info("会员{}企业服务商入驻,服务类型不能为空",providerDto.getMemberId());
@@ -221,6 +222,7 @@ public class ClientProviderService {
             providerServices = providerServicesMapper.selectById(providerServiceDto.getId());
             BeanUtil.copyProperties(providerDto,providerServices);
             providerServices.setVersion(provider.getVersion());
+            providerServices.setProviderId(providerDto.getId());
             providerServices.setId(null);
             if (!Objects.equals(providerServices.getValidateState(),ProviderStatEnum.CONFIRM_SUCCESS.getCode())){
               providerServices.setValidateState(ProviderStatEnum.WAIT_CONFIRM.getCode());
@@ -231,6 +233,7 @@ public class ClientProviderService {
             providerServices.setVersion(provider.getVersion());
             providerServices.setUpdateTime(DateUtil.date());
             providerServices.setCreateTime(DateUtil.date());
+            providerServices.setProviderId(provider.getId());
           }
           providerServicesMapper.insert(providerServices);
         }
@@ -243,6 +246,7 @@ public class ClientProviderService {
           providerUser.setCreateTime(DateUtil.date());
           providerUserMapper.insert(providerUser);
         }
+        providerMapper.updateById(provider);
       } else {
         Provider provider = new Provider();
         BeanUtil.copyProperties(providerDto, provider);

@@ -48,6 +48,7 @@ public class AuthController extends BaseController {
     return success(authService.me(SecurityKit.currentUser()));
   }
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("getFormId")
   @ApiOperation("获取formId")
   public Result getFormId(@RequestBody @Valid FormIdForm formIdForm){

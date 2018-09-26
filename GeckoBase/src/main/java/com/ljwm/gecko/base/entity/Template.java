@@ -1,17 +1,16 @@
 package com.ljwm.gecko.base.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-
-
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -19,7 +18,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author Levis
- * @since 2018-09-20
+ * @since 2018-09-25
  */
 @Data
 @SuppressWarnings("ALL")
@@ -40,9 +39,9 @@ public class Template implements Serializable {
     @TableField("`COMPANY_ID`")
     private Long companyId;
 
-    @ApiModelProperty(value = "模板表头")
-    @TableField("`NAME`")
-    private String name;
+    @ApiModelProperty(value = "模板表头ID")
+    @TableField("`ATTRIBUTE_ID`")
+    private Long attributeId;
 
     @ApiModelProperty(value = "顺序")
     @TableField("`SORT`")
@@ -53,7 +52,7 @@ public class Template implements Serializable {
 
     public static final String COMPANY_ID = "`COMPANY_ID`";
 
-    public static final String NAME = "`NAME`";
+    public static final String ATTRIBUTE_ID = "`ATTRIBUTE_ID`";
 
     public static final String SORT = "`SORT`";
 

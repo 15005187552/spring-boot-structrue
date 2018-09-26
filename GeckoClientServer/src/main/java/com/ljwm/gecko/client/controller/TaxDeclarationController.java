@@ -5,15 +5,13 @@ import com.ljwm.gecko.client.model.dto.RecordForm;
 import com.ljwm.gecko.client.model.dto.TaxForm;
 import com.ljwm.gecko.client.model.dto.TaxInfoForm;
 import com.ljwm.gecko.client.model.dto.TaxListForm;
+import com.ljwm.gecko.client.security.JwtUser;
 import com.ljwm.gecko.client.service.TaxDeclarationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -29,29 +27,40 @@ public class TaxDeclarationController {
   @Autowired
   TaxDeclarationService taxDeclarationService;
 
-  @Transactional
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("/commitInfo")
   @ApiOperation("提交信息")
   public Result commit(@RequestBody @Valid TaxForm taxForm){
     return taxDeclarationService.commit(taxForm);
   }
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("/findInfo")
   @ApiOperation("查看信息")
   public Result findInfo(@RequestBody @Valid TaxInfoForm taxInfoForm){
     return Result.success(taxDeclarationService.find(taxInfoForm));
   }
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("/declareType")
   @ApiOperation("申报类型")
   public Result declareType(@RequestBody @Valid RecordForm recordForm){
     return taxDeclarationService.declareType(recordForm);
   }
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("/findTaxList")
   @ApiOperation("查看信息")
   public Result findTaxList(@RequestBody @Valid TaxListForm taxListForm){
     return taxDeclarationService.findTaxList(taxListForm);
   }
+
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PostMapping("findTaxById/{taxId}")
+  @ApiOperation("查看账单详情")
+  public Result findTaxById(@PathVariable Long taxId){
+    return taxDeclarationService.findTaxById(taxId);
+  }
+
 
 }

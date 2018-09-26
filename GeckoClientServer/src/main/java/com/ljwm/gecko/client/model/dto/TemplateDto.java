@@ -3,18 +3,16 @@ package com.ljwm.gecko.client.model.dto;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
-
 /**
  * @author Janiffy
- * @date 2018/9/20 18:44
+ * @date 2018/9/25 14:36
  */
 @Data
 @Accessors(chain = true)
-public class TemplateForm {
+public class TemplateDto {
 
-  private Long companyId;
+  private Long id;
 
-  private List<TemplateDto> list;
+  private int sort;
 
 }
