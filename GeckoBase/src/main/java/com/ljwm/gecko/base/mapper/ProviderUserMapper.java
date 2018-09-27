@@ -4,6 +4,8 @@ import com.ljwm.gecko.base.entity.ProviderUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Map;
+
 /**
  * <p>
  * 服务商员工表 Mapper 接口
@@ -14,4 +16,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ProviderUserMapper extends BaseMapper<ProviderUser> {
     void delete(@Param("providerId") Long providerId);
+
+    ProviderUser findByMap(@Param("params") Map map);
 }

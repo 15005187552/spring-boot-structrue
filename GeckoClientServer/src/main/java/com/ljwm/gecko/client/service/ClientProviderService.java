@@ -3,7 +3,9 @@ package com.ljwm.gecko.client.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.mapper.CommonMapper;
@@ -13,10 +15,7 @@ import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.entity.Provider;
 import com.ljwm.gecko.base.entity.ProviderServices;
 import com.ljwm.gecko.base.entity.ProviderUser;
-import com.ljwm.gecko.base.enums.DisabledEnum;
-import com.ljwm.gecko.base.enums.ProviderStatEnum;
-import com.ljwm.gecko.base.enums.ProviderTypeEnum;
-import com.ljwm.gecko.base.enums.ValidateStatEnum;
+import com.ljwm.gecko.base.enums.*;
 import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.bean.AppInfo;
 import com.ljwm.gecko.base.model.dto.ProviderDto;
@@ -34,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -239,12 +239,56 @@ public class ClientProviderService {
         }
         //删除用户
         providerUserMapper.delete(provider.getId());
+        List<ProviderUser> providerUserList = providerUserMapper.selectByMap(Kv.by("PROVIDER_ID",provider.getId()));
+        List<Long> oldMemberIds = Lists.newArrayList();
+        if (CollectionUtils.isNotEmpty(providerUserList)){
+          for (ProviderUser providerUser: providerUserList){
+            oldMemberIds.add(providerUser.getMemberId());
+          }
+        }
+        //现在服务商所拥有的报税员
+        List<Long> addMemberIds = Lists.newArrayList();
+        addMemberIds.addAll(memberIds);
+        //获取并集并不重复
+        oldMemberIds.removeAll(memberIds);
+        memberIds.addAll(oldMemberIds);
         for (Long memberId : memberIds){
-          ProviderUser providerUser = new ProviderUser();
-          providerUser.setMemberId(memberId);
-          providerUser.setProviderId(provider.getId());
-          providerUser.setCreateTime(DateUtil.date());
-          providerUserMapper.insert(providerUser);
+          ProviderUser providerUser = providerUserMapper.findByMap(Kv.by("providerId",provider.getId()).set("memberId",memberId));
+          if (providerUser==null){
+            ProviderUser providerUserTemp = new ProviderUser();
+            providerUserTemp.setMemberId(memberId);
+            providerUserTemp.setProviderId(provider.getId());
+            providerUserTemp.setCreateTime(DateUtil.date());
+            if (Objects.equals(memberId,providerDto.getMemberId())){
+              providerUserTemp.setRolesCode(ProviderRoleEnum.CREATOR.getCode()+","+ProviderRoleEnum.PREPARER.getCode());
+            }else {
+              providerUserTemp.setRolesCode(String.valueOf(ProviderRoleEnum.PREPARER.getCode()));
+            }
+            providerUserMapper.insert(providerUserTemp);
+          }else {
+            //服务商所拥有的会员
+            if (addMemberIds.contains(memberId)){
+              //已经有报税员角色
+              if (!providerUser.getRolesCode().contains(String.valueOf(ProviderRoleEnum.PREPARER.getCode()))){
+                providerUser.setRolesCode(providerUser.getRolesCode()+","+ProviderRoleEnum.PREPARER.getCode());
+                providerUserMapper.updateById(providerUser);
+              }
+            }else {
+                //删除的角色
+              if (providerUser.getRolesCode().contains(String.valueOf(ProviderRoleEnum.PREPARER.getCode()))){
+                  String [] roles = providerUser.getRolesCode().split("\\,");
+                  List<String> list=Arrays.asList(roles);
+                  list.remove(String.valueOf(ProviderRoleEnum.PREPARER.getCode()));
+                  if (CollectionUtils.isEmpty(list)){
+                    providerUserMapper.deleteById(providerUser.getId());
+                  }else {
+                    String roleNew = Joiner.on(",").join(list);
+                    providerUser.setRolesCode(roleNew);
+                    providerUserMapper.updateById(providerUser);
+                  }
+              }
+            }
+          }
         }
         providerMapper.updateById(provider);
       } else {
@@ -297,6 +341,11 @@ public class ClientProviderService {
           providerUser.setMemberId(memberId);
           providerUser.setProviderId(provider.getId());
           providerUser.setCreateTime(DateUtil.date());
+          if (Objects.equals(memberId,providerDto.getMemberId())){
+            providerUser.setRolesCode(ProviderRoleEnum.CREATOR.getCode()+","+ProviderRoleEnum.PREPARER.getCode());
+          }else {
+            providerUser.setRolesCode(String.valueOf(ProviderRoleEnum.PREPARER.getCode()));
+          }
           providerUserMapper.insert(providerUser);
         }
       }
