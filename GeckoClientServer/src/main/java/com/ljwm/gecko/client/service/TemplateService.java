@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
+import com.ljwm.gecko.base.entity.AttendanceTemplate;
 import com.ljwm.gecko.base.entity.Template;
+import com.ljwm.gecko.base.mapper.AttendanceTemplateMapper;
 import com.ljwm.gecko.base.mapper.AttributeMapper;
 import com.ljwm.gecko.base.mapper.TemplateMapper;
 import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
@@ -44,6 +46,14 @@ public class TemplateService {
 
   @Autowired
   CommonService commonService;
+
+  @Autowired
+  AttendanceTemplateMapper attendanceTemplateMapper;
+
+  String[] employeeStr = {"工号", "*姓名", "*证照类型", "*证照号码", "*国籍(地区)", "性别", "出生年月", "学历", "*人员状态", "*是否雇员",
+    "*手机号码", "任职受雇日期", "员工类别", "部门", "岗位", "离职日期", "工作城市", "婚姻状况", "是否引进人才", "开户银行",
+    "工资账号", "社保账号", "公积金账号", "是否特定行业", "是否股东、投资者", "是否残疾", "是否烈属", "是否孤老", "残疾证号", "烈属证号",
+    "电子邮箱", "居住省份", "居住城市", "居住所在区", "居住详细地址", "备注"};
 
   public Result uploadTemplate(TemplateForm templateForm) {
     List<TemplateDto> list = templateForm.getList();
@@ -88,19 +98,11 @@ public class TemplateService {
     return Result.success("下载完成");
   }
 
-  public Result downloadTemplate(HttpServletResponse response, CompanyDto companyDto) throws IOException {
-    List<Template> list = templateMapper.selectList(new QueryWrapper<Template>()
-      .eq(Template.COMPANY_ID, companyDto.getCompanyId())
-      .orderByAsc(true,Template.SORT));
-    String[] str = {"工号", "*姓名", "*证照类型", "*证照号码", "*国籍(地区)", "*人员状态", "*是否雇员", "*手机号码", "社保缴费基数", "公积金缴费基数", "公积金缴费比例"};
+  public Result downloadTemplate(HttpServletResponse response) throws IOException {
     Map<String, String> map = new LinkedHashMap<>();
     int i = 0;
-    for (String string : str){
+    for (String string : employeeStr){
       map.put(String.valueOf(i), string);
-      i++;
-    }
-    for (Template template : list) {
-      map.put(String.valueOf(i), attributeMapper.selectById(template.getAttributeId()).getName());
       i++;
     }
     response.reset();
@@ -112,21 +114,73 @@ public class TemplateService {
     return Result.success("导出成功！");
   }
 
-  public Result getEmployeeTem(CompanyDto companyDto) {
-    List<Template> list = templateMapper.selectList(new QueryWrapper<Template>()
-      .eq(Template.COMPANY_ID, companyDto.getCompanyId())
-      .orderByAsc(true,Template.SORT));
-    String[] str = {"工号", "*姓名", "*证照类型", "*证照号码", "*国籍(地区)", "*人员状态", "*是否雇员", "*手机号码", "社保缴费基数", "公积金缴费基数", "公积金缴费比例"};
+  public Result getEmployeeTem() {
+    Map<String, String> map = new LinkedHashMap<>();
+    int i = 0;
+    for (String string : employeeStr){
+      map.put(String.valueOf(i), string);
+      i++;
+    }
+    return Result.success(map);
+  }
+
+  public Result uploadAttendanceTem(TemplateForm templateForm) {
+    List<TemplateDto> list = templateForm.getList();
+    for(TemplateDto templateDto : list){
+      AttendanceTemplate attendanceTemplate = new AttendanceTemplate();
+      attendanceTemplate.setSort(templateDto.getSort()).setCompanyId(templateForm.getCompanyId()).setAttributeId(templateDto.getId());
+      AttendanceTemplate templateFind = attendanceTemplateMapper.selectOne(new QueryWrapper<AttendanceTemplate>()
+        .eq(AttendanceTemplate.COMPANY_ID, attendanceTemplate.getCompanyId()).eq(AttendanceTemplate.ATTRIBUTE_ID, attendanceTemplate.getAttributeId()));
+      if (templateFind != null){
+        attendanceTemplate.setId(templateFind.getId());
+        attendanceTemplateMapper.updateById(attendanceTemplate);
+      } else {
+        attendanceTemplateMapper.insert(attendanceTemplate);
+      }
+    }
+    return Result.success("模板上传成功！");
+  }
+
+  public Result getAttendanceTem(CompanyDto companyDto) {
+    List<AttendanceTemplate> list = attendanceTemplateMapper.selectList(new QueryWrapper<AttendanceTemplate>()
+      .eq(AttendanceTemplate.COMPANY_ID, companyDto.getCompanyId())
+      .orderByAsc(true,AttendanceTemplate.SORT));
+    String[] str = {"*姓名", "*证照类型", "*证照号码"};
     Map<String, String> map = new LinkedHashMap<>();
     int i = 0;
     for (String string : str){
       map.put(String.valueOf(i), string);
       i++;
     }
-    for (Template template : list) {
+    for (AttendanceTemplate template : list) {
       map.put(String.valueOf(i), attributeMapper.selectById(template.getAttributeId()).getName());
       i++;
     }
     return Result.success(map);
   }
+
+  public Result downloadAttendance(HttpServletResponse response, CompanyDto companyDto) throws IOException {
+    List<AttendanceTemplate> list = attendanceTemplateMapper.selectList(new QueryWrapper<AttendanceTemplate>()
+      .eq(AttendanceTemplate.COMPANY_ID, companyDto.getCompanyId())
+      .orderByAsc(true,Template.SORT));
+    String[] str = {"*姓名", "*证照类型", "*证照号码"};
+    Map<String, String> map = new LinkedHashMap<>();
+    int i = 0;
+    for (String string : str){
+      map.put(String.valueOf(i), string);
+      i++;
+    }
+    for (AttendanceTemplate attendanceTemplate : list) {
+      map.put(String.valueOf(i), attributeMapper.selectById(attendanceTemplate.getId()).getName());
+      i++;
+    }
+    response.reset();
+    response.setContentType("multipart/form-data");
+    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("模板表.xlsx","UTF-8"));
+    OutputStream output = response.getOutputStream();
+    ExcelUtil.exportExcel(map, null, output);
+    output.close();
+    return Result.success("导出成功！");
+  }
+
 }
