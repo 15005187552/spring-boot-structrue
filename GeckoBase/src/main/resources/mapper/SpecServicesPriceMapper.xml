@@ -20,4 +20,40 @@
           `ID`          ,`KEY`          ,`KEY_NAME`          ,`PRICE`          ,`DOWN_PAYMENT_RATE`          ,`CREATE_TIME`          ,`PROVIDER_ID`          ,`DISABLED`          ,`GOOD_ID`
     </sql>
 
+    <resultMap id="specServicesPriceSimpleVo" type="com.ljwm.gecko.base.model.vo.SpecServicesPriceSimpleVo" extends="BaseResultMap">
+
+    </resultMap>
+
+    <select id="findByMap" parameterType="map" resultMap="specServicesPriceSimpleVo">
+      select t.*  from t_spec_services_price t
+      <where>
+        <if test="params.key != null and params.key != ''">
+          AND t.`KEY`=#{params.key}
+        </if>
+        <if test="params.id != null ">
+          <![CDATA[
+          AND t.`ID` !=#{params.id}
+        ]]>
+        </if>
+        <if test="params.providerId != null ">
+          AND t.`PROVIDER_ID` =#{params.providerId}
+        </if>
+        <if test="params.goodId != null ">
+          AND t.`GOOD_ID` =#{params.goodId}
+        </if>
+      </where>
+    </select>
+
+    <select id="find" parameterType="map" resultMap="specServicesPriceSimpleVo">
+      select t.*  from t_spec_services_price t
+      <where>
+        <if test="params.providerId != null ">
+          AND t.`PROVIDER_ID` =#{params.providerId}
+        </if>
+        <if test="params.goodId != null ">
+          AND t.`GOOD_ID` =#{params.goodId}
+        </if>
+      </where>
+    </select>
+
 </mapper>

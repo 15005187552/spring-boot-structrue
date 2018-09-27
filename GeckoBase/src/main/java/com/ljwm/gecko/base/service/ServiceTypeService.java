@@ -74,4 +74,8 @@ public class ServiceTypeService {
     serviceTypeMapper.updateById(serviceType);
     return serviceType.getDisabled();
   }
+
+  public List<ServeSimpleVo> findTopList(){
+    return serviceTypeMapper.findTopList();
+  }
 }

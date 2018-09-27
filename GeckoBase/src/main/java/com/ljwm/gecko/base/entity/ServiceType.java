@@ -52,6 +52,10 @@ public class ServiceType implements Serializable {
     @TableField("`DISABLED`")
     private Boolean disabled;
 
+    @ApiModelProperty(value = "是否置顶菜单")
+    @TableField("`IS_TOP`")
+    private Integer isTop;
+
 
     public static final String ID = "`ID`";
 

@@ -60,4 +60,8 @@
     select *  from t_service_type  where `PID` is not null AND `PID`=#{pId}
   </select>
 
+  <select id="findTopList" resultMap="serverSimpleVo">
+    select *  from t_service_type where IS_TOP=1 and DISABLED=0
+  </select>
+
 </mapper>

@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Livis
@@ -66,7 +66,7 @@ public class SpecServicesPrice implements Serializable {
     @TableField("`DISABLED`")
     private Integer disabled;
 
-    @ApiModelProperty(value = "商品明细id")
+    @ApiModelProperty(value = "商品id")
     @TableField("`GOOD_ID`")
     private Long goodId;
 
