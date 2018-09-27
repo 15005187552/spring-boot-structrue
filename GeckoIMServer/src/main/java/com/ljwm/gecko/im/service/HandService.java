@@ -56,9 +56,9 @@ public class HandService {
 
       String msg = "{name:'" + id+ "',message:'" + text + "'}";
 
-      WsResponse wsResponse = WsResponse.fromText(json.toString(), "utf-8");
-//      Tio.send(channelContext,wsResponse);
-      Tio.sendToGroup(channelContext.groupContext, Const.GROUP_ID, wsResponse);
+      WsResponse wsResponse = WsResponse.fromText(msg, "utf-8");
+      Tio.send(channelContext,wsResponse);
+//      Tio.sendToGroup(channelContext.groupContext, Const.GROUP_ID, wsResponse);
 
       Object message = kafkaMessage.get();
 
