@@ -15,11 +15,4 @@ public class AttributeAttendanceVo extends Attribute {
 
   private AttendanceTemplate attendanceTemplate;
 
-  public AttendanceTemplate getAttendanceTemplate() {
-    return attendanceTemplate;
-  }
-
-  public void setAttendanceTemplate(AttendanceTemplate attendanceTemplate) {
-    this.attendanceTemplate = attendanceTemplate;
-  }
 }

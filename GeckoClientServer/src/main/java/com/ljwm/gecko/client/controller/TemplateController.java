@@ -39,20 +39,38 @@ public class TemplateController {
 
 
   @PostMapping("/uploadEmployeeTemplate")
-  @ApiOperation("自定义模板要加的字段")
+  @ApiOperation("自定义员工信息模板要加的字段")
   public Result uploadTemplate(@RequestBody @Valid TemplateForm templateForm){
     return  templateService.uploadTemplate(templateForm);
   }
 
   @PostMapping("/downloadEmployee")
-  @ApiOperation("下载模板")
-  public Result downloadTemplate(HttpServletResponse response, @RequestBody @Valid CompanyDto companyDto) throws IOException {
-    return templateService.downloadTemplate(response, companyDto);
+  @ApiOperation("下载员工信息模板")
+  public Result downloadTemplate(HttpServletResponse response) throws IOException {
+    return templateService.downloadTemplate(response);
   }
 
   @PostMapping("/getEmployeeTem")
   @ApiOperation("获取员工要填写的字段")
-  public Result getEmployeeTem(@RequestBody @Valid CompanyDto companyDto){
-    return templateService.getEmployeeTem(companyDto);
+  public Result getEmployeeTem(){
+    return templateService.getEmployeeTem();
+  }
+
+  @PostMapping("/uploadAttendanceTem")
+  @ApiOperation("自定义考勤模板要加的字段")
+  public Result uploadAttendanceTem(@RequestBody @Valid TemplateForm templateForm){
+    return  templateService.uploadAttendanceTem(templateForm);
+  }
+
+  @PostMapping("/getAttendanceTem")
+  @ApiOperation("获取考勤要填写的字段")
+  public Result getAttendanceTem(@RequestBody @Valid CompanyDto companyDto){
+    return templateService.getAttendanceTem(companyDto);
+  }
+
+  @PostMapping("/downloadAttendance")
+  @ApiOperation("下载考勤信息模板")
+  public Result downloadAttendance(HttpServletResponse response, @RequestBody @Valid CompanyDto companyDto) throws IOException {
+    return templateService.downloadAttendance(response, companyDto);
   }
 }

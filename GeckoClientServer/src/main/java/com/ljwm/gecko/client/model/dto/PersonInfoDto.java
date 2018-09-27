@@ -44,7 +44,7 @@ public class PersonInfoDto implements Serializable {
   @ApiModelProperty(value = "是否雇员")
   private String employee;
 
-  @ApiModelProperty(value = "注册手机号")
+  @ApiModelProperty(value = "手机号码")
   private String regMobile;
 
   @ApiModelProperty(value = "任职日期")
@@ -61,48 +61,6 @@ public class PersonInfoDto implements Serializable {
 
   @ApiModelProperty(value = "离职日期")
   private String termDate;
-
-  @ApiModelProperty(value = "社保缴费基数")
-  private String socialBase;
-
-  /*@ApiModelProperty(value = "社保公司比例")
-  private String socialComPer;
-
-  @ApiModelProperty(value = "公司养老保险比例")
-  private String comPension;
-
-  @ApiModelProperty(value = "公司医疗保险比例")
-  private String comMedical;
-
-  @ApiModelProperty(value = "公司失业保险比例")
-  private String comUnemploy;
-
-  @ApiModelProperty(value = "公司工伤保险比例")
-  private String comInjury;
-
-  @ApiModelProperty(value = "公司生育保险比例")
-  private String comBirth;
-
-  @ApiModelProperty(value = "社保个人比例")
-  private String socialPersonPer;
-
-  @ApiModelProperty(value = "个人养老保险比例")
-  private String personPension;
-
-  @ApiModelProperty(value = "个人医疗保险比例")
-  private String personMedical;
-
-  @ApiModelProperty(value = "个人失业保险比例")
-  private String personUnemploy;*/
-
-  @ApiModelProperty(value = "公积金基数")
-  private String fundBase;
-
-  @ApiModelProperty(value = "公司公积金比例")
-  private String fundCom;
-
-  @ApiModelProperty(value = "个人公积金比例")
-  private String fundPerson;
 
   @ApiModelProperty(value = "工作城市")
   private String workCity;

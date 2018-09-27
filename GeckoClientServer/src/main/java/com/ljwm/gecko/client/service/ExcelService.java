@@ -155,7 +155,6 @@ public class ExcelService {
         .setDepartment(personInfoDto.getDepartment())
         .setStation(personInfoDto.getStation())
         .setTermDate(TimeUtil.parseString(personInfoDto.getTermDate()))
-        .setSocialBase(new BigDecimal(personInfoDto.getSocialBase()))
        /* .setSocialComPer(new BigDecimal(personInfoDto.getSocialComPer()))
         .setComPension(new BigDecimal(personInfoDto.getComPension()))
         .setComMedical(new BigDecimal(personInfoDto.getComMedical()))
@@ -166,9 +165,6 @@ public class ExcelService {
         .setPersonPension(new BigDecimal(personInfoDto.getPersonPension()))
         .setPersonMedical(new BigDecimal(personInfoDto.getPersonMedical()))
         .setPersonUnemploy(new BigDecimal(personInfoDto.getPersonUnemploy()))*/
-        .setFundBase(new BigDecimal(personInfoDto.getFundBase()))
-        .setFundCom(new BigDecimal(personInfoDto.getFundCom()))
-        .setFundPerson(new BigDecimal(personInfoDto.getFundPerson()))
         .setWorkCity(workCity)
         .setMaritalStatus(EnumUtil.getEnumByName(MaritalStatusEnum.class, personInfoDto.getMaritalStatus()).getCode())
         .setNtroduceTalents(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getNtroduceTalents()).getCode())
@@ -211,7 +207,7 @@ public class ExcelService {
     }
     Map<String, String> map = new LinkedHashMap<>();
     int i = 0;
-    String[] str = new String[]{"工号", "*姓名", "*证照类型", "*证照号码", "*国籍(地区)", "性别", "出生年月", "*人员状态",
+    String[] str = {"工号", "*姓名", "*证照类型", "*证照号码", "*国籍(地区)", "性别", "出生年月", "*人员状态",
       "*是否雇员", "*手机号码", "是否残疾", "是否烈属", "是否孤老", "残疾证号", "烈属证号", "任职受雇日期", "离职日期", "电子邮箱", "学历",
       "职业", "开户银行", "银行账号", "是否特定行业", "是否股东、投资者", "个人股本（投资）额", "户籍所在省份", "户籍所在城市", "户籍所在区（县）",
       "户籍所在详细地址","居住省份", "居住城市", "居住所在区（县）", "居住详细地址", "备注", "是否境外人员", "姓名（中文）", "境内有无住所",
