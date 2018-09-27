@@ -24,8 +24,14 @@ public class AttributeController {
   AttributeService attributeService;
 
   @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
-  @RequestMapping(value = "/getAllAttribute", method = RequestMethod.POST)
+  @RequestMapping(value = "/getEmployAttribute", method = RequestMethod.POST)
   public Result getAllAttribute(@RequestBody @Valid CompanyDto companyDto){
     return  attributeService.getAllAttribute(companyDto);
+  }
+
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @RequestMapping(value = "/getAttendanceAttribute", method = RequestMethod.POST)
+  public Result getAttendanceAttribute(@RequestBody @Valid CompanyDto companyDto){
+    return  attributeService.getAttendanceAttribute(companyDto);
   }
 }

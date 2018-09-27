@@ -15,7 +15,7 @@
           `ID`          ,`TABLE_NAME`          ,`ITEM_ID`          ,`NAME`
     </sql>
 
-  <resultMap id="ResultMap" type="com.ljwm.gecko.base.model.vo.AttributeCompanyVo">
+  <resultMap id="ResultMap" type="com.ljwm.gecko.base.model.vo.AttributeEmployVo">
     <id column="ID" property="id" />
     <result column="TABLE_NAME" property="tableName" />
     <result column="ITEM_ID" property="itemId" />
@@ -24,6 +24,21 @@
   </resultMap>
 
   <resultMap id="TemplateMap" type="com.ljwm.gecko.base.model.vo.TemplateVo">
+    <id column="ID" property="id" />
+    <result column="COMPANY_ID" property="companyId" />
+    <result column="ATTRIBUTE_ID" property="attributeId" />
+    <result column="SORT" property="sort" />
+  </resultMap>
+
+  <resultMap id="AttendanceResultMap" type="com.ljwm.gecko.base.model.vo.AttributeAttendanceVo">
+    <id column="ID" property="id" />
+    <result column="TABLE_NAME" property="tableName" />
+    <result column="ITEM_ID" property="itemId" />
+    <result column="NAME" property="name" />
+    <association property="attendanceTemplate" resultMap="AttendanceTemplateMap"/>
+  </resultMap>
+
+  <resultMap id="AttendanceTemplateMap" type="com.ljwm.gecko.base.entity.AttendanceTemplate">
     <id column="ID" property="id" />
     <result column="COMPANY_ID" property="companyId" />
     <result column="ATTRIBUTE_ID" property="attributeId" />

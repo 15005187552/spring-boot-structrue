@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2018/9/26 19:14
  */
 @Data
-public class AttributeCompanyVo extends Attribute {
+public class AttributeEmployVo extends Attribute {
 
   @JSONField(name = "template")
   private TemplateVo templateVo;
