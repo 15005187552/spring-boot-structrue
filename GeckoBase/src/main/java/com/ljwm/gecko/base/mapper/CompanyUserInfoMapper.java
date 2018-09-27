@@ -2,7 +2,6 @@ package com.ljwm.gecko.base.mapper;
 
 import com.ljwm.gecko.base.entity.CompanyUserInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -10,9 +9,8 @@ import org.springframework.stereotype.Repository;
  * </p>
  *
  * @author Levis
- * @since 2018-09-10
+ * @since 2018-09-27
  */
-@Repository
 public interface CompanyUserInfoMapper extends BaseMapper<CompanyUserInfo> {
 
 }

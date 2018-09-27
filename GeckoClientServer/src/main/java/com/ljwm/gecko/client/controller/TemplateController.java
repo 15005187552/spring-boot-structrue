@@ -38,8 +38,8 @@ public class TemplateController {
   }*/
 
 
-  @PostMapping("/uploadEmployeeTemplate")
-  @ApiOperation("自定义员工信息模板要加的字段")
+  @PostMapping("/uploadAttendanceTem")
+  @ApiOperation("自定义考勤模板要加的字段")
   public Result uploadTemplate(@RequestBody @Valid TemplateForm templateForm){
     return  templateService.uploadTemplate(templateForm);
   }
@@ -56,11 +56,11 @@ public class TemplateController {
     return templateService.getEmployeeTem();
   }
 
-  @PostMapping("/uploadAttendanceTem")
+  /*@PostMapping("/uploadAttendanceTem")
   @ApiOperation("自定义考勤模板要加的字段")
   public Result uploadAttendanceTem(@RequestBody @Valid TemplateForm templateForm){
     return  templateService.uploadAttendanceTem(templateForm);
-  }
+  }*/
 
   @PostMapping("/getAttendanceTem")
   @ApiOperation("获取考勤要填写的字段")

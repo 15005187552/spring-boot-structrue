@@ -145,26 +145,8 @@ public class TemplateService {
   }
 
   public Result getAttendanceTem(CompanyDto companyDto) {
-    List<AttendanceTemplate> list = attendanceTemplateMapper.selectList(new QueryWrapper<AttendanceTemplate>()
-      .eq(AttendanceTemplate.COMPANY_ID, companyDto.getCompanyId())
-      .orderByAsc(true,AttendanceTemplate.SORT));
-    String[] str = {"*姓名", "*证照类型", "*证照号码"};
-    Map<String, String> map = new LinkedHashMap<>();
-    int i = 0;
-    for (String string : str){
-      map.put(String.valueOf(i), string);
-      i++;
-    }
-    for (AttendanceTemplate template : list) {
-      map.put(String.valueOf(i), attributeMapper.selectById(template.getAttributeId()).getName());
-      i++;
-    }
-    return Result.success(map);
-  }
-
-  public Result downloadAttendance(HttpServletResponse response, CompanyDto companyDto) throws IOException {
-    List<AttendanceTemplate> list = attendanceTemplateMapper.selectList(new QueryWrapper<AttendanceTemplate>()
-      .eq(AttendanceTemplate.COMPANY_ID, companyDto.getCompanyId())
+    List<Template> list = templateMapper.selectList(new QueryWrapper<Template>()
+      .eq(Template.COMPANY_ID, companyDto.getCompanyId())
       .orderByAsc(true,Template.SORT));
     String[] str = {"*姓名", "*证照类型", "*证照号码"};
     Map<String, String> map = new LinkedHashMap<>();
@@ -173,8 +155,26 @@ public class TemplateService {
       map.put(String.valueOf(i), string);
       i++;
     }
-    for (AttendanceTemplate attendanceTemplate : list) {
-      map.put(String.valueOf(i), attributeMapper.selectById(attendanceTemplate.getId()).getName());
+    for (Template template : list) {
+      map.put(String.valueOf(i), attributeMapper.selectById(template.getAttributeId()).getName());
+      i++;
+    }
+    return Result.success(map);
+  }
+
+  public Result downloadAttendance(HttpServletResponse response, CompanyDto companyDto) throws IOException {
+    List<Template> list = templateMapper.selectList(new QueryWrapper<Template>()
+      .eq(Template.COMPANY_ID, companyDto.getCompanyId())
+      .orderByAsc(true,Template.SORT));
+    String[] str = {"*姓名", "*证照类型", "*证照号码"};
+    Map<String, String> map = new LinkedHashMap<>();
+    int i = 0;
+    for (String string : str){
+      map.put(String.valueOf(i), string);
+      i++;
+    }
+    for (Template template : list) {
+      map.put(String.valueOf(i), attributeMapper.selectById(template.getId()).getName());
       i++;
     }
     response.reset();

@@ -20,4 +20,17 @@
       delete from t_provider_user where PROVIDER_ID=#{providerId}
     </delete>
 
+    <select id="findByMap" parameterType="map" resultMap="BaseResultMap">
+      select t.*  from t_provider_user  t
+      <where>
+        <if test="params.providerId != null ">
+          AND t.PROVIDER_ID=#{params.providerId}
+        </if>
+        <if test="params.memberId != null ">
+          AND t.MEMBER_ID=#{params.memberId}
+        </if>
+      </where>
+      limit 1
+    </select>
+
 </mapper>
