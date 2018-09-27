@@ -305,7 +305,7 @@ public class ExcelService {
       if (CollectionUtil.isEmpty(employeeDtoList)){
         throw new LogicException("该公司下没有对应员工");
       }
-      BigDecimal socialBase = employeeDtoList.get(0).getCompanyUserInfo().getSocialBase();
+      /*BigDecimal socialBase = employeeDtoList.get(0).getCompanyUserInfo().getSocialBase();
       BigDecimal fundBase = employeeDtoList.get(0).getCompanyUserInfo().getFundBase();
       BigDecimal entire = companySpecialMapper.selectByName("养老保险");
       BigDecimal medical = companySpecialMapper.selectByName("医疗保险");
@@ -314,7 +314,7 @@ public class ExcelService {
       normalSalaryVo.setEntireInsurance(socialBase.multiply(entire).toString());
       normalSalaryVo.setMedicalInsurance(socialBase.multiply(medical).toString());
       normalSalaryVo.setUnemployeeInsurance(socialBase.multiply(unemployee).toString());
-      normalSalaryVo.setFund(fundBase.multiply(fund).toString());
+      normalSalaryVo.setFund(fundBase.multiply(fund).toString());*/
       BigDecimal annuity = taxOtherReduceMapper.selectTaxMoney(memberId, "年金", declareTime);
       BigDecimal commercialInsurance = taxOtherReduceMapper.selectTaxMoney(memberId, "商业健康保险费", declareTime);
       BigDecimal otherEntireInsurance = taxOtherReduceMapper.selectTaxMoney(memberId, "养老保险", declareTime);

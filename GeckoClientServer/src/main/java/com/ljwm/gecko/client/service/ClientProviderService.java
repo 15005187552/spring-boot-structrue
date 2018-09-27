@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -277,11 +278,17 @@ public class ClientProviderService {
               if (providerUser.getRolesCode().contains(String.valueOf(ProviderRoleEnum.PREPARER.getCode()))){
                   String [] roles = providerUser.getRolesCode().split("\\,");
                   List<String> list=Arrays.asList(roles);
-                  list.remove(String.valueOf(ProviderRoleEnum.PREPARER.getCode()));
-                  if (CollectionUtils.isEmpty(list)){
+                  List<String> newList=Lists.newArrayList();
+                  for (String role :list){
+                    String temp = String.valueOf(ProviderRoleEnum.PREPARER.getCode());
+                    if (!Objects.equals(role,temp)){
+                      newList.add(role);
+                    }
+                  }
+                  if (CollectionUtils.isEmpty(newList)){
                     providerUserMapper.deleteById(providerUser.getId());
                   }else {
-                    String roleNew = Joiner.on(",").join(list);
+                    String roleNew = Joiner.on(",").join(newList);
                     providerUser.setRolesCode(roleNew);
                     providerUserMapper.updateById(providerUser);
                   }
