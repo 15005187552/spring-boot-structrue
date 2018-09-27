@@ -65,10 +65,9 @@ public class ShowcaseWsMsgHandler implements IWsMsgHandler {
     Tio.sendToGroup(channelContext.groupContext, Const.GROUP_ID, wsResponse);
 
     String id = httpRequest.getParam("id");
-    //		channelContext.setUserid(myname);
+
     // todo 这里获取用户id ，绑定channelContext
     CHANNEL_CONTEXT_MAP.put(id, channelContext);
-//    channelContext.getId()
   }
 
   /**

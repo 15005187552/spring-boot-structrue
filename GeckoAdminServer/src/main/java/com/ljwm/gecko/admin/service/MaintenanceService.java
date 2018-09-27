@@ -3,13 +3,23 @@ package com.ljwm.gecko.admin.service;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.service.CommonService;
+import com.ljwm.gecko.admin.model.form.AttendanceQuery;
+import com.ljwm.gecko.admin.model.form.AttendanceSaveForm;
 import com.ljwm.gecko.admin.model.form.MemberQuery;
+import com.ljwm.gecko.base.entity.AttendanceAttribute;
 import com.ljwm.gecko.base.entity.Member;
+import com.ljwm.gecko.base.mapper.AttendanceAttributeMapper;
 import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.model.vo.MemberVo;
+import com.ljwm.gecko.base.model.vo.admin.AttendanceAtrVo;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -22,7 +32,28 @@ public class MaintenanceService {
   @Autowired
   private CommonService commonService;
 
-  public Page<MemberVo> find(MemberQuery query){
-    return commonService.find(query,(p,q)->memberMapper.find(p, BeanUtil.beanToMap(query)));
+  @Autowired
+  private AttendanceAttributeMapper attendanceAttributeMapper;
+
+  public Page<MemberVo> find(MemberQuery query) {
+    return commonService.find(query, (p, q) -> memberMapper.find(p, BeanUtil.beanToMap(query)));
+  }
+
+  @Transactional
+  public AttendanceAttribute save(AttendanceSaveForm form) {
+    return Optional.of(form).map(f -> {
+      AttendanceAttribute attribute = null;
+      if (!Objects.isNull(f.getId()))
+        attribute = attendanceAttributeMapper.selectById(f.getId());
+      if (Objects.isNull(attribute))
+        attribute = new AttendanceAttribute();
+      BeanUtil.copyProperties(form, attribute);
+      commonService.insertOrUpdate(attribute, attendanceAttributeMapper);
+      return attribute;
+    }).get();
+  }
+
+  public Page<AttendanceAtrVo> find(AttendanceQuery query) {
+    return  commonService.find(query,(p,q) -> attendanceAttributeMapper.find(p,BeanUtil.beanToMap(query)));
   }
 }
