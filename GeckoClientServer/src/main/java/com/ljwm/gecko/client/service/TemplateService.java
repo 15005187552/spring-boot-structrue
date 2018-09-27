@@ -11,6 +11,7 @@ import com.ljwm.gecko.base.mapper.AttributeMapper;
 import com.ljwm.gecko.base.mapper.TemplateMapper;
 import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
 import com.ljwm.gecko.client.model.dto.CompanyDto;
+import com.ljwm.gecko.client.model.dto.PersonInfoDto;
 import com.ljwm.gecko.client.model.dto.TemplateDto;
 import com.ljwm.gecko.client.model.dto.TemplateForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -116,9 +118,10 @@ public class TemplateService {
 
   public Result getEmployeeTem() {
     Map<String, String> map = new LinkedHashMap<>();
+    Field[] fields = PersonInfoDto.class.getDeclaredFields();
     int i = 0;
     for (String string : employeeStr){
-      map.put(String.valueOf(i), string);
+      map.put(fields[i].getName(), string);
       i++;
     }
     return Result.success(map);
