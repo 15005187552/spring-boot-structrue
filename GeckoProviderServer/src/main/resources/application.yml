@@ -3,7 +3,7 @@ server:
 spring:
   profiles:
     active: dev,devLocal
-    include: base,gecko,common
+    include: base,gecko,common,kafka
 wx:
   xcx:                  #小程序
     appId: wx02c093bdfb8fba13

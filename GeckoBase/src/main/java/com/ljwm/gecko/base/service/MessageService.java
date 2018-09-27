@@ -29,11 +29,13 @@ import java.util.List;
 public class MessageService {
 
 
-  public static final String TOPIC_PUSH_TO_ADMIN = "TOPIC_PUSH_TO_ADMIN";
-  // 推送消息给Admin
-  public static final String TOPIC_PUSH_FROM_ADMIN = "TOPIC_PUSH_FROM_ADMIN";         // 推送消息给Admin
+  public static final String TOPIC_PUSH_TO_ADMIN = "TOPIC_PUSH_TO_ADMIN";             // 推送消息给Admin
 
-  public static final String TOPIC_CUSTOMER_MESSAGE = "TOPIC_CUSTOMER_MESSAGE"; // 客服消息Topic
+  public static final String TOPIC_PUSH_FROM_ADMIN = "TOPIC_PUSH_FROM_ADMIN";         // 从Admin推送消息
+
+  public static final String TOPIC_SESSION_CUSTOMER = "TOPIC_SESSION_CUSTOMER";       // 用户会话聊天
+
+  public static final String TOPIC_CUSTOMER_MESSAGE = "TOPIC_CUSTOMER_MESSAGE";       // 客服消息Topic
 
 
   @Autowired
@@ -93,10 +95,6 @@ public class MessageService {
       log.info("Send To Kafka Message Queue Successfully !");
     }
 
-  }
-
-  public void pushTest(){
-    kafkaTemplate.send(TOPIC_PUSH_TO_ADMIN,"key","45645");
   }
 }
 

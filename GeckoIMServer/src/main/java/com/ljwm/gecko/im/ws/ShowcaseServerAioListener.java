@@ -3,6 +3,7 @@
  */
 package com.ljwm.gecko.im.ws;
 
+import com.ljwm.gecko.im.service.HandleHandshake;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,20 +26,24 @@ public class ShowcaseServerAioListener extends WsServerAioListener {
   @Autowired
   private ShowcaseServerConfig showcaseServerConfig;
 
+  @Autowired
+  private HandleHandshake handleHandshake;
+
   @Override
   public void onAfterConnected(ChannelContext channelContext, boolean isConnected, boolean isReconnect) throws Exception {
     super.onAfterConnected(channelContext, isConnected, isReconnect);
     if (log.isInfoEnabled()) {
-      log.info("onAfterConnected\r\n{}", channelContext);
+      log.info("1  onAfterConnected\r\n{}", channelContext);
     }
 
+    log.info("wo diao yong le ");
   }
 
   @Override
   public void onAfterSent(ChannelContext channelContext, Packet packet, boolean isSentSuccess) throws Exception {
     super.onAfterSent(channelContext, packet, isSentSuccess);
     if (log.isInfoEnabled()) {
-      log.info("onAfterSent\r\n{}\r\n{}", packet.logstr(), channelContext);
+      log.info("2  onAfterSent\r\n{}\r\n{}", packet.logstr(), channelContext);
     }
   }
 
@@ -46,28 +51,17 @@ public class ShowcaseServerAioListener extends WsServerAioListener {
   public void onBeforeClose(ChannelContext channelContext, Throwable throwable, String remark, boolean isRemove) throws Exception {
     super.onBeforeClose(channelContext, throwable, remark, isRemove);
     if (log.isInfoEnabled()) {
-      log.info("onBeforeClose\r\n{}", channelContext);
+      log.info("3  onBeforeClose\r\n{}", channelContext);
     }
-
-    WsSessionContext wsSessionContext = (WsSessionContext) channelContext.getAttribute();
-
-    if (wsSessionContext != null && wsSessionContext.isHandshaked()) {
-
-      int count = Tio.getAllChannelContexts(channelContext.groupContext).getObj().size();
-
-      String msg = channelContext.getClientNode().toString() + " 离开了，现在共有【" + count + "】人在线";
-      //用tio-websocket，服务器发送到客户端的Packet都是WsResponse
-      WsResponse wsResponse = WsResponse.fromText(msg, showcaseServerConfig.getCHARSET());
-      //群发
-      Tio.sendToGroup(channelContext.groupContext, Const.GROUP_ID, wsResponse);
-    }
+    // 关闭前的处理
+//    handleHandshake.connetCloseHanle(channelContext.toString());
   }
 
   @Override
   public void onAfterDecoded(ChannelContext channelContext, Packet packet, int packetSize) throws Exception {
     super.onAfterDecoded(channelContext, packet, packetSize);
     if (log.isInfoEnabled()) {
-      log.info("onAfterDecoded\r\n{}\r\n{}", packet.logstr(), channelContext);
+      log.info("4  onAfterDecoded\r\n{}\r\n{}", packet.logstr(), channelContext);
     }
   }
 
@@ -75,7 +69,7 @@ public class ShowcaseServerAioListener extends WsServerAioListener {
   public void onAfterReceivedBytes(ChannelContext channelContext, int receivedBytes) throws Exception {
     super.onAfterReceivedBytes(channelContext, receivedBytes);
     if (log.isInfoEnabled()) {
-      log.info("onAfterReceivedBytes\r\n{}", channelContext);
+      log.info("5   onAfterReceivedBytes\r\n{}", channelContext);
     }
   }
 
@@ -83,8 +77,9 @@ public class ShowcaseServerAioListener extends WsServerAioListener {
   public void onAfterHandled(ChannelContext channelContext, Packet packet, long cost) throws Exception {
     super.onAfterHandled(channelContext, packet, cost);
     if (log.isInfoEnabled()) {
-      log.info("onAfterHandled\r\n{}\r\n{}", packet.logstr(), channelContext);
+      log.info("6   onAfterHandled\r\n{}\r\n{}", packet.logstr(), channelContext.toString());
     }
+    log.info("Aio handled");
   }
 
 }

@@ -21,8 +21,8 @@ import io.swagger.annotations.ApiModelProperty;
  * 套接字连接信息表
  * </p>
  *
- * @author YunQiSong
- * @since 2018-09-24
+ * @author xixil
+ * @since 2018-09-27
  */
 @Data
 @SuppressWarnings("ALL")
@@ -43,25 +43,21 @@ public class SocketInfo implements Serializable {
     @TableField("`TARGET_ID`")
     private Long targetId;
 
-    @ApiModelProperty(value = "对应的记录表")
+    @ApiModelProperty(value = "对应的记录表Code")
     @TableField("`TARGET_TABLE`")
-    private Long targetTable;
+    private Integer targetTable;
 
     @ApiModelProperty(value = "Socket状态 （在线，离线）枚举")
     @TableField("`STATUS`")
     private Integer status;
 
-    @ApiModelProperty(value = "渠道（PC,MEMBER,ADMIN,PRIVADER）枚举")
+    @ApiModelProperty(value = "渠道（CLIENT,MEMBER,ADMIN,PROVIDER）枚举")
     @TableField("`CHANNEL`")
     private Integer channel;
 
     @ApiModelProperty(value = "当前IP")
     @TableField("`IP`")
     private String ip;
-
-    @ApiModelProperty(value = "上次IP")
-    @TableField("`LAST_IP`")
-    private String lastIp;
 
     @ApiModelProperty(value = "连接时间")
     @TableField("`CONNECT_TIME`")
@@ -83,8 +79,6 @@ public class SocketInfo implements Serializable {
     public static final String CHANNEL = "`CHANNEL`";
 
     public static final String IP = "`IP`";
-
-    public static final String LAST_IP = "`LAST_IP`";
 
     public static final String CONNECT_TIME = "`CONNECT_TIME`";
 

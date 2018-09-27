@@ -51,8 +51,4 @@ public class TestController {
     messageService.pushMessageToAdmin(6L,JSONUtil.toJsonStr(messageBean));
   }
 
-  @GetMapping("test")
-  public void test(){
-    aMessageService.pushTest();
-  }
 }

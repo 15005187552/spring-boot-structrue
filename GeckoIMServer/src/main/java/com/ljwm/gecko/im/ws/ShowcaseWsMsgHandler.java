@@ -1,10 +1,13 @@
 package com.ljwm.gecko.im.ws;
 
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.ljwm.gecko.base.enums.SocketChannelEnum;
+import com.ljwm.gecko.base.mapper.SocketInfoMapper;
+import com.ljwm.gecko.im.service.HandleHandshake;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.tio.core.ChannelContext;
-import org.tio.core.GroupContext;
 import org.tio.core.Tio;
 import org.tio.http.common.HttpRequest;
 import org.tio.http.common.HttpResponse;
@@ -13,32 +16,48 @@ import org.tio.websocket.common.WsResponse;
 import org.tio.websocket.common.WsSessionContext;
 import org.tio.websocket.server.handler.IWsMsgHandler;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentSkipListMap;
+
 
 /**
  * @author tanyaowu
  * 2017年6月28日 下午5:32:38
  */
-@Component
+
 @Slf4j
+@Component
+@SuppressWarnings("all")
 public class ShowcaseWsMsgHandler implements IWsMsgHandler {
 
-  public static final Map<String, ChannelContext> CHANNEL_CONTEXT_MAP = new ConcurrentSkipListMap();
+  @Autowired
+  private SocketInfoMapper socketInfoMapper;
 
   @Autowired
   private ShowcaseServerConfig showcaseServerConfig;
 
+  @Autowired
+  private HandleHandshake handleHandshake;
+
+//  public static final Map<String, ChannelContext> CHANNEL_CONTEXT_MAP = new ConcurrentSkipListMap();
+
   /**
    * 握手时走这个方法，业务可以在这里获取cookie，request参数等
    */
+
   @Override
   public HttpResponse handshake(HttpRequest request, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {
     String clientip = request.getClientIp();
     String id = request.getParam("id");
 
     Tio.bindUser(channelContext, id);
+
+//    count++;
+//    if(count == 2)
+//    channelContexttstatic = channelContext;
 
     log.info("状态 1：{}");
     log.info("收到来自{}的ws握手包\r\n{}", clientip, request.toString());
@@ -54,20 +73,30 @@ public class ShowcaseWsMsgHandler implements IWsMsgHandler {
    */
   @Override
   public void onAfterHandshaked(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {
+
+//    log.info(" Is Equel ：{}",channelContexttstatic == channelContext);
     //绑定到群组，后面会有群发
     Tio.bindGroup(channelContext, Const.GROUP_ID);
-    int count = Tio.getAllChannelContexts(channelContext.groupContext).getObj().size();
 
-    String msg = "{name:'admin',message:'" + channelContext.userid + " 进来了，共【" + count + "】人在线" + "'}";
-    //用tio-websocket，服务器发送到客户端的Packet都是WsResponse
-    WsResponse wsResponse = WsResponse.fromText(msg, showcaseServerConfig.getCHARSET());
-    //群发
-    Tio.sendToGroup(channelContext.groupContext, Const.GROUP_ID, wsResponse);
 
+//    Tio.getAllChannelContexts()
+    // todo
     String id = httpRequest.getParam("id");
+    if (Objects.isNull(channelContext.getBsId())) {
+      channelContext.setBsId(IdWorker.getIdStr());
 
-    // todo 这里获取用户id ，绑定channelContext
-    CHANNEL_CONTEXT_MAP.put(id, channelContext);
+      handleHandshake.connectHandle(id, httpRequest.getClientIp(), SocketChannelEnum.PROVIDER);
+
+//      CHANNEL_CONTEXT_MAP.put(channelContext.getBsId(), channelContext);
+    }
+
+//    int count = Tio.getAllChannelContexts(channelContext.groupContext).getObj().size();
+//
+//    String msg = "{name:'admin',message:'" + channelContext.userid + " 进来了，共【" + count + "】人在线" + "'}";
+//    //用tio-websocket，服务器发送到客户端的Packet都是WsResponse
+//    WsResponse wsResponse = WsResponse.fromText(msg, showcaseServerConfig.getCHARSET());
+//    //群发
+//    Tio.sendToGroup(channelContext.groupContext, Const.GROUP_ID, wsResponse);
   }
 
   /**
@@ -84,6 +113,8 @@ public class ShowcaseWsMsgHandler implements IWsMsgHandler {
   @Override
   public Object onClose(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
     Tio.remove(channelContext, "receive close flag");
+    log.info("receive close flag");
+//    handleHandshake.closeHandle(channelContext.toString());
     return null;
   }
 
