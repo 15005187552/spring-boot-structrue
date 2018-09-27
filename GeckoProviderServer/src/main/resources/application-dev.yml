@@ -1,0 +1,10 @@
+appInfo:
+  webRoot: "E://upload/"
+  webPath: "https://mhs.1322.com"
+  filePath: "${appInfo.webRoot}/gecko/"
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.8.167:3306/geckodb?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: root
