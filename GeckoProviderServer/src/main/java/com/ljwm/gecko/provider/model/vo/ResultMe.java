@@ -36,5 +36,5 @@ public class ResultMe {
 
   private String avatarPath;
 
-  private ProviderVo provider;
+  private ProviderSimpleVo provider;
 }

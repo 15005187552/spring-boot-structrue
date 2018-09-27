@@ -29,7 +29,9 @@ import java.util.List;
 public class MessageService {
 
 
-  public static final String TOPIC_PUSH_TO_ADMIN = "TOPIC_PUSH_TO_ADMIN";         // 推送消息给Admin
+  public static final String TOPIC_PUSH_TO_ADMIN = "TOPIC_PUSH_TO_ADMIN";
+  // 推送消息给Admin
+  public static final String TOPIC_PUSH_FROM_ADMIN = "TOPIC_PUSH_FROM_ADMIN";         // 推送消息给Admin
 
   public static final String TOPIC_CUSTOMER_MESSAGE = "TOPIC_CUSTOMER_MESSAGE"; // 客服消息Topic
 
@@ -93,6 +95,8 @@ public class MessageService {
 
   }
 
-
+  public void pushTest(){
+    kafkaTemplate.send(TOPIC_PUSH_TO_ADMIN,"key","45645");
+  }
 }
 

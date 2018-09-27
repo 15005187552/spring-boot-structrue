@@ -2,12 +2,16 @@ spring:
   kafka:
     bootstrap-servers: 192.168.8.17:9092
     producer:
-      retries: 3
+      retries: 0
       batch-size: 16384
       buffer-memory: 33554432
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      servers: 192.168.8.17:9092
+#      zookeeper:
+#        connect: 192.168.8.17:2181
     consumer:
+#      servers: 192.168.8.17:9092
       group-id: GeckoIm
       auto-offset-reset: earliest
       enable-auto-commit: true

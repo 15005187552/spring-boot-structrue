@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.ProviderGoodsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.ProviderGoods">
+        <id column="ID" property="id" />
+        <result column="SERVICE_ID" property="serviceId" />
+        <result column="PROVIDER_ID" property="providerId" />
+        <result column="NAME" property="name" />
+        <result column="SUBTITLE" property="subtitle" />
+        <result column="MAIN_IMAGE" property="mainImage" />
+        <result column="DETAIL" property="detail" />
+        <result column="PRICE" property="price" />
+        <result column="STATUS" property="status" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="IS_CONFIRM_PRICE" property="isConfirmPrice" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`SERVICE_ID`          ,`PROVIDER_ID`          ,`NAME`          ,`SUBTITLE`          ,`MAIN_IMAGE`          ,`DETAIL`          ,`PRICE`          ,`STATUS`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`IS_CONFIRM_PRICE`
+    </sql>
+
+    <resultMap id="providerGoodsVo" type="com.ljwm.gecko.base.model.vo.ProviderGoodsVo" extends="BaseResultMap">
+      <collection property="providerGoodsPathVoList" column="ID" select="com.ljwm.gecko.base.mapper.ProviderGoodsPathMapper.findByGoodId"/>
+    </resultMap>
+
+    <select id="findByPage" parameterType="map" resultMap="providerGoodsVo">
+        select t.*  from t_provider_goods t
+        <where>
+          <if test="params.text != null and params.text != ''">
+            AND (
+            t.`NAME` LIKE CONCAT('%',#{params.text},'%')
+            )
+          </if>
+          <if test="params.status != null ">
+            AND t.`STATUS` = #{params.status}
+          </if>
+          <if test="params.providerId != null ">
+            AND t.`PROVIDER_ID` = #{params.providerId}
+          </if>
+          <if test="params.serviceId != null ">
+            AND t.`SERVICE_ID` = #{params.serviceId}
+          </if>
+        </where>
+    </select>
+
+</mapper>

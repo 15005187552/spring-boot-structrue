@@ -2,7 +2,8 @@ package com.ljwm.gecko.client.service;
 
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.mapper.AttributeMapper;
-import com.ljwm.gecko.base.model.vo.AttributeCompanyVo;
+import com.ljwm.gecko.base.model.vo.AttributeAttendanceVo;
+import com.ljwm.gecko.base.model.vo.AttributeEmployVo;
 import com.ljwm.gecko.client.model.dto.CompanyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,13 @@ public class AttributeService {
 
   public Result getAllAttribute(CompanyDto companyDto) {
 
-    List<AttributeCompanyVo> list = attributeMapper.selectAllAttribute(companyDto.getCompanyId());
+    List<AttributeEmployVo> list = attributeMapper.selectAllAttribute(companyDto.getCompanyId());
     return Result.success(list);
+  }
+
+  public Result getAttendanceAttribute(CompanyDto companyDto) {
+    List<AttributeAttendanceVo> list = attributeMapper.selectAttendanceAttribute(companyDto.getCompanyId());
+    return Result.success(list);
+
   }
 }

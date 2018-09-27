@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.ProviderGoodsPathMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.ProviderGoodsPath">
+        <id column="ID" property="id" />
+        <result column="GOOD_ID" property="goodId" />
+        <result column="PIC_PATH" property="picPath" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`GOOD_ID`          ,`PIC_PATH`          ,`CREATE_TIME`          ,`UPDATE_TIME`
+    </sql>
+
+    <delete id="deleteByGoodId" parameterType="long">
+      delete from t_provider_goods_path where GOOD_ID=#{goodId}
+    </delete>
+
+    <resultMap id="providerGoodsPath" type="com.ljwm.gecko.base.model.vo.ProviderGoodsVo" extends="BaseResultMap">
+
+    </resultMap>
+    <select id="findByGoodId" parameterType="long" resultMap="providerGoodsPath">
+      select t.*  from t_provider_goods_path t where t.GOOD_ID=#{goodId}
+    </select>
+</mapper>

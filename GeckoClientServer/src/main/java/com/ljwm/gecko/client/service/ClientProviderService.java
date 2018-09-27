@@ -304,11 +304,11 @@ public class ClientProviderService {
   }
 
   public ProviderVo findProviderByMemberId(Long memberId){
-    return providerMapper.findProviderSimpleVoByMemberId(memberId);
+    return providerMapper.findProviderByMemberId(memberId);
   }
 
   public ProviderVo findProviderByProviderId(Long memberId){
-    return providerMapper.findProviderSimpleVoByMemberId(memberId);
+    return providerMapper.findProviderByMemberId(memberId);
   }
 
   public Page<ProviderSimpleVo> findClientByPage(ProviderQueryDto query) {

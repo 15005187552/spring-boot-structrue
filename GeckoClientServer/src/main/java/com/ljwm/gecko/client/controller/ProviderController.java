@@ -7,7 +7,6 @@ import com.ljwm.gecko.base.model.dto.ProviderDto;
 import com.ljwm.gecko.base.model.dto.ProviderQueryDto;
 import com.ljwm.gecko.base.model.vo.ProviderSimpleVo;
 import com.ljwm.gecko.base.model.vo.ProviderVo;
-import com.ljwm.gecko.base.service.ProviderService;
 import com.ljwm.gecko.client.service.ClientProviderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
