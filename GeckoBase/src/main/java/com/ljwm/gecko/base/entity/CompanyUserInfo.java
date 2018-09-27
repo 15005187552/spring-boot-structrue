@@ -1,21 +1,17 @@
 package com.ljwm.gecko.base.entity;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -75,22 +71,6 @@ public class CompanyUserInfo implements Serializable {
     @ApiModelProperty(value = "离职日期")
     @TableField("`TERM_DATE`")
     private Date termDate;
-
-    @ApiModelProperty(value = "社保缴费基数")
-    @TableField("`SOCIAL_BASE`")
-    private BigDecimal socialBase;
-
-    @ApiModelProperty(value = "公积金基数")
-    @TableField("`FUND_BASE`")
-    private BigDecimal fundBase;
-
-    @ApiModelProperty(value = "公司公积金比例")
-    @TableField("`FUND_COM`")
-    private BigDecimal fundCom;
-
-    @ApiModelProperty(value = "个人公积金比例")
-    @TableField("`FUND_PERSON`")
-    private BigDecimal fundPerson;
 
     @ApiModelProperty(value = "城市编码")
     @TableField("`WORK_CITY`")
@@ -156,14 +136,6 @@ public class CompanyUserInfo implements Serializable {
     public static final String STATION = "`STATION`";
 
     public static final String TERM_DATE = "`TERM_DATE`";
-
-    public static final String SOCIAL_BASE = "`SOCIAL_BASE`";
-
-    public static final String FUND_BASE = "`FUND_BASE`";
-
-    public static final String FUND_COM = "`FUND_COM`";
-
-    public static final String FUND_PERSON = "`FUND_PERSON`";
 
     public static final String WORK_CITY = "`WORK_CITY`";
 

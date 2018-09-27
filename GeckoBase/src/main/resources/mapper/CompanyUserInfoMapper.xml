@@ -14,10 +14,6 @@
         <result column="DEPARTMENT" property="department" />
         <result column="STATION" property="station" />
         <result column="TERM_DATE" property="termDate" />
-        <result column="SOCIAL_BASE" property="socialBase" />
-        <result column="FUND_BASE" property="fundBase" />
-        <result column="FUND_COM" property="fundCom" />
-        <result column="FUND_PERSON" property="fundPerson" />
         <result column="WORK_CITY" property="workCity" />
         <result column="MARITAL_STATUS" property="maritalStatus" />
         <result column="NTRODUCE_TALENTS" property="ntroduceTalents" />
@@ -33,7 +29,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `COMPANY_USER_ID`          ,`JOB_NUM`          ,`EDUCATION`          ,`PERSON_STATE`          ,`EMPLOYEE`          ,`HIRE_DATE`          ,`EMPLOYEE_TYPE`          ,`DEPARTMENT`          ,`STATION`          ,`TERM_DATE`          ,`SOCIAL_BASE`          ,`FUND_BASE`          ,`FUND_COM`          ,`FUND_PERSON`          ,`WORK_CITY`          ,`MARITAL_STATUS`          ,`NTRODUCE_TALENTS`          ,`BANK`          ,`BANK_NUM`          ,`SOCIAL_NUM`          ,`FUND_NUM`          ,`SPECIAL_INDUSTRY`          ,`IS_INVESTOR`          ,`EMAIL`          ,`REMARK`
+          `COMPANY_USER_ID`          ,`JOB_NUM`          ,`EDUCATION`          ,`PERSON_STATE`          ,`EMPLOYEE`          ,`HIRE_DATE`          ,`EMPLOYEE_TYPE`          ,`DEPARTMENT`          ,`STATION`          ,`TERM_DATE`          ,`WORK_CITY`          ,`MARITAL_STATUS`          ,`NTRODUCE_TALENTS`          ,`BANK`          ,`BANK_NUM`          ,`SOCIAL_NUM`          ,`FUND_NUM`          ,`SPECIAL_INDUSTRY`          ,`IS_INVESTOR`          ,`EMAIL`          ,`REMARK`
     </sql>
 
 </mapper>
