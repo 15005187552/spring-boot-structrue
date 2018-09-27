@@ -124,4 +124,8 @@
       </if>
     </select>
 
+    <select id="findProviderListByMemberId" parameterType="long" resultMap="providerVo">
+      select DISTINCT t.*  from t_provider t,t_provider_user tpu where t.ID=tpu.PROVIDER_ID and tpu.MEMBER_ID=#{memberId}
+    </select>
+
 </mapper>

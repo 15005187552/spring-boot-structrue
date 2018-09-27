@@ -307,8 +307,8 @@ public class ClientProviderService {
     return providerMapper.findProviderByMemberId(memberId);
   }
 
-  public ProviderVo findProviderByProviderId(Long memberId){
-    return providerMapper.findProviderByMemberId(memberId);
+  public ProviderVo findProviderByProviderId(Long providerId){
+    return providerMapper.findProviderByProviderId(providerId);
   }
 
   public Page<ProviderSimpleVo> findClientByPage(ProviderQueryDto query) {
