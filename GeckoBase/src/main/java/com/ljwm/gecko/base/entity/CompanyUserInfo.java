@@ -37,7 +37,7 @@ public class CompanyUserInfo implements Serializable {
 
 
     @ApiModelProperty(value = "ID主键")
-    @TableId(value = "`COMPANY_USER_ID`", type = IdType.AUTO)
+    @TableId(value = "`COMPANY_USER_ID`", type = IdType.INPUT)
     private Long companyUserId;
 
     @ApiModelProperty(value = "工号")
