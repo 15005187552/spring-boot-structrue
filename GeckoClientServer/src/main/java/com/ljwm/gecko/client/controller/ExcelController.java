@@ -31,8 +31,8 @@ public class ExcelController {
   @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("/personInfo/import")
   @ApiOperation("人员信息导入")
-  public Result improtPersonInfo(@RequestParam("file")MultipartFile file, @RequestParam("companyId")Long companyId) throws Exception {
-    excelService.improtPersonInfo(file, companyId);
+  public Result importPersonInfo(@RequestParam("file")MultipartFile file, @RequestParam("companyId")Long companyId) throws Exception {
+    excelService.importPersonInfo(file, companyId);
     return Result.success("导入成功！");
   }
 

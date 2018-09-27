@@ -107,13 +107,13 @@ public class PersonInfoDto implements Serializable {
   @ApiModelProperty(value = "电子邮箱")
   private String email;
 
-  @ApiModelProperty(value = "省")
+  @ApiModelProperty(value = "居住省")
   private String province;
 
-  @ApiModelProperty(value = "城市")
+  @ApiModelProperty(value = "居住城市")
   private String city;
 
-  @ApiModelProperty(value = "区")
+  @ApiModelProperty(value = "居住区")
   private String area;
 
   @ApiModelProperty(value = "详细地址")
