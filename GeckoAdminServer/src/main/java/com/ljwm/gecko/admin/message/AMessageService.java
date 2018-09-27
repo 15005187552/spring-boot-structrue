@@ -69,16 +69,11 @@ public class AMessageService extends MessageService {
 
       log.info("PushMessage : {}", pushMessage);
 
-      kafkaTemplate.send(TOPIC_PUSH_FROM_ADMIN, JSON.toJSONString(Packet.create(TOPIC_PUSH_FROM_ADMIN, pushMessage)));
-
       if (socketInfo.size() > 0) {
+        kafkaTemplate.send(TOPIC_PUSH_FROM_ADMIN, JSON.toJSONString(Packet.create(TOPIC_PUSH_FROM_ADMIN, pushMessage)));
 
         log.info("Send To Kafka Message Queue Successfully !");
       }
     }
-  }
-
-  public void adminSend() {
-    kafkaTemplate.send(TOPIC_PUSH_FROM_ADMIN, "key", "4564789");
   }
 }

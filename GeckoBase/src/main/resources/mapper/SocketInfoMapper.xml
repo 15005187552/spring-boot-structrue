@@ -10,14 +10,13 @@
         <result column="STATUS" property="status" />
         <result column="CHANNEL" property="channel" />
         <result column="IP" property="ip" />
-        <result column="LAST_IP" property="lastIp" />
         <result column="CONNECT_TIME" property="connectTime" />
         <result column="CONNECT_CONTENXT_ID" property="connectContenxtId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`TARGET_ID`          ,`TARGET_TABLE`          ,`STATUS`          ,`CHANNEL`          ,`IP`          ,`LAST_IP`          ,`CONNECT_TIME`          ,`CONNECT_CONTENXT_ID`
+          `ID`          ,`TARGET_ID`          ,`TARGET_TABLE`          ,`STATUS`          ,`CHANNEL`          ,`IP`          ,`CONNECT_TIME`          ,`CONNECT_CONTENXT_ID`
     </sql>
 
 </mapper>
