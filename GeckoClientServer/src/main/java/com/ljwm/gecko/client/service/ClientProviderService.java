@@ -238,7 +238,6 @@ public class ClientProviderService {
           providerServicesMapper.insert(providerServices);
         }
         //删除用户
-        providerUserMapper.delete(provider.getId());
         List<ProviderUser> providerUserList = providerUserMapper.selectByMap(Kv.by("PROVIDER_ID",provider.getId()));
         List<Long> oldMemberIds = Lists.newArrayList();
         if (CollectionUtils.isNotEmpty(providerUserList)){
