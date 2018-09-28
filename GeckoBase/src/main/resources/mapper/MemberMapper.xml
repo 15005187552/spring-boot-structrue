@@ -135,7 +135,7 @@
   </select>
 
   <select id="findMemberVoByMemberId" parameterType="long" resultMap="MemberVo">
-    select *  from t_member where MEMBER_ID=#{memberId}
+    select *  from t_member where ID=#{memberId}
   </select>
 
   <resultMap id="memberCheckVo" type="com.ljwm.gecko.base.model.vo.MemberVo" extends="BaseResultMap">
