@@ -46,4 +46,8 @@
           </if>
         </where>
     </select>
+
+    <select id="findProviderGoodsVoById" parameterType="long" resultMap="providerGoodsVo">
+      select t.*  from t_provider_goods t where t.ID=#{id} limit 1
+    </select>
 </mapper>
