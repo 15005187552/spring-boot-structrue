@@ -171,8 +171,10 @@ public class AttendanceService {
             }
           }
         }
+      }else {
+        return Result.fail(naturalPerson.getName()+"的证件号码或者证照类型有误！");
       }
     }
-    return Result.success("成功!");
+    return Result.success("成功！");
   }
 }
