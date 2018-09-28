@@ -1,19 +1,16 @@
 package com.ljwm.gecko.base.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -21,7 +18,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author Levis
- * @since 2018-09-27
+ * @since 2018-09-28
  */
 @Data
 @SuppressWarnings("ALL")
@@ -38,13 +35,9 @@ public class Attendance implements Serializable {
     @TableId(value = "`ID`", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "时间")
-    @TableField("`DATE`")
-    private String date;
-
-    @ApiModelProperty(value = "公司用户关联ID")
-    @TableField("`COMPANY_USER_ID`")
-    private Long companyUserId;
+    @ApiModelProperty(value = "考勤报税数据ID")
+    @TableField("`TAX_ID`")
+    private String taxId;
 
     @ApiModelProperty(value = "属性ID")
     @TableField("`ATTRIBUTE_ID`")
@@ -57,9 +50,7 @@ public class Attendance implements Serializable {
 
     public static final String ID = "`ID`";
 
-    public static final String DATE = "`DATE`";
-
-    public static final String COMPANY_USER_ID = "`COMPANY_USER_ID`";
+    public static final String TAX_ID = "`TAX_ID`";
 
     public static final String ATTRIBUTE_ID = "`ATTRIBUTE_ID`";
 
