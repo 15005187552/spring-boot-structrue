@@ -50,6 +50,10 @@ public class AttendanceService {
   @Autowired
   CompanySpecialMapper companySpecialMapper;
 
+  @Autowired
+  SpecialDeductionMapper specialDeductionMapper;
+
+
   @Transactional
   public Result commit(AttendanceForm attendanceForm) {
     Long companyId = attendanceForm.getCompanyId();
@@ -114,20 +118,34 @@ public class AttendanceService {
           }*/
           List<CompanySpecial> companySpecialList = companySpecialMapper.selectList(new QueryWrapper<CompanySpecial>().eq(CompanySpecial.COMPANY_ID, companyId));
           for (CompanySpecial companySpecial : companySpecialList){
+            SpecialDeduction specialDeduction = specialDeductionMapper.selectOne(new QueryWrapper<SpecialDeduction>().like(SpecialDeduction.NAME, "公积金"));
             TaxSpecial taxSpecial = taxSpecialMapper.selectOne(new QueryWrapper<TaxSpecial>().eq(TaxSpecial.TAX_ID, tax.getId()).eq(TaxSpecial.SPECIAL_DEDU_ID, companySpecial.getSpecialId()));
-            if (taxSpecial != null){
-              BigDecimal companyPer = companySpecial.getCompanyPer();
-              BigDecimal personPer = companySpecial.getPersonPer();
-              taxSpecial.setUpdateTime(date).setUpdater(SecurityKit.currentId()).setCompanyMoney(socialBase.multiply(companyPer).toString())
-                .setPersonalMoney(socialBase.multiply(personPer).toString()).setCompanyPercent(companyPer.toString()).setPersonalPercent(personPer.toString());
-              taxSpecialMapper.updateById(taxSpecial);
-            }else {
-              BigDecimal companyPer = companySpecial.getCompanyPer();
-              BigDecimal personPer = companySpecial.getPersonPer();
-              taxSpecial.setUpdateTime(date).setUpdater(SecurityKit.currentId()).setCompanyMoney(socialBase.multiply(companyPer).toString())
-                .setPersonalMoney(socialBase.multiply(personPer).toString()).setCompanyPercent(companyPer.toString()).setPersonalPercent(personPer.toString())
-                .setTaxId(tax.getId()).setSpecialDeduId(companySpecial.getSpecialId());
-              taxSpecialMapper.insert(taxSpecial);
+            if (specialDeduction.getId().equals(companySpecial.getSpecialId())){
+              if(taxSpecial != null) {
+                taxSpecial.setUpdater(SecurityKit.currentId()).setUpdateTime(date).setCompanyMoney(fundBase.multiply(fundPer).toString())
+                  .setPersonalMoney(fundBase.multiply(fundPer).toString()).setCompanyPercent(fundPer.toString()).setPersonalPercent(fundPer.toString());
+                taxSpecialMapper.updateById(taxSpecial);
+              } else {
+                taxSpecial.setUpdater(SecurityKit.currentId()).setUpdateTime(date).setCompanyMoney(fundBase.multiply(fundPer).toString())
+                  .setPersonalMoney(fundBase.multiply(fundPer).toString()).setCompanyPercent(fundPer.toString()).setPersonalPercent(fundPer.toString())
+                  .setTaxId(tax.getId()).setSpecialDeduId(companySpecial.getSpecialId());
+                taxSpecialMapper.updateById(taxSpecial);
+              }
+            } else {
+              if (taxSpecial != null) {
+                BigDecimal companyPer = companySpecial.getCompanyPer();
+                BigDecimal personPer = companySpecial.getPersonPer();
+                taxSpecial.setUpdateTime(date).setUpdater(SecurityKit.currentId()).setCompanyMoney(socialBase.multiply(companyPer).toString())
+                  .setPersonalMoney(socialBase.multiply(personPer).toString()).setCompanyPercent(companyPer.toString()).setPersonalPercent(personPer.toString());
+                taxSpecialMapper.updateById(taxSpecial);
+              } else {
+                BigDecimal companyPer = companySpecial.getCompanyPer();
+                BigDecimal personPer = companySpecial.getPersonPer();
+                taxSpecial.setUpdateTime(date).setUpdater(SecurityKit.currentId()).setCompanyMoney(socialBase.multiply(companyPer).toString())
+                  .setPersonalMoney(socialBase.multiply(personPer).toString()).setCompanyPercent(companyPer.toString()).setPersonalPercent(personPer.toString())
+                  .setTaxId(tax.getId()).setSpecialDeduId(companySpecial.getSpecialId());
+                taxSpecialMapper.insert(taxSpecial);
+              }
             }
           }
           if(tableName == TableNameEnum.T_ADD_SPECIAL.getCode()){
