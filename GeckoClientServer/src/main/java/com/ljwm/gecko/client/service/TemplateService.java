@@ -1,5 +1,6 @@
 package com.ljwm.gecko.client.service;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.service.CommonService;
@@ -176,7 +177,7 @@ public class TemplateService {
       i--;
     }
     for (Template template : list) {
-      map.put(String.valueOf(template.getId()), attributeMapper.selectById(template.getId()).getName());
+      map.put(String.valueOf(template.getId()), attributeMapper.selectById(template.getAttributeId()).getName());
     }
     response.reset();
     response.setContentType("multipart/form-data");
