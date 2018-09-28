@@ -49,4 +49,7 @@ public class ProviderDto {
 
   @ApiModelProperty("营业执照图片url")
   private String picPath;
+
+  @ApiModelProperty("报税员是否修改")
+  private Boolean isChange=false;
 }

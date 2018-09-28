@@ -201,7 +201,7 @@ public class ClientProviderService {
             String destDir = appInfo.getFilePath() + Constant.PROVIDER + member.getId() + "/";
             Fileutil.cutGeneralFile(srcPath, destDir);
             provider.setPicPath(Constant.PROVIDER + member.getId() + "/" + providerDto.getPicPath());
-            provider.setInfoValidateState(0);
+            provider.setInfoValidateState(InfoValidateStateEnum.INIT.getCode());
             provider.setValidateText(StringUtils.EMPTY);
           }
         }
@@ -225,7 +225,11 @@ public class ClientProviderService {
             providerServices.setVersion(provider.getVersion());
             providerServices.setProviderId(providerDto.getId());
             providerServices.setId(null);
-            if (!Objects.equals(providerServices.getValidateState(),ProviderStatEnum.CONFIRM_SUCCESS.getCode())){
+            if (!providerDto.getIsChange()){
+              if (!Objects.equals(providerServices.getValidateState(),ProviderStatEnum.CONFIRM_SUCCESS.getCode())){
+                providerServices.setValidateState(ProviderStatEnum.WAIT_CONFIRM.getCode());
+              }
+            }else {
               providerServices.setValidateState(ProviderStatEnum.WAIT_CONFIRM.getCode());
             }
           }else {
@@ -295,6 +299,11 @@ public class ClientProviderService {
               }
             }
           }
+        }
+        if (providerDto.getIsChange()){
+          provider.setValidateText(StringUtils.EMPTY);
+          provider.setInfoValidateState(InfoValidateStateEnum.INIT.getCode());
+          provider.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
         }
         providerMapper.updateById(provider);
       } else {
