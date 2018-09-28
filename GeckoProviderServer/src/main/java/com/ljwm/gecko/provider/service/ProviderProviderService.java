@@ -18,8 +18,4 @@ public class ProviderProviderService {
   public List<ProviderVo> findProviderListByMemberId(Long memberId){
     return providerMapper.findProviderListByMemberId(memberId);
   }
-
-  public ProviderVo findProviderByProviderId(Long providerId){
-    return providerMapper.findProviderByProviderId(providerId);
-  }
 }

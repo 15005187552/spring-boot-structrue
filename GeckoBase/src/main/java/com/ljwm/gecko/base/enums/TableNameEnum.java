@@ -17,11 +17,11 @@ public enum TableNameEnum implements CommonEnum {
   T_MEMBER(4,"t_member"),
   T_ADMIN(5,"t_admin"),
   T_PROVIDER(6,"t_provider"),
-  ;
-
+  T_ATTENDANCE(7, "t_attendance_attibute");
   private Integer code;
 
   private String name;
+
 
   TableNameEnum(Integer code, String name){
     this.code = code;

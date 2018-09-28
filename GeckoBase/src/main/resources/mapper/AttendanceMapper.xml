@@ -5,15 +5,14 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Attendance">
         <id column="ID" property="id" />
-        <result column="DATE" property="date" />
-        <result column="COMPANY_USER_ID" property="companyUserId" />
+        <result column="TAX_ID" property="taxId" />
         <result column="ATTRIBUTE_ID" property="attributeId" />
         <result column="VALUE" property="value" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`DATE`          ,`COMPANY_USER_ID`          ,`ATTRIBUTE_ID`          ,`VALUE`
+          `ID`          ,`TAX_ID`          ,`ATTRIBUTE_ID`          ,`VALUE`
     </sql>
 
 </mapper>

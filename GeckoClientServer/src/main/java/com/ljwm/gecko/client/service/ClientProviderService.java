@@ -34,7 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -201,7 +200,7 @@ public class ClientProviderService {
             String destDir = appInfo.getFilePath() + Constant.PROVIDER + member.getId() + "/";
             Fileutil.cutGeneralFile(srcPath, destDir);
             provider.setPicPath(Constant.PROVIDER + member.getId() + "/" + providerDto.getPicPath());
-            provider.setInfoValidateState(InfoValidateStateEnum.INIT.getCode());
+            provider.setInfoValidateState(0);
             provider.setValidateText(StringUtils.EMPTY);
           }
         }
@@ -225,11 +224,7 @@ public class ClientProviderService {
             providerServices.setVersion(provider.getVersion());
             providerServices.setProviderId(providerDto.getId());
             providerServices.setId(null);
-            if (!providerDto.getIsChange()){
-              if (!Objects.equals(providerServices.getValidateState(),ProviderStatEnum.CONFIRM_SUCCESS.getCode())){
-                providerServices.setValidateState(ProviderStatEnum.WAIT_CONFIRM.getCode());
-              }
-            }else {
+            if (!Objects.equals(providerServices.getValidateState(),ProviderStatEnum.CONFIRM_SUCCESS.getCode())){
               providerServices.setValidateState(ProviderStatEnum.WAIT_CONFIRM.getCode());
             }
           }else {
@@ -243,6 +238,7 @@ public class ClientProviderService {
           providerServicesMapper.insert(providerServices);
         }
         //删除用户
+        providerUserMapper.delete(provider.getId());
         List<ProviderUser> providerUserList = providerUserMapper.selectByMap(Kv.by("PROVIDER_ID",provider.getId()));
         List<Long> oldMemberIds = Lists.newArrayList();
         if (CollectionUtils.isNotEmpty(providerUserList)){
@@ -282,28 +278,17 @@ public class ClientProviderService {
               if (providerUser.getRolesCode().contains(String.valueOf(ProviderRoleEnum.PREPARER.getCode()))){
                   String [] roles = providerUser.getRolesCode().split("\\,");
                   List<String> list=Arrays.asList(roles);
-                  List<String> newList=Lists.newArrayList();
-                  for (String role :list){
-                    String temp = String.valueOf(ProviderRoleEnum.PREPARER.getCode());
-                    if (!Objects.equals(role,temp)){
-                      newList.add(role);
-                    }
-                  }
-                  if (CollectionUtils.isEmpty(newList)){
+                  list.remove(String.valueOf(ProviderRoleEnum.PREPARER.getCode()));
+                  if (CollectionUtils.isEmpty(list)){
                     providerUserMapper.deleteById(providerUser.getId());
                   }else {
-                    String roleNew = Joiner.on(",").join(newList);
+                    String roleNew = Joiner.on(",").join(list);
                     providerUser.setRolesCode(roleNew);
                     providerUserMapper.updateById(providerUser);
                   }
               }
             }
           }
-        }
-        if (providerDto.getIsChange()){
-          provider.setValidateText(StringUtils.EMPTY);
-          provider.setInfoValidateState(InfoValidateStateEnum.INIT.getCode());
-          provider.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
         }
         providerMapper.updateById(provider);
       } else {

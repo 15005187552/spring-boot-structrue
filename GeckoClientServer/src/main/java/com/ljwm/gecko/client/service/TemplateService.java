@@ -16,6 +16,7 @@ import com.ljwm.gecko.client.model.dto.TemplateDto;
 import com.ljwm.gecko.client.model.dto.TemplateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -57,6 +58,7 @@ public class TemplateService {
     "工资账号", "社保账号", "公积金账号", "是否特定行业", "是否股东、投资者", "是否残疾", "是否烈属", "是否孤老", "残疾证号", "烈属证号",
     "电子邮箱", "居住省份", "居住城市", "居住所在区", "居住详细地址", "备注"};
 
+  @Transactional
   public Result uploadTemplate(TemplateForm templateForm) {
     List<TemplateDto> list = templateForm.getList();
     for(TemplateDto templateDto : list){
@@ -127,6 +129,7 @@ public class TemplateService {
     return Result.success(map);
   }
 
+  @Transactional
   public Result uploadAttendanceTem(TemplateForm templateForm) {
     List<TemplateDto> list = templateForm.getList();
     for(TemplateDto templateDto : list){
@@ -153,11 +156,10 @@ public class TemplateService {
     int i = 0;
     for (String string : str){
       map.put(String.valueOf(i), string);
-      i++;
+      i--;
     }
     for (Template template : list) {
-      map.put(String.valueOf(i), attributeMapper.selectById(template.getAttributeId()).getName());
-      i++;
+      map.put(String.valueOf(template.getId()), attributeMapper.selectById(template.getAttributeId()).getName());
     }
     return Result.success(map);
   }
@@ -171,11 +173,10 @@ public class TemplateService {
     int i = 0;
     for (String string : str){
       map.put(String.valueOf(i), string);
-      i++;
+      i--;
     }
     for (Template template : list) {
-      map.put(String.valueOf(i), attributeMapper.selectById(template.getId()).getName());
-      i++;
+      map.put(String.valueOf(template.getId()), attributeMapper.selectById(template.getId()).getName());
     }
     response.reset();
     response.setContentType("multipart/form-data");

@@ -8,10 +8,7 @@ import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.dao.LocationDao;
-import com.ljwm.gecko.base.entity.CompanyUser;
-import com.ljwm.gecko.base.entity.CompanyUserInfo;
-import com.ljwm.gecko.base.entity.Member;
-import com.ljwm.gecko.base.entity.NaturalPerson;
+import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.enums.*;
 import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.dto.EmployeeDto;
@@ -75,6 +72,9 @@ public class ExcelService {
   @Autowired
   TaxOtherReduceMapper taxOtherReduceMapper;
 
+  @Autowired
+  AttributeMapper attributeMapper;
+
   @Transactional
   public void importPersonInfo(MultipartFile file, Long companyId) throws Exception {
     isHasProperty(companyId);
@@ -102,94 +102,32 @@ public class ExcelService {
     }
   }
 
-  public void importEmployeeInfo(PersonInfoDto personInfoDto, Long companyId) throws ParseException {
-    Map<String, Object> map = new HashedMap();
-    map.put("REG_MOBILE", personInfoDto.getRegMobile());
-    List<Member> list = memberMapper.selectByMap(map);
-    Long memberId;
-    if(CollectionUtil.isNotEmpty(list)){
-      memberId = list.get(0).getId();
-    } else {
-      //发送短信邀请码  并且插入数据库
-      Member member = new Member();
-      member.setRegMobile(personInfoDto.getRegMobile())
-        .setCreateTime(new Date())
-        .setDisabled(DisabledEnum.DISABLED.getInfo());
-      memberMapper.insert(member);
-      memberId = member.getId();
+
+  public String importAttendance(MultipartFile file, Long companyId, String declareTime) throws IOException {
+    isHasProperty(companyId);
+    InputStream inputStream = file.getInputStream();
+    ExcelLogs logs =new ExcelLogs();
+    Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs , 0);
+    for(Map m:importExcel){
+      for (Object key:m.keySet()){
+        if(key.toString().equals("*姓名")){
+          Object name = m.get(key);
+        }
+        if(key.toString().equals("*证件类型")){
+          Object certificate = m.get(key);
+        }
+        if(key.toString().equals("*证照号码")){
+          Object certNum = m.get(key);
+        }
+        Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.NAME, key.toString()));
+        Long itemId = attribute.getItemId();
+       // String tableName = EnumUtil.getEnumBycode(TableNameEnum.class, attribute.getTableName()).getValue();
+
+
+      }
     }
-    Integer provinceCode = locationDao.getProvinceCode(personInfoDto.getProvince());
-    Integer cityCode = locationDao.getCityCode(personInfoDto.getCity(), provinceCode);
-    Integer areaCode = locationDao.getAreaCode(personInfoDto.getArea(), cityCode);
-    NaturalPerson naturalPerson = new NaturalPerson();
-    naturalPerson.setMemberId(memberId)
-      .setCountry(EnumUtil.getEnumByName(CountryType.class, personInfoDto.getCountry()).getCode())
-      .setName(personInfoDto.getName())
-      .setGender(EnumUtil.getEnumByName(GenderEnum.class, personInfoDto.getGender()).getCode())
-      .setBirthday(TimeUtil.parseString(personInfoDto.getBirthday()))
-      .setCertificate(EnumUtil.getEnumByName(CertificateType.class, personInfoDto.getCertificate()).getCode())
-      .setProvince(provinceCode)
-      .setCity(cityCode)
-      .setArea(areaCode)
-      .setAddress(personInfoDto.getAddress())
-      .setCertNum(personInfoDto.getCertNum())
-      .setDisablityNum(personInfoDto.getDisablityNum())
-      .setMatrtyrNum(personInfoDto.getMatrtyrNum())
-      .setCreatTime(new Date()).setUpdateTime(new Date());
-    NaturalPerson naturalPerson1 = naturalPersonMapper.selectById(memberId);
-    if(naturalPerson1 != null){
-      naturalPersonMapper.updateById(naturalPerson);
-    } else {
-      naturalPersonMapper.insert(naturalPerson);
-    }
-    String[] str = new String[RoleCodeType.values().length];
-    StringBuffer stringBuffer = new StringBuffer();
-    for (int j = 0; j < str.length; j++) {
-      str[j] = "0";
-      stringBuffer.append(str[j]);
-    }
-    String role = stringBuffer.toString();
-    CompanyUser companyUser = companyUserDao.insertOrUpdate(memberId, companyId, role);
-    Long companyUserId = companyUser.getId();
-    CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUserId);
-    CompanyUserInfo companyUserInfo1 = new CompanyUserInfo();
-    Integer workCity = locationDao.getCityCode(personInfoDto.getWorkCity(), null);
-    companyUserInfo1.setCompanyUserId(companyUserId)
-      .setJobNum(personInfoDto.getJobNum())
-      .setEducation(EnumUtil.getEnumByName(EducationEnum.class, personInfoDto.getEducation()).getCode())
-      .setPersonState(EnumUtil.getEnumByName(PersonStateEnum.class, personInfoDto.getPersonState()).getCode())
-      .setEmployee(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getEmployee()).getCode())
-      .setHireDate(TimeUtil.parseString(personInfoDto.getHireDate()))
-      .setEmployeeType(personInfoDto.getEmployeeType())
-      .setDepartment(personInfoDto.getDepartment())
-      .setStation(personInfoDto.getStation())
-      .setTermDate(TimeUtil.parseString(personInfoDto.getTermDate()))
-      /* .setSocialComPer(new BigDecimal(personInfoDto.getSocialComPer()))
-       .setComPension(new BigDecimal(personInfoDto.getComPension()))
-       .setComMedical(new BigDecimal(personInfoDto.getComMedical()))
-       .setComUnemploy(new BigDecimal(personInfoDto.getComUnemploy()))
-       .setComInjury(new BigDecimal(personInfoDto.getComInjury()))
-       .setComBirth(new BigDecimal(personInfoDto.getComBirth()))
-       .setSocialPersonPer(new BigDecimal(personInfoDto.getSocialPersonPer()))
-       .setPersonPension(new BigDecimal(personInfoDto.getPersonPension()))
-       .setPersonMedical(new BigDecimal(personInfoDto.getPersonMedical()))
-       .setPersonUnemploy(new BigDecimal(personInfoDto.getPersonUnemploy()))*/
-      .setWorkCity(workCity)
-      .setMaritalStatus(EnumUtil.getEnumByName(MaritalStatusEnum.class, personInfoDto.getMaritalStatus()).getCode())
-      .setNtroduceTalents(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getNtroduceTalents()).getCode())
-      .setBank(personInfoDto.getBank())
-      .setBankNum(personInfoDto.getBankNum())
-      .setSocialNum(personInfoDto.getSocialNum())
-      .setFundNum(personInfoDto.getFundNum())
-      .setSpecialIndustry(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getSpecialIndustry()).getCode())
-      .setIsInvestor(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getIsInvestor()).getCode())
-      .setEmail(personInfoDto.getEmail())
-      .setRemark(personInfoDto.getRemark());
-    if(companyUserInfo != null) {
-      companyUserInfoMapper.updateById(companyUserInfo1);
-    } else {
-      companyUserInfoMapper.insert(companyUserInfo1);
-    }
+
+    return "导入成功！";
   }
 
   public String exportPersonInfoExcel(HttpServletResponse response, Long companyId) throws IOException {
@@ -363,5 +301,95 @@ public class ExcelService {
       importEmployeeInfo(personInfoDto, companyId);
     }
     return Result.success("成功");
+  }
+
+  public void importEmployeeInfo(PersonInfoDto personInfoDto, Long companyId) throws ParseException {
+    Map<String, Object> map = new HashedMap();
+    map.put("REG_MOBILE", personInfoDto.getRegMobile());
+    List<Member> list = memberMapper.selectByMap(map);
+    Long memberId;
+    if(CollectionUtil.isNotEmpty(list)){
+      memberId = list.get(0).getId();
+    } else {
+      //发送短信邀请码  并且插入数据库
+      Member member = new Member();
+      member.setRegMobile(personInfoDto.getRegMobile())
+        .setCreateTime(new Date())
+        .setDisabled(DisabledEnum.DISABLED.getInfo());
+      memberMapper.insert(member);
+      memberId = member.getId();
+    }
+    Integer provinceCode = locationDao.getProvinceCode(personInfoDto.getProvince());
+    Integer cityCode = locationDao.getCityCode(personInfoDto.getCity(), provinceCode);
+    Integer areaCode = locationDao.getAreaCode(personInfoDto.getArea(), cityCode);
+    NaturalPerson naturalPerson = new NaturalPerson();
+    naturalPerson.setMemberId(memberId)
+      .setCountry(EnumUtil.getEnumByName(CountryType.class, personInfoDto.getCountry()).getCode())
+      .setName(personInfoDto.getName())
+      .setGender(EnumUtil.getEnumByName(GenderEnum.class, personInfoDto.getGender()).getCode())
+      .setBirthday(TimeUtil.parseString(personInfoDto.getBirthday()))
+      .setCertificate(EnumUtil.getEnumByName(CertificateType.class, personInfoDto.getCertificate()).getCode())
+      .setProvince(provinceCode)
+      .setCity(cityCode)
+      .setArea(areaCode)
+      .setAddress(personInfoDto.getAddress())
+      .setCertNum(personInfoDto.getCertNum())
+      .setDisablityNum(personInfoDto.getDisablityNum())
+      .setMatrtyrNum(personInfoDto.getMatrtyrNum())
+      .setCreatTime(new Date()).setUpdateTime(new Date());
+    NaturalPerson naturalPerson1 = naturalPersonMapper.selectById(memberId);
+    if(naturalPerson1 != null){
+      naturalPersonMapper.updateById(naturalPerson);
+    } else {
+      naturalPersonMapper.insert(naturalPerson);
+    }
+    String[] str = new String[RoleCodeType.values().length];
+    StringBuffer stringBuffer = new StringBuffer();
+    for (int j = 0; j < str.length; j++) {
+      str[j] = "0";
+      stringBuffer.append(str[j]);
+    }
+    String role = stringBuffer.toString();
+    CompanyUser companyUser = companyUserDao.insertOrUpdate(memberId, companyId, role);
+    Long companyUserId = companyUser.getId();
+    CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUserId);
+    CompanyUserInfo companyUserInfo1 = new CompanyUserInfo();
+    Integer workCity = locationDao.getCityCode(personInfoDto.getWorkCity(), null);
+    companyUserInfo1.setCompanyUserId(companyUserId)
+      .setJobNum(personInfoDto.getJobNum())
+      .setEducation(EnumUtil.getEnumByName(EducationEnum.class, personInfoDto.getEducation()).getCode())
+      .setPersonState(EnumUtil.getEnumByName(PersonStateEnum.class, personInfoDto.getPersonState()).getCode())
+      .setEmployee(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getEmployee()).getCode())
+      .setHireDate(TimeUtil.parseString(personInfoDto.getHireDate()))
+      .setEmployeeType(personInfoDto.getEmployeeType())
+      .setDepartment(personInfoDto.getDepartment())
+      .setStation(personInfoDto.getStation())
+      .setTermDate(TimeUtil.parseString(personInfoDto.getTermDate()))
+      /* .setSocialComPer(new BigDecimal(personInfoDto.getSocialComPer()))
+       .setComPension(new BigDecimal(personInfoDto.getComPension()))
+       .setComMedical(new BigDecimal(personInfoDto.getComMedical()))
+       .setComUnemploy(new BigDecimal(personInfoDto.getComUnemploy()))
+       .setComInjury(new BigDecimal(personInfoDto.getComInjury()))
+       .setComBirth(new BigDecimal(personInfoDto.getComBirth()))
+       .setSocialPersonPer(new BigDecimal(personInfoDto.getSocialPersonPer()))
+       .setPersonPension(new BigDecimal(personInfoDto.getPersonPension()))
+       .setPersonMedical(new BigDecimal(personInfoDto.getPersonMedical()))
+       .setPersonUnemploy(new BigDecimal(personInfoDto.getPersonUnemploy()))*/
+      .setWorkCity(workCity)
+      .setMaritalStatus(EnumUtil.getEnumByName(MaritalStatusEnum.class, personInfoDto.getMaritalStatus()).getCode())
+      .setNtroduceTalents(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getNtroduceTalents()).getCode())
+      .setBank(personInfoDto.getBank())
+      .setBankNum(personInfoDto.getBankNum())
+      .setSocialNum(personInfoDto.getSocialNum())
+      .setFundNum(personInfoDto.getFundNum())
+      .setSpecialIndustry(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getSpecialIndustry()).getCode())
+      .setIsInvestor(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getIsInvestor()).getCode())
+      .setEmail(personInfoDto.getEmail())
+      .setRemark(personInfoDto.getRemark());
+    if(companyUserInfo != null) {
+      companyUserInfoMapper.updateById(companyUserInfo1);
+    } else {
+      companyUserInfoMapper.insert(companyUserInfo1);
+    }
   }
 }
