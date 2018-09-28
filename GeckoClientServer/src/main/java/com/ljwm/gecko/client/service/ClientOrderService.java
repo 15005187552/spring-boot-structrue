@@ -86,7 +86,7 @@ public class ClientOrderService {
       orderItem.setCreateTime(DateUtil.date());
       orderItem.setUpdateTime(DateUtil.date());
       Order order = new Order();
-      if (orderItemDto.getProductServiceId()!=null){
+      if (orderItemDto.getGoodId()!=null){
         //立即支付
         order.setMemberId(SecurityKit.currentId());
         order.setOrderNo(MAIN_ORDER+idWorkerUtil.nextId());
