@@ -1,7 +1,7 @@
 appInfo:
-  webRoot: "E://upload/"
-  webPath: "https://mhs.1322.com"
-  filePath: "${appInfo.webRoot}/gecko/"
+  webRoot: "D://upload/"
+  webPath: "https://mhs.1322.com/static/gecko/"
+  filePath: "${appInfo.webRoot}gecko/"
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
