@@ -36,6 +36,9 @@ public class MemberVo extends Member {
   @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
   private String picPassport;
 
+  @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
+  private String avatarPath;
+
   @JSONField(serializeUsing = StatusWithNameSerializer.ValidateStatSerializer.class)
   private Integer validateState;
 

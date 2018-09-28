@@ -34,4 +34,7 @@ public class OrderItemDto {
   @ApiModelProperty("商品规格id")
   private Long specServiceId;
 
+  @ApiModelProperty(value = "会员id",hidden = true)
+  private Long memberId;
+
 }

@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public interface SpecServicesPriceMapper extends BaseMapper<SpecServicesPrice> {
 
-  SpecServicesPriceSimpleVo findByMap(@Param("params") Kv kv);
+  SpecServicesPriceSimpleVo findByMap(@Param("params") Map map);
 
   List<SpecServicesPriceSimpleVo> find(@Param("params") Map map);
 }

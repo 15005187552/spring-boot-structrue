@@ -70,6 +70,10 @@ public class SpecServicesPrice implements Serializable {
     @TableField("`GOOD_ID`")
     private Long goodId;
 
+    @ApiModelProperty(value = "服务类型id")
+    @TableField("`SERVICE_ID`")
+    private Integer serviceId;
+
 
     public static final String ID = "`ID`";
 

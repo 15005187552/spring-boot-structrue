@@ -41,6 +41,9 @@
         <if test="params.goodId != null ">
           AND t.`GOOD_ID` =#{params.goodId}
         </if>
+        <if test="params.serviceId != null ">
+          AND t.`SERVICE_ID` =#{params.serviceId}
+        </if>
       </where>
     </select>
 

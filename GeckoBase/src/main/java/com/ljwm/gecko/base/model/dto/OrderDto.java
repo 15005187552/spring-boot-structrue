@@ -15,8 +15,5 @@ public class OrderDto {
   private BigDecimal payment;
 
   @ApiModelProperty(value = "订单明细")
-  private List<String> orderItemNoList;
-
-  @ApiModelProperty("单笔订单立即支付")
-  private OrderItemDto orderItemDto;
+  private List<Long> orderItemNoList;
 }
