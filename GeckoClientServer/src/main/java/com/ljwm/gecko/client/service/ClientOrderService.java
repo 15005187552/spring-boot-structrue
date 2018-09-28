@@ -145,7 +145,7 @@ public class ClientOrderService {
     orderItem.setOrderItemNo(SUB_ORDER+idWorkerUtil.nextId());
     orderItem.setCreateTime(DateUtil.date());
     orderItem.setUpdateTime(DateUtil.date());
-    if (orderItem.getProductServiceId()!=null){
+    if (orderItem.getGoodId()!=null){
       orderItem.setOrderItemStatus(OrderStatusEnum.NO_PAID.getCode());
     }else {
       orderItem.setOrderItemStatus(OrderStatusEnum.WAIT.getCode());

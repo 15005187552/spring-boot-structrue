@@ -7,9 +7,7 @@
         <id column="ID" property="id" />
         <result column="ORDER_NO" property="orderNo" />
         <result column="SERVICE_ID" property="serviceId" />
-        <result column="PRODUCT_SERVICE_ID" property="productServiceId" />
-        <result column="SERVICE_NAME" property="serviceName" />
-        <result column="SERVICE_IMAGE" property="serviceImage" />
+        <result column="GOOD_ID" property="goodId" />
         <result column="CURRENT_UNIT_PRICE" property="currentUnitPrice" />
         <result column="QUANTITY" property="quantity" />
         <result column="TOTAL_PRICE" property="totalPrice" />
@@ -19,11 +17,15 @@
         <result column="ORDER_ITEM_NO" property="orderItemNo" />
         <result column="ORDER_ITEM_STATUS" property="orderItemStatus" />
         <result column="PROVIDER_ID" property="providerId" />
+        <result column="DOWN_PAYMENT_RATE" property="downPaymentRate" />
+        <result column="DOWN_PAYMENT_AMOUNT" property="downPaymentAmount" />
+        <result column="REMIAN_AMOUNT" property="remianAmount" />
+        <result column="MEMBER_ID" property="memberId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`ORDER_NO`          ,`SERVICE_ID`          ,`PRODUCT_SERVICE_ID`          ,`SERVICE_NAME`          ,`SERVICE_IMAGE`          ,`CURRENT_UNIT_PRICE`          ,`QUANTITY`          ,`TOTAL_PRICE`          ,`SERVICE_CONTENT`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`ORDER_ITEM_NO`          ,`ORDER_ITEM_STATUS`          ,`PROVIDER_ID`
+          `ID`          ,`ORDER_NO`          ,`SERVICE_ID`          ,`GOOD_ID`          ,`CURRENT_UNIT_PRICE`          ,`QUANTITY`          ,`TOTAL_PRICE`          ,`SERVICE_CONTENT`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`ORDER_ITEM_NO`          ,`ORDER_ITEM_STATUS`          ,`PROVIDER_ID`          ,`DOWN_PAYMENT_RATE`          ,`DOWN_PAYMENT_AMOUNT`          ,`REMIAN_AMOUNT`          ,`MEMBER_ID`
     </sql>
 
     <resultMap id="orderItemVo" type="com.ljwm.gecko.base.model.vo.OrderItemVo" extends="BaseResultMap">
@@ -41,5 +43,4 @@
     <select id="findOrderItemVoList" parameterType="string" resultMap="orderItemVo">
       select t.*  from t_order_item t where t.ORDER_NO=#{orderNo}
     </select>
-
 </mapper>

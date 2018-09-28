@@ -9,8 +9,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,8 +22,8 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  * </p>
  *
- * @author Livis
- * @since 2018-09-18
+ * @author xixil
+ * @since 2018-09-28
  */
 @Data
 @SuppressWarnings("ALL")
@@ -45,16 +47,8 @@ public class OrderItem implements Serializable {
     private Integer serviceId;
 
     @ApiModelProperty(value = "商品服务明细id")
-    @TableField("`PRODUCT_SERVICE_ID`")
-    private Long productServiceId;
-
-    @ApiModelProperty(value = "商品名称")
-    @TableField("`SERVICE_NAME`")
-    private String serviceName;
-
-    @ApiModelProperty(value = "商品图片地址")
-    @TableField("`SERVICE_IMAGE`")
-    private String serviceImage;
+    @TableField("`GOOD_ID`")
+    private Long goodId;
 
     @ApiModelProperty(value = "生成订单时的商品单价，单位是元,保留两位小数")
     @TableField("`CURRENT_UNIT_PRICE`")
@@ -88,6 +82,22 @@ public class OrderItem implements Serializable {
     @TableField("`PROVIDER_ID`")
     private Long providerId;
 
+    @ApiModelProperty(value = "首付比率")
+    @TableField("`DOWN_PAYMENT_RATE`")
+    private BigDecimal downPaymentRate;
+
+    @ApiModelProperty(value = "首付金额")
+    @TableField("`DOWN_PAYMENT_AMOUNT`")
+    private BigDecimal downPaymentAmount;
+
+    @ApiModelProperty(value = "剩余金额")
+    @TableField("`REMIAN_AMOUNT`")
+    private BigDecimal remianAmount;
+
+    @ApiModelProperty(value = "会员id")
+    @TableField("`MEMBER_ID`")
+    private Long memberId;
+
 
     public static final String ID = "`ID`";
 
@@ -95,11 +105,7 @@ public class OrderItem implements Serializable {
 
     public static final String SERVICE_ID = "`SERVICE_ID`";
 
-    public static final String PRODUCT_SERVICE_ID = "`PRODUCT_SERVICE_ID`";
-
-    public static final String SERVICE_NAME = "`SERVICE_NAME`";
-
-    public static final String SERVICE_IMAGE = "`SERVICE_IMAGE`";
+    public static final String GOOD_ID = "`GOOD_ID`";
 
     public static final String CURRENT_UNIT_PRICE = "`CURRENT_UNIT_PRICE`";
 
@@ -118,5 +124,13 @@ public class OrderItem implements Serializable {
     public static final String ORDER_ITEM_STATUS = "`ORDER_ITEM_STATUS`";
 
     public static final String PROVIDER_ID = "`PROVIDER_ID`";
+
+    public static final String DOWN_PAYMENT_RATE = "`DOWN_PAYMENT_RATE`";
+
+    public static final String DOWN_PAYMENT_AMOUNT = "`DOWN_PAYMENT_AMOUNT`";
+
+    public static final String REMIAN_AMOUNT = "`REMIAN_AMOUNT`";
+
+    public static final String MEMBER_ID = "`MEMBER_ID`";
 
 }

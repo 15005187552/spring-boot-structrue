@@ -4,72 +4,78 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Order">
-        <id column="id" property="id" />
-        <result column="order_no" property="orderNo" />
-        <result column="member_id" property="memberId" />
-        <result column="shipping_id" property="shippingId" />
-        <result column="payment" property="payment" />
-        <result column="payment_type" property="paymentType" />
-        <result column="status" property="status" />
-        <result column="payment_time" property="paymentTime" />
-        <result column="end_time" property="endTime" />
-        <result column="close_time" property="closeTime" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
+        <id column="ID" property="id" />
+        <result column="ORDER_NO" property="orderNo" />
+        <result column="MEMBER_ID" property="memberId" />
+        <result column="SHIPPING_ID" property="shippingId" />
+        <result column="PAYMENT" property="payment" />
+        <result column="PAYMENT_TYPE" property="paymentType" />
+        <result column="STATUS" property="status" />
+        <result column="PAYMENT_TIME" property="paymentTime" />
+        <result column="END_TIME" property="endTime" />
+        <result column="CLOSE_TIME" property="closeTime" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="WX_ORDER_NO" property="wxOrderNo" />
+        <result column="DOWN_PAYMENT_AMOUNT" property="downPaymentAmount" />
+        <result column="REMIAN_AMOUNT" property="remianAmount" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `id`          ,`order_no`          ,`member_id`          ,`shipping_id`          ,`payment`          ,`payment_type`          ,`status`          ,`payment_time`          ,`end_time`          ,`close_time`          ,`create_time`          ,`update_time`
+          `ID`          ,`ORDER_NO`          ,`MEMBER_ID`          ,`SHIPPING_ID`          ,`PAYMENT`          ,`PAYMENT_TYPE`          ,`STATUS`          ,`PAYMENT_TIME`          ,`END_TIME`          ,`CLOSE_TIME`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`WX_ORDER_NO`          ,`DOWN_PAYMENT_AMOUNT`          ,`REMIAN_AMOUNT`
     </sql>
 
-    <resultMap id="orderVo" type="com.ljwm.gecko.base.model.vo.OrderVo" extends="BaseResultMap">
-      <collection property="orderItemVoList" column="ORDER_NO" select="com.ljwm.gecko.base.mapper.OrderItemMapper.findOrderItemVoList"/>
-    </resultMap>
 
-    <resultMap id="orderProviderVo" type="com.ljwm.gecko.base.model.vo.OrderVo" extends="BaseResultMap">
-        <collection property="orderItemVoList" column="{orderNo=ORDER_NO,providerId=providerId}" select="com.ljwm.gecko.base.mapper.OrderItemMapper.findOrderItemVoList"/>
-    </resultMap>
 
-    <select id="findPage" parameterType="map" resultMap="orderVo">
-      select DISTINCT t.* from t_order t LEFT JOIN t_order_item toi on t.ORDER_NO=toi.ORDER_NO
-      <where>
-        <if test="params.providerId != null">
+  <resultMap id="orderVo" type="com.ljwm.gecko.base.model.vo.OrderVo" extends="BaseResultMap">
+    <collection property="orderItemVoList" column="ORDER_NO" select="com.ljwm.gecko.base.mapper.OrderItemMapper.findOrderItemVoList"/>
+  </resultMap>
+
+  <resultMap id="orderProviderVo" type="com.ljwm.gecko.base.model.vo.OrderVo" extends="BaseResultMap">
+    <collection property="orderItemVoList" column="{orderNo=ORDER_NO,providerId=providerId}" select="com.ljwm.gecko.base.mapper.OrderItemMapper.findOrderItemVoList"/>
+  </resultMap>
+
+  <select id="findPage" parameterType="map" resultMap="orderVo">
+    select DISTINCT t.* from t_order t LEFT JOIN t_order_item toi on t.ORDER_NO=toi.ORDER_NO
+    <where>
+      <if test="params.providerId != null">
         AND toi.`PROVIDER_ID` = #{params.providerId}
-        </if>
-        <if test="params.text != null and params.text != ''">
-          AND t.`ORDER_NO` LIKE CONCAT('%',#{params.text},'%')
-        </if>
-        <if test="params.status != null ">
-          AND t.`STATUS` = #{params.status}
-        </if>
-      </where>
-      ORDER BY t.CREATE_TIME
-      <if test="params.asc">
-        ASC
       </if>
-      <if test="!params.asc">
-        DESC
+      <if test="params.text != null and params.text != ''">
+        AND t.`ORDER_NO` LIKE CONCAT('%',#{params.text},'%')
       </if>
-    </select>
+      <if test="params.status != null ">
+        AND t.`STATUS` = #{params.status}
+      </if>
+    </where>
+    ORDER BY t.CREATE_TIME
+    <if test="params.asc">
+      ASC
+    </if>
+    <if test="!params.asc">
+      DESC
+    </if>
+  </select>
 
-    <select id="findProviderPage" parameterType="map" resultMap="orderProviderVo">
-      select DISTINCT t.*,#{params.providerId} AS `providerId`  from t_order t LEFT JOIN t_order_item toi on t.ORDER_NO=toi.ORDER_NO
-      <where>
-        AND toi.`PROVIDER_ID` = #{params.providerId}
-        <if test="params.text != null and params.text != ''">
-          AND t.`ORDER_NO` LIKE CONCAT('%',#{params.text},'%')
-        </if>
-        <if test="params.status != null ">
-          AND t.`STATUS` = #{params.status}
-        </if>
-      </where>
-      ORDER BY t.CREATE_TIME
-      <if test="params.asc">
-        ASC
+  <select id="findProviderPage" parameterType="map" resultMap="orderProviderVo">
+    select DISTINCT t.*,#{params.providerId} AS `providerId`  from t_order t LEFT JOIN t_order_item toi on t.ORDER_NO=toi.ORDER_NO
+    <where>
+      AND toi.`PROVIDER_ID` = #{params.providerId}
+      <if test="params.text != null and params.text != ''">
+        AND t.`ORDER_NO` LIKE CONCAT('%',#{params.text},'%')
       </if>
-      <if test="!params.asc">
-        DESC
+      <if test="params.status != null ">
+        AND t.`STATUS` = #{params.status}
       </if>
-    </select>
+    </where>
+    ORDER BY t.CREATE_TIME
+    <if test="params.asc">
+      ASC
+    </if>
+    <if test="!params.asc">
+      DESC
+    </if>
+  </select>
+
 </mapper>
