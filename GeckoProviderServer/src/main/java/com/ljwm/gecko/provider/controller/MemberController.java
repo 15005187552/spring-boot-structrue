@@ -20,7 +20,7 @@ public class MemberController extends BaseController {
   @Autowired
   private ProviderMemberService providerMemberService;
 
-  @GetMapping("findMemberById")
+  @GetMapping("findMemberById/{memberId}")
   @ApiOperation("根据会员id查询会员信息")
   public Result<MemberVo> findMemberById(@PathVariable Long memberId){
     return success(providerMemberService.findMemberById(memberId));
