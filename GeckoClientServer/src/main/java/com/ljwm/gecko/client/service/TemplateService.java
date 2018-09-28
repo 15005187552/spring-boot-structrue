@@ -1,5 +1,6 @@
 package com.ljwm.gecko.client.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.service.CommonService;
@@ -14,6 +15,7 @@ import com.ljwm.gecko.client.model.dto.CompanyDto;
 import com.ljwm.gecko.client.model.dto.PersonInfoDto;
 import com.ljwm.gecko.client.model.dto.TemplateDto;
 import com.ljwm.gecko.client.model.dto.TemplateForm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +37,7 @@ import java.util.Map;
  * @author Janiffy
  * @date 2018/9/20 18:47
  */
+@Slf4j
 @Service
 public class TemplateService {
 
@@ -152,16 +155,17 @@ public class TemplateService {
     List<Template> list = templateMapper.selectList(new QueryWrapper<Template>()
       .eq(Template.COMPANY_ID, companyDto.getCompanyId())
       .orderByAsc(true,Template.SORT));
-    Map<String, String> map = new LinkedHashMap<>();
-    int i = 0;
+    JSONObject map = new JSONObject(true);
+    int i = -1000;
     for (String string : str){
       map.put(String.valueOf(i), string);
-      i--;
+      i++;
     }
-
     for (Template template : list) {
       map.put(String.valueOf(template.getId()), attributeMapper.selectById(template.getAttributeId()).getName());
     }
+
+    log.info("map : {}", map.toJSONString());
     return Result.success(map);
   }
 
@@ -170,10 +174,10 @@ public class TemplateService {
       .eq(Template.COMPANY_ID, companyDto.getCompanyId())
       .orderByAsc(true,Template.SORT));
     Map<String, String> map = new LinkedHashMap<>();
-    int i = 0;
+    int i = -1000;
     for (String string : str){
       map.put(String.valueOf(i), string);
-      i--;
+      i++;
     }
     for (Template template : list) {
       map.put(String.valueOf(template.getId()), attributeMapper.selectById(template.getId()).getName());

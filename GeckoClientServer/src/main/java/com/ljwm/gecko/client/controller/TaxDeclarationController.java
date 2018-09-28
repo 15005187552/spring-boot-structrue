@@ -62,5 +62,12 @@ public class TaxDeclarationController {
     return taxDeclarationService.findTaxById(taxId);
   }
 
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PostMapping("findTaxInfo")
+  @ApiOperation("查看账单详情")
+  public Result findTaxInfo(@RequestParam("taxId") Long taxId){
+    return taxDeclarationService.findTaxInfo(taxId);
+  }
+
 
 }

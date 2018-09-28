@@ -38,5 +38,4 @@ public class CalcController {
     return calcService.redPackage();
   }
 
-
 }

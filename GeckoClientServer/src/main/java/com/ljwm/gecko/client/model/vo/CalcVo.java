@@ -27,4 +27,7 @@ public class CalcVo {
 
   @ApiModelProperty("新个税")
   private BigDecimal newTax;
+
+  @ApiModelProperty("社保")
+  private BigDecimal socialSurance;
 }

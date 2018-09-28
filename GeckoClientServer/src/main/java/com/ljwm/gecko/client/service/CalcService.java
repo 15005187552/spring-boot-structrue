@@ -1,16 +1,19 @@
 package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.LoginInfoHolder;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.entity.CalTax;
 import com.ljwm.gecko.base.entity.CityItem;
 import com.ljwm.gecko.base.entity.Guest;
+import com.ljwm.gecko.base.entity.SpecialDeduction;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.enums.SpecialType;
 import com.ljwm.gecko.base.mapper.CalTaxMapper;
 import com.ljwm.gecko.base.mapper.GuestMapper;
+import com.ljwm.gecko.base.mapper.SpecialDeductionMapper;
 import com.ljwm.gecko.client.dao.CalTaxDao;
 import com.ljwm.gecko.client.dao.CalcDao;
 import com.ljwm.gecko.client.model.dto.CalcForm;
@@ -44,6 +47,9 @@ public class CalcService {
   @Autowired
   GuestMapper guestMapper;
 
+  @Autowired
+  SpecialDeductionMapper specialDeductionMapper;
+
   @Transactional
   public Result calc(CalcForm calcForm) {
     Integer code = calcForm.getCode();
@@ -51,26 +57,41 @@ public class CalcService {
     List<CityItem> list = calcDao.calc(code);
     BigDecimal tax = BigDecimal.ZERO;
     BigDecimal money;
+    BigDecimal singleMoney = BigDecimal.ZERO;
     //五险一金扣除项
-    if(CollectionUtil.isNotEmpty(list)){
+    if(CollectionUtil.isNotEmpty(list)) {
       BigDecimal upLimit;
       BigDecimal lowLimit;
       BigDecimal personPer;
       Integer perType;
-      for(CityItem cityItem:list){
+      Long itemId = null;
+      SpecialDeduction specialDeduction = specialDeductionMapper.selectOne(new QueryWrapper<SpecialDeduction>().like(SpecialDeduction.NAME, "公积金"));
+      if (specialDeduction != null) {
+        itemId = specialDeduction.getId();
+      }
+      for (CityItem cityItem : list) {
         upLimit = cityItem.getUpperLimit();
         lowLimit = cityItem.getLowerLimit();
         personPer = cityItem.getPersonPer();
         perType = cityItem.getPerType();
-        if(perType == SpecialType.PERCENT.getCode()) {
+        if (perType == SpecialType.PERCENT.getCode()) {
           if (enterMoney.compareTo(upLimit) > 0) {
-            tax = tax.add(upLimit.multiply(personPer));
+            if (cityItem.getItemType().equals(itemId)){
+              singleMoney = upLimit.multiply(personPer);
+            }
+              tax = tax.add(upLimit.multiply(personPer));
           } else if (enterMoney.compareTo(lowLimit) < 0) {
+            if (cityItem.getItemType().equals(itemId)){
+              singleMoney = lowLimit.multiply(personPer);
+            }
             tax = tax.add(lowLimit.multiply(personPer));
           } else {
+            if (cityItem.getItemType().equals(itemId)){
+              singleMoney = enterMoney.multiply(personPer);
+            }
             tax = tax.add(enterMoney.multiply(personPer));
           }
-        }else {
+        } else {
           tax = tax.add(personPer);
         }
       }
@@ -96,23 +117,7 @@ public class CalcService {
     } else{
       oldTax = BigDecimal.ZERO;
     }
-    if(money.compareTo(new BigDecimal("85000"))>=0){
-      newTax = (money.subtract(newPort).multiply(new BigDecimal("0.45")).subtract(new BigDecimal("15160")));
-    } else if(money.compareTo(new BigDecimal("60000"))>=0){
-      newTax = (money.subtract(newPort).multiply(new BigDecimal("0.35")).subtract(new BigDecimal("7160")));
-    } else if(money.compareTo(new BigDecimal("40000"))>=0){
-      newTax = (money.subtract(newPort).multiply(new BigDecimal("0.30")).subtract(new BigDecimal("4410")));
-    } else if(money.compareTo(new BigDecimal("30000"))>=0){
-      newTax = (money.subtract(newPort).multiply(new BigDecimal("0.25")).subtract(new BigDecimal("2660")));
-    } else if(money.compareTo(new BigDecimal("17000"))>=0){
-      newTax = (money.subtract(newPort).multiply(new BigDecimal("0.20")).subtract(new BigDecimal("1410")));
-    } else if(money.compareTo(new BigDecimal("8000"))>=0){
-      newTax = (money.subtract(newPort).multiply(new BigDecimal("0.10")).subtract(new BigDecimal("210")));
-    } else if(money.compareTo(new BigDecimal("5000"))>=0){
-      newTax = (money.subtract(newPort).multiply(new BigDecimal("0.03")));
-    } else {
-      newTax = BigDecimal.ZERO;
-    }
+    newTax = calNew(money, newPort);
     BigDecimal difference = oldTax.subtract(newTax);
     BigDecimal percent = difference.divide(oldTax, 4, BigDecimal.ROUND_HALF_UP);
     if(difference.compareTo(BigDecimal.ZERO)>=0){
@@ -138,8 +143,30 @@ public class CalcService {
       CalTax calTax = new CalTax(guestId, code, enterMoney, oldTax, newTax, new Date(), new Date());
       calTaxDao.insertOrUpdate(calTax, difference);
     }
-    CalcVo calcVo = new CalcVo(percent, difference, oldTax, newTax);
+    CalcVo calcVo = new CalcVo(percent, difference, oldTax, newTax, tax.subtract(singleMoney));
     return Result.success(calcVo);
+  }
+
+  public BigDecimal calNew(BigDecimal money, BigDecimal newPort){
+    BigDecimal newTax;
+    if(money.compareTo(new BigDecimal("85000"))>=0){
+      newTax = (money.subtract(newPort).multiply(new BigDecimal("0.45")).subtract(new BigDecimal("15160")));
+    } else if(money.compareTo(new BigDecimal("60000"))>=0){
+      newTax = (money.subtract(newPort).multiply(new BigDecimal("0.35")).subtract(new BigDecimal("7160")));
+    } else if(money.compareTo(new BigDecimal("40000"))>=0){
+      newTax = (money.subtract(newPort).multiply(new BigDecimal("0.30")).subtract(new BigDecimal("4410")));
+    } else if(money.compareTo(new BigDecimal("30000"))>=0){
+      newTax = (money.subtract(newPort).multiply(new BigDecimal("0.25")).subtract(new BigDecimal("2660")));
+    } else if(money.compareTo(new BigDecimal("17000"))>=0){
+      newTax = (money.subtract(newPort).multiply(new BigDecimal("0.20")).subtract(new BigDecimal("1410")));
+    } else if(money.compareTo(new BigDecimal("8000"))>=0){
+      newTax = (money.subtract(newPort).multiply(new BigDecimal("0.10")).subtract(new BigDecimal("210")));
+    } else if(money.compareTo(new BigDecimal("5000"))>=0){
+      newTax = (money.subtract(newPort).multiply(new BigDecimal("0.03")));
+    } else {
+      newTax = BigDecimal.ZERO;
+    }
+    return newTax;
   }
 
   public Result redPackage() {

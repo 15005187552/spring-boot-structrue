@@ -7,15 +7,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
-import com.ljwm.gecko.base.entity.Tax;
-import com.ljwm.gecko.base.mapper.TaxMapper;
-import com.ljwm.gecko.base.model.vo.*;
+import com.ljwm.gecko.base.entity.*;
+import com.ljwm.gecko.base.mapper.*;
+import com.ljwm.gecko.base.model.vo.NaturalPersonTaxVo;
+import com.ljwm.gecko.base.model.vo.TaxVo;
 import com.ljwm.gecko.client.dao.TaxInfoDao;
 import com.ljwm.gecko.client.model.dto.*;
+import com.ljwm.gecko.client.model.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +38,24 @@ public class TaxDeclarationService {
 
   @Autowired
   TaxMapper taxMapper;
+
+  @Autowired
+  CalcService calcService;
+
+  @Autowired
+  TaxIncomeMapper taxIncomeMapper;
+
+  @Autowired
+  TaxSpecialMapper taxSpecialMapper;
+
+  @Autowired
+  TaxSpecialAddMapper taxSpecialAddMapper;
+
+  @Autowired
+  TaxOtherReduceMapper taxOtherReduceMapper;
+
+  @Autowired
+  AttendanceMapper attendanceMapper;
 
   @Transactional
   public Result commit(TaxForm taxForm) {
@@ -66,7 +88,17 @@ public class TaxDeclarationService {
         taxInfoDao.insertOrUpdateTaxSpecialAdd(taxSpecialAddForm, taxId);
       }
     }
-    return Result.success("提交成功!");
+    BigDecimal income = BigDecimal.ZERO;
+    for(TaxIncomeForm taxIncomeForm : taxIncomeFormList){
+      income = income.add(new BigDecimal(taxIncomeForm.getIncome()));
+    }
+    BigDecimal specialDe = BigDecimal.ZERO;
+    for (TaxSpecialForm taxSpecialForm : taxSpecialList){
+      specialDe = specialDe.add(new BigDecimal(taxSpecialForm.getPersonalMoney()));
+    }
+    BigDecimal money = income.subtract(specialDe);
+    BigDecimal newTax = calcService.calNew(money, new BigDecimal("5000"));
+    return Result.success(money.subtract(newTax));
   }
 
   public TaxVo find(TaxInfoForm taxInfoForm) {
@@ -75,10 +107,10 @@ public class TaxDeclarationService {
     Integer declareType = taxInfoForm.getDeclareType();
     Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>()
         .eq(Tax.MEMBER_ID, memberId).eq(Tax.DECLARE_TIME, declareTime).eq(Tax.DECLARE_TYPE, declareType));
-    List<TaxIncomeVo> incomeVoList = taxInfoDao.selectIncomeInfo(memberId, declareTime ,declareType);
-    List<TaxOtherReduceVo> taxOtherReduceList = taxInfoDao.selectOther(memberId, declareTime ,declareType);
-    List<TaxSpecialVo> taxSpecialVoList = taxInfoDao.selectSpecial(memberId, declareTime ,declareType);
-    List<TaxSpecialAddVo> taxSpecialAddVoList = taxInfoDao.selectSpecialAdd(memberId, declareTime ,declareType);
+    List<com.ljwm.gecko.base.model.vo.TaxIncomeVo> incomeVoList = taxInfoDao.selectIncomeInfo(memberId, declareTime ,declareType);
+    List<com.ljwm.gecko.base.model.vo.TaxOtherReduceVo> taxOtherReduceList = taxInfoDao.selectOther(memberId, declareTime ,declareType);
+    List<com.ljwm.gecko.base.model.vo.TaxSpecialVo> taxSpecialVoList = taxInfoDao.selectSpecial(memberId, declareTime ,declareType);
+    List<com.ljwm.gecko.base.model.vo.TaxSpecialAddVo> taxSpecialAddVoList = taxInfoDao.selectSpecialAdd(memberId, declareTime ,declareType);
     if(CollectionUtil.isNotEmpty(incomeVoList)||CollectionUtil.isNotEmpty(taxOtherReduceList)||
       CollectionUtil.isNotEmpty(taxSpecialVoList)||CollectionUtil.isNotEmpty(taxSpecialAddVoList)){
       TaxVo taxVo = new TaxVo();
@@ -118,5 +150,60 @@ public class TaxDeclarationService {
       return Result.success(naturalPersonTaxVo);
     }
     return Result.success(null);
+  }
+
+  public Result findTaxInfo(Long taxId) {
+    AttendanceTaxVo attendanceTaxVo = new AttendanceTaxVo();
+    List<Attendance> attendanceList = attendanceMapper.selectList(new QueryWrapper<Attendance>().eq(Attendance.TAX_ID, taxId));
+    List<TaxIncome> taxIncomeList = taxIncomeMapper.selectList(new QueryWrapper<TaxIncome>().eq(TaxIncome.TAX_ID, taxId));
+    List<TaxSpecial> taxSpecialList = taxSpecialMapper.selectList(new QueryWrapper<TaxSpecial>().eq(TaxSpecial.TAX_ID, taxId));
+    List<TaxSpecialAdd> taxSpecialAddList = taxSpecialAddMapper.selectList(new QueryWrapper<TaxSpecialAdd>().eq(TaxSpecialAdd.TAX_ID, taxId));
+    List<TaxOtherReduce> taxOtherReduceList = taxOtherReduceMapper.selectList(new QueryWrapper<TaxOtherReduce>().eq(TaxOtherReduce.TAX_ID, taxId));
+    if(CollectionUtil.isNotEmpty(attendanceList)){
+      List<AttendanceVo> attendanceVoList = new ArrayList<>();
+      for (Attendance attendance: attendanceList){
+        AttendanceVo attendanceVo = new AttendanceVo();
+        BeanUtil.copyProperties(attendance, attendanceVo);
+        attendanceVoList.add(attendanceVo);
+      }
+      attendanceTaxVo.setAttendanceList(attendanceVoList);
+    }
+    if(CollectionUtil.isNotEmpty(taxIncomeList)){
+      List<TaxIncomeVo> taxIncomeVoList = new ArrayList<>();
+      for (TaxIncome taxIncome: taxIncomeList){
+        TaxIncomeVo taxIncomeVo = new TaxIncomeVo();
+        BeanUtil.copyProperties(taxIncome, taxIncomeVo);
+        taxIncomeVoList.add(taxIncomeVo);
+      }
+      attendanceTaxVo.setIncomeList(taxIncomeVoList);
+    }
+    if(CollectionUtil.isNotEmpty(taxSpecialList)){
+      List<TaxSpecialVo> taxSpecialVoList = new ArrayList<>();
+      for (TaxSpecial taxSpecial: taxSpecialList){
+        TaxSpecialVo taxSpecialVo = new TaxSpecialVo();
+        BeanUtil.copyProperties(taxSpecial, taxSpecialVo);
+        taxSpecialVoList.add(taxSpecialVo);
+      }
+      attendanceTaxVo.setSpecialList(taxSpecialVoList);
+    }
+    if(CollectionUtil.isNotEmpty(taxSpecialAddList)){
+      List<TaxSpecialAddVo> taxSpecialAddVoList = new ArrayList<>();
+      for (TaxSpecialAdd taxSpecialAdd: taxSpecialAddList){
+        TaxSpecialAddVo taxSpecialAddVo = new TaxSpecialAddVo();
+        BeanUtil.copyProperties(taxSpecialAdd, taxSpecialAddVo);
+        taxSpecialAddVoList.add(taxSpecialAddVo);
+      }
+      attendanceTaxVo.setSpecialAddList(taxSpecialAddVoList);
+    }
+    if(CollectionUtil.isNotEmpty(taxOtherReduceList)){
+      List<TaxOtherReduceVo> taxOtherReduceVoList = new ArrayList<>();
+      for (TaxOtherReduce taxOtherReduce: taxOtherReduceList){
+        TaxOtherReduceVo taxOtherReduceVo = new TaxOtherReduceVo();
+        BeanUtil.copyProperties(taxOtherReduce, taxOtherReduceVo);
+        taxOtherReduceVoList.add(taxOtherReduceVo);
+      }
+      attendanceTaxVo.setOtherReduceList(taxOtherReduceVoList);
+    }
+    return Result.success(attendanceTaxVo);
   }
 }
