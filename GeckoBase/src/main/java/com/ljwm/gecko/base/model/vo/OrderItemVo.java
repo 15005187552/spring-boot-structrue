@@ -9,4 +9,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 public class OrderItemVo extends OrderItem {
+
+  private ProviderGoodsVo providerGoodsVo;
+
+  private SpecServicesPriceSimpleVo specServicesPriceSimpleVo;
 }

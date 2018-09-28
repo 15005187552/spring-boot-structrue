@@ -3,6 +3,7 @@ package com.ljwm.gecko.client.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.ljwm.bootbase.enums.ResultEnum;
@@ -15,10 +16,8 @@ import com.ljwm.gecko.base.enums.OrderStatusEnum;
 import com.ljwm.gecko.base.enums.PaymentTypeEnum;
 import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.bean.AppInfo;
-import com.ljwm.gecko.base.model.dto.OrderCommentsDto;
-import com.ljwm.gecko.base.model.dto.OrderDto;
-import com.ljwm.gecko.base.model.dto.OrderItemCommentsDto;
-import com.ljwm.gecko.base.model.dto.OrderItemDto;
+import com.ljwm.gecko.base.model.dto.*;
+import com.ljwm.gecko.base.model.vo.OrderItemVo;
 import com.ljwm.gecko.base.model.vo.OrderSimpleVo;
 import com.ljwm.gecko.base.model.vo.OrderVo;
 import com.ljwm.gecko.base.utils.Fileutil;
@@ -92,6 +91,7 @@ public class ClientOrderService {
     order.setPayment((BigDecimal)(resMap.get("totalAmount")));  //暂时不考虑数量
     order.setStatus(OrderStatusEnum.NO_PAID.getCode());
     order.setDownPaymentAmount((BigDecimal)(resMap.get("downPaymentAmount")));
+    order.setRemianAmount((BigDecimal)(resMap.get("remainAmount")));
     orderMapper.insert(order);
     List<OrderItem> orderItemList = (List<OrderItem>)resMap.get("orderItemsList");
     for (OrderItem orderItem : orderItemList){
@@ -106,6 +106,7 @@ public class ClientOrderService {
     Map<String,Object> retMap = Maps.newHashMap();
     BigDecimal totalAmount = BigDecimal.ZERO;
     BigDecimal downPaymentAmount = BigDecimal.ZERO;
+    BigDecimal remainAmount = BigDecimal.ZERO;
     List<OrderItem> orderItemList = Lists.newArrayList();
     for (Long orderItemId:orderItemOrderList){
       OrderItem orderItem = orderItemMapper.selectById(orderItemId);
@@ -115,9 +116,12 @@ public class ClientOrderService {
       }
       orderItemList.add(orderItem);
       totalAmount = totalAmount.add(new BigDecimal(orderItem.getCurrentUnitPrice().doubleValue())) ;
+      downPaymentAmount = downPaymentAmount.add(new BigDecimal(orderItem.getDownPaymentAmount().doubleValue()));
+      remainAmount = remainAmount.add(new BigDecimal(orderItem.getRemainAmount().doubleValue()));
     }
     retMap.put("totalAmount",totalAmount);
     retMap.put("downPaymentAmount",downPaymentAmount);
+    retMap.put("remainAmount",remainAmount);
     retMap.put("orderItemsList",orderItemList);
     return retMap;
   }
@@ -231,5 +235,9 @@ public class ClientOrderService {
       }
     }
     return new OrderSimpleVo(order);
+  }
+
+  public Page<OrderItemVo> findOrderItemList(OrderItemQueryDto orderItemQueryDto){
+    return commonService.find(orderItemQueryDto, (p, q) -> orderItemMapper.findOrderItemList(p, BeanUtil.beanToMap(orderItemQueryDto)));
   }
 }

@@ -34,4 +34,7 @@ public class SpecServicesPriceForm {
   @ApiModelProperty(value = "商品id")
   private Long goodId;
 
+  @ApiModelProperty("服务类型id")
+  private Integer serviceId;
+
 }

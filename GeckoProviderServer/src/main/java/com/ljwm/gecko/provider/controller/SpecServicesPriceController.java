@@ -6,6 +6,7 @@ import com.ljwm.gecko.base.model.vo.SpecServicesPriceSimpleVo;
 import com.ljwm.gecko.provider.model.form.SpecServicesPriceCommonQueryForm;
 import com.ljwm.gecko.provider.model.form.SpecServicesPriceForm;
 import com.ljwm.gecko.provider.service.SpecServicesPriceService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/specServicesPrice")
+@Api(tags = "服务规格管理")
 public class SpecServicesPriceController extends BaseController {
 
   @Autowired
