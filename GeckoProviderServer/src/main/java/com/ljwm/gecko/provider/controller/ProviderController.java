@@ -27,4 +27,10 @@ public class ProviderController extends BaseController {
   public Result<List<ProviderVo>>  findProviderListByMemberId(@PathVariable Long memberId){
     return success(providerProviderService.findProviderListByMemberId(memberId));
   }
+
+  @GetMapping("findProviderByProviderId/{id}")
+  @ApiOperation("客户端根据服务商id查询服务商详情")
+  public Result<ProviderVo> findProviderByProviderId(@PathVariable Long id){
+    return success(providerProviderService.findProviderByProviderId(id));
+  }
 }

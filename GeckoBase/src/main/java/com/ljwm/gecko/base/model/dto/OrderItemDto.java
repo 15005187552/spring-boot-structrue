@@ -14,7 +14,7 @@ public class OrderItemDto {
   private Integer serviceId;
 
   @ApiModelProperty(value = "商品服务明细id")
-  private Long productServiceId;
+  private Long goodId;
 
   @ApiModelProperty(value = "商品名称")
   private String serviceName;
@@ -30,5 +30,8 @@ public class OrderItemDto {
 
   @ApiModelProperty("服务商id")
   private Long providerId;
+
+  @ApiModelProperty("商品规格id")
+  private Long specServiceId;
 
 }

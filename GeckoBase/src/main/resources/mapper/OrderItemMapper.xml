@@ -19,7 +19,7 @@
         <result column="PROVIDER_ID" property="providerId" />
         <result column="DOWN_PAYMENT_RATE" property="downPaymentRate" />
         <result column="DOWN_PAYMENT_AMOUNT" property="downPaymentAmount" />
-        <result column="REMIAN_AMOUNT" property="remianAmount" />
+        <result column="REMAIN_AMOUNT" property="remainAmount" />
         <result column="MEMBER_ID" property="memberId" />
     </resultMap>
 

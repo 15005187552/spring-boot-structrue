@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author xixil
@@ -91,8 +91,8 @@ public class OrderItem implements Serializable {
     private BigDecimal downPaymentAmount;
 
     @ApiModelProperty(value = "剩余金额")
-    @TableField("`REMIAN_AMOUNT`")
-    private BigDecimal remianAmount;
+    @TableField("`REMAIN_AMOUNT`")
+    private BigDecimal remainAmount;
 
     @ApiModelProperty(value = "会员id")
     @TableField("`MEMBER_ID`")
@@ -129,7 +129,7 @@ public class OrderItem implements Serializable {
 
     public static final String DOWN_PAYMENT_AMOUNT = "`DOWN_PAYMENT_AMOUNT`";
 
-    public static final String REMIAN_AMOUNT = "`REMIAN_AMOUNT`";
+    public static final String REMAIN_AMOUNT = "`REMAIN_AMOUNT`";
 
     public static final String MEMBER_ID = "`MEMBER_ID`";
 

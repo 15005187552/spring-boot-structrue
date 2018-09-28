@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Livis
@@ -80,10 +80,9 @@ public class ProviderGoods implements Serializable {
     @TableField("`UPDATE_TIME`")
     private Date updateTime;
 
-    @ApiModelProperty(value = "是否需要定价   0 不需要   1  需要")
-    @TableField("`IS_CONFIRM_PRICE`")
-    private Integer isConfirmPrice;
-
+    @ApiModelProperty(value = "首付比率")
+    @TableField("`DOWN_PAYMENT_RATE`")
+    private BigDecimal downPaymentRate;
 
     public static final String ID = "`ID`";
 
@@ -106,7 +105,5 @@ public class ProviderGoods implements Serializable {
     public static final String CREATE_TIME = "`CREATE_TIME`";
 
     public static final String UPDATE_TIME = "`UPDATE_TIME`";
-
-    public static final String IS_CONFIRM_PRICE = "`IS_CONFIRM_PRICE`";
 
 }

@@ -15,7 +15,7 @@
         <result column="STATUS" property="status" />
         <result column="CREATE_TIME" property="createTime" />
         <result column="UPDATE_TIME" property="updateTime" />
-        <result column="IS_CONFIRM_PRICE" property="isConfirmPrice" />
+        <result column="DOWN_PAYMENT_RATE" property="downPaymentRate" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
