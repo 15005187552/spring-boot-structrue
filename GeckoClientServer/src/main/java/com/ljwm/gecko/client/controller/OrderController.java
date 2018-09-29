@@ -1,11 +1,13 @@
 package com.ljwm.gecko.client.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.model.dto.OrderCommentsDto;
 import com.ljwm.gecko.base.model.dto.OrderDto;
 import com.ljwm.gecko.base.model.dto.OrderItemDto;
+import com.ljwm.gecko.base.model.dto.OrderItemQueryDto;
 import com.ljwm.gecko.base.model.vo.OrderSimpleVo;
 import com.ljwm.gecko.base.model.vo.OrderVo;
 import com.ljwm.gecko.client.model.vo.OrderPaymentVo;
@@ -37,6 +39,12 @@ public class OrderController extends BaseController {
     orderItemDto.setMemberId(SecurityKit.currentId());
     clientOrderService.createOrderItem(orderItemDto);
     return success();
+  }
+
+  @PostMapping("find")
+  @ApiOperation("服务商查询订单列表")
+  public Result<Page<OrderVo>> find(@RequestBody OrderItemQueryDto orderItemQueryDto){
+    return success(clientOrderService.findOrderItemList(orderItemQueryDto));
   }
 
   @GetMapping("payOrderTest/{id}")

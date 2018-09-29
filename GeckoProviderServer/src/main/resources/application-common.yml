@@ -6,5 +6,5 @@ swagger2:
   version: "V1.0"
 jwt:
   route:
-    freeRouters: "/enum/*,/location/*,/auth/*"
+    freeRouters: "/enum/*,/location/*,/auth/login"
 

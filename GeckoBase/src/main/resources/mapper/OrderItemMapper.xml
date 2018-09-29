@@ -54,6 +54,9 @@
         <if test="params.memberId != null ">
           AND t.`MEMBER_ID` = #{params.memberId}
         </if>
+        <if test="params.providerId != null ">
+          AND t.`PROVIDER_ID` = #{params.providerId}
+        </if>
       </where>
     </select>
 </mapper>
