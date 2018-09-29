@@ -33,5 +33,6 @@ public class TaxIncomeVo {
   private Long updater;
 
   @ApiModelProperty(value = "收入金额")
+  @JSONField(name = "value")
   private String income;
 }

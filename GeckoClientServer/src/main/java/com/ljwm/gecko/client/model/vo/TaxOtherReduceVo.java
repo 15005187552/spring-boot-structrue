@@ -25,6 +25,7 @@ public class TaxOtherReduceVo {
   private Long otherReduceId;
 
   @ApiModelProperty(value = "个人缴纳金额")
+  @JSONField(name = "value")
   private String taxMoney;
 
   @ApiModelProperty(value = "缴纳证明路径")

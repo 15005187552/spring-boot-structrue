@@ -24,6 +24,7 @@ public class TaxSpecialAddVo {
   private Long specialAddId;
 
   @ApiModelProperty(value = "个人缴纳金额")
+  @JSONField(name = "value")
   private String taxMoney;
 
   @ApiModelProperty(value = "缴纳证明附件路径")

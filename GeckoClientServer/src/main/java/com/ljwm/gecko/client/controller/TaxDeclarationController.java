@@ -68,7 +68,7 @@ public class TaxDeclarationController {
 
   @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("findListByCompanyId")
-  @ApiOperation("查看公司报税详情")
+  @ApiOperation("查看公司报税列表")
   public Result findListByCompanyId(@RequestBody TaxFindForm taxFindForm){
     return taxDeclarationService.findListByCompanyId(taxFindForm);
   }
