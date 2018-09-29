@@ -1,5 +1,5 @@
 swagger2:
-  basePackage: "com.ljwm.gecko.client"
+  basePackage: "com.ljwm"
   authorization: "Authorization"
   title: "壁虎个税客户服务API"
   description: ""

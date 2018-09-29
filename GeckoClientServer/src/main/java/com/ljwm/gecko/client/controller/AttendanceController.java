@@ -1,11 +1,11 @@
 package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
-import com.ljwm.gecko.base.entity.Attendance;
 import com.ljwm.gecko.client.model.dto.AttendanceForm;
 import com.ljwm.gecko.client.security.JwtUser;
 import com.ljwm.gecko.client.service.AttendanceService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,8 +28,17 @@ public class AttendanceController {
   AttendanceService attendanceService;
 
   @PostMapping("/commit")
+  @ApiOperation("提交员工考勤信息")
   @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
-  public Result<Attendance> commit(@RequestBody @Valid AttendanceForm attendanceForm){
+  public Result commit(@RequestBody @Valid AttendanceForm attendanceForm){
     return attendanceService.commit(attendanceForm);
   }
+
+  @PostMapping("/getAttendace")
+  @ApiOperation("获取当前员工考勤工资信息")
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  public Result getAttendace(){
+    return attendanceService.getAttendace();
+  }
+
 }
