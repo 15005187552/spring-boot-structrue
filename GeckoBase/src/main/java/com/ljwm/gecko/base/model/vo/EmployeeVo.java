@@ -24,7 +24,7 @@ public class EmployeeVo {
   private String certType;
 
   @ApiModelProperty("证件号")
-  @JSONField(name = "memberIdcard")
+  // @JSONField(name = "memberIdcard")
   private String certNum;
 
   @ApiModelProperty("姓名")
