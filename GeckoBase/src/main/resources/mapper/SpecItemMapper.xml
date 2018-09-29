@@ -68,7 +68,7 @@
     </select>
 
     <select id="findByMap" parameterType="map" resultMap="specItemSimpleVo">
-      select t.*  from t_spec t
+      select t.*  from t_spec_item t
       <where>
         <if test="params.item != null and params.item != ''">
           AND t.`ITEM`=#{params.item}
@@ -82,6 +82,10 @@
           AND t.`SERVICE_ID` =#{params.specId}
         </if>
       </where>
+    </select>
+
+    <select id="findBySpecId" parameterType="integer" resultMap="specItemSimpleVo">
+      select t.*  from t_spec_item t where t.SPEC_ID=#{specId} order by t.SORT
     </select>
 
 </mapper>

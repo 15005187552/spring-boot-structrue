@@ -13,14 +13,14 @@ public class OrderItemDto {
   @ApiModelProperty(value = "服务id")
   private Integer serviceId;
 
-  @ApiModelProperty(value = "商品服务明细id")
-  private Long goodId;
+  //@ApiModelProperty(value = "商品服务明细id")
+  //private Long goodId;
 
-  @ApiModelProperty(value = "商品名称")
-  private String serviceName;
+  //@ApiModelProperty(value = "商品名称")
+  //private String serviceName;
 
-  @ApiModelProperty(value = "生成订单时的商品单价，单位是元,保留两位小数")
-  private BigDecimal currentUnitPrice;
+  //@ApiModelProperty(value = "生成订单时的商品单价，单位是元,保留两位小数")
+  //private BigDecimal currentUnitPrice;
 
   @ApiModelProperty(value = "商品数量",hidden = true)
   private Integer quantity=1;

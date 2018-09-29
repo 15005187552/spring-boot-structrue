@@ -18,6 +18,7 @@
 
     <resultMap id="specVo" type="com.ljwm.gecko.base.model.vo.SpecVo" extends="BaseResultMap">
       <association property="serveSimpleVo" column="SERVICE_ID" select="com.ljwm.gecko.base.mapper.ServiceTypeMapper.findById"/>
+      <collection property="specItemSimpleVoList" column="ID" select="com.ljwm.gecko.base.mapper.SpecItemMapper.findBySpecId"/>
     </resultMap>
 
     <resultMap id="specSimpleVo" type="com.ljwm.gecko.base.model.vo.SpecSimpleVo" extends="BaseResultMap">
@@ -87,6 +88,10 @@
 
   <select id="findSpecSimpleVoById" parameterType="integer" resultMap="specSimpleVo">
     select t.*  from t_spec t where t.ID=#{id}
+  </select>
+
+  <select id="findByServiceId" parameterType="integer" resultMap="specVo">
+    select t.*  from t_spec t where t.SERVICE_ID=#{serviceId}
   </select>
 
 </mapper>

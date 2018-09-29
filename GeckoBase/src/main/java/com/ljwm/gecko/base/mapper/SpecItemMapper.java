@@ -24,4 +24,6 @@ public interface SpecItemMapper extends BaseMapper<SpecItem> {
   List<SpecItemSimpleVo> find(@Param("params")Map map);
 
   SpecItemSimpleVo findByMap(@Param("params")Map map);
+
+  List<SpecItemSimpleVo> findBySpecId(@Param("specId")Integer specId);
 }
