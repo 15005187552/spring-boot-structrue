@@ -5,26 +5,20 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
-import com.ljwm.gecko.base.entity.Company;
-import com.ljwm.gecko.base.entity.CompanyUser;
-import com.ljwm.gecko.base.entity.Member;
-import com.ljwm.gecko.base.entity.NaturalPerson;
+import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.enums.ActivateEnum;
 import com.ljwm.gecko.base.enums.DisabledEnum;
-import com.ljwm.gecko.base.mapper.CompanyMapper;
-import com.ljwm.gecko.base.mapper.CompanyUserMapper;
-import com.ljwm.gecko.base.mapper.MemberMapper;
-import com.ljwm.gecko.base.mapper.NaturalPersonMapper;
+import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.dto.MemberComForm;
+import com.ljwm.gecko.base.model.dto.NaturalPersonDto;
 import com.ljwm.gecko.base.model.vo.CompanyVo;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
-import com.ljwm.gecko.client.model.dto.CompanyDto;
-import com.ljwm.gecko.client.model.dto.InactiveForm;
-import com.ljwm.gecko.client.model.dto.MemberForm;
-import com.ljwm.gecko.client.model.dto.MemberIdDto;
+import com.ljwm.gecko.client.model.dto.*;
 import com.ljwm.gecko.client.model.vo.CompanyInfoVo;
 import com.ljwm.gecko.client.model.vo.CompanyUserVo;
+import com.ljwm.gecko.client.model.vo.PersonInfoVo;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.poi.ss.formula.functions.Na;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,6 +51,9 @@ public class CompanyUserService {
 
   @Autowired
   MemberMapper memberMapper;
+
+  @Autowired
+  CompanyUserInfoMapper companyUserInfoMapper;
 
   @Transactional
   public Result memberEnterCom(MemberComForm memberComForm) {
@@ -167,5 +164,22 @@ public class CompanyUserService {
       .eq(CompanyUser.MEMBER_ID, memberIdDto.getMemberId())
       .eq(CompanyUser.DISABLED, DisabledEnum.ENABLED.getCode())
       .eq(CompanyUser.ACTIVATED, ActivateEnum.ENABLED.getCode())));
+  }
+
+  public Result findEmployeeInfo(Long companyId) {
+    List<PersonInfoVo> personInfoDtoList = new ArrayList<>();
+    List<NaturalPerson> naturalPersonList = naturalPersonMapper.selectList(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.COMPANY_ID, companyId));
+    for (NaturalPerson naturalPerson:
+         naturalPersonList) {
+      PersonInfoVo personInfoVo = new PersonInfoVo();
+      Long memberId = naturalPerson.getMemberId();
+      BeanUtil.copyProperties(naturalPerson, personInfoVo);
+      List<CompanyUserInfo> companyUserInfoList = companyUserInfoMapper.selectCompanyUser(companyId, memberId);
+      if (CollectionUtil.isNotEmpty(companyUserInfoList)){
+        BeanUtil.copyProperties(companyUserInfoList.get(0), personInfoVo);
+      }
+      personInfoDtoList.add(personInfoVo);
+    }
+    return Result.success(personInfoDtoList);
   }
 }

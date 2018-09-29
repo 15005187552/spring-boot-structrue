@@ -23,7 +23,7 @@ public class TaxSpecialAddVo {
   @ApiModelProperty(value = "专项附加扣除分类ID")
   private Long specialAddId;
 
-  @ApiModelProperty(value = "个人缴纳金额")
+  @ApiModelProperty(value = "个人缴纳金额,参数改为value")
   @JSONField(name = "value")
   private String taxMoney;
 

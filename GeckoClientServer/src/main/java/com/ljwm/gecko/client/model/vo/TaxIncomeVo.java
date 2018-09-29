@@ -32,7 +32,7 @@ public class TaxIncomeVo {
   @ApiModelProperty(value = "更新人")
   private Long updater;
 
-  @ApiModelProperty(value = "收入金额")
+  @ApiModelProperty(value = "收入金额,参数改为value")
   @JSONField(name = "value")
   private String income;
 }

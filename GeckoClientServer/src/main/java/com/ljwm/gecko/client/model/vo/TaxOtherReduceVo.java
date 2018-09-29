@@ -24,7 +24,7 @@ public class TaxOtherReduceVo {
   @ApiModelProperty(value = "其它扣除减免分类ID")
   private Long otherReduceId;
 
-  @ApiModelProperty(value = "个人缴纳金额")
+  @ApiModelProperty(value = "个人缴纳金额,参数改为value")
   @JSONField(name = "value")
   private String taxMoney;
 

@@ -45,4 +45,7 @@ public interface CompanyUserMapper extends BaseMapper<CompanyUser> {
     "WHERE a.COMPANY_ID =#{companyId} AND MEMBER_ID=#{memberId} AND a.ID = b.COMPANY_USER_ID")
   @ResultMap("EmployeeInfo")
   List<EmployeeDto> selectEmployeeList(@Param("companyId") Long companyId, @Param("memberId") Long memberId);
+
+
+
 }
