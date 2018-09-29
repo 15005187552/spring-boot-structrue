@@ -1,7 +1,7 @@
 package com.ljwm.gecko.client.model.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.ljwm.gecko.base.serializer.StatusWithNameSerializer;
+import com.ljwm.gecko.base.serializer.IdToNameSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -18,7 +18,7 @@ public class AttendanceVo{
   @ApiModelProperty(value = "考勤报税数据ID")
   private String taxId;
 
-  @JSONField(serializeUsing = StatusWithNameSerializer.AttendanceSerializer.class)
+  @JSONField(serializeUsing = IdToNameSerializer.AttendanceSerializer.class)
   @ApiModelProperty(value = "属性ID")
   private Long attributeId;
 

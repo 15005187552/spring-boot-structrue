@@ -35,6 +35,8 @@ public interface TaxMapper extends BaseMapper<Tax> {
   @ResultMap("NaturalResultMap")
   List<NaturalPersonTaxVo> selectTaxInfo(Long taxId);
 
+  List<Tax> selectTaxList(@Param("page") Page page, @Param("map") Map<String, Object> map);
+
   /*@Select("SELECT * FROM t_natural_person a, t_tax b WHERE a.COMPANY_ID = #{map.companyId} AND b.MEMBER_ID = a.MEMBER_ID <if test=\"map.name!=null and map.name != ''\">AND a.`NAME` = #{map.name}</if>\n" +
     "<if test=\"map.declareTime!=null and map.declareTime != ''\">AND b.DECLARE_TIME = #{map.declareTime}</if>")
   List<NaturalPersonTaxVo> selectTaxByList(@Param("page") Page<NaturalPersonTaxVo> page, @Param("map")Map<String, Object> map);*/

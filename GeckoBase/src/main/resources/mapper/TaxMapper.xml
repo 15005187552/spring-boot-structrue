@@ -66,4 +66,13 @@
     </where>
   </select>
 
+  <select id="selectTaxList" resultMap="BaseResultMap">
+    SELECT b.*
+    FROM t_natural_person a, t_tax b
+    <where>
+      a.COMPANY_ID = #{map.companyId} AND b.MEMBER_ID = a.MEMBER_ID
+      <if test="map.name!=null and map.name != ''">AND a.`NAME` = #{map.name}</if>
+      <if test="map.declareTime!=null and map.declareTime != ''">AND b.DECLARE_TIME = #{map.declareTime}</if>
+    </where>
+  </select>
 </mapper>

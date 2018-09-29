@@ -1,10 +1,7 @@
 package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
-import com.ljwm.gecko.client.model.dto.RecordForm;
-import com.ljwm.gecko.client.model.dto.TaxForm;
-import com.ljwm.gecko.client.model.dto.TaxInfoForm;
-import com.ljwm.gecko.client.model.dto.TaxListForm;
+import com.ljwm.gecko.client.model.dto.*;
 import com.ljwm.gecko.client.security.JwtUser;
 import com.ljwm.gecko.client.service.TaxDeclarationService;
 import io.swagger.annotations.Api;
@@ -69,5 +66,10 @@ public class TaxDeclarationController {
     return taxDeclarationService.findTaxInfo(taxId);
   }
 
-
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PostMapping("findListByCompanyId")
+  @ApiOperation("查看公司报税详情")
+  public Result findListByCompanyId(@RequestBody TaxFindForm taxFindForm){
+    return taxDeclarationService.findListByCompanyId(taxFindForm);
+  }
 }

@@ -57,6 +57,9 @@ public class TaxDeclarationService {
   @Autowired
   AttendanceMapper attendanceMapper;
 
+  @Autowired
+  NaturalPersonMapper naturalPersonMapper;
+
   @Transactional
   public Result commit(TaxForm taxForm) {
     Tax tax = new Tax();
@@ -205,5 +208,10 @@ public class TaxDeclarationService {
       attendanceTaxVo.setOtherReduceList(taxOtherReduceVoList);
     }
     return Result.success(attendanceTaxVo);
+  }
+
+  public Result findListByCompanyId(TaxFindForm taxFindForm) {
+    Page<Tax> page = commonService.find(taxFindForm, (p, q) -> taxMapper.selectTaxList(p, BeanUtil.beanToMap(taxFindForm)));
+    return Result.success(page);
   }
 }

@@ -3,7 +3,6 @@ package com.ljwm.gecko.base.serializer;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.ljwm.bootbase.kit.SpringKit;
-import com.ljwm.gecko.base.dao.*;
 import com.ljwm.gecko.base.enums.*;
 import com.ljwm.gecko.base.service.LocationService;
 import com.ljwm.gecko.base.utils.EnumUtil;
@@ -74,41 +73,6 @@ public abstract class StatusWithNameSerializer implements ObjectSerializer {
     @Override
     public String getNameByCode(Object code) {
       return SpringKit.getBean(LocationService.class).getNameByCode(code.toString());
-    }
-  }
-
-  public static class SpecialDeductionSerializer extends StatusWithNameSerializer {
-    @Override
-    public String getNameByCode(Object code) {
-      return SpringKit.getBean(SpecialDuctionDao.class).idToName((Long) code);
-    }
-  }
-
-  public static class SpecialAddSerializer extends StatusWithNameSerializer {
-    @Override
-    public String getNameByCode(Object code) {
-      return SpringKit.getBean(SpecialAddDao.class).idToName((Long) code);
-    }
-  }
-
-  public static class IncomeTypeSerializer extends StatusWithNameSerializer {
-    @Override
-    public String getNameByCode(Object code) {
-      return SpringKit.getBean(IncomeTypeDao.class).idToName((Long) code);
-    }
-  }
-
-  public static class AttendanceSerializer extends StatusWithNameSerializer {
-    @Override
-    public String getNameByCode(Object code) {
-      return SpringKit.getBean(AttendanceAttributeDao.class).idToName((Long) code);
-    }
-  }
-
-  public static class OtherReduceSerializer extends StatusWithNameSerializer {
-    @Override
-    public String getNameByCode(Object code) {
-      return SpringKit.getBean(OtherReduceDao.class).idToName((Long) code);
     }
   }
 
