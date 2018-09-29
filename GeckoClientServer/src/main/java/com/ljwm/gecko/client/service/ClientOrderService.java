@@ -133,7 +133,7 @@ public class ClientOrderService {
     orderItem.setOrderItemNo(SUB_ORDER+idWorkerUtil.nextId());
     orderItem.setCreateTime(DateUtil.date());
     orderItem.setUpdateTime(DateUtil.date());
-    if (orderItem.getGoodId()!=null){
+    if (orderItemDto.getSpecServiceId()!=null){
       orderItem.setOrderItemStatus(OrderStatusEnum.OVER_CONFIRM.getCode());
       SpecServicesPrice specServicesPrice =specServicesPriceMapper.selectById(orderItemDto.getSpecServiceId());
       if (specServicesPrice==null){
