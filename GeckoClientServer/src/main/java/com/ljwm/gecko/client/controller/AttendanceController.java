@@ -34,11 +34,4 @@ public class AttendanceController {
     return attendanceService.commit(attendanceForm);
   }
 
-  @PostMapping("/getAttendace")
-  @ApiOperation("获取当前员工考勤工资信息")
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
-  public Result getAttendace(){
-    return attendanceService.getAttendace();
-  }
-
 }

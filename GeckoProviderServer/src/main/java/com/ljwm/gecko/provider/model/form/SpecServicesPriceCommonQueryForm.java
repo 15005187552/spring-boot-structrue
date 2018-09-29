@@ -13,4 +13,7 @@ public class SpecServicesPriceCommonQueryForm {
 
   @ApiModelProperty(value = "服务商id",hidden = true)
   private Long providerId;
+
+  @ApiModelProperty("服务类型id")
+  private Long serviceId;
 }

@@ -20,4 +20,6 @@ import java.util.Map;
  */
 public interface ProviderGoodsMapper extends BaseMapper<ProviderGoods> {
   List<ProviderGoodsVo> findByPage(Page<ProviderGoodsVo> ret, @Param("params")Map map);
+
+  ProviderGoodsVo findProviderGoodsVoById(@Param("id") Long id);
 }

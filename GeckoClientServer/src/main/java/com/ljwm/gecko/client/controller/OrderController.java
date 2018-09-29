@@ -2,6 +2,7 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.model.dto.OrderCommentsDto;
 import com.ljwm.gecko.base.model.dto.OrderDto;
 import com.ljwm.gecko.base.model.dto.OrderItemDto;
@@ -33,6 +34,7 @@ public class OrderController extends BaseController {
   @PostMapping("createOrderItem")
   @ApiOperation("创建子订单")
   public Result createOrderItem(@RequestBody OrderItemDto orderItemDto){
+    orderItemDto.setMemberId(SecurityKit.currentId());
     clientOrderService.createOrderItem(orderItemDto);
     return success();
   }

@@ -1,11 +1,13 @@
 package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.controller.BaseController;
-import com.ljwm.gecko.client.service.ClientSpecServicesPrice;
+import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.client.model.dto.SpecServicePriceQueryForm;
+import com.ljwm.gecko.client.service.ClientSpecServicesPriceService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/specServicePrice")
@@ -13,6 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class SpecServicePriceController extends BaseController {
 
   @Autowired
-  private ClientSpecServicesPrice clientSpecServicesPrice;
+  private ClientSpecServicesPriceService clientSpecServicesPriceService;
+
+
+  @PostMapping("findSpecServicePrice")
+  @ApiOperation("查询商品的规格信息")
+  public Result findSpecServicePrice(@RequestBody SpecServicePriceQueryForm specServicePriceQueryForm){
+      return success(clientSpecServicesPriceService.findSpecServicesPrice(specServicePriceQueryForm));
+  }
 
 }

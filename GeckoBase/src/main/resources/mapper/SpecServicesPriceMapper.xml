@@ -41,6 +41,9 @@
         <if test="params.goodId != null ">
           AND t.`GOOD_ID` =#{params.goodId}
         </if>
+        <if test="params.serviceId != null ">
+          AND t.`SERVICE_ID` =#{params.serviceId}
+        </if>
       </where>
     </select>
 
@@ -53,7 +56,14 @@
         <if test="params.goodId != null ">
           AND t.`GOOD_ID` =#{params.goodId}
         </if>
+        <if test="params.serviceId != null ">
+          AND t.`SERVICE_ID` =#{params.serviceId}
+        </if>
       </where>
+    </select>
+
+    <select id="findById" parameterType="long" resultMap="specServicesPriceSimpleVo">
+      select t.* from t_spec_services_price t where t.ID=#{id}
     </select>
 
 </mapper>

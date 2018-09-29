@@ -180,7 +180,7 @@ public class TemplateService {
       i++;
     }
     for (Template template : list) {
-      map.put(String.valueOf(template.getId()), attributeMapper.selectById(template.getId()).getName());
+      map.put(String.valueOf(template.getId()), attributeMapper.selectById(template.getAttributeId()).getName());
     }
     response.reset();
     response.setContentType("multipart/form-data");

@@ -3,27 +3,21 @@ package com.ljwm.gecko.client.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.bean.Constant;
-import com.ljwm.gecko.base.entity.Order;
-import com.ljwm.gecko.base.entity.OrderComments;
-import com.ljwm.gecko.base.entity.OrderCommentsPath;
-import com.ljwm.gecko.base.entity.OrderItem;
+import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.enums.OrderStatusEnum;
 import com.ljwm.gecko.base.enums.PaymentTypeEnum;
-import com.ljwm.gecko.base.mapper.OrderCommentsMapper;
-import com.ljwm.gecko.base.mapper.OrderCommentsPathMapper;
-import com.ljwm.gecko.base.mapper.OrderItemMapper;
-import com.ljwm.gecko.base.mapper.OrderMapper;
+import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.bean.AppInfo;
-import com.ljwm.gecko.base.model.dto.OrderCommentsDto;
-import com.ljwm.gecko.base.model.dto.OrderDto;
-import com.ljwm.gecko.base.model.dto.OrderItemCommentsDto;
-import com.ljwm.gecko.base.model.dto.OrderItemDto;
+import com.ljwm.gecko.base.model.dto.*;
+import com.ljwm.gecko.base.model.vo.OrderItemVo;
 import com.ljwm.gecko.base.model.vo.OrderSimpleVo;
 import com.ljwm.gecko.base.model.vo.OrderVo;
 import com.ljwm.gecko.base.utils.Fileutil;
@@ -39,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -69,6 +64,9 @@ public class ClientOrderService {
   private OrderCommentsPathMapper orderCommentsPathMapper;
 
   @Autowired
+  private SpecServicesPriceMapper specServicesPriceMapper;
+
+  @Autowired
   private AppInfo appInfo;
 
   private static final String MAIN_ORDER="MN";
@@ -78,64 +76,54 @@ public class ClientOrderService {
   @OrderLogger
   @Transactional
   public synchronized OrderVo placeOrder(OrderDto orderDto){
-    OrderItemDto orderItemDto = orderDto.getOrderItemDto();
-    if (orderItemDto!=null){
-      OrderItem orderItem = new OrderItem();
-      BeanUtil.copyProperties(orderItemDto,orderItem);
-      orderItem.setOrderItemNo(SUB_ORDER+idWorkerUtil.nextId());
-      orderItem.setCreateTime(DateUtil.date());
-      orderItem.setUpdateTime(DateUtil.date());
-      Order order = new Order();
-      if (orderItemDto.getGoodId()!=null){
-        //立即支付
-        order.setMemberId(SecurityKit.currentId());
-        order.setOrderNo(MAIN_ORDER+idWorkerUtil.nextId());
-        order.setPaymentType(PaymentTypeEnum.ONLINE_PAY.getCode());
-        order.setCreateTime(DateUtil.date());
-        order.setPayment(orderItemDto.getCurrentUnitPrice());  //暂时不考虑数量
-        order.setStatus(OrderStatusEnum.NO_PAID.getCode());
-        orderMapper.insert(order);
-        orderItem.setOrderNo(order.getOrderNo());
-        orderItem.setOrderItemStatus(OrderStatusEnum.NO_PAID.getCode());
-
-      }else {
-        orderItem.setOrderItemStatus(OrderStatusEnum.WAIT.getCode());
-      }
-      orderItemMapper.insert(orderItem);
-      return new OrderVo(order);
-    }else {
-      //多服务支付
-      List<String> orderItemOrderList = orderDto.getOrderItemNoList();
-      if (CollectionUtils.isEmpty(orderItemOrderList)){
-        log.info("提交订单,订单明细不能为空");
-        throw new LogicException(ResultEnum.DATA_ERROR,"服务明细不能为空!");
-      }
-      List<OrderItem> orderItemList = Lists.newArrayList();
-      BigDecimal totalPrice = BigDecimal.ZERO;
-      for (String orderItemNo:orderItemOrderList){
-        OrderItem orderItem = orderItemMapper.findByOrderItemNo(orderItemNo);
-        if (orderItem==null|| !Objects.equals(orderItem.getOrderItemStatus(),OrderStatusEnum.NO_PAID.getCode())){
-          log.info("订单号{},为非未支付状态,不能下单");
-          throw new LogicException(ResultEnum.DATA_ERROR,"订单非支付状态,不能支付");
-        }
-        orderItemList.add(orderItem);
-        totalPrice = totalPrice.add(new BigDecimal(orderItem.getCurrentUnitPrice().doubleValue())) ;
-      }
-      Order order = new Order();
-      order.setMemberId(SecurityKit.currentId());
-      order.setOrderNo(MAIN_ORDER+idWorkerUtil.nextId());
-      order.setPaymentType(PaymentTypeEnum.ONLINE_PAY.getCode());
-      order.setCreateTime(DateUtil.date());
-      order.setPayment(totalPrice);  //暂时不考虑数量
-      order.setStatus(OrderStatusEnum.NO_PAID.getCode());
-      orderMapper.insert(order);
-      for (OrderItem orderItem : orderItemList){
-        orderItem.setOrderNo(order.getOrderNo());
-        orderItem.setUpdateTime(DateUtil.date());
-        orderItemMapper.updateById(orderItem);
-      }
-      return new OrderVo(order);
+    //多服务支付
+    List<Long> orderItemOrderList = orderDto.getOrderItemNoList();
+    if (CollectionUtils.isEmpty(orderItemOrderList)){
+      log.info("提交订单,订单明细不能为空");
+      throw new LogicException(ResultEnum.DATA_ERROR,"服务明细不能为空!");
     }
+    Map<String,Object> resMap = calMoney(orderItemOrderList);
+    Order order = new Order();
+    order.setMemberId(SecurityKit.currentId());
+    order.setOrderNo(MAIN_ORDER+idWorkerUtil.nextId());
+    order.setPaymentType(PaymentTypeEnum.ONLINE_PAY.getCode());
+    order.setCreateTime(DateUtil.date());
+    order.setPayment((BigDecimal)(resMap.get("totalAmount")));  //暂时不考虑数量
+    order.setStatus(OrderStatusEnum.NO_PAID.getCode());
+    order.setDownPaymentAmount((BigDecimal)(resMap.get("downPaymentAmount")));
+    order.setRemianAmount((BigDecimal)(resMap.get("remainAmount")));
+    orderMapper.insert(order);
+    List<OrderItem> orderItemList = (List<OrderItem>)resMap.get("orderItemsList");
+    for (OrderItem orderItem : orderItemList){
+      orderItem.setOrderNo(order.getOrderNo());
+      orderItem.setUpdateTime(DateUtil.date());
+      orderItemMapper.updateById(orderItem);
+    }
+    return new OrderVo(order);
+  }
+
+  public Map<String,Object> calMoney(List<Long> orderItemOrderList){
+    Map<String,Object> retMap = Maps.newHashMap();
+    BigDecimal totalAmount = BigDecimal.ZERO;
+    BigDecimal downPaymentAmount = BigDecimal.ZERO;
+    BigDecimal remainAmount = BigDecimal.ZERO;
+    List<OrderItem> orderItemList = Lists.newArrayList();
+    for (Long orderItemId:orderItemOrderList){
+      OrderItem orderItem = orderItemMapper.selectById(orderItemId);
+      if (orderItem==null|| !Objects.equals(orderItem.getOrderItemStatus(),OrderStatusEnum.OVER_CONFIRM.getCode())){
+        log.info("订单号{},为非已定价状态,不能下单");
+        throw new LogicException(ResultEnum.DATA_ERROR,"订单非已定价状态,不能支付");
+      }
+      orderItemList.add(orderItem);
+      totalAmount = totalAmount.add(new BigDecimal(orderItem.getCurrentUnitPrice().doubleValue())) ;
+      downPaymentAmount = downPaymentAmount.add(new BigDecimal(orderItem.getDownPaymentAmount().doubleValue()));
+      remainAmount = remainAmount.add(new BigDecimal(orderItem.getRemainAmount().doubleValue()));
+    }
+    retMap.put("totalAmount",totalAmount);
+    retMap.put("downPaymentAmount",downPaymentAmount);
+    retMap.put("remainAmount",remainAmount);
+    retMap.put("orderItemsList",orderItemList);
+    return retMap;
   }
 
   @Transactional
@@ -146,7 +134,16 @@ public class ClientOrderService {
     orderItem.setCreateTime(DateUtil.date());
     orderItem.setUpdateTime(DateUtil.date());
     if (orderItem.getGoodId()!=null){
-      orderItem.setOrderItemStatus(OrderStatusEnum.NO_PAID.getCode());
+      orderItem.setOrderItemStatus(OrderStatusEnum.OVER_CONFIRM.getCode());
+      SpecServicesPrice specServicesPrice =specServicesPriceMapper.selectById(orderItemDto.getSpecServiceId());
+      if (specServicesPrice==null){
+        log.info("根据商品规格id{}查询商品规格信息不存在!");
+        throw new LogicException(ResultEnum.DATA_ERROR,"查询商品规格信息不存在!");
+      }
+      orderItem.setCurrentUnitPrice(specServicesPrice.getPrice());
+      orderItem.setDownPaymentRate(specServicesPrice.getDownPaymentRate());
+      orderItem.setTotalPrice(specServicesPrice.getPrice());
+      orderItem.setDownPaymentAmount(specServicesPrice.getPrice().multiply(specServicesPrice.getDownPaymentRate()));
     }else {
       orderItem.setOrderItemStatus(OrderStatusEnum.WAIT.getCode());
     }
@@ -238,5 +235,9 @@ public class ClientOrderService {
       }
     }
     return new OrderSimpleVo(order);
+  }
+
+  public Page<OrderItemVo> findOrderItemList(OrderItemQueryDto orderItemQueryDto){
+    return commonService.find(orderItemQueryDto, (p, q) -> orderItemMapper.findOrderItemList(p, BeanUtil.beanToMap(orderItemQueryDto)));
   }
 }

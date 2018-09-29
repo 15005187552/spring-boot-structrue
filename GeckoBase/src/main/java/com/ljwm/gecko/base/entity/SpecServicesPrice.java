@@ -1,21 +1,18 @@
 package com.ljwm.gecko.base.entity;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * <p>
@@ -69,6 +66,10 @@ public class SpecServicesPrice implements Serializable {
     @ApiModelProperty(value = "商品id")
     @TableField("`GOOD_ID`")
     private Long goodId;
+
+    @ApiModelProperty(value = "服务类型id")
+    @TableField("`SERVICE_ID`")
+    private Integer serviceId;
 
 
     public static final String ID = "`ID`";
