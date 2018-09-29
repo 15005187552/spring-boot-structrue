@@ -1,6 +1,7 @@
 package com.ljwm.gecko.base.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.SpecServicesPrice;
 import com.ljwm.gecko.base.model.vo.SpecServicesPriceSimpleVo;
 import org.apache.ibatis.annotations.Param;
@@ -23,4 +24,6 @@ public interface SpecServicesPriceMapper extends BaseMapper<SpecServicesPrice> {
   List<SpecServicesPriceSimpleVo> find(@Param("params") Map map);
 
   SpecServicesPriceSimpleVo findById(@Param("id") Long id);
+
+  List<SpecServicesPriceSimpleVo> findByServiceIdAndProviderId(@Param("params") Kv kv);
 }

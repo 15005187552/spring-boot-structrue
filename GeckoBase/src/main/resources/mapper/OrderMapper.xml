@@ -33,7 +33,7 @@
   </resultMap>
 
   <resultMap id="orderProviderVo" type="com.ljwm.gecko.base.model.vo.OrderVo" extends="BaseResultMap">
-    <collection property="orderItemVoList" column="{orderNo=ORDER_NO,providerId=providerId}" select="com.ljwm.gecko.base.mapper.OrderItemMapper.findOrderItemVoList"/>
+    <collection property="orderItemVoList" column="{orderNo=ORDER_NO,providerId=providerId}" select="com.ljwm.gecko.base.mapper.OrderItemMapper.findProviderOrderItemVoList"/>
   </resultMap>
 
   <select id="findPage" parameterType="map" resultMap="orderVo">

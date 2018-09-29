@@ -11,7 +11,7 @@ public class SpecServicesPriceCommonQueryForm {
   @ApiModelProperty("商品id")
   private Long goodId;
 
-  @ApiModelProperty(value = "服务商id",hidden = true)
+  @ApiModelProperty("服务商id")
   private Long providerId;
 
   @ApiModelProperty("服务类型id")
