@@ -20,6 +20,9 @@ public class TaxSpecialVo {
   @ApiModelProperty(value = "报税数据ID")
   private Long taxId;
 
+  @ApiModelProperty(value = "报税数据专项扣除名称")
+  private String name;
+
   @JSONField(serializeUsing = IdToNameSerializer.SpecialDeductionSerializer.class)
   @ApiModelProperty(value = "专项扣除分类ID")
   private Long specialDeduId;

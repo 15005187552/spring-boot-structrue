@@ -21,8 +21,8 @@ import java.util.List;
 @Repository
 public interface TaxIncomeMapper extends BaseMapper<TaxIncome> {
   @Select("SELECT b.ID as INCOME_ID, " +
-    "a.ID as TAX_ID" +
-    "c.ID as INCOME_TYPE_ID" +
+    "a.ID as TAX_ID, " +
+    "c.ID as INCOME_TYPE_ID, " +
     "c.`NAME`, " +
     "c.SORT, " +
     "c.IS_NEED_ENTER, " +
@@ -32,9 +32,9 @@ public interface TaxIncomeMapper extends BaseMapper<TaxIncome> {
     "b.UPDATE_TIME, " +
     "b.UPDATER, " +
     "b.INCOME\n" +
-    "FROM t_tax a," +
-    " t_tax_income b," +
-    " t_income_type c\n" +
+    "FROM t_tax a, " +
+    "t_tax_income b, " +
+    "t_income_type c\n" +
     "WHERE a.DECLARE_TIME = #{declareTime} AND MEMBER_ID = #{memberId} AND DECLARE_TYPE = #{declareType}\n" +
     "AND a.ID = b.TAX_ID  \n" +
     "AND c.ID = b.INCOME_TYPE_ID")
