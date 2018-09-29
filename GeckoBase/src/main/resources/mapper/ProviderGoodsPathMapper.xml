@@ -24,6 +24,6 @@
 
     </resultMap>
     <select id="findByGoodId" parameterType="long" resultMap="providerGoodsPath">
-      select t.*  from t_provider_goods_path t where t.GOOD_ID=#{goodId}
+      select t.*  from t_provider_goods_path t where t.ID=#{goodId}
     </select>
 </mapper>
