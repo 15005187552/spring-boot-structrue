@@ -33,7 +33,6 @@ public class AMessageService extends MessageService {
   @Autowired
   private PushMessageMapper pushMessageMapper;
 
-
   @Autowired
   private KafkaTemplate kafkaTemplate;
 

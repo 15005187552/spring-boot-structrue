@@ -6,10 +6,12 @@
     <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.CustomerMessage">
         <id column="ID" property="id" />
         <result column="CUSTOMER_SESSION_ID" property="customerSessionId" />
-        <result column="SENDER_ID" property="senderId" />
-        <result column="SENDER_TYPE" property="senderType" />
+        <result column="TEXT" property="text" />
+        <result column="RECEIVER_ID" property="receiverId" />
+        <result column="RECEIVER_TYPE" property="receiverType" />
         <result column="CUSTOMER_STATUS" property="customerStatus" />
         <result column="PROVIDER_STATUS" property="providerStatus" />
+        <result column="STATUS" property="status" />
         <result column="CREATE_TIME" property="createTime" />
         <result column="PUSH_TIME" property="pushTime" />
         <result column="HAND_TIME" property="handTime" />
@@ -17,7 +19,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`CUSTOMER_SESSION_ID`          ,`SENDER_ID`          ,`SENDER_TYPE`          ,`CUSTOMER_STATUS`          ,`PROVIDER_STATUS`          ,`CREATE_TIME`          ,`PUSH_TIME`          ,`HAND_TIME`
+          `ID`          ,`CUSTOMER_SESSION_ID`          ,`TEXT`          ,`RECEIVER_ID`          ,`RECEIVER_TYPE`          ,`CUSTOMER_STATUS`          ,`PROVIDER_STATUS`          ,`STATUS`          ,`CREATE_TIME`          ,`PUSH_TIME`          ,`HAND_TIME`
     </sql>
 
 </mapper>

@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
@@ -16,4 +18,6 @@ public class ProviderServicesVo extends ProviderServices {
   private Integer validateState;
 
   private ServeSimpleVo serveSimpleVo;
+
+  private List<SpecServicesPriceSimpleVo> specServicesPriceSimpleVoList;
 }

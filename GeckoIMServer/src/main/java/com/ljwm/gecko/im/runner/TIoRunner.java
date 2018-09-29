@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.tio.server.ServerGroupContext;
 import org.tio.websocket.server.WsServerStarter;
 
@@ -44,12 +45,12 @@ public class TIoRunner implements ApplicationRunner {
 
     serverGroupContext = wsServerStarter.getServerGroupContext();
     serverGroupContext.setName(showcaseServerConfig.getPROTOCOL_NAME());
-    serverGroupContext.setServerAioListener(showcaseServerAioListener);
-
+    ShowcaseWsMsgHandler.GROUP_CONTEXT = serverGroupContext;
+//    serverGroupContext.setServerAioListener(showcaseServerAioListener);
     //设置ip监控
-    serverGroupContext.setIpStatListener(showcaseIpStatListener);
+//    serverGroupContext.setIpStatListener(showcaseIpStatListener);
     //设置ip统计时间段
-    serverGroupContext.ipStats.addDurations(showcaseServerConfig.getIpStatDuration().getIPSTAT_DURATIONS());
+//    serverGroupContext.ipStats.addDurations(showcaseServerConfig.getIpStatDuration().getIPSTAT_DURATIONS());
 
     //设置心跳超时时间
     serverGroupContext.setHeartbeatTimeout(showcaseServerConfig.getHEARTBEAT_TIMEOUT());
@@ -70,7 +71,6 @@ public class TIoRunner implements ApplicationRunner {
   public void run(ApplicationArguments args) throws Exception {
 
     showcaseWebsocketStarter(showcaseServerConfig.getSERVER_PORT(), showcaseWsMsgHandler);
-
     wsServerStarter.start();
 
     log.info("Tio Started On Port : {}", showcaseServerConfig.getSERVER_PORT());

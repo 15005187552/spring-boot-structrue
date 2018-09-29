@@ -66,4 +66,8 @@
       select t.* from t_spec_services_price t where t.ID=#{id}
     </select>
 
+    <select id="findByServiceIdAndProviderId" parameterType="map" resultMap="specServicesPriceSimpleVo">
+      select t.* from t_spec_services_price t where t.SERVICE_ID=#{serviceId} and t.PROVIDER_ID=#{providerId}
+    </select>
+
 </mapper>

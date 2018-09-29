@@ -37,6 +37,8 @@ public class MessageService {
 
   public static final String TOPIC_CUSTOMER_MESSAGE = "TOPIC_CUSTOMER_MESSAGE";       // 客服消息Topic
 
+  public static final String TOPIC_TO_PROVIDER = "TOPIC_TO_PROVIDER";       // 推送至服务商Topic
+
 
   @Autowired
   private CommonService commonService;

@@ -20,4 +20,6 @@ public interface ProviderServicesMapper extends BaseMapper<ProviderServices> {
   List<ProviderServicesVo> findProviderServicesVoListByProviderId(@Param("providerId") Long providerId);
 
   List<ProviderServicesSimpleVo> findClienProviderServicesListByProviderId(@Param("providerId") Long providerId);
+
+  List<ProviderServicesVo> findProviderServicesDetailVoListByProviderId(@Param("providerId") Long providerId);
 }
