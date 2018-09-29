@@ -13,5 +13,4 @@ public enum ChatSessionEnum {
   private Integer code;
 
   private String info;
-
 }

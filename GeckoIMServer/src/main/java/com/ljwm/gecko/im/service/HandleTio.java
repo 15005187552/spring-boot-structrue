@@ -27,7 +27,7 @@ import java.util.List;
 public class HandleTio {
 
   @Autowired
-  private ChantMessageService chantMessageService;
+  private ChatMessageService chatMessageService;
 
   @Autowired
   private CommonService commonService;
