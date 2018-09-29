@@ -21,8 +21,8 @@ import io.swagger.annotations.ApiModelProperty;
  * 客服会话表
  * </p>
  *
- * @author YunQiSong
- * @since 2018-09-24
+ * @author xixil
+ * @since 2018-09-29
  */
 @Data
 @SuppressWarnings("ALL")
