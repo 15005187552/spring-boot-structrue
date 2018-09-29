@@ -1,4 +1,4 @@
-package com.ljwm.gecko.client.model.vo;
+package com.ljwm.gecko.base.model.vo;
 
 import lombok.Data;
 

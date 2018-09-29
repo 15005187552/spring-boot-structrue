@@ -1,4 +1,4 @@
-package com.ljwm.gecko.client.model.vo;
+package com.ljwm.gecko.base.model.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ljwm.gecko.base.serializer.IdToNameSerializer;
@@ -10,7 +10,7 @@ import lombok.Data;
  * @date 2018/9/28 21:04
  */
 @Data
-public class AttendanceVo{
+public class AttendanceVo {
 
   @ApiModelProperty(value = "主键ID")
   private Long id;

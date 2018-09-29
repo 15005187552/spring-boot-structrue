@@ -9,11 +9,9 @@ import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.mapper.*;
-import com.ljwm.gecko.base.model.vo.NaturalPersonTaxVo;
-import com.ljwm.gecko.base.model.vo.TaxVo;
+import com.ljwm.gecko.base.model.vo.*;
 import com.ljwm.gecko.client.dao.TaxInfoDao;
 import com.ljwm.gecko.client.model.dto.*;
-import com.ljwm.gecko.client.model.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -143,19 +141,19 @@ public class TaxDeclarationService {
     return Result.success(page);
   }
 
-  public Result findTaxById(Long taxId) {
+  public NaturalPersonTaxVo findTaxById(Long taxId) {
     List<NaturalPersonTaxVo> list = taxMapper.selectTaxInfo(taxId);
     if(CollectionUtil.isNotEmpty(list)){
       NaturalPersonTaxVo naturalPersonTaxVo = list.get(0);
       TaxVo taxVo = naturalPersonTaxVo.getTaxVo();
       TaxInfoForm taxInfoForm = new TaxInfoForm().setMemberId(taxVo.getMemberId()).setDeclareTime(taxVo.getDeclareTime()).setDeclareType(taxVo.getDeclareType());
       naturalPersonTaxVo.setTaxVo(find(taxInfoForm));
-      return Result.success(naturalPersonTaxVo);
+      return naturalPersonTaxVo;
     }
-    return Result.success(null);
+    return null;
   }
 
-  public Result findTaxInfo(Long taxId) {
+  public AttendanceTaxVo findTaxInfo(Long taxId) {
     AttendanceTaxVo attendanceTaxVo = new AttendanceTaxVo();
     List<Attendance> attendanceList = attendanceMapper.selectList(new QueryWrapper<Attendance>().eq(Attendance.TAX_ID, taxId));
     List<TaxIncome> taxIncomeList = taxIncomeMapper.selectList(new QueryWrapper<TaxIncome>().eq(TaxIncome.TAX_ID, taxId));
@@ -207,7 +205,7 @@ public class TaxDeclarationService {
       }
       attendanceTaxVo.setOtherReduceList(taxOtherReduceVoList);
     }
-    return Result.success(attendanceTaxVo);
+    return attendanceTaxVo;
   }
 
   public Result findListByCompanyId(TaxFindForm taxFindForm) {

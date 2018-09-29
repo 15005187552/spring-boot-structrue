@@ -56,14 +56,14 @@ public class TaxDeclarationController {
   @PostMapping("findTaxById/{taxId}")
   @ApiOperation("查看账单详情")
   public Result findTaxById(@PathVariable Long taxId){
-    return taxDeclarationService.findTaxById(taxId);
+    return Result.success(taxDeclarationService.findTaxById(taxId));
   }
 
   @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("findTaxInfo")
   @ApiOperation("查看账单详情")
   public Result findTaxInfo(@RequestParam("taxId") Long taxId){
-    return taxDeclarationService.findTaxInfo(taxId);
+    return Result.success(taxDeclarationService.findTaxInfo(taxId));
   }
 
   @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)

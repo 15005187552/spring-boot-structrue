@@ -31,7 +31,7 @@ public class AttendanceForm {
     private String name;
 
     @ApiModelProperty("证件类型")
-    private String certificate;
+    private Integer certificate;
 
     @ApiModelProperty("证照号码")
     private String idCard;

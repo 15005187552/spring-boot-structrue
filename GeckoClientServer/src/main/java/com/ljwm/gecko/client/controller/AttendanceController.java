@@ -2,6 +2,7 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.client.model.dto.AttendanceForm;
+import com.ljwm.gecko.client.model.dto.TaxFindForm;
 import com.ljwm.gecko.client.security.JwtUser;
 import com.ljwm.gecko.client.service.AttendanceService;
 import io.swagger.annotations.Api;
@@ -32,6 +33,13 @@ public class AttendanceController {
   @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   public Result commit(@RequestBody @Valid AttendanceForm attendanceForm){
     return attendanceService.commit(attendanceForm);
+  }
+
+  @PostMapping("/findAttendanceList")
+  @ApiOperation("获取工资考勤信息")
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  public Result findAttendanceList(@RequestBody TaxFindForm taxFindForm){
+    return attendanceService.findAttendanceList(taxFindForm);
   }
 
 }

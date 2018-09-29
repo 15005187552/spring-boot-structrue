@@ -12,6 +12,15 @@
         <result column="UPDATE_TIME" property="updateTime" />
     </resultMap>
 
+  <resultMap id="TaxInfoMap" type="com.ljwm.gecko.base.model.vo.TaxListVo">
+    <id column="ID" property="id" />
+    <result column="MEMBER_ID" property="memberId" />
+    <result column="DECLARE_TYPE" property="declareType" />
+    <result column="DECLARE_TIME" property="declareTime" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+  </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
           `ID`          ,`MEMBER_ID`          ,`DECLARE_TYPE`          ,`DECLARE_TIME`          ,`CREATE_TIME`          ,`UPDATE_TIME`
@@ -67,6 +76,16 @@
   </select>
 
   <select id="selectTaxList" resultMap="BaseResultMap">
+    SELECT b.*
+    FROM t_natural_person a, t_tax b
+    <where>
+      a.COMPANY_ID = #{map.companyId} AND b.MEMBER_ID = a.MEMBER_ID
+      <if test="map.name!=null and map.name != ''">AND a.`NAME` = #{map.name}</if>
+      <if test="map.declareTime!=null and map.declareTime != ''">AND b.DECLARE_TIME = #{map.declareTime}</if>
+    </where>
+  </select>
+
+  <select id="selectTaxVoList" resultMap="TaxInfoMap">
     SELECT b.*
     FROM t_natural_person a, t_tax b
     <where>

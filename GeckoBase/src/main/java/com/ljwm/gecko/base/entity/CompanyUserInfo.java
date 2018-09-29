@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -19,7 +20,7 @@ import java.util.Date;
  * </p>
  *
  * @author Levis
- * @since 2018-09-27
+ * @since 2018-09-29
  */
 @Data
 @SuppressWarnings("ALL")
@@ -33,7 +34,7 @@ public class CompanyUserInfo implements Serializable {
 
 
     @ApiModelProperty(value = "ID主键")
-    @TableId(value = "`COMPANY_USER_ID`", type = IdType.INPUT)
+    @TableId(value = "`COMPANY_USER_ID`", type = IdType.AUTO)
     private Long companyUserId;
 
     @ApiModelProperty(value = "工号")
@@ -79,6 +80,18 @@ public class CompanyUserInfo implements Serializable {
     @ApiModelProperty(value = "婚姻状况")
     @TableField("`MARITAL_STATUS`")
     private Integer maritalStatus;
+
+    @ApiModelProperty(value = "公积金比例")
+    @TableField("`FUND_PER`")
+    private BigDecimal fundPer;
+
+    @ApiModelProperty(value = "公积金基数")
+    @TableField("`FUND_BASE`")
+    private BigDecimal fundBase;
+
+    @ApiModelProperty(value = "社保基数")
+    @TableField("`SOCIAL_BASE`")
+    private BigDecimal socialBase;
 
     @ApiModelProperty(value = "是否引进人才")
     @TableField("`NTRODUCE_TALENTS`")
@@ -140,6 +153,12 @@ public class CompanyUserInfo implements Serializable {
     public static final String WORK_CITY = "`WORK_CITY`";
 
     public static final String MARITAL_STATUS = "`MARITAL_STATUS`";
+
+    public static final String FUND_PER = "`FUND_PER`";
+
+    public static final String FUND_BASE = "`FUND_BASE`";
+
+    public static final String SOCIAL_BASE = "`SOCIAL_BASE`";
 
     public static final String NTRODUCE_TALENTS = "`NTRODUCE_TALENTS`";
 

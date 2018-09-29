@@ -1,13 +1,18 @@
 package com.ljwm.gecko.client.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.enums.TableNameEnum;
 import com.ljwm.gecko.base.mapper.*;
+import com.ljwm.gecko.base.model.vo.TaxListVo;
 import com.ljwm.gecko.client.model.dto.AttendanceForm;
+import com.ljwm.gecko.client.model.dto.TaxFindForm;
+import org.apache.poi.ss.formula.functions.Na;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +58,17 @@ public class AttendanceService {
   @Autowired
   SpecialDeductionMapper specialDeductionMapper;
 
+  @Autowired
+  CommonService commonService;
+
+  @Autowired
+  TaxDeclarationService taxDeclarationService;
+
+  @Autowired
+  CompanyUserMapper companyUserMapper;
+
+  @Autowired
+  CompanyUserInfoMapper companyUserInfoMapper;
 
   @Transactional
   public Result commit(AttendanceForm attendanceForm) {
@@ -63,11 +79,17 @@ public class AttendanceService {
       BigDecimal socialBase = new BigDecimal(attendanceDto.getSocialBase());
       BigDecimal fundBase = new BigDecimal(attendanceDto.getFundBase());
       BigDecimal fundPer = new BigDecimal(attendanceDto.getFundPer());
-      String certificate = attendanceDto.getCertificate();
+      Integer certificate = attendanceDto.getCertificate();
       String idCard = attendanceDto.getIdCard();
       NaturalPerson naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERT_NUM, idCard).eq(NaturalPerson.CERTIFICATE, certificate));
       if (naturalPerson != null) {
         Long memberId = naturalPerson.getMemberId();
+        CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, companyId).eq(CompanyUser.MEMBER_ID, memberId));
+        CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUser.getId());
+        if(companyUserInfo != null){
+          companyUserInfo.setFundBase(fundBase).setFundPer(fundPer).setSocialBase(socialBase);
+          companyUserInfoMapper.updateById(companyUserInfo);
+        }
         Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId).eq(Tax.DECLARE_TYPE, attendanceForm.getDeclareType()));
         Date date = new Date();
         tax.setUpdateTime(date);
@@ -177,5 +199,23 @@ public class AttendanceService {
     }
     return Result.success("成功！");
   }
-
+  String[] str = {"*姓名", "*证照类型", "*证照号码", "*社保基数", "*公积金基数", "公积金比例"};
+  public Result findAttendanceList(TaxFindForm taxFindForm) {
+    Page<TaxListVo> page = commonService.find(taxFindForm, (p, q) -> taxMapper.selectTaxVoList(p, BeanUtil.beanToMap(taxFindForm)));
+    List<TaxListVo> list = page.getRecords();
+    for (TaxListVo taxListVo :list){
+      Long memberId = taxListVo.getMemberId();
+      CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, taxFindForm.getCompanyId()).eq(CompanyUser.MEMBER_ID, memberId));
+      CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUser.getId());
+      NaturalPerson naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.MEMBER_ID, memberId));
+      if(companyUserInfo == null || naturalPerson == null){
+        return Result.success(null);
+      }else {
+        taxListVo.setIdCard(naturalPerson.getCertNum()).setName(naturalPerson.getName()).setCertificate(naturalPerson.getCertificate()).
+          setSocialBase(companyUserInfo.getSocialBase().toString()).setFundBase(companyUserInfo.getFundBase().toString()).setFundPer(companyUserInfo.getFundPer().toString());
+        taxListVo.setAttendanceTaxVo(taxDeclarationService.findTaxInfo(taxListVo.getId()));
+      }
+    }
+    return Result.success(page);
+  }
 }
