@@ -61,4 +61,9 @@ public class SpecServicesPriceService {
   public List<ProviderServicesVo> findProviderServicesListByProviderId(Long providerId){
     return providerServicesMapper.findProviderServicesDetailVoListByProviderId(providerId);
   }
+
+  @Transactional
+  public Boolean disabled(Long id){
+    return specServicesPriceMapper.disabled(id)>=1;
+  }
 }

@@ -30,4 +30,7 @@ public interface SpecServicesPriceMapper extends BaseMapper<SpecServicesPrice> {
 
   @Update("UPDATE t_spec_services_price SET DISABLED=#{status} WHERE SERVICE_ID=#{serviceId} and PROVIDER_ID=#{providerId}")
   int disabled(@Param("serviceId") Integer serviceId,@Param("status") Integer status,@Param("providerId") Long providerId);
+
+  @Update("UPDATE t_spec_services_price SET DISABLED=IF(DISABLED=1,0,1) WHERE ID=#{id}")
+  int disabled(@Param("id") Long id);
 }

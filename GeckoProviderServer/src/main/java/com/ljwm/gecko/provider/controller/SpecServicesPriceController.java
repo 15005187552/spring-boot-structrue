@@ -40,4 +40,10 @@ public class SpecServicesPriceController extends BaseController {
   public Result<List<ProviderServicesVo>>  findProviderServicesListByProviderId(@PathVariable Long providerId){
     return success(specServicesPriceService.findProviderServicesListByProviderId(providerId));
   }
+
+  @GetMapping("disabled/{id}/{status}")
+  @ApiOperation("禁用启用")
+  public Result disabled(@PathVariable Long id){
+    return success(specServicesPriceService.disabled(id));
+  }
 }
