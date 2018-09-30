@@ -5,6 +5,7 @@ import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.SpecServicesPrice;
 import com.ljwm.gecko.base.model.vo.SpecServicesPriceSimpleVo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
@@ -26,4 +27,7 @@ public interface SpecServicesPriceMapper extends BaseMapper<SpecServicesPrice> {
   SpecServicesPriceSimpleVo findById(@Param("id") Long id);
 
   List<SpecServicesPriceSimpleVo> findByServiceIdAndProviderId(@Param("params") Kv kv);
+
+  @Update("UPDATE t_spec_services_price SET DISABLED=#{status} WHERE SERVICE_ID=#{serviceId} and PROVIDER_ID=#{providerId}")
+  int disabled(@Param("serviceId") Integer serviceId,@Param("status") Integer status,@Param("providerId") Long providerId);
 }

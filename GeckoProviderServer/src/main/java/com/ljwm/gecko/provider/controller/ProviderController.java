@@ -34,8 +34,8 @@ public class ProviderController extends BaseController {
     return success(providerProviderService.findProviderByProviderId(id));
   }
 
-  @GetMapping("disabled/{id}")
-  public Result disabled(@PathVariable Long id){
-    return success();
+  @GetMapping("disabled/{id}/{status}")
+  public Result disabled(@PathVariable Long id,@PathVariable Integer status){
+    return success(providerProviderService.disabled(id,status));
   }
 }

@@ -24,6 +24,6 @@ public interface ProviderServicesMapper extends BaseMapper<ProviderServices> {
 
   List<ProviderServicesVo> findProviderServicesDetailVoListByProviderId(@Param("providerId") Long providerId);
 
-  @Update("UPDATE t_provider_services SET STATUS=IF(STATUS=1,0,1) WHERE ID=#{id}")
-  int disabled(@Param("id") Long id);
+  @Update("UPDATE t_provider_services SET DISABLED=#{status} WHERE ID=#{id}")
+  int disabled(@Param("id") Long id,@Param("status") Integer status);
 }
