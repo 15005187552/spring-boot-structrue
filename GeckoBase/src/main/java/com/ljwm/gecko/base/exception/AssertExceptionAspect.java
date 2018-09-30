@@ -16,7 +16,6 @@ public class AssertExceptionAspect {
   @ResponseBody
   public Result handleAssertionError(AssertionError e) {
     log.info("AssertionError occur: {}", e);
-//    String detailMessage = UtilKit.getTargetByExpression("detailMessage",e);
     return Result.fail(ResultEnum.DATA_ERROR.getCode(), ResultEnum.DATA_ERROR.getMsg() + ":" + e.getMessage());
   }
 

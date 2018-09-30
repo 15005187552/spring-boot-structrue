@@ -73,7 +73,7 @@ public class HandService {
 
       String msg = "{name:'" + id + "',message:'" + text + "'}";
 
-      WsResponse wsResponse = WsResponse.fromText(msg, "utf-8");
+      WsResponse wsResponse = WsResponse.fromText(msg,"utf-8");
 //      Tio.send(channelContext, wsResponse);
 //      Tio.sendToGroup(channelContext.groupContext, Const.GROUP_ID, wsResponse);
 
@@ -98,24 +98,47 @@ public class HandService {
 //    if (Objects.isNull(socketInfo))
 //      throw new LogicException(ResultEnum.DATA_ERROR, "当前接收用户未登陆" + id);
 //    Tio.send(Tio.getChannelContextsByUserid(s,id.toString()),)
-    WsResponse wsResponse = WsResponse.fromText(text, "utf-8");
-    Set<ChannelContext> channelContexts = Tio.getChannelContextsByUserid(ShowcaseWsMsgHandler.GROUP_CONTEXT, id.toString()).getObj();
+    WsResponse wsResponse = WsResponse.fromText(text,"utf-8");
+    Set<ChannelContext> channelContexts = Tio.getChannelContextsByUserid(ShowcaseWsMsgHandler.GROUP_CONTEXT,id.toString()).getObj();
 
-    Tio.send(channelContexts.stream().collect(Collectors.toList()).get(0), wsResponse);
+    Tio.send(channelContexts.stream().collect(Collectors.toList()).get(0),wsResponse);
   }
 
   @KafkaListener(topics = MessageService.TOPIC_TO_PROVIDER)
   public void handToProvider(ConsumerRecord<?, ?> record) {
-    JSONObject message = Optional.of(record.value())
+    JSONObject message = getMesage(record);
+
+    tioSendHandle(message,message.getString("receiverId"));
+  }
+
+
+  @KafkaListener(topics = MessageService.TOPIC_TO_MEMBER)
+  public void HandToMember(ConsumerRecord<?, ?> record) {
+    JSONObject message = getMesage(record);
+    tioSendHandle(message,message.getString("receiverId"));
+  }
+
+  /**
+   * 解析监听数据
+   * @param record
+   * @return
+   */
+  private JSONObject getMesage(ConsumerRecord<?, ?> record) {
+    return Optional.of(record.value())
       .map(item -> JSONObject.parseObject(item.toString())).get()
       .getJSONObject("message");
-    String text = message.getString("text");
-    String id = message.getString("receiverId");
+  }
 
-    WsResponse wsResponse = WsResponse.fromText(message.toJSONString(), "utf-8");
-    Set<ChannelContext> channelContexts = Tio.getChannelContextsByUserid(ShowcaseWsMsgHandler.GROUP_CONTEXT, id).getObj();
+  /**
+   * tio 分发
+   * @param message
+   * @param id
+   */
+  private void tioSendHandle(JSONObject message,String id) {
+    WsResponse wsResponse = WsResponse.fromText(message.toJSONString(),"utf-8");
+    Set<ChannelContext> channelContexts = Tio.getChannelContextsByUserid(ShowcaseWsMsgHandler.GROUP_CONTEXT,id).getObj();
     for (ChannelContext channelContext : channelContexts) {
-      Tio.send(channelContext, wsResponse);
+      Tio.send(channelContext,wsResponse);
     }
   }
 }

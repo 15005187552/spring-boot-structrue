@@ -1,9 +1,10 @@
 package com.ljwm.gecko.im.controller;
 
-import cn.hutool.core.lang.Assert;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
-import com.ljwm.gecko.im.service.ChatMessageService;
+import com.ljwm.gecko.im.model.form.SendProviderForm;
+import com.ljwm.gecko.im.service.SessionDistributeService;
+import com.ljwm.gecko.im.service.SessionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class ChatController extends BaseController {
   public static List invokeMethod = new ArrayList();
 
   @Autowired
-  private ChatMessageService chatMessageService;
+  private SessionService sessionService;
 
   @GetMapping("getInvokeMethod")
   public Result getInvokeMethod() {
@@ -29,8 +30,15 @@ public class ChatController extends BaseController {
 
   @GetMapping("providerAccess/{receiverId}/{providerId}")
   @ApiOperation("服务商客服接入")
-  public Result providerAccess(@PathVariable Long receiverId, @PathVariable Long providerId) {
-    chatMessageService.providerAccess(receiverId, providerId);
+  public Result providerAccess(@PathVariable Long receiverId,@PathVariable Long providerId) {
+    sessionService.providerAccess(receiverId,providerId);
+    return success();
+  }
+
+  @PostMapping("sendToCustomer")
+  @ApiOperation("服务商会话发送给用户 例：订单的接口推送到会话")
+  public Result sendToCustomer(SendProviderForm form) {
+    sessionService.sendToCustomer(form);
     return success();
   }
 }
