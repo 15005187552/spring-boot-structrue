@@ -70,7 +70,7 @@ public class AuthService {
 
   public ResultMe me(JwtUser jwtUser) {
     //判断是否为会员
-    MemberInfo memberInfo = memberInfoService.selectMemberInfo(jwtUser.getId(), LoginType.MOBILE.getCode().toString());
+    MemberInfo memberInfo = memberInfoService.selectMemberInfo(jwtUser.getId(), loginType);
     if (memberInfo==null){
       return null;
     }
