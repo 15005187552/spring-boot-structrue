@@ -101,6 +101,7 @@ public class ExcelService {
   }
 
 
+  @Transactional
   public String importAttendance(MultipartFile file, Long companyId, String declareTime) throws IOException {
     isHasProperty(companyId);
     InputStream inputStream = file.getInputStream();
@@ -291,6 +292,7 @@ public class ExcelService {
     return memberId;
   }
 
+  @Transactional
   public Result commitEmployeeInfo(EmployeeInfoForm employeeInfoForm) throws ParseException {
     Long companyId = employeeInfoForm.getCompanyId();
     isHasProperty(companyId);
@@ -301,6 +303,7 @@ public class ExcelService {
     return Result.success("成功");
   }
 
+  @Transactional
   public void importEmployeeInfo(PersonInfoDto personInfoDto, Long companyId) throws ParseException {
     Map<String, Object> map = new HashedMap();
     map.put("REG_MOBILE", personInfoDto.getRegMobile());
@@ -334,11 +337,13 @@ public class ExcelService {
       .setCertNum(personInfoDto.getCertNum())
       .setDisablityNum(personInfoDto.getDisablityNum())
       .setMatrtyrNum(personInfoDto.getMatrtyrNum())
-      .setCreatTime(new Date()).setUpdateTime(new Date());
+      .setUpdateTime(new Date()).setCompanyId(companyId);
     NaturalPerson naturalPerson1 = naturalPersonMapper.selectById(memberId);
     if(naturalPerson1 != null){
-      naturalPersonMapper.updateById(naturalPerson);
+      BeanUtil.copyProperties(naturalPerson, naturalPerson1);
+      naturalPersonMapper.updateById(naturalPerson1);
     } else {
+      naturalPerson.setCreatTime(new Date());
       naturalPersonMapper.insert(naturalPerson);
     }
     String[] str = new String[RoleCodeType.values().length];
