@@ -10,6 +10,7 @@ import com.ljwm.gecko.base.entity.ServiceType;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.ServiceTypeMapper;
 import com.ljwm.gecko.base.model.dto.ServeDto;
+import com.ljwm.gecko.base.model.form.ServicePathForm;
 import com.ljwm.gecko.base.model.form.ServiceTypeQuery;
 import com.ljwm.gecko.base.model.vo.ServeSimpleVo;
 import com.ljwm.gecko.base.model.vo.ServiceVo;
@@ -47,19 +48,13 @@ public class ServiceTypeService {
     return Optional
       .ofNullable(serveDto)
       .map(f -> {
-        if (f.getPid() != null) {
-          ServiceType service = serviceTypeMapper.selectById(f.getPid());
-          if (service == null) {
-            throw new LogicException(ResultEnum.DATA_ERROR,"找不到要修改的“id为" + f.getId() + "”节点!");
-          }
-        }
-        ServiceType service = new ServiceType();
+        ServiceType service = null;
+        if (f.getPid() != null)
+          service = serviceTypeMapper.selectById(f.getPid());
+        if (service == null)
+          service = new ServiceType();
         BeanUtil.copyProperties(f,service);
-        if (f.getId() == null) {
-          serviceTypeMapper.insert(service);
-        } else {
-          serviceTypeMapper.updateById(service);
-        }
+        commonService.insertOrUpdate(service,serviceTypeMapper);
         return new ServeSimpleVo(service);
       })
       .map(ServeSimpleVo::new).get();
@@ -85,5 +80,13 @@ public class ServiceTypeService {
       new QueryWrapper<ServiceType>()
         .eq("LEVEL",level)
     );
+  }
+
+  @Transactional
+  public Integer savePath(ServicePathForm form) {
+    ServiceType serviceType = serviceTypeMapper.selectById(form.getId());
+    if (serviceType == null) throw new LogicException("未找到id为" + form.getId() + "的服务类型");
+    serviceType.setAvatarPath(form.getPath());
+    return serviceTypeMapper.updateById(serviceType);
   }
 }

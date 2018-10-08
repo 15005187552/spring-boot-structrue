@@ -15,6 +15,9 @@ public class AppInfo {
   @ApiModelProperty("图片包")
   private String pic;
 
+  @ApiModelProperty("服务内容头像图片包")
+  private String servicePic;
+
   @ApiModelProperty("文件路径")
   private String filePath;
 

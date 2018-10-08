@@ -9,6 +9,7 @@ import com.ljwm.gecko.base.model.dto.ConfirmProviderDto;
 import com.ljwm.gecko.base.model.dto.ConfirmProviderInfoDto;
 import com.ljwm.gecko.base.model.dto.ProviderQueryDto;
 import com.ljwm.gecko.base.model.dto.ServeDto;
+import com.ljwm.gecko.base.model.form.ServicePathForm;
 import com.ljwm.gecko.base.model.form.ServiceTypeQuery;
 import com.ljwm.gecko.base.model.vo.ProviderServicesVo;
 import com.ljwm.gecko.base.model.vo.ProviderVo;
@@ -27,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/provider")
 @Api(tags = "服务商铺 API")
+@SuppressWarnings("all")
 public class ProviderController extends BaseController {
 
   @Autowired
@@ -44,12 +46,12 @@ public class ProviderController extends BaseController {
   @PostMapping("confirmProvider")
   @ApiOperation("审核服务商入驻申请")
   public Result<List<ProviderServicesVo>> confirmProvider(@RequestBody ConfirmProviderDto confirmProviderDto) {
-    return success( providerService.confirmProvider(confirmProviderDto));
+    return success(providerService.confirmProvider(confirmProviderDto));
   }
 
   @PostMapping("confirmProviderInfo")
   @ApiOperation("服务商审核服务商基本信息")
-  public Result confirmProviderInfo(@RequestBody ConfirmProviderInfoDto confirmProviderInfoDto){
+  public Result confirmProviderInfo(@RequestBody ConfirmProviderInfoDto confirmProviderInfoDto) {
     confirmProviderInfoDto.setValidatorId(SecurityKit.currentId());
     providerService.confirmProviderInfo(confirmProviderInfoDto);
     return success();
@@ -68,6 +70,12 @@ public class ProviderController extends BaseController {
     return success(serviceTypeService.findByPage(query));
   }
 
+  @PostMapping("savePath")
+  @ApiOperation("服务类型头像保存")
+  public Result savePath(@RequestBody ServicePathForm form) {
+    return success(serviceTypeService.savePath(form));
+  }
+
   @PostMapping("save")
   @ApiOperation("保存服务类型")
   public Result<ServeSimpleVo> save(@RequestBody ServeDto serveDto) {
@@ -81,9 +89,10 @@ public class ProviderController extends BaseController {
   }
 
   private static final Integer level = 1;
+
   @GetMapping("findTypeByLevel")
   @ApiOperation("获取所有等级为 1 的服务类型")
-  public Result findTypeByLevel(){
+  public Result findTypeByLevel() {
     return success(serviceTypeService.findTypeByLevel(level));
   }
 }

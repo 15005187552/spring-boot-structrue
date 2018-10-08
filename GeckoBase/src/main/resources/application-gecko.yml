@@ -5,9 +5,9 @@ spring:
     multipart:
       maxRequestSize: 100Mb
       maxFileSize: 100Mb
-appInfo:
-  pic: "advertisement"
-  webRoot: "D://upload/"
-  webPath: "http://192.168.8.167:7005/gecko/"
-  filePath: "${appInfo.webRoot}gecko/"
-  adminPath: "http://192.168.8.167:7005/gecko/"
+#appInfo:
+#  pic: "advertisement"
+#  webRoot: "D://upload/"
+#  webPath: "http://192.168.8.167:7005/gecko/"
+#  filePath: "${appInfo.webRoot}gecko/"
+#  adminPath: "http://192.168.8.167:7005/gecko/"

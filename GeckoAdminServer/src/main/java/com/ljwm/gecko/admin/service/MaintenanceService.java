@@ -1,6 +1,7 @@
 package com.ljwm.gecko.admin.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.admin.model.form.AttendanceQuery;
@@ -44,9 +45,9 @@ public class MaintenanceService {
     return Optional.of(form).map(f -> {
       AttendanceAttribute attribute = null;
       if (!Objects.isNull(f.getId()))
-        attribute = attendanceAttributeMapper.selectById(f.getId());
+        attribute = attendanceAttributeMapper.selectById(f.getId()).setUpdateTime(DateTime.now());
       if (Objects.isNull(attribute))
-        attribute = new AttendanceAttribute();
+        attribute = new AttendanceAttribute().setCreateTime(DateTime.now());
       BeanUtil.copyProperties(form, attribute);
       commonService.insertOrUpdate(attribute, attendanceAttributeMapper);
       return attribute;

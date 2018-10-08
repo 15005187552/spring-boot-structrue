@@ -8,10 +8,7 @@ import com.ljwm.gecko.admin.service.MaintenanceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("attendance")
@@ -23,13 +20,13 @@ public class AttendanceController extends BaseController {
 
   @PostMapping("save")
   @ApiOperation("考勤字段 保存")
-  public Result save(AttendanceSaveForm form) {
+  public Result save(@RequestBody AttendanceSaveForm form) {
     return success(maintenanceService.save(form));
   }
 
   @PostMapping("find")
   @ApiOperation("查看")
-  public Result find(AttendanceQuery query) {
+  public Result find(@RequestBody AttendanceQuery query) {
     return success(maintenanceService.find(query));
   }
 

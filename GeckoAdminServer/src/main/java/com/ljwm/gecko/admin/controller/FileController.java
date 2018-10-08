@@ -26,9 +26,18 @@ public class FileController extends BaseController {
   private AppInfo appInfo;
 
   @PostMapping("upload")
-  @ApiOperation(value = "后台--全局上传接口，必传参数 file")
+  @ApiOperation(value = "后台--广告上传接口，必传参数 file")
   public Result<String> upload(@RequestParam("file") MultipartFile file) {
     String fileName = FileKit.saveUploadFile(file, appInfo.getFilePath(), appInfo.getPic());
+    if (StrUtil.isEmpty(fileName))
+      return fail(ResultEnum.FAIL_TO_SAVE_FILE);
+    return success(fileName);
+  }
+
+  @PostMapping("uploadService")
+  @ApiOperation(value = "后台--服务内容上传接口，必传参数 file")
+  public Result<String> uploadService(@RequestParam("file") MultipartFile file) {
+    String fileName = FileKit.saveUploadFile(file, appInfo.getFilePath(), appInfo.getServicePic());
     if (StrUtil.isEmpty(fileName))
       return fail(ResultEnum.FAIL_TO_SAVE_FILE);
     return success(fileName);
