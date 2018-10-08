@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Janiffy
  * @date 2018/10/8 10:06
  */
-public class AttendanceDto {
+public class AttendanceModel {
 
   @ApiModelProperty("公司ID")
   private Long companyId;

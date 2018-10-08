@@ -205,7 +205,6 @@ public class TaxInfoDao {
   }
 
   public List<Tax> selectByPage(Page<Tax> taxPage, Map map) {
-
     return taxMapper.selectByPage(taxPage,map);
   }
 

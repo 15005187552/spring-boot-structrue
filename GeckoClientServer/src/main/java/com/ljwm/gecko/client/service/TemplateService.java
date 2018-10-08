@@ -164,7 +164,6 @@ public class TemplateService {
     for (Template template : list) {
       map.put(String.valueOf(template.getId()), attributeMapper.selectById(template.getAttributeId()).getName());
     }
-
     log.info("map : {}", map.toJSONString());
     return Result.success(map);
   }

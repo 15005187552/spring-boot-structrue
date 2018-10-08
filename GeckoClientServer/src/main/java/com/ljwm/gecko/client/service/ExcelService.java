@@ -391,7 +391,7 @@ public class ExcelService {
     }
   }
 
-  public String exportAttendanceExcel(HttpServletResponse response, AttendanceDto attendanceDto) {
+  public String exportAttendanceExcel(HttpServletResponse response, AttendanceModel attendanceDto) {
 
     return "成功！";
   }
