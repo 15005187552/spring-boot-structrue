@@ -1,6 +1,7 @@
 package com.ljwm.gecko.base.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
@@ -38,7 +39,7 @@ public class ServiceTypeService {
   }
 
   public Page<ServiceVo> findByPage(ServiceTypeQuery query) {
-    return commonService.find(query, (p, q) -> serviceTypeMapper.find(p, BeanUtil.beanToMap(query)));
+    return commonService.find(query,(p,q) -> serviceTypeMapper.find(p,BeanUtil.beanToMap(query)));
   }
 
   @Transactional
@@ -49,11 +50,11 @@ public class ServiceTypeService {
         if (f.getPid() != null) {
           ServiceType service = serviceTypeMapper.selectById(f.getPid());
           if (service == null) {
-            throw new LogicException(ResultEnum.DATA_ERROR, "找不到要修改的“id为" + f.getId() + "”节点!");
+            throw new LogicException(ResultEnum.DATA_ERROR,"找不到要修改的“id为" + f.getId() + "”节点!");
           }
         }
         ServiceType service = new ServiceType();
-        BeanUtil.copyProperties(f, service);
+        BeanUtil.copyProperties(f,service);
         if (f.getId() == null) {
           serviceTypeMapper.insert(service);
         } else {
@@ -67,15 +68,22 @@ public class ServiceTypeService {
   @Transactional
   public Boolean disabled(Integer id) {
     ServiceType serviceType = serviceTypeMapper.selectById(id);
-    if (Objects.isNull(serviceType)) throw new LogicException(ResultEnum.DATA_ERROR, "未找到id为" + id + "的服务分类");
+    if (Objects.isNull(serviceType)) throw new LogicException(ResultEnum.DATA_ERROR,"未找到id为" + id + "的服务分类");
     serviceType.setDisabled(
-      Objects.equals(serviceType.getDisabled(), DisabledEnum.ENABLED.getInfo()) ? DisabledEnum.DISABLED.getInfo() : DisabledEnum.ENABLED.getInfo()
+      Objects.equals(serviceType.getDisabled(),DisabledEnum.ENABLED.getInfo()) ? DisabledEnum.DISABLED.getInfo() : DisabledEnum.ENABLED.getInfo()
     );
     serviceTypeMapper.updateById(serviceType);
     return serviceType.getDisabled();
   }
 
-  public List<ServeSimpleVo> findTopList(){
+  public List<ServeSimpleVo> findTopList() {
     return serviceTypeMapper.findTopList();
+  }
+
+  public List<ServiceType> findTypeByLevel(Integer level) {
+    return serviceTypeMapper.selectList(
+      new QueryWrapper<ServiceType>()
+        .eq("LEVEL",level)
+    );
   }
 }

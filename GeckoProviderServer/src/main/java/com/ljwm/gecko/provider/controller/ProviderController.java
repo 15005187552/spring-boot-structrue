@@ -33,4 +33,9 @@ public class ProviderController extends BaseController {
   public Result<ProviderVo> findProviderByProviderId(@PathVariable Long id){
     return success(providerProviderService.findProviderByProviderId(id));
   }
+
+  @GetMapping("disabled/{id}/{status}")
+  public Result disabled(@PathVariable Long id,@PathVariable Integer status){
+    return success(providerProviderService.disabled(id,status));
+  }
 }

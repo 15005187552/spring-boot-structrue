@@ -26,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/provider")
-@Api(tags = "服务商管理 API")
+@Api(tags = "服务商铺 API")
 public class ProviderController extends BaseController {
 
   @Autowired
@@ -75,7 +75,15 @@ public class ProviderController extends BaseController {
   }
 
   @GetMapping("typeDisabled/{id}")
+  @ApiOperation("服务类型禁用")
   public Result typeDisabled(@PathVariable @Valid Integer id) {
     return success(serviceTypeService.disabled(id));
+  }
+
+  private static final Integer level = 1;
+  @GetMapping("findTypeByLevel")
+  @ApiOperation("获取所有等级为 1 的服务类型")
+  public Result findTypeByLevel(){
+    return success(serviceTypeService.findTypeByLevel(level));
   }
 }

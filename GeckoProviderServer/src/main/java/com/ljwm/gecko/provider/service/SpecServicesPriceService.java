@@ -6,7 +6,9 @@ import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.gecko.base.entity.SpecServicesPrice;
+import com.ljwm.gecko.base.mapper.ProviderServicesMapper;
 import com.ljwm.gecko.base.mapper.SpecServicesPriceMapper;
+import com.ljwm.gecko.base.model.vo.ProviderServicesVo;
 import com.ljwm.gecko.base.model.vo.SpecServicesPriceSimpleVo;
 import com.ljwm.gecko.provider.model.form.SpecServicesPriceCommonQueryForm;
 import com.ljwm.gecko.provider.model.form.SpecServicesPriceForm;
@@ -23,6 +25,9 @@ public class SpecServicesPriceService {
 
   @Autowired
   private SpecServicesPriceMapper specServicesPriceMapper;
+
+  @Autowired
+  private ProviderServicesMapper providerServicesMapper;
 
   @Transactional
   public void save(SpecServicesPriceForm specServicesPriceForm){
@@ -51,5 +56,14 @@ public class SpecServicesPriceService {
 
   public List<SpecServicesPriceSimpleVo> find(SpecServicesPriceCommonQueryForm specServicesPriceCommonQueryForm){
     return specServicesPriceMapper.find(BeanUtil.beanToMap(specServicesPriceCommonQueryForm));
+  }
+
+  public List<ProviderServicesVo> findProviderServicesListByProviderId(Long providerId){
+    return providerServicesMapper.findProviderServicesDetailVoListByProviderId(providerId);
+  }
+
+  @Transactional
+  public Boolean disabled(Long id){
+    return specServicesPriceMapper.disabled(id)>=1;
   }
 }

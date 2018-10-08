@@ -1,23 +1,35 @@
 package com.ljwm.gecko.im.service;
 
+import cn.hutool.core.util.ClassUtil;
+import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
+import com.ljwm.bootbase.kit.SpringKit;
+import com.ljwm.bootbase.kit.UtilKit;
 import com.ljwm.gecko.base.entity.SocketInfo;
 import com.ljwm.gecko.base.mapper.SocketInfoMapper;
 import com.ljwm.gecko.base.service.MessageService;
+import com.ljwm.gecko.im.ws.ShowcaseWsMsgHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.SetUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+import org.tio.core.ChannelContext;
 import org.tio.core.Tio;
 import org.tio.websocket.common.WsResponse;
+import sun.reflect.misc.MethodUtil;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * PushService  Created by yunqisong on 2018/9/24.
@@ -61,7 +73,7 @@ public class HandService {
 
       String msg = "{name:'" + id + "',message:'" + text + "'}";
 
-      WsResponse wsResponse = WsResponse.fromText(msg, "utf-8");
+      WsResponse wsResponse = WsResponse.fromText(msg,"utf-8");
 //      Tio.send(channelContext, wsResponse);
 //      Tio.sendToGroup(channelContext.groupContext, Const.GROUP_ID, wsResponse);
 
@@ -86,7 +98,48 @@ public class HandService {
 //    if (Objects.isNull(socketInfo))
 //      throw new LogicException(ResultEnum.DATA_ERROR, "当前接收用户未登陆" + id);
 //    Tio.send(Tio.getChannelContextsByUserid(s,id.toString()),)
-//    Tio.getChannelContextsByUserid(Const.GROUP_ID,id);
+    WsResponse wsResponse = WsResponse.fromText(text,"utf-8");
+    Set<ChannelContext> channelContexts = Tio.getChannelContextsByUserid(ShowcaseWsMsgHandler.GROUP_CONTEXT,id.toString()).getObj();
+
+    Tio.send(channelContexts.stream().collect(Collectors.toList()).get(0),wsResponse);
+  }
+
+  @KafkaListener(topics = MessageService.TOPIC_TO_PROVIDER)
+  public void handToProvider(ConsumerRecord<?, ?> record) {
+    JSONObject message = getMesage(record);
+
+    tioSendHandle(message,message.getString("receiverId"));
+  }
+
+
+  @KafkaListener(topics = MessageService.TOPIC_TO_MEMBER)
+  public void HandToMember(ConsumerRecord<?, ?> record) {
+    JSONObject message = getMesage(record);
+    tioSendHandle(message,message.getString("receiverId"));
+  }
+
+  /**
+   * 解析监听数据
+   * @param record
+   * @return
+   */
+  private JSONObject getMesage(ConsumerRecord<?, ?> record) {
+    return Optional.of(record.value())
+      .map(item -> JSONObject.parseObject(item.toString())).get()
+      .getJSONObject("message");
+  }
+
+  /**
+   * tio 分发
+   * @param message
+   * @param id
+   */
+  private void tioSendHandle(JSONObject message,String id) {
+    WsResponse wsResponse = WsResponse.fromText(message.toJSONString(),"utf-8");
+    Set<ChannelContext> channelContexts = Tio.getChannelContextsByUserid(ShowcaseWsMsgHandler.GROUP_CONTEXT,id).getObj();
+    for (ChannelContext channelContext : channelContexts) {
+      Tio.send(channelContext,wsResponse);
+    }
   }
 }
 

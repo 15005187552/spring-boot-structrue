@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/specItem")
-@Api(tags = "规格项管理 API")
+@Api(tags = "规格选值 API")
 public class SpecItemController extends BaseController {
 
   @Autowired

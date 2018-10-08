@@ -2,6 +2,7 @@ package com.ljwm.gecko.base.model.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ljwm.gecko.base.serializer.IdToNameSerializer;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ import java.util.Date;
  * @date 2018/9/28 20:59
  */
 @Data
+@ApiModel("申报记录关联其它扣除VO")
 public class TaxOtherReduceVo {
 
   @ApiModelProperty(value = "报税数据其它扣除减免")
@@ -19,6 +21,9 @@ public class TaxOtherReduceVo {
 
   @ApiModelProperty(value = "报税数据ID")
   private Long taxId;
+
+  @ApiModelProperty(value = "其它扣除名称")
+  private String name;
 
   @JSONField(serializeUsing = IdToNameSerializer.OtherReduceSerializer.class)
   @ApiModelProperty(value = "其它扣除减免分类ID")

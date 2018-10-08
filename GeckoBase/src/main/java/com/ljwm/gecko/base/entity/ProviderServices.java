@@ -69,6 +69,10 @@ public class ProviderServices implements Serializable {
     @TableField("`VERSION`")
     private Integer version;
 
+    @ApiModelProperty("是否启用")
+    @TableField("`DISABLED`")
+    private Integer disabled;
+
 
     public static final String ID = "`ID`";
 

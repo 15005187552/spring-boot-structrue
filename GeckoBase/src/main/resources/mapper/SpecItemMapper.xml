@@ -79,7 +79,7 @@
           ]]>
         </if>
         <if test="params.specId != null ">
-          AND t.`SERVICE_ID` =#{params.specId}
+          AND t.`SPEC_ID` =#{params.specId}
         </if>
       </where>
     </select>

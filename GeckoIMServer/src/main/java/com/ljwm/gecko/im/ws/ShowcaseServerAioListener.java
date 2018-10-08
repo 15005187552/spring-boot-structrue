@@ -3,15 +3,12 @@
  */
 package com.ljwm.gecko.im.ws;
 
-import com.ljwm.gecko.im.service.HandleHandshake;
+import com.ljwm.gecko.im.service.HandleTio;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.tio.core.ChannelContext;
-import org.tio.core.Tio;
 import org.tio.core.intf.Packet;
-import org.tio.websocket.common.WsResponse;
-import org.tio.websocket.common.WsSessionContext;
 import org.tio.websocket.server.WsServerAioListener;
 
 /**
@@ -27,7 +24,7 @@ public class ShowcaseServerAioListener extends WsServerAioListener {
   private ShowcaseServerConfig showcaseServerConfig;
 
   @Autowired
-  private HandleHandshake handleHandshake;
+  private HandleTio handleTio;
 
   @Override
   public void onAfterConnected(ChannelContext channelContext, boolean isConnected, boolean isReconnect) throws Exception {

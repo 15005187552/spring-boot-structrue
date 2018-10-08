@@ -240,4 +240,8 @@ public class ClientOrderService {
   public Page<OrderItemVo> findOrderItemList(OrderItemQueryDto orderItemQueryDto){
     return commonService.find(orderItemQueryDto, (p, q) -> orderItemMapper.findOrderItemList(p, BeanUtil.beanToMap(orderItemQueryDto)));
   }
+
+  public Page<OrderVo> findOrderList(OrderQueryDto orderQueryDto){
+    return commonService.find(orderQueryDto, (p, q) -> orderMapper.findPage(p, BeanUtil.beanToMap(orderQueryDto)));
+  }
 }

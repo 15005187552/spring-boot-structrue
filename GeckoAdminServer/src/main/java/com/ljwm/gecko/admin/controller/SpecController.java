@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/spec")
-@Api(tags = "服务规格管理 API")
+@Api(tags = "服务规格 API")
 public class SpecController extends BaseController {
 
   @Autowired

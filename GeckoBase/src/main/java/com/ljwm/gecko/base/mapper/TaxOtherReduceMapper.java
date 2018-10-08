@@ -22,7 +22,10 @@ import java.util.List;
 @Repository
 public interface TaxOtherReduceMapper extends BaseMapper<TaxOtherReduce> {
 
-  @Select("SELECT c.ID, c.`NAME`, b.TAX_MONEY, b.TAX_DOC_PATH\n"+
+  @Select("SELECT c.ID, " +
+    "c.`NAME`, " +
+    "b.TAX_MONEY, " +
+    "b.TAX_DOC_PATH\n"+
            "FROM t_tax a, t_tax_other_reduce b, t_other_reduce c\n"+
            "WHERE a.DECLARE_TIME = #{declareTime} AND MEMBER_ID = #{memberId} AND DECLARE_TYPE = #{declareType}\n"+
            "AND a.ID = b.TAX_ID  \n"+

@@ -21,8 +21,8 @@ import io.swagger.annotations.ApiModelProperty;
  * 客服消息表
  * </p>
  *
- * @author YunQiSong
- * @since 2018-09-24
+ * @author xixil
+ * @since 2018-09-29
  */
 @Data
 @SuppressWarnings("ALL")
@@ -43,13 +43,17 @@ public class CustomerMessage implements Serializable {
     @TableField("`CUSTOMER_SESSION_ID`")
     private Long customerSessionId;
 
-    @ApiModelProperty(value = "发送者ID，发送者可以为游客，客户，客服")
-    @TableField("`SENDER_ID`")
-    private Long senderId;
+    @ApiModelProperty(value = "会话内容")
+    @TableField("`TEXT`")
+    private String text;
 
-    @ApiModelProperty(value = "发送者不同类型")
-    @TableField("`SENDER_TYPE`")
-    private Integer senderType;
+    @ApiModelProperty(value = "接收者ID，发送者可以为游客，客户，客服")
+    @TableField("`RECEIVER_ID`")
+    private Long receiverId;
+
+    @ApiModelProperty(value = "接收者不同类型")
+    @TableField("`RECEIVER_TYPE`")
+    private Integer receiverType;
 
     @ApiModelProperty(value = "客户消息状态（未发，未读，已读）")
     @TableField("`CUSTOMER_STATUS`")
@@ -58,6 +62,10 @@ public class CustomerMessage implements Serializable {
     @ApiModelProperty(value = "服务商（接待处理）状态（未发，未读，已读）")
     @TableField("`PROVIDER_STATUS`")
     private Integer providerStatus;
+
+    @ApiModelProperty(value = "状态")
+    @TableField("`STATUS`")
+    private Integer status;
 
     @ApiModelProperty(value = "创建时间")
     @TableField("`CREATE_TIME`")
@@ -76,13 +84,17 @@ public class CustomerMessage implements Serializable {
 
     public static final String CUSTOMER_SESSION_ID = "`CUSTOMER_SESSION_ID`";
 
-    public static final String SENDER_ID = "`SENDER_ID`";
+    public static final String TEXT = "`TEXT`";
 
-    public static final String SENDER_TYPE = "`SENDER_TYPE`";
+    public static final String RECEIVER_ID = "`RECEIVER_ID`";
+
+    public static final String RECEIVER_TYPE = "`RECEIVER_TYPE`";
 
     public static final String CUSTOMER_STATUS = "`CUSTOMER_STATUS`";
 
     public static final String PROVIDER_STATUS = "`PROVIDER_STATUS`";
+
+    public static final String STATUS = "`STATUS`";
 
     public static final String CREATE_TIME = "`CREATE_TIME`";
 

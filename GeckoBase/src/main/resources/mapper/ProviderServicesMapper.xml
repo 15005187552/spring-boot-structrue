@@ -24,8 +24,17 @@
         <association property="serveSimpleVo" column="SERVICE_ID" select="com.ljwm.gecko.base.mapper.ServiceTypeMapper.findById"/>
     </resultMap>
 
+    <resultMap id="providerDetailServicesVo" type="com.ljwm.gecko.base.model.vo.ProviderServicesVo" extends="BaseResultMap">
+      <association property="serveSimpleVo" column="SERVICE_ID" select="com.ljwm.gecko.base.mapper.ServiceTypeMapper.findById"/>
+      <collection property="specServicesPriceSimpleVoList" column="{serviceId=SERVICE_ID,providerId=providerId}" select="com.ljwm.gecko.base.mapper.SpecServicesPriceMapper.findByServiceIdAndProviderId"/>
+    </resultMap>
+
     <select id="findProviderServicesVoListByProviderId" parameterType="long" resultMap="providerServicesVo">
       SELECT DISTINCT tps.*  from t_provider tp,t_provider_services tps where tp.ID=#{providerId} and  tp.ID=tps.PROVIDER_ID and tp.VERSION = tps.VERSION
+    </select>
+
+    <select id="findProviderServicesDetailVoListByProviderId" parameterType="long" resultMap="providerDetailServicesVo">
+      SELECT DISTINCT tps.* ,#{providerId} AS `providerId`  from t_provider tp,t_provider_services tps where tp.ID=#{providerId} and  tp.ID=tps.PROVIDER_ID and tp.VERSION = tps.VERSION
     </select>
 
     <resultMap id="providerServicesSimpleVo" type="com.ljwm.gecko.base.model.vo.ProviderServicesSimpleVo">

@@ -35,7 +35,9 @@ public class MessageService {
 
   public static final String TOPIC_SESSION_CUSTOMER = "TOPIC_SESSION_CUSTOMER";       // 用户会话聊天
 
-  public static final String TOPIC_CUSTOMER_MESSAGE = "TOPIC_CUSTOMER_MESSAGE";       // 客服消息Topic
+  public static final String TOPIC_TO_PROVIDER = "TOPIC_TO_PROVIDER";       // 发送至服务商Topic
+
+  public static final String TOPIC_TO_MEMBER = "TOPIC_TO_MEMBER";       // 发送至用户
 
 
   @Autowired

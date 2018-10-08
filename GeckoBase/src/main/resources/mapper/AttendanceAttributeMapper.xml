@@ -2,27 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljwm.gecko.base.mapper.AttendanceAttributeMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.AttendanceAttribute">
-        <id column="ID" property="id" />
-        <result column="NAME" property="name" />
-        <result column="DESC" property="desc" />
-        <result column="IS_NEED_ENTER" property="isNeedEnter" />
-        <result column="CREATE_TIME" property="createTime" />
-        <result column="UPDATE_TIME" property="updateTime" />
-        <result column="DISABLED" property="disabled" />
-        <result column="SORT" property="sort" />
-    </resultMap>
+  <!-- 通用查询映射结果 -->
+  <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.AttendanceAttribute">
+    <id column="ID" property="id"/>
+    <result column="NAME" property="name"/>
+    <result column="DESC" property="desc"/>
+    <result column="IS_NEED_ENTER" property="isNeedEnter"/>
+    <result column="CREATE_TIME" property="createTime"/>
+    <result column="UPDATE_TIME" property="updateTime"/>
+    <result column="DISABLED" property="disabled"/>
+    <result column="SORT" property="sort"/>
+  </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
+  <!-- 通用查询结果列 -->
+  <sql id="Base_Column_List">
           `ID`          ,`NAME`          ,`DESC`          ,`IS_NEED_ENTER`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`DISABLED`          ,`SORT`
     </sql>
 
-    <resultMap id="AttendanceAtrVo" type="com.ljwm.gecko.base.model.vo.admin.AttendanceAtrVo"  extends="BaseResultMap"/>
+  <resultMap id="AttendanceAtrVo" type="com.ljwm.gecko.base.model.vo.admin.AttendanceAtrVo" extends="BaseResultMap"/>
 
 
-  <select id="find" resultMap="AttendanceAtrVo"  parameterType="java.util.HashMap" >
+  <select id="find" resultMap="AttendanceAtrVo" parameterType="java.util.HashMap">
     SELECT
     <include refid="Base_Column_List"/>
     FROM `t_attendance_attribute`
