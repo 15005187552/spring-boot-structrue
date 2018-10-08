@@ -41,8 +41,8 @@ public interface CompanyUserMapper extends BaseMapper<CompanyUser> {
   List<EmployeeVo> selectEmployee(@Param("companyId") Long companyId, @Param("disableCode")Integer disableCode, @Param("activateCode")Integer activateCode);
 
 
-  @Select("SELECT * FROM t_company_user a, t_company_user_info b\n" +
-    "WHERE a.COMPANY_ID =#{companyId} AND MEMBER_ID=#{memberId} AND a.ID = b.COMPANY_USER_ID")
+  @Select("SELECT * FROM t_company_user a RIGHT JOIN t_company_user_info b\n" +
+    "ON a.COMPANY_ID =#{companyId} AND MEMBER_ID=#{memberId} AND a.ID = b.COMPANY_USER_ID")
   @ResultMap("EmployeeInfo")
   List<EmployeeDto> selectEmployeeList(@Param("companyId") Long companyId, @Param("memberId") Long memberId);
 

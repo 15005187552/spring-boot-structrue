@@ -7,9 +7,11 @@ import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.*;
+import com.ljwm.gecko.base.enums.CertificateType;
 import com.ljwm.gecko.base.enums.TableNameEnum;
 import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.vo.TaxListVo;
+import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.client.model.dto.AttendanceForm;
 import com.ljwm.gecko.client.model.dto.TaxFindForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +81,7 @@ public class AttendanceService {
       BigDecimal socialBase = new BigDecimal(attendanceDto.getSocialBase());
       BigDecimal fundBase = new BigDecimal(attendanceDto.getFundBase());
       BigDecimal fundPer = new BigDecimal(attendanceDto.getFundPer());
-      Integer certificate = attendanceDto.getCertificate();
+      Integer certificate = EnumUtil.getEnumByName(CertificateType.class, attendanceDto.getCertificate()).getCode();
       String idCard = attendanceDto.getIdCard();
       NaturalPerson naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERT_NUM, idCard).eq(NaturalPerson.CERTIFICATE, certificate));
       if (naturalPerson != null) {
