@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.model.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -14,6 +15,7 @@ public class SpecItemDto {
   @ApiModelProperty(value = "规格类型id")
   private Integer specId;
 
+  @JSONField(name = "name")
   @ApiModelProperty(value = "规格项")
   private String item;
 
