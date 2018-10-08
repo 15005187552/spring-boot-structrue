@@ -12,6 +12,7 @@ import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.vo.*;
 import com.ljwm.gecko.client.dao.TaxInfoDao;
 import com.ljwm.gecko.client.model.dto.*;
+import com.ljwm.gecko.client.model.vo.TaxResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,7 +100,9 @@ public class TaxDeclarationService {
     }
     BigDecimal money = income.subtract(specialDe);
     BigDecimal newTax = calcService.calNew(money, new BigDecimal("5000"));
-    return Result.success(money.subtract(newTax));
+    TaxResultVo taxResultVo = new TaxResultVo()
+      .setSocialFee(specialDe).setTax(newTax).setAfterTax(money.subtract(newTax)).setIncomeAdvice("收入建议").setDeducAdvice("扣除建议");
+    return Result.success(taxResultVo);
   }
 
   public TaxVo find(TaxInfoForm taxInfoForm) {
