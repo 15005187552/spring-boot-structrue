@@ -162,7 +162,7 @@ public class TemplateService {
       i++;
     }
     for (Template template : list) {
-      map.put(String.valueOf(template.getId()), attributeMapper.selectById(template.getAttributeId()).getName());
+      map.put(String.valueOf(template.getAttributeId()), attributeMapper.selectById(template.getAttributeId()).getName());
     }
     log.info("map : {}", map.toJSONString());
     return Result.success(map);
@@ -179,7 +179,7 @@ public class TemplateService {
       i++;
     }
     for (Template template : list) {
-      map.put(String.valueOf(template.getId()), attributeMapper.selectById(template.getAttributeId()).getName());
+      map.put(String.valueOf(template.getAttributeId()), attributeMapper.selectById(template.getAttributeId()).getName());
     }
     response.reset();
     response.setContentType("multipart/form-data");

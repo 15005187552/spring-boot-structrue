@@ -94,10 +94,11 @@ public class AttendanceService {
         }
         Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId).eq(Tax.DECLARE_TYPE, attendanceForm.getDeclareType()));
         Date date = new Date();
-        tax.setUpdateTime(date);
         if (tax != null){
+          tax.setUpdateTime(date);
           taxMapper.updateById(tax);
         } else {
+          tax = new Tax().setUpdateTime(date).setDeclareType(attendanceForm.getDeclareType()).setDeclareTime(declareTime).setMemberId(memberId);
           tax.setCreateTime(date);
           taxMapper.insert(tax);
         }

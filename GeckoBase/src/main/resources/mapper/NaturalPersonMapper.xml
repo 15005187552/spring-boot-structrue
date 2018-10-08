@@ -44,7 +44,7 @@
 
   <resultMap id="NaturalPersonVo" type="com.ljwm.gecko.base.model.vo.NaturalPersonVo" extends="BaseResultMap"/>
 
-  <resultMap id="PersonInfoVo" type="com.ljwm.gecko.client.model.vo.PersonInfoVo" >
+  <resultMap id="PersonInfoVo" type="com.ljwm.gecko.base.model.vo.PersonInfoVo" >
     <id column="MEMBER_ID" property="memberId" />
     <result column="COUNTRY" property="country" />
     <result column="NAME" property="name" />
