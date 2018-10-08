@@ -3,8 +3,10 @@ package com.ljwm.gecko.client.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
+import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.enums.ActivateEnum;
 import com.ljwm.gecko.base.enums.DisabledEnum;
@@ -12,10 +14,7 @@ import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.dto.MemberComForm;
 import com.ljwm.gecko.base.model.vo.CompanyVo;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
-import com.ljwm.gecko.client.model.dto.CompanyDto;
-import com.ljwm.gecko.client.model.dto.InactiveForm;
-import com.ljwm.gecko.client.model.dto.MemberForm;
-import com.ljwm.gecko.client.model.dto.MemberIdDto;
+import com.ljwm.gecko.client.model.dto.*;
 import com.ljwm.gecko.client.model.vo.CompanyInfoVo;
 import com.ljwm.gecko.client.model.vo.CompanyUserVo;
 import com.ljwm.gecko.client.model.vo.PersonInfoVo;
@@ -55,6 +54,9 @@ public class CompanyUserService {
 
   @Autowired
   CompanyUserInfoMapper companyUserInfoMapper;
+
+  @Autowired
+  CommonService commonService;
 
   @Transactional
   public Result memberEnterCom(MemberComForm memberComForm) {
@@ -167,23 +169,18 @@ public class CompanyUserService {
       .eq(CompanyUser.ACTIVATED, ActivateEnum.ENABLED.getCode())));
   }
 
-  public Result findEmployeeInfo(Long companyId) {
-    List<PersonInfoVo> personInfoDtoList = new ArrayList<>();
-    List<NaturalPerson> naturalPersonList = naturalPersonMapper.selectList(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.COMPANY_ID, companyId));
-    for (NaturalPerson naturalPerson:
-         naturalPersonList) {
-      PersonInfoVo personInfoVo = new PersonInfoVo();
-      Long memberId = naturalPerson.getMemberId();
-      BeanUtil.copyProperties(naturalPerson, personInfoVo);
-      List<CompanyUserInfo> companyUserInfoList = companyUserInfoMapper.selectCompanyUser(companyId, memberId);
+  public Result findEmployeeInfo(CompanyPageDto companyPageDto) {
+    Page<PersonInfoVo> page = commonService.find(companyPageDto, (p, q)->naturalPersonMapper.findList(p, companyPageDto.getCompanyId()));
+    List<PersonInfoVo> personInfoDtoList = page.getRecords();
+    for (PersonInfoVo personInfoVo:personInfoDtoList) {
+      List<CompanyUserInfo> companyUserInfoList = companyUserInfoMapper.selectCompanyUser(companyPageDto.getCompanyId(), personInfoVo.getMemberId());
       if (CollectionUtil.isNotEmpty(companyUserInfoList)){
         BeanUtil.copyProperties(companyUserInfoList.get(0), personInfoVo);
       }
-      personInfoDtoList.add(personInfoVo);
+      Member member = memberMapper.selectById(personInfoVo.getMemberId());
+      personInfoVo.setRegMobile(member.getRegMobile());
     }
-    return Result.success(personInfoDtoList);
+    return Result.success(page);
   }
-
-
 
 }

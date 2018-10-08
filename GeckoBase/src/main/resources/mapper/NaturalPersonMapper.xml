@@ -43,4 +43,14 @@
   </resultMap>
 
   <resultMap id="NaturalPersonVo" type="com.ljwm.gecko.base.model.vo.NaturalPersonVo" extends="BaseResultMap"/>
+
+  <resultMap id="PersonInfoVo" type="com.ljwm.gecko.client.model.vo.PersonInfoVo" >
+    <id column="MEMBER_ID" property="memberId" />
+    <result column="COUNTRY" property="country" />
+    <result column="NAME" property="name" />
+    <result column="GENDER" property="gender" />
+    <result column="BIRTHDAY" property="birthday" />
+    <result column="CERTIFICATE" property="certificate" />
+    <result column="CERT_NUM" property="certNum" />
+  </resultMap>
 </mapper>

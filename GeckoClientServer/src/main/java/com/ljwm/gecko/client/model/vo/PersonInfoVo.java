@@ -9,6 +9,10 @@ import lombok.Data;
  */
 @Data
 public class PersonInfoVo {
+
+  @ApiModelProperty("会员ID")
+  private Long memberId;
+
   @ApiModelProperty(value = "工号")
   private String jobNum;
 

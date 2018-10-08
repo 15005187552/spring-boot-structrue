@@ -1,9 +1,11 @@
 package com.ljwm.gecko.base.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.gecko.base.entity.NaturalPerson;
 import com.ljwm.gecko.base.model.dto.NaturalPersonDto;
 import com.ljwm.gecko.base.model.vo.NaturalPersonVo;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -29,4 +31,8 @@ public interface NaturalPersonMapper extends BaseMapper<NaturalPerson> {
   @Select("SELECT * FROM `t_natural_person` WHERE `MEMBER_ID` = #{id}")
   @ResultMap("NaturalPersonVo")
   NaturalPersonVo findById(Long id);
+
+  @Select("SELECT * FROM t_natural_person WHERE COMPANY_ID = #{companyId}")
+  @ResultMap("PersonInfoVo")
+  List findList(Page p, @Param("companyId") Long companyId);
 }
