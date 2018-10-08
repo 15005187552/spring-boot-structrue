@@ -59,6 +59,9 @@ public class TaxDeclarationService {
   @Autowired
   NaturalPersonMapper naturalPersonMapper;
 
+  @Autowired
+  IncomeTypeMapper incomeTypeMapper;
+
   @Transactional
   public Result commit(TaxForm taxForm) {
     Tax tax = new Tax();
@@ -92,7 +95,10 @@ public class TaxDeclarationService {
     }
     BigDecimal income = BigDecimal.ZERO;
     for(TaxIncomeForm taxIncomeForm : taxIncomeFormList){
-      income = income.add(new BigDecimal(taxIncomeForm.getIncome()));
+      IncomeType incomeType = incomeTypeMapper.selectOne(new QueryWrapper<IncomeType>().like(IncomeType.NAME, "综合所得"));
+      if(incomeType!= null && incomeType.getId().equals(taxIncomeForm.getPId())) {
+        income = income.add(new BigDecimal(taxIncomeForm.getIncome()));
+      }
     }
     BigDecimal specialDe = BigDecimal.ZERO;
     for (TaxSpecialForm taxSpecialForm : taxSpecialList){

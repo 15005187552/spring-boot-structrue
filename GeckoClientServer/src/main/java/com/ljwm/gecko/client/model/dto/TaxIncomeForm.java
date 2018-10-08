@@ -19,4 +19,7 @@ public class TaxIncomeForm {
 
   @ApiModelProperty(value = "收入金额")
   private String income;
+
+  @ApiModelProperty("pId")
+  private Long pId;
 }

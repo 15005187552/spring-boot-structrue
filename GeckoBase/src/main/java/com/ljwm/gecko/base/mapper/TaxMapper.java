@@ -24,7 +24,7 @@ import java.util.Map;
 @Component
 public interface TaxMapper extends BaseMapper<Tax> {
 
-  @Select("SELECT * FROM `t_tax` WHERE MEMBER_ID = #{map.memberId} AND DECLARE_TYPE= #{map.declareType}")
+  @Select("SELECT * FROM `t_tax` WHERE MEMBER_ID = #{map.memberId} AND DECLARE_TYPE= #{map.declareType} ORDER BY DECLARE_TIME DESC")
   List<Tax> selectByPage(@Param("taxPage") Page<Tax> taxPage, @Param("map") Map map);
 
 
