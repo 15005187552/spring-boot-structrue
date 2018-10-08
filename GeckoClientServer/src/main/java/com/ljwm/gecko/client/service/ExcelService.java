@@ -73,6 +73,12 @@ public class ExcelService {
   @Autowired
   AttributeMapper attributeMapper;
 
+  @Autowired
+  AttendanceService attendanceService;
+
+  @Autowired
+  TaxMapper taxMapper;
+
   @Transactional
   public void importPersonInfo(MultipartFile file, Long companyId) throws Exception {
     isHasProperty(companyId);
@@ -102,31 +108,66 @@ public class ExcelService {
 
 
   @Transactional
-  public String importAttendance(MultipartFile file, Long companyId, String declareTime) throws IOException {
+  public Result importAttendance(MultipartFile file, Long companyId, String declareTime, Integer declareType) throws IOException {
     isHasProperty(companyId);
     InputStream inputStream = file.getInputStream();
     ExcelLogs logs =new ExcelLogs();
     Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs , 0);
     for(Map m:importExcel){
-      for (Object key:m.keySet()){
-        if(key.toString().equals("*姓名")){
-          Object name = m.get(key);
+      Object name, certificate = null, certNum = null, socialBase = null, fundBase = null, fundPer = null;
+      NaturalPerson naturalPerson = null;
+      for (Object key:m.keySet()) {
+        if (key.toString().equals("*姓名")) {
+          name = m.get(key);
         }
-        if(key.toString().equals("*证件类型")){
-          Object certificate = m.get(key);
+        if (key.toString().equals("*证件类型")) {
+          certificate = m.get(key);
         }
-        if(key.toString().equals("*证照号码")){
-          Object certNum = m.get(key);
+        if (key.toString().equals("*证照号码")) {
+          certNum = m.get(key);
         }
-        Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.NAME, key.toString()));
-        Long itemId = attribute.getItemId();
-       // String tableName = EnumUtil.getEnumBycode(TableNameEnum.class, attribute.getTableName()).getValue();
-
-
+        if (key.toString().equals("*社保基数")) {
+          socialBase = m.get(key);
+        }
+        if (key.toString().equals("*公积金基数")) {
+          fundBase = m.get(key);
+        }
+        if (key.toString().equals("*公积金比例")) {
+          fundPer = m.get(key);
+        }
+        if (certificate != null && certNum != null) {
+          if(naturalPerson == null){
+            naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERT_NUM, certNum.toString()).eq(NaturalPerson.CERTIFICATE, certificate.toString()));
+            if(naturalPerson ==null){
+                return Result.fail("证件号码或者证照类型有误！");
+            }
+          }else {
+            Long memberId = naturalPerson.getMemberId();
+            CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, companyId).eq(CompanyUser.MEMBER_ID, memberId));
+            CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUser.getId());
+            if (companyUserInfo != null) {
+              companyUserInfo.setFundBase(new BigDecimal(fundBase.toString())).setFundPer(new BigDecimal(fundPer.toString())).setSocialBase(new BigDecimal(socialBase.toString()));
+              companyUserInfoMapper.updateById(companyUserInfo);
+            }
+            Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId).eq(Tax.DECLARE_TYPE, declareType));
+            Date date = new Date();
+            tax.setUpdateTime(date);
+            if (tax != null) {
+              taxMapper.updateById(tax);
+            } else {
+              tax.setCreateTime(date);
+              taxMapper.insert(tax);
+            }
+            Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.NAME, key.toString()));
+            Long itemId = attribute.getItemId();
+            Integer tableName = attribute.getTableName();
+            String value = m.get(key).toString();
+            attendanceService.insertOrUpdate(tableName, itemId, new Date(), value, tax, new BigDecimal(socialBase.toString()), new BigDecimal(fundBase.toString()), new BigDecimal(fundPer.toString()), companyId);
+          }
+        }
       }
     }
-
-    return "导入成功！";
+    return Result.success("导入成功！");
   }
 
   public String exportPersonInfoExcel(HttpServletResponse response, Long companyId) throws IOException {
@@ -338,7 +379,8 @@ public class ExcelService {
       .setDisablityNum(personInfoDto.getDisablityNum())
       .setMatrtyrNum(personInfoDto.getMatrtyrNum())
       .setUpdateTime(new Date()).setCompanyId(companyId);
-    NaturalPerson naturalPerson1 = naturalPersonMapper.selectById(memberId);
+    NaturalPerson naturalPerson1 = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERTIFICATE, personInfoDto.getCertificate())
+      .eq(NaturalPerson.CERT_NUM, personInfoDto.getCertNum()));
     if(naturalPerson1 != null){
       BeanUtil.copyProperties(naturalPerson, naturalPerson1);
       naturalPersonMapper.updateById(naturalPerson1);

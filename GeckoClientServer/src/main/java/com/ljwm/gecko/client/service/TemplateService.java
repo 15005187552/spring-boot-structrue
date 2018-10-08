@@ -61,7 +61,7 @@ public class TemplateService {
     "工资账号", "社保账号", "公积金账号", "是否特定行业", "是否股东、投资者", "是否残疾", "是否烈属", "是否孤老", "残疾证号", "烈属证号",
     "电子邮箱", "居住省份", "居住城市", "居住所在区", "居住详细地址", "备注"};
 
-  String[] str = {"*姓名", "*证照类型", "*证照号码", "*社保基数", "*公积金基数", "公积金比例"};
+  String[] str = {"*姓名", "*证照类型", "*证照号码", "*社保基数", "*公积金基数", "*公积金比例"};
   @Transactional
   public Result uploadTemplate(TemplateForm templateForm) {
     List<TemplateDto> list = templateForm.getList();

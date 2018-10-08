@@ -61,8 +61,8 @@ public class ExcelController {
   @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
   @PostMapping("/attendance/import")
   @ApiOperation("导入员工考勤信息")
-  public Result importAttendance(@RequestParam("file")MultipartFile file, @RequestParam("companyId")Long companyId, @RequestParam("declareTime") String declareTime)throws IOException {
-    return Result.success(excelService.importAttendance(file, companyId, declareTime));
+  public Result importAttendance(@RequestParam("file")MultipartFile file, @RequestParam("companyId")Long companyId, @RequestParam("declareTime") String declareTime, @RequestParam("declareType") Integer declareType)throws IOException {
+    return excelService.importAttendance(file, companyId, declareTime, declareType);
   }
 
   @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
