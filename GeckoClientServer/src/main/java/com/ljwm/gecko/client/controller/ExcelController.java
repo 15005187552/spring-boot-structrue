@@ -1,6 +1,7 @@
 package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.client.model.dto.AttendanceDto;
 import com.ljwm.gecko.client.model.dto.NormalSalaryForm;
 import com.ljwm.gecko.client.security.JwtUser;
 import com.ljwm.gecko.client.service.ExcelService;
@@ -64,6 +65,11 @@ public class ExcelController {
     return Result.success(excelService.importAttendance(file, companyId, declareTime));
   }
 
-
+  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PostMapping("/attendance/export")
+  @ApiOperation("工资考勤信息导出")
+  public Result exportPersonInfoExcel(HttpServletResponse response, @RequestBody AttendanceDto attendanceDto)throws IOException {
+    return Result.success(excelService.exportAttendanceExcel(response, attendanceDto));
+  }
 
 }

@@ -18,9 +18,7 @@ import com.ljwm.gecko.base.utils.TimeUtil;
 import com.ljwm.gecko.base.utils.excelutil.ExcelLogs;
 import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
-import com.ljwm.gecko.client.model.dto.EmployeeInfoForm;
-import com.ljwm.gecko.client.model.dto.NormalSalaryForm;
-import com.ljwm.gecko.client.model.dto.PersonInfoDto;
+import com.ljwm.gecko.client.model.dto.*;
 import com.ljwm.gecko.client.model.vo.NormalSalaryVo;
 import com.ljwm.gecko.client.model.vo.PersonExportVo;
 import lombok.extern.slf4j.Slf4j;
@@ -391,5 +389,10 @@ public class ExcelService {
     } else {
       companyUserInfoMapper.insert(companyUserInfo1);
     }
+  }
+
+  public String exportAttendanceExcel(HttpServletResponse response, AttendanceDto attendanceDto) {
+
+    return "成功！";
   }
 }

@@ -4,6 +4,7 @@ import com.ljwm.gecko.base.entity.CompanyUserInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @author Levis
  * @since 2018-09-27
  */
+@Repository
 public interface CompanyUserInfoMapper extends BaseMapper<CompanyUserInfo> {
 
   @Select("SELECT * FROM t_company_user a, t_company_user_info b WHERE a.MEMBER_ID =#{memberId} AND a.COMPANY_ID =#{companyId} AND a.ID = b.COMPANY_USER_ID")

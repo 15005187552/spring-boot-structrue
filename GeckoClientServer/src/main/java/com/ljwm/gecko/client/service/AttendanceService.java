@@ -12,11 +12,11 @@ import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.vo.TaxListVo;
 import com.ljwm.gecko.client.model.dto.AttendanceForm;
 import com.ljwm.gecko.client.model.dto.TaxFindForm;
-import org.apache.poi.ss.formula.functions.Na;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -199,7 +199,7 @@ public class AttendanceService {
     }
     return Result.success("成功！");
   }
-  String[] str = {"*姓名", "*证照类型", "*证照号码", "*社保基数", "*公积金基数", "公积金比例"};
+
   public Result findAttendanceList(TaxFindForm taxFindForm) {
     Page<TaxListVo> page = commonService.find(taxFindForm, (p, q) -> taxMapper.selectTaxVoList(p, BeanUtil.beanToMap(taxFindForm)));
     List<TaxListVo> list = page.getRecords();
@@ -210,12 +210,12 @@ public class AttendanceService {
       NaturalPerson naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.MEMBER_ID, memberId));
       if(companyUserInfo == null || naturalPerson == null){
         return Result.success(null);
-      }else {
-        taxListVo.setIdCard(naturalPerson.getCertNum()).setName(naturalPerson.getName()).setCertificate(naturalPerson.getCertificate()).
-          setSocialBase(companyUserInfo.getSocialBase().toString()).setFundBase(companyUserInfo.getFundBase().toString()).setFundPer(companyUserInfo.getFundPer().toString());
-        taxListVo.setAttendanceTaxVo(taxDeclarationService.findTaxInfo(taxListVo.getId()));
       }
+      taxListVo.setIdCard(naturalPerson.getCertNum()).setName(naturalPerson.getName()).setCertificate(naturalPerson.getCertificate()).
+        setSocialBase(companyUserInfo.getSocialBase().toString()).setFundBase(companyUserInfo.getFundBase().toString()).setFundPer(companyUserInfo.getFundPer().toString());
+      taxListVo.setAttendanceTaxVo(taxDeclarationService.findTaxInfo(taxListVo.getId()));
     }
     return Result.success(page);
   }
+
 }

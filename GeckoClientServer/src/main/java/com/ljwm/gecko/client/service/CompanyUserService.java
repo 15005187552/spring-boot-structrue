@@ -10,15 +10,16 @@ import com.ljwm.gecko.base.enums.ActivateEnum;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.dto.MemberComForm;
-import com.ljwm.gecko.base.model.dto.NaturalPersonDto;
 import com.ljwm.gecko.base.model.vo.CompanyVo;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
-import com.ljwm.gecko.client.model.dto.*;
+import com.ljwm.gecko.client.model.dto.CompanyDto;
+import com.ljwm.gecko.client.model.dto.InactiveForm;
+import com.ljwm.gecko.client.model.dto.MemberForm;
+import com.ljwm.gecko.client.model.dto.MemberIdDto;
 import com.ljwm.gecko.client.model.vo.CompanyInfoVo;
 import com.ljwm.gecko.client.model.vo.CompanyUserVo;
 import com.ljwm.gecko.client.model.vo.PersonInfoVo;
 import org.apache.commons.collections.map.HashedMap;
-import org.apache.poi.ss.formula.functions.Na;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -182,4 +183,7 @@ public class CompanyUserService {
     }
     return Result.success(personInfoDtoList);
   }
+
+
+
 }
