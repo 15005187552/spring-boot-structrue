@@ -124,10 +124,11 @@ public class AttendanceService {
       TaxIncome taxIncome = taxIncomeMapper.selectOne(new QueryWrapper<TaxIncome>().eq(TaxIncome.TAX_ID, tax.getId())
         .eq(TaxIncome.INCOME_TYPE_ID, itemId));
       if (taxIncome != null){
-        taxIncome.setUpdateTime(date).setIncome(value).setUpdater(SecurityKit.currentId());
+        taxIncome.setUpdateTime(date).setIncome(value).setUpdater(SecurityKit.currentId()).setIncomeTypeId(itemId).setTaxId(tax.getId());
         taxIncomeMapper.updateById(taxIncome);
       } else {
-        taxIncome.setUpdateTime(date).setIncome(value).setUpdater(SecurityKit.currentId()).setCreateTime(date);
+        taxIncome = new TaxIncome();
+        taxIncome.setUpdateTime(date).setIncome(value).setUpdater(SecurityKit.currentId()).setCreateTime(date).setIncomeTypeId(itemId).setTaxId(tax.getId());
         taxIncomeMapper.insert(taxIncome);
       }
     }
@@ -135,10 +136,11 @@ public class AttendanceService {
       TaxOtherReduce taxOtherReduce = taxOtherReduceMapper.selectOne(new QueryWrapper<TaxOtherReduce>()
         .eq(TaxOtherReduce.TAX_ID, tax.getId()).eq(TaxOtherReduce.OTHER_REDUCE_ID, itemId));
       if (taxOtherReduce != null){
-        taxOtherReduce.setUpdateTime(date).setTaxMoney(value).setUpdater(SecurityKit.currentId());
+        taxOtherReduce.setUpdateTime(date).setTaxMoney(value).setUpdater(SecurityKit.currentId()).setOtherReduceId(itemId).setTaxId(tax.getId());
         taxOtherReduceMapper.updateById(taxOtherReduce);
       } else {
-        taxOtherReduce.setUpdateTime(date).setTaxMoney(value).setUpdater(SecurityKit.currentId()).setCreateTime(date);
+        taxOtherReduce = new TaxOtherReduce();
+        taxOtherReduce.setUpdateTime(date).setTaxMoney(value).setUpdater(SecurityKit.currentId()).setCreateTime(date).setOtherReduceId(itemId).setTaxId(tax.getId());
         taxOtherReduceMapper.insert(taxOtherReduce);
       }
     }
@@ -152,6 +154,7 @@ public class AttendanceService {
             .setPersonalMoney(fundBase.multiply(fundPer).toString()).setCompanyPercent(fundPer.toString()).setPersonalPercent(fundPer.toString());
           taxSpecialMapper.updateById(taxSpecial);
         } else {
+          taxSpecial = new TaxSpecial();
           taxSpecial.setUpdater(SecurityKit.currentId()).setUpdateTime(date).setCompanyMoney(fundBase.multiply(fundPer).toString())
             .setPersonalMoney(fundBase.multiply(fundPer).toString()).setCompanyPercent(fundPer.toString()).setPersonalPercent(fundPer.toString())
             .setTaxId(tax.getId()).setSpecialDeduId(companySpecial.getSpecialId());
@@ -167,6 +170,7 @@ public class AttendanceService {
         } else {
           BigDecimal companyPer = companySpecial.getCompanyPer();
           BigDecimal personPer = companySpecial.getPersonPer();
+          taxSpecial = new TaxSpecial();
           taxSpecial.setUpdateTime(date).setUpdater(SecurityKit.currentId()).setCompanyMoney(socialBase.multiply(companyPer).toString())
             .setPersonalMoney(socialBase.multiply(personPer).toString()).setCompanyPercent(companyPer.toString()).setPersonalPercent(personPer.toString())
             .setTaxId(tax.getId()).setSpecialDeduId(companySpecial.getSpecialId());
@@ -181,6 +185,7 @@ public class AttendanceService {
         taxSpecialAdd.setUpdateTime(date).setTaxMoney(value).setUpdater(SecurityKit.currentId());
         taxSpecialAddMapper.updateById(taxSpecialAdd);
       } else {
+        taxSpecialAdd = new TaxSpecialAdd();
         taxSpecialAdd.setUpdateTime(date).setTaxMoney(value).setUpdater(SecurityKit.currentId()).setCreateTime(date);
         taxSpecialAddMapper.insert(taxSpecialAdd);
       }
@@ -192,6 +197,7 @@ public class AttendanceService {
         attendance.setValue(value);
         attendanceMapper.updateById(attendance);
       } else {
+        attendance = new Attendance();
         attendance.setValue(value);
         attendanceMapper.insert(attendance);
       }

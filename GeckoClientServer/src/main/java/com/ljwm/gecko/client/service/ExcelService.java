@@ -113,31 +113,32 @@ public class ExcelService {
     InputStream inputStream = file.getInputStream();
     ExcelLogs logs =new ExcelLogs();
     Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs , 0);
+    Object name, certificate = null, certNum = null, socialBase = null, fundBase = null, fundPer = null;
+    NaturalPerson naturalPerson = null;
     for(Map m:importExcel){
-      Object name, certificate = null, certNum = null, socialBase = null, fundBase = null, fundPer = null;
-      NaturalPerson naturalPerson = null;
       for (Object key:m.keySet()) {
-        if (key.toString().equals("*姓名")) {
+        if (key.equals("*姓名")) {
           name = m.get(key);
         }
-        if (key.toString().equals("*证件类型")) {
+        if (key.equals("*证照类型")) {
           certificate = m.get(key);
         }
-        if (key.toString().equals("*证照号码")) {
+        if (key.equals("*证照号码")) {
           certNum = m.get(key);
         }
-        if (key.toString().equals("*社保基数")) {
+        if (key.equals("*社保基数")) {
           socialBase = m.get(key);
         }
-        if (key.toString().equals("*公积金基数")) {
+        if (key.equals("*公积金基数")) {
           fundBase = m.get(key);
         }
-        if (key.toString().equals("*公积金比例")) {
+        if (key.equals("*公积金比例")) {
           fundPer = m.get(key);
         }
         if (certificate != null && certNum != null) {
           if(naturalPerson == null){
-            naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERT_NUM, certNum.toString()).eq(NaturalPerson.CERTIFICATE, certificate.toString()));
+            Integer certificateType = EnumUtil.getEnumByName(CertificateType.class, certificate.toString()).getCode();
+            naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERT_NUM, certNum.toString()).eq(NaturalPerson.CERTIFICATE, certificateType));
             if(naturalPerson ==null){
                 return Result.fail("证件号码或者证照类型有误！");
             }
@@ -146,23 +147,34 @@ public class ExcelService {
             CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, companyId).eq(CompanyUser.MEMBER_ID, memberId));
             CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUser.getId());
             if (companyUserInfo != null) {
-              companyUserInfo.setFundBase(new BigDecimal(fundBase.toString())).setFundPer(new BigDecimal(fundPer.toString())).setSocialBase(new BigDecimal(socialBase.toString()));
+              if(fundBase !=null){
+                companyUserInfo.setFundBase(new BigDecimal(fundBase.toString()));
+              }
+              if (fundPer != null){
+                companyUserInfo.setFundPer(new BigDecimal(fundPer.toString()));
+              }
+              if(socialBase != null){
+                companyUserInfo.setFundPer(new BigDecimal(socialBase.toString()));
+              }
               companyUserInfoMapper.updateById(companyUserInfo);
             }
             Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId).eq(Tax.DECLARE_TYPE, declareType));
             Date date = new Date();
-            tax.setUpdateTime(date);
             if (tax != null) {
+              tax.setUpdateTime(date);
               taxMapper.updateById(tax);
             } else {
-              tax.setCreateTime(date);
+              tax = new Tax();
+              tax.setCreateTime(date).setUpdateTime(date).setDeclareTime(declareTime).setDeclareType(declareType).setMemberId(memberId);
               taxMapper.insert(tax);
             }
-            Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.NAME, key.toString()));
-            Long itemId = attribute.getItemId();
-            Integer tableName = attribute.getTableName();
-            String value = m.get(key).toString();
-            attendanceService.insertOrUpdate(tableName, itemId, new Date(), value, tax, new BigDecimal(socialBase.toString()), new BigDecimal(fundBase.toString()), new BigDecimal(fundPer.toString()), companyId);
+            if(!key.toString().contains("*")) {
+              Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.NAME, key.toString()));
+              Long itemId = attribute.getItemId();
+              Integer tableName = attribute.getTableName();
+              String value = m.get(key).toString();
+              attendanceService.insertOrUpdate(tableName, itemId, new Date(), value, tax, new BigDecimal(socialBase.toString()), new BigDecimal(fundBase.toString()), new BigDecimal(fundPer.toString()), companyId);
+            }
           }
         }
       }
