@@ -10,10 +10,6 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class OrderDto {
-
-  @ApiModelProperty(value = "实际付款金额,单位是元,保留两位小数")
-  private BigDecimal payment;
-
   @ApiModelProperty(value = "订单明细")
   private List<Long> orderItemNoList;
 }
