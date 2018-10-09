@@ -14,10 +14,9 @@
     </resultMap>
 
     <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.TaxIncomeVo">
-      <result column="INCOME_ID" property="incomeId" />
+      <result column="INCOME_ID" property="id" />
       <result column="TAX_ID" property="taxId" />
       <result column="INCOME_TYPE_ID" property="incomeTypeId" />
-      <result column="NAME" property="name" />
       <result column="SORT" property="sort" />
       <result column="IS_NEED_ENTER" property="isNeedEnter" />
       <result column="P_ID" property="pId" />
