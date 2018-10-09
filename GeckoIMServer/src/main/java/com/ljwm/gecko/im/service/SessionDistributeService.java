@@ -69,7 +69,7 @@ public class SessionDistributeService extends MessageService implements IDynamic
 
     Long guestId = jsonObject.getLong("guestId");
 
-    Long providerId = jsonObject.getLong("providerId");
+    Long providerId = jsonObject.getJSONObject("sessionBean").getLong("providerId");
 
     String text = jsonObject.getString("text");
 

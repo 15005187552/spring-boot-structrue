@@ -1,5 +1,9 @@
 package com.ljwm.gecko.im.ws;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSONObject;
+import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.gecko.base.enums.SocketChannelEnum;
 import com.ljwm.gecko.base.mapper.SocketInfoMapper;
 import com.ljwm.gecko.im.security.UserDetailsServiceImpl;
@@ -51,16 +55,16 @@ public class ShowcaseWsMsgHandler implements IWsMsgHandler {
    */
 
   @Override
-  public HttpResponse handshake(HttpRequest request, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {
+  public HttpResponse handshake(HttpRequest request,HttpResponse httpResponse,ChannelContext channelContext) throws Exception {
     String id = request.getParam("id");
-    Tio.bindUser(channelContext, id);
+    Tio.bindUser(channelContext,id);
 
     if (!Boolean.valueOf(request.getParam("tiows_reconnect"))) {
-      handleTio.connectHandle(id, request.getClientIp(), SocketChannelEnum.PROVIDER, channelContext.toString());
+      handleTio.connectHandle(id,request.getClientIp(),SocketChannelEnum.PROVIDER,channelContext.toString());
     }
 
     String clientip = request.getClientIp();
-    log.info("收到来自{}的ws握手包\r\n{}", clientip, request.toString());
+    log.info("收到来自{}的ws握手包\r\n{}",clientip,request.toString());
     return httpResponse;
   }
 
@@ -72,10 +76,10 @@ public class ShowcaseWsMsgHandler implements IWsMsgHandler {
    * @author tanyaowu
    */
   @Override
-  public void onAfterHandshaked(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {
+  public void onAfterHandshaked(HttpRequest httpRequest,HttpResponse httpResponse,ChannelContext channelContext) throws Exception {
 
     log.info("ws onAfterHandshaked invoke");
-    Tio.bindGroup(channelContext, Const.GROUP_ID);
+    Tio.bindGroup(channelContext,Const.GROUP_ID);
 
     // todo
     String id = httpRequest.getParam("id");
@@ -86,11 +90,11 @@ public class ShowcaseWsMsgHandler implements IWsMsgHandler {
    * 当客户端发close flag时，会走这个方法
    */
   @Override
-  public Object onClose(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
-    Tio.remove(channelContext, "receive close flag");
+  public Object onClose(WsRequest wsRequest,byte[] bytes,ChannelContext channelContext) throws Exception {
+    Tio.remove(channelContext,"receive close flag");
 
     log.info("receive close flag");
-    handleTio.connetCloseHanle(channelContext.userid, channelContext.toString());
+    handleTio.connetCloseHanle(channelContext.userid,channelContext.toString());
     return null;
   }
 
@@ -98,16 +102,23 @@ public class ShowcaseWsMsgHandler implements IWsMsgHandler {
    * 字符消息（binaryType = blob）过来后会走这个方法
    */
   @Override
-  public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) throws Exception {
-    WsSessionContext wsSessionContext = (WsSessionContext) channelContext.getAttribute();
-    HttpRequest httpRequest = wsSessionContext.getHandshakeRequestPacket();//获取websocket握手包
-    if (log.isDebugEnabled()) {
-      log.debug("握手包:{}", httpRequest);
-    }
+  public Object onText(WsRequest wsRequest,String text,ChannelContext channelContext) throws Exception {
+//    WsSessionContext wsSessionContext = (WsSessionContext) channelContext.getAttribute();
+//    HttpRequest httpRequest = wsSessionContext.getHandshakeRequestPacket();//获取websocket握手包
+//    if (log.isDebugEnabled()) {
+//      log.debug("握手包:{}",httpRequest);
+//    }
+    String message = JSONUtil.toJsonStr(text);
+    if (!JSONUtil.isJson(message))
+      throw new LogicException("数据传输格式错误");
 
-    // 信息分发
-    log.info("message start handle");
-    handleTio.messageHandle(text);
+    if (StrUtil.equals(JSONObject.parseObject(message).getString("header"),"heartBeat")) {
+        log.debug("心跳");
+    }else{
+      // 信息分发
+      log.info("message start handle");
+      handleTio.messageHandle(text);
+    }
 
     return null;
   }
@@ -116,7 +127,7 @@ public class ShowcaseWsMsgHandler implements IWsMsgHandler {
    * 字节消息（binaryType = arraybuffer）过来后会走这个方法
    */
   @Override
-  public Object onBytes(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
+  public Object onBytes(WsRequest wsRequest,byte[] bytes,ChannelContext channelContext) throws Exception {
     return null;
   }
 

@@ -22,4 +22,6 @@ import java.util.Map;
 public interface AttendanceAttributeMapper extends BaseMapper<AttendanceAttribute> {
 
   List<AttendanceAtrVo> find(Page<AttendanceAtrVo> page, @Param("params") Map map);
+
+  Boolean deleteAble(Long id);
 }

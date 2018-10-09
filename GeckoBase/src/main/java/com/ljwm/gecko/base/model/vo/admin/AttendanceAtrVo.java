@@ -7,4 +7,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class AttendanceAtrVo extends AttendanceAttribute {
+
+  private Boolean deleteAble;
 }

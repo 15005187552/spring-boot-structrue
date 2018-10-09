@@ -19,7 +19,9 @@
           `ID`          ,`NAME`          ,`DESC`          ,`IS_NEED_ENTER`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`DISABLED`          ,`SORT`
     </sql>
 
-  <resultMap id="AttendanceAtrVo" type="com.ljwm.gecko.base.model.vo.admin.AttendanceAtrVo" extends="BaseResultMap"/>
+  <resultMap id="AttendanceAtrVo" type="com.ljwm.gecko.base.model.vo.admin.AttendanceAtrVo" extends="BaseResultMap">
+    <association property="deleteAble" column="ID" select="com.ljwm.gecko.base.mapper.AttendanceAttributeMapper.deleteAble"/>
+  </resultMap>
 
 
   <select id="find" resultMap="AttendanceAtrVo" parameterType="java.util.HashMap">
@@ -47,5 +49,12 @@
     </if>
   </select>
 
-
+  <select id="deleteAble" resultType="java.lang.Boolean" parameterType="java.lang.Long">
+    <![CDATA[
+        SELECT IF(CONVERT(GROUP_CONCAT(`res` SEPARATOR ''),SIGNED)>=1,0,1) AS res
+        FROM (
+            SELECT IF(COUNT(`ATTRIBUTE_ID`)>=1,1,0) AS res FROM `t_attendance` WHERE `ATTRIBUTE_ID`=#{id} AND `ATTRIBUTE_ID` IS NOT NULL
+            ) AS temp
+        ]]>
+  </select>
 </mapper>

@@ -3,6 +3,8 @@ package com.ljwm.gecko.admin.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ljwm.bootbase.enums.ResultEnum;
+import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.admin.model.form.AttendanceQuery;
 import com.ljwm.gecko.admin.model.form.AttendanceSaveForm;
@@ -37,7 +39,7 @@ public class MaintenanceService {
   private AttendanceAttributeMapper attendanceAttributeMapper;
 
   public Page<MemberVo> find(MemberQuery query) {
-    return commonService.find(query, (p, q) -> memberMapper.find(p, BeanUtil.beanToMap(query)));
+    return commonService.find(query,(p,q) -> memberMapper.find(p,BeanUtil.beanToMap(query)));
   }
 
   @Transactional
@@ -48,13 +50,20 @@ public class MaintenanceService {
         attribute = attendanceAttributeMapper.selectById(f.getId()).setUpdateTime(DateTime.now());
       if (Objects.isNull(attribute))
         attribute = new AttendanceAttribute().setCreateTime(DateTime.now());
-      BeanUtil.copyProperties(form, attribute);
-      commonService.insertOrUpdate(attribute, attendanceAttributeMapper);
+      BeanUtil.copyProperties(form,attribute);
+      commonService.insertOrUpdate(attribute,attendanceAttributeMapper);
       return attribute;
     }).get();
   }
 
   public Page<AttendanceAtrVo> find(AttendanceQuery query) {
-    return  commonService.find(query,(p,q) -> attendanceAttributeMapper.find(p,BeanUtil.beanToMap(query)));
+    return commonService.find(query,(p,q) -> attendanceAttributeMapper.find(p,BeanUtil.beanToMap(query)));
+  }
+
+  @Transactional
+  public void delete(Long id) {
+    AttendanceAttribute attribute = attendanceAttributeMapper.selectById(id);
+    if (attribute == null) throw new LogicException(ResultEnum.DATA_ERROR,"未找到id为" + id + "的考情字段");
+    attendanceAttributeMapper.deleteById(attribute);
   }
 }
