@@ -2,6 +2,7 @@ package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
@@ -222,12 +223,17 @@ public class ClientOrderService {
     orderPayInfoMapper.updateById(orderPayInfo);
     JwtUser jwtUser = SecurityKit.currentUser();
     assert jwtUser != null;
+    JSONObject jsonObject =  JSONObject.parseObject(jwtUser.getMember().getAccount().getExtInfo());
+    String openId =StringUtils.EMPTY;
+    if (jsonObject!=null){
+      openId = jsonObject.getString("openId");
+    }
     // 3. 下单
     Map map = weiXinXcxService.weixinPay(
       UtilKit.currentIp(),                    // ip
       wxNum,                                  // 微信单号
       MoneyKit.getFen(orderPayInfo.getPayAmount()),    // 金额
-      jwtUser.getMember().getAccount().getAccount(),      // OPEN ID
+      openId,      // OPEN ID
       orderMapper.getOrderInfo(order.getOrderNo()),// 构造商品明细
       true,
       false

@@ -6,15 +6,15 @@ spring:
     include: base,gecko,common
 wx:
   xcx:                  #小程序
-    appId: wx02c093bdfb8fba13
-    appSecret: b11358f00ef7ac5b946d4aa1ab488575
+    appId: wxdefc6532215f6981
+    appSecret: da1df9c302a1dafa17a8b1ffbc72b2d5
   gzh:
     appId: wx32f9a57c9a3c31ac
     appSecret: d58316dc8bba2eba740c09213bf5072c
   mch:
-    mchId: 1500209732
-    paySecret: d58316dc8bba2eba740c09213bf5072c
-    notifyUrl: "https://mhs.1322.com/asm/order/weixin/notify"
+    mchId: 1515868511
+    paySecret: da1df9c302a1dafa17a8b1ffbc72b2d5
+    notifyUrl: "https://mhs.1322.com/order/weixin/notify"
     notifyVipUrl: "https://mhs.1322.com/asm/vip/weixin/notifyVip"
 appInfo:
   webRoot: "E://upload/"

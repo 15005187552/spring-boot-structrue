@@ -1,6 +1,7 @@
 package com.ljwm.gecko.client.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jfinal.kit.HttpKit;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
@@ -13,14 +14,17 @@ import com.ljwm.gecko.client.model.vo.OrderPaymentVo;
 import com.ljwm.gecko.client.service.ClientOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("order")
 @Api(tags = "订单管理--客户端  API")
+@Slf4j
 public class OrderController extends BaseController {
 
   @Autowired
@@ -80,5 +84,12 @@ public class OrderController extends BaseController {
   @ApiOperation("客户端 --- 评论订单")
   public Result<OrderSimpleVo> comments(@RequestBody @Valid OrderCommentsDto orderCommentsForm) {
     return success(clientOrderService.comments(orderCommentsForm));
+  }
+
+  @RequestMapping("weixin/notify")
+  @ApiOperation(hidden = true, value = "处理微信回调接口!")
+  public void handlerWeixinNotify(HttpServletRequest request) {
+    String xmlStr = HttpKit.readData(request);
+    log.info("处理微信回调接口:{}",xmlStr);
   }
 }
