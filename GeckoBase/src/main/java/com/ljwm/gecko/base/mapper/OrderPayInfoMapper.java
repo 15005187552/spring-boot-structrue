@@ -1,0 +1,16 @@
+package com.ljwm.gecko.base.mapper;
+
+import com.ljwm.gecko.base.entity.OrderPayInfo;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+/**
+ * <p>
+ *  Mapper 接口
+ * </p>
+ *
+ * @author Levis
+ * @since 2018-10-08
+ */
+public interface OrderPayInfoMapper extends BaseMapper<OrderPayInfo> {
+
+}

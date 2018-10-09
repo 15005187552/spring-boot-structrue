@@ -17,7 +17,7 @@ public class GeckoGeneratorTestLocal {
     MyGenerator.build(
       GeneratorConfig
         .builder()
-        .authorName("xixil")  // 设置作者
+        .authorName("Levis")  // 设置作者
         .basePackage("com.ljwm.gecko.base")
         .path(PathKit.getProjectPath())
         .prefix("t_")             // 前缀t_
@@ -27,7 +27,7 @@ public class GeckoGeneratorTestLocal {
         .created(false)    // 第一次建类用创建
         .idType(IdType.AUTO)
         .tables(new String[]{
-          "t_order","t_order_item"})
+          "t_spec"})
         .build()
     );
   }

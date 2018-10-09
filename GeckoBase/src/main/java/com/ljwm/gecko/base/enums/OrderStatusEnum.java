@@ -8,7 +8,8 @@ public enum OrderStatusEnum {
   CANCELED(0,"已取消"),
   WAIT(5,"待服务定价"),
   OVER_CONFIRM(8,"已定价"),
-  NO_PAID(10,"未支付"),
+  NO_PAID(10,"首付款未支付"),
+  NO_REMAIN_PAID(15,"尾款未支付"),
   PAID(20,"已付款"),
   ORDER_SUCCESS(50,"交易成功"),
   ORDER_CLOSE(60,"交易关闭");

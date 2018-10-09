@@ -26,18 +26,30 @@ public class OrderController extends BaseController {
   @Autowired
   private ClientOrderService clientOrderService;
 
-  @PostMapping("placeOrder")
-  @ApiOperation("创建支付订单")
-  public Result<OrderVo> placeOrder(@RequestBody OrderDto orderDto){
-    return success(clientOrderService.placeOrder(orderDto));
-  }
-
   @PostMapping("createOrderItem")
-  @ApiOperation("创建子订单")
+  @ApiOperation("前台--① 创建子订单")
   public Result createOrderItem(@RequestBody OrderItemDto orderItemDto){
     orderItemDto.setMemberId(SecurityKit.currentId());
     clientOrderService.createOrderItem(orderItemDto);
     return success();
+  }
+
+  @PostMapping("placeOrder")
+  @ApiOperation("前台--② 创建支付订单")
+  public Result<OrderVo> placeOrder(@RequestBody OrderDto orderDto){
+    return success(clientOrderService.placeOrder(orderDto));
+  }
+
+  @GetMapping("payOrderTest/{id}")
+  @ApiOperation("前台--③-1  开发环境直接设置为已支付")
+  public Result<OrderSimpleVo> payOrderTest(@PathVariable @Valid Long id) {
+    return success(clientOrderService.setOrderPaid(id));
+  }
+
+  @GetMapping("payOrder/{id}")
+  @ApiOperation("前台--③-1 测试/正式 (小程序) 对未付款的订单唤起微信支付")
+  public Result<OrderPaymentVo> payOrderXcx(@PathVariable @Valid Long id) {
+    return success(clientOrderService.payOrderXcx(id));
   }
 
   @PostMapping("findOrderItem")
@@ -50,18 +62,6 @@ public class OrderController extends BaseController {
   @ApiOperation("服务商查询订单列表")
   public Result<Page<OrderVo>> find(@RequestBody OrderQueryDto orderQueryDto){
     return success(clientOrderService.findOrderList(orderQueryDto));
-  }
-
-  @GetMapping("payOrderTest/{id}")
-  @ApiOperation("客户端 开发环境直接设置为已支付")
-  public Result<OrderSimpleVo> payOrderTest(@PathVariable @Valid Long id) {
-    return success(clientOrderService.setOrderPaid(id));
-  }
-
-  @GetMapping("payOrder/{id}")
-  @ApiOperation("客户端 测试/正式 (小程序) 对未付款的订单唤起微信支付")
-  public Result<OrderPaymentVo> payOrderXcx(@PathVariable @Valid Long id) {
-    return success(clientOrderService.payOrderXcx(id));
   }
 
   @PostMapping("comments")
