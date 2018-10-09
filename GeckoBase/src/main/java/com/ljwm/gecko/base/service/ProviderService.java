@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -65,8 +66,8 @@ public class ProviderService {
   private CommonService commonService;
 
   public Page<ProviderVo> findByPage(ProviderQueryDto query) {
-    Page<ProviderVo> page = commonService.find(query, (p, q) ->
-      providerMapper.findByPage(p, BeanUtil.beanToMap(query)));
+    Page<ProviderVo> page = commonService.find(query,(p,q) ->
+      providerMapper.findByPage(p,BeanUtil.beanToMap(query)));
     page.setRecords(page.getRecords().stream().collect(Collectors.toList())
     );
     return page;
@@ -75,20 +76,20 @@ public class ProviderService {
   @Transactional
   public List<ProviderServicesVo> confirmProvider(ConfirmProviderDto confirmProviderDto) {
     Provider provider = providerMapper.selectById(confirmProviderDto.getId());
-    if (provider == null || !Objects.equals(provider.getValidateState(), ProviderStatEnum.WAIT_CONFIRM.getCode())) {
-      log.info("服务商id:{} 服务商入驻信息不存在,或非待审核状态!", confirmProviderDto.getId());
-      throw new LogicException(ResultEnum.DATA_ERROR, "服务商查询不到或非待审核状态!");
+    if (provider == null || !Objects.equals(provider.getValidateState(),ProviderStatEnum.WAIT_CONFIRM.getCode())) {
+      log.info("服务商id:{} 服务商入驻信息不存在,或非待审核状态!",confirmProviderDto.getId());
+      throw new LogicException(ResultEnum.DATA_ERROR,"服务商查询不到或非待审核状态!");
     }
 
     List<ProviderServicesConfirmDto> providerServicesConfirmDtoList = confirmProviderDto.getProviderServicesConfirmDtoList();
-    if (CollectionUtils.isEmpty(providerServicesConfirmDtoList)){
+    if (CollectionUtils.isEmpty(providerServicesConfirmDtoList)) {
       log.info("服务商{} ,服务商认证详情不能为空!",confirmProviderDto.getId());
       throw new LogicException(ResultEnum.DATA_ERROR,"资质认证详情不能为空!");
     }
     Integer validateState = ValidateStatEnum.CONFIRM_SUCCESS.getCode();
-    for (ProviderServicesConfirmDto providerServicesConfirmDto: providerServicesConfirmDtoList){
+    for (ProviderServicesConfirmDto providerServicesConfirmDto : providerServicesConfirmDtoList) {
       ProviderServices providerServices = providerServicesMapper.selectById(providerServicesConfirmDto.getId());
-      if (providerServices==null){
+      if (providerServices == null) {
         log.info("服务商类型查询不到此服务类型");
         throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此服务类型!");
       }
@@ -107,19 +108,19 @@ public class ProviderService {
 
     List<ProviderServicesVo> providerServicesVoList = providerServicesMapper.findProviderServicesVoListByProviderId(confirmProviderDto.getId());
     Integer providerValidateStatus = ValidateStatEnum.CONFIRM_SUCCESS.getCode();
-    for (ProviderServicesVo providerServicesVo: providerServicesVoList){
-      if (Objects.equals(providerServicesVo.getValidateState(),ValidateStatEnum.WAIT_CONFIRM.getCode())){
+    for (ProviderServicesVo providerServicesVo : providerServicesVoList) {
+      if (Objects.equals(providerServicesVo.getValidateState(),ValidateStatEnum.WAIT_CONFIRM.getCode())) {
         providerValidateStatus = ValidateStatEnum.WAIT_CONFIRM.getCode();
         break;
       }
     }
-    if (!Objects.equals(providerValidateStatus,ValidateStatEnum.WAIT_CONFIRM.getCode())){
-        for (ProviderServicesVo providerServicesVo: providerServicesVoList){
-          if (Objects.equals(providerServicesVo.getValidateState(),ValidateStatEnum.CONFIRM_FAILED.getCode())){
-            providerValidateStatus = ValidateStatEnum.CONFIRM_FAILED.getCode();
-            break;
-          }
+    if (!Objects.equals(providerValidateStatus,ValidateStatEnum.WAIT_CONFIRM.getCode())) {
+      for (ProviderServicesVo providerServicesVo : providerServicesVoList) {
+        if (Objects.equals(providerServicesVo.getValidateState(),ValidateStatEnum.CONFIRM_FAILED.getCode())) {
+          providerValidateStatus = ValidateStatEnum.CONFIRM_FAILED.getCode();
+          break;
         }
+      }
     }
     provider.setValidateState(providerValidateStatus);
     providerMapper.updateById(provider);
@@ -128,19 +129,19 @@ public class ProviderService {
   }
 
   @Transactional
-  public void confirmProviderInfo(ConfirmProviderInfoDto confirmProviderInfoDto){
+  public void confirmProviderInfo(ConfirmProviderInfoDto confirmProviderInfoDto) {
     Provider provider = providerMapper.selectById(confirmProviderInfoDto.getId());
-    if (provider == null ) {
-      log.info("服务商id:{} 服务商入驻信息不存在", confirmProviderInfoDto.getId());
-      throw new LogicException(ResultEnum.DATA_ERROR, "服务商查询不到");
+    if (provider == null) {
+      log.info("服务商id:{} 服务商入驻信息不存在",confirmProviderInfoDto.getId());
+      throw new LogicException(ResultEnum.DATA_ERROR,"服务商查询不到");
     }
-    if (!Objects.equals(provider.getInfoValidateState(), InfoValidateStateEnum.INIT.getCode())){
+    if (!Objects.equals(provider.getInfoValidateState(),InfoValidateStateEnum.INIT.getCode())) {
       log.info("服务商id{},非待审核基本信息状态!",confirmProviderInfoDto.getId());
       throw new LogicException(ResultEnum.DATA_ERROR,"非待审核基本信息状态!");
     }
-    if (confirmProviderInfoDto.isAgree()){
+    if (confirmProviderInfoDto.isAgree()) {
       provider.setInfoValidateState(InfoValidateStateEnum.CONFIRM_SUCCESS.getCode());
-    }else {
+    } else {
       provider.setInfoValidateState(InfoValidateStateEnum.CONFIRM_FAILED.getCode());
       provider.setValidateText(confirmProviderInfoDto.getValidateText());
     }
@@ -148,5 +149,12 @@ public class ProviderService {
     providerMapper.updateById(provider);
   }
 
+  public Provider saveCashDeposit(Long providerId,BigDecimal cashDeosit) {
+    Provider provider = providerMapper.selectById(providerId);
+    if (provider == null) throw new LogicException(ResultEnum.DATA_ERROR,"未找到id为" + providerId + "的服务商");
+    provider.setCashDeposit(cashDeosit);
+    providerMapper.updateById(provider);
+    return provider;
+  }
 
 }

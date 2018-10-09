@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -94,5 +95,10 @@ public class ProviderController extends BaseController {
   @ApiOperation("获取所有等级为 1 的服务类型")
   public Result findTypeByLevel() {
     return success(serviceTypeService.findTypeByLevel(level));
+  }
+
+  @GetMapping("saveCashDeposit")
+  public Result saveCashDeposit(@RequestParam Long providerId,@RequestParam BigDecimal cashDeposit) {
+    return success(providerService.saveCashDeposit(providerId,cashDeposit));
   }
 }
