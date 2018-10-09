@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.SecurityKit;
@@ -114,6 +115,26 @@ public class ClientOrderService {
     return new OrderVo(order);
   }
 
+  @OrderLogger
+  @Transactional
+  public synchronized OrderVo placeRemainOrder(Long id){
+    Order order = orderMapper.selectById(id);
+    if (order==null){
+      log.info("根据订单id{},查询不到该订单信息!",id);
+      throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此订单信息!");
+    }
+    OrderPayInfo orderPayInfo = new OrderPayInfo();
+    orderPayInfo.setMemberId(SecurityKit.currentId());
+    orderPayInfo.setOrderNo(order.getOrderNo());
+    orderPayInfo.setStatus(0);//设置为未支付
+    orderPayInfo.setType(1);//设置为首付款
+    orderPayInfo.setPayAmount(order.getDownPaymentAmount());
+    orderPayInfo.setUpdateTime(DateUtil.date());
+    orderPayInfo.setCreateTime(DateUtil.date());
+    orderPayInfoMapper.insert(orderPayInfo);
+    return new OrderVo(order);
+  }
+
   public Map<String,Object> calMoney(List<Long> orderItemOrderList){
     Map<String,Object> retMap = Maps.newHashMap();
     BigDecimal totalAmount = BigDecimal.ZERO;
@@ -189,18 +210,23 @@ public class ClientOrderService {
       log.info("订单id{},查询不到该订单!",id);
       throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此订单!");
     }
-
+    OrderPayInfo orderPayInfo = orderPayInfoMapper.findOrderPayByOrderNo(Kv.by("orderNo",order.getOrderNo()).set("type",0));
+    if (!Objects.equals(orderPayInfo.getStatus(),0)){
+      log.info("订单首付款已经支付,无需重复发起支付!");
+      throw new LogicException(ResultEnum.DATA_ERROR,"订单首付款已经支付,无需重复发起支付!");
+    }
     // 2. 生成推送微信单号
     String wxNum = UtilKit.createNum("WX");
-    order.setWxOrderNo(wxNum);
-    orderMapper.updateById(order);
+    orderPayInfo.setWxOrderNum(wxNum);
+    orderPayInfo.setUpdateTime(DateUtil.date());
+    orderPayInfoMapper.updateById(orderPayInfo);
     JwtUser jwtUser = SecurityKit.currentUser();
     assert jwtUser != null;
     // 3. 下单
     Map map = weiXinXcxService.weixinPay(
       UtilKit.currentIp(),                    // ip
       wxNum,                                  // 微信单号
-      MoneyKit.getFen(order.getPayment()),    // 金额
+      MoneyKit.getFen(orderPayInfo.getPayAmount()),    // 金额
       jwtUser.getMember().getAccount().getAccount(),      // OPEN ID
       orderMapper.getOrderInfo(order.getOrderNo()),// 构造商品明细
       true,
@@ -210,6 +236,37 @@ public class ClientOrderService {
     return new OrderPaymentVo(id, map);
   }
 
+  public OrderPaymentVo payRemainOrderXcx(Long id){
+    Order order = orderMapper.selectById(id);
+    if (order==null){
+      log.info("订单id{},查询不到该订单!",id);
+      throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此订单!");
+    }
+    OrderPayInfo orderPayInfo = orderPayInfoMapper.findOrderPayByOrderNo(Kv.by("orderNo",order.getOrderNo()).set("type",1));
+    if (!Objects.equals(orderPayInfo.getStatus(),0)){
+      log.info("订单首付款已经支付,无需重复发起支付!");
+      throw new LogicException(ResultEnum.DATA_ERROR,"订单首付款已经支付,无需重复发起支付!");
+    }
+    // 2. 生成推送微信单号
+    String wxNum = UtilKit.createNum("WX");
+    orderPayInfo.setWxOrderNum(wxNum);
+    orderPayInfo.setUpdateTime(DateUtil.date());
+    orderPayInfoMapper.updateById(orderPayInfo);
+    JwtUser jwtUser = SecurityKit.currentUser();
+    assert jwtUser != null;
+    // 3. 下单
+    Map map = weiXinXcxService.weixinPay(
+      UtilKit.currentIp(),                    // ip
+      wxNum,                                  // 微信单号
+      MoneyKit.getFen(orderPayInfo.getPayAmount()),    // 金额
+      jwtUser.getMember().getAccount().getAccount(),      // OPEN ID
+      orderMapper.getOrderInfo(order.getOrderNo()),// 构造商品明细
+      true,
+      false
+    );
+    // 4. 构造返回值
+    return new OrderPaymentVo(id, map);
+  }
   public OrderSimpleVo comments(OrderCommentsDto orderCommentsDto){
     Order order = orderMapper.selectById(orderCommentsDto.getId());
     if (order==null){

@@ -54,6 +54,7 @@
   </select>
 
   <resultMap id="serverSimpleVo" type="com.ljwm.gecko.base.model.vo.ServeSimpleVo" extends="BaseResultMap">
+      <association property="pName" column="PID" select="com.ljwm.gecko.base.mapper.ServiceTypeMapper.findNameByPid" notNullColumn="PID"/>
   </resultMap>
 
   <select id="findById" parameterType="integer" resultMap="serverSimpleVo">
@@ -66,6 +67,10 @@
 
   <select id="findTopList" resultMap="serverSimpleVo">
     select *  from t_service_type where IS_TOP=1 and DISABLED=0
+  </select>
+
+  <select id="findNameByPid" parameterType="integer" resultType="string">
+    select t.name from t_service_type t where t.ID=#{pId}
   </select>
 
 </mapper>

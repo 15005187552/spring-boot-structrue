@@ -34,10 +34,16 @@ public class OrderController extends BaseController {
     return success();
   }
 
-  @PostMapping("placeOrder")
-  @ApiOperation("前台--② 创建支付订单")
-  public Result<OrderVo> placeOrder(@RequestBody OrderDto orderDto){
+  @PostMapping("placeDownOrder")
+  @ApiOperation("前台--②-1 创建首付款支付订单")
+  public Result<OrderVo> placeDownOrder(@RequestBody OrderDto orderDto){
     return success(clientOrderService.placeOrder(orderDto));
+  }
+
+  @GetMapping("placeDownOrder/{id}")
+  @ApiOperation("前台--②-2 创建尾款支付订单")
+  public Result<OrderVo> placeRemainOrder(@PathVariable Long id){
+    return success(clientOrderService.placeRemainOrder(id));
   }
 
   @GetMapping("payOrderTest/{id}")
@@ -46,10 +52,16 @@ public class OrderController extends BaseController {
     return success(clientOrderService.setOrderPaid(id));
   }
 
-  @GetMapping("payOrder/{id}")
-  @ApiOperation("前台--③-1 测试/正式 (小程序) 对未付款的订单唤起微信支付")
+  @GetMapping("payDownOrder/{id}")
+  @ApiOperation("前台--③-1 测试/正式 (小程序) 对首付款未付款的订单唤起微信支付")
   public Result<OrderPaymentVo> payOrderXcx(@PathVariable @Valid Long id) {
     return success(clientOrderService.payOrderXcx(id));
+  }
+
+  @GetMapping("payRemainOrder/{id}")
+  @ApiOperation("前台--③-2 测试/正式 (小程序) 对尾款未付款的订单唤起微信支付")
+  public Result<OrderPaymentVo> payRemainOrderXcx(@PathVariable @Valid Long id) {
+    return success(clientOrderService.payRemainOrderXcx(id));
   }
 
   @PostMapping("findOrderItem")

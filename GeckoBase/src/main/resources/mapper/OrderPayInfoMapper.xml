@@ -20,4 +20,8 @@
           `ID`          ,`MEMBER_ID`          ,`ORDER_NO`          ,`WX_ORDER_NUM`          ,`STATUS`          ,`TYPE`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`PAY_AMOUNT`
     </sql>
 
+    <select id="findOrderPayByOrderNo" parameterType="map" resultMap="BaseResultMap">
+      select t.*  from t_order_pay_info t where t.TYPE=#{params.type} and t.ORDER_NO=#{params.orderNo} limit 1
+    </select>
+
 </mapper>
