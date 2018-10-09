@@ -148,6 +148,7 @@ public class ClientOrderService {
       orderItem.setDownPaymentRate(specServicesPrice.getDownPaymentRate());
       orderItem.setTotalPrice(specServicesPrice.getPrice().multiply(new BigDecimal(orderItemDto.getQuantity())));
       orderItem.setDownPaymentAmount(orderItem.getTotalPrice().multiply(specServicesPrice.getDownPaymentRate()));
+      orderItem.setRemainAmount(orderItem.getTotalPrice().subtract(orderItem.getDownPaymentAmount()));
     }else {
       orderItem.setOrderItemStatus(OrderStatusEnum.WAIT.getCode());
     }

@@ -5,6 +5,7 @@ import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.model.dto.OrderQueryDto;
 import com.ljwm.gecko.base.model.vo.OrderVo;
+import com.ljwm.gecko.provider.model.form.OrderItemPriceDto;
 import com.ljwm.gecko.provider.service.OrderProviderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,5 +29,10 @@ public class OrderController extends BaseController {
     return success(orderProviderService.find(orderQueryDto));
   }
 
-
+  @PostMapping("resetPrice")
+  @ApiOperation("服务商定价")
+  public Result resetPrice(@RequestBody OrderItemPriceDto orderItemPriceDto){
+    orderProviderService.resetPrice(orderItemPriceDto);
+    return success();
+  }
 }

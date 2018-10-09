@@ -55,6 +55,7 @@ public class SpecServicesPriceService {
       specServicesPriceMapper.updateById(specServicesPrice);
     }else {
       //新增
+      /*
       ProviderSimpleVo providerVo = providerMapper.findProviderSimpleVoByMemberId(SecurityKit.currentUser().getId());
       if (providerVo!=null && Objects.equals(providerVo.getInfoValidateState(),InfoValidateStateEnum.CONFIRM_SUCCESS.getCode())){
         specServicesPriceForm.setProviderId(providerVo.getId());
@@ -62,6 +63,7 @@ public class SpecServicesPriceService {
         log.info("此用户{}非服务商管理员用户!",SecurityKit.currentUser().getId().toString());
         throw new LogicException(ResultEnum.DATA_ERROR,"此用户非服务商管理员用户!");
       }
+      */
       SpecServicesPrice specServicesPrice = new SpecServicesPrice();
       BeanUtil.copyProperties(specServicesPriceForm,specServicesPrice);
       specServicesPrice.setCreateTime(DateUtil.date());
