@@ -68,6 +68,9 @@ public class ClientOrderService {
   private SpecServicesPriceMapper specServicesPriceMapper;
 
   @Autowired
+  private OrderPayInfoMapper orderPayInfoMapper;
+
+  @Autowired
   private AppInfo appInfo;
 
   private static final String MAIN_ORDER="MN";
@@ -99,6 +102,15 @@ public class ClientOrderService {
       orderItem.setUpdateTime(DateUtil.date());
       orderItemMapper.updateById(orderItem);
     }
+    OrderPayInfo orderPayInfo = new OrderPayInfo();
+    orderPayInfo.setMemberId(SecurityKit.currentId());
+    orderPayInfo.setOrderNo(order.getOrderNo());
+    orderPayInfo.setStatus(0);//设置为未支付
+    orderPayInfo.setType(0);//设置为首付款
+    orderPayInfo.setPayAmount(order.getDownPaymentAmount());
+    orderPayInfo.setUpdateTime(DateUtil.date());
+    orderPayInfo.setCreateTime(DateUtil.date());
+    orderPayInfoMapper.insert(orderPayInfo);
     return new OrderVo(order);
   }
 
