@@ -25,7 +25,7 @@ public class SpecServicesPriceForm {
   @ApiModelProperty(value = "首付比率")
   private BigDecimal downPaymentRate;
 
-  @ApiModelProperty(value = "服务商id",hidden = true)
+  @ApiModelProperty(value = "服务商id")
   private Long providerId;
 
   @ApiModelProperty(value = "是否启用   0  启用  1 不启用")

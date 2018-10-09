@@ -18,7 +18,10 @@ import com.ljwm.gecko.base.utils.TimeUtil;
 import com.ljwm.gecko.base.utils.excelutil.ExcelLogs;
 import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
-import com.ljwm.gecko.client.model.dto.*;
+import com.ljwm.gecko.client.model.dto.AttendanceModel;
+import com.ljwm.gecko.client.model.dto.EmployeeInfoForm;
+import com.ljwm.gecko.client.model.dto.NormalSalaryForm;
+import com.ljwm.gecko.client.model.dto.PersonInfoDto;
 import com.ljwm.gecko.client.model.vo.NormalSalaryVo;
 import com.ljwm.gecko.client.model.vo.PersonExportVo;
 import lombok.extern.slf4j.Slf4j;
@@ -73,6 +76,12 @@ public class ExcelService {
   @Autowired
   AttributeMapper attributeMapper;
 
+  @Autowired
+  AttendanceService attendanceService;
+
+  @Autowired
+  TaxMapper taxMapper;
+
   @Transactional
   public void importPersonInfo(MultipartFile file, Long companyId) throws Exception {
     isHasProperty(companyId);
@@ -102,31 +111,78 @@ public class ExcelService {
 
 
   @Transactional
-  public String importAttendance(MultipartFile file, Long companyId, String declareTime) throws IOException {
+  public Result importAttendance(MultipartFile file, Long companyId, String declareTime, Integer declareType) throws IOException {
     isHasProperty(companyId);
     InputStream inputStream = file.getInputStream();
     ExcelLogs logs =new ExcelLogs();
     Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs , 0);
+    Object name, certificate = null, certNum = null, socialBase = null, fundBase = null, fundPer = null;
+    NaturalPerson naturalPerson = null;
     for(Map m:importExcel){
-      for (Object key:m.keySet()){
-        if(key.toString().equals("*姓名")){
-          Object name = m.get(key);
+      for (Object key:m.keySet()) {
+        if (key.equals("*姓名")) {
+          name = m.get(key);
         }
-        if(key.toString().equals("*证件类型")){
-          Object certificate = m.get(key);
+        if (key.equals("*证照类型")) {
+          certificate = m.get(key);
         }
-        if(key.toString().equals("*证照号码")){
-          Object certNum = m.get(key);
+        if (key.equals("*证照号码")) {
+          certNum = m.get(key);
         }
-        Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.NAME, key.toString()));
-        Long itemId = attribute.getItemId();
-       // String tableName = EnumUtil.getEnumBycode(TableNameEnum.class, attribute.getTableName()).getValue();
-
-
+        if (key.equals("*社保基数")) {
+          socialBase = m.get(key);
+        }
+        if (key.equals("*公积金基数")) {
+          fundBase = m.get(key);
+        }
+        if (key.equals("*公积金比例")) {
+          fundPer = m.get(key);
+        }
+        if (certificate != null && certNum != null) {
+          if(naturalPerson == null){
+            Integer certificateType = EnumUtil.getEnumByName(CertificateType.class, certificate.toString()).getCode();
+            naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERT_NUM, certNum.toString()).eq(NaturalPerson.CERTIFICATE, certificateType));
+            if(naturalPerson ==null){
+                return Result.fail("证件号码或者证照类型有误！");
+            }
+          }else {
+            Long memberId = naturalPerson.getMemberId();
+            CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, companyId).eq(CompanyUser.MEMBER_ID, memberId));
+            CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUser.getId());
+            if (companyUserInfo != null) {
+              if(fundBase !=null){
+                companyUserInfo.setFundBase(new BigDecimal(fundBase.toString()));
+              }
+              if (fundPer != null){
+                companyUserInfo.setFundPer(new BigDecimal(fundPer.toString()));
+              }
+              if(socialBase != null){
+                companyUserInfo.setFundPer(new BigDecimal(socialBase.toString()));
+              }
+              companyUserInfoMapper.updateById(companyUserInfo);
+            }
+            Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId).eq(Tax.DECLARE_TYPE, declareType));
+            Date date = new Date();
+            if (tax != null) {
+              tax.setUpdateTime(date);
+              taxMapper.updateById(tax);
+            } else {
+              tax = new Tax();
+              tax.setCreateTime(date).setUpdateTime(date).setDeclareTime(declareTime).setDeclareType(declareType).setMemberId(memberId);
+              taxMapper.insert(tax);
+            }
+            if(!key.toString().contains("*")) {
+              Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.NAME, key.toString()));
+              Long itemId = attribute.getItemId();
+              Integer tableName = attribute.getTableName();
+              String value = m.get(key).toString();
+              attendanceService.insertOrUpdate(tableName, itemId, new Date(), value, tax, new BigDecimal(socialBase.toString()), new BigDecimal(fundBase.toString()), new BigDecimal(fundPer.toString()), companyId);
+            }
+          }
+        }
       }
     }
-
-    return "导入成功！";
+    return Result.success("导入成功！");
   }
 
   public String exportPersonInfoExcel(HttpServletResponse response, Long companyId) throws IOException {
@@ -304,7 +360,7 @@ public class ExcelService {
   }
 
   @Transactional
-  public void importEmployeeInfo(PersonInfoDto personInfoDto, Long companyId) throws ParseException {
+  public void importEmployeeInfo(PersonInfoDto personInfoDto, Long companyId) {
     Map<String, Object> map = new HashedMap();
     map.put("REG_MOBILE", personInfoDto.getRegMobile());
     List<Member> list = memberMapper.selectByMap(map);
@@ -324,13 +380,7 @@ public class ExcelService {
     Integer cityCode = locationDao.getCityCode(personInfoDto.getCity(), provinceCode);
     Integer areaCode = locationDao.getAreaCode(personInfoDto.getArea(), cityCode);
     NaturalPerson naturalPerson = new NaturalPerson();
-    naturalPerson.setMemberId(memberId)
-      .setCountry(EnumUtil.getEnumByName(CountryType.class, personInfoDto.getCountry()).getCode())
-      .setName(personInfoDto.getName())
-      .setGender(EnumUtil.getEnumByName(GenderEnum.class, personInfoDto.getGender()).getCode())
-      .setBirthday(TimeUtil.parseString(personInfoDto.getBirthday()))
-      .setCertificate(EnumUtil.getEnumByName(CertificateType.class, personInfoDto.getCertificate()).getCode())
-      .setProvince(provinceCode)
+    naturalPerson.setMemberId(memberId).setName(personInfoDto.getName()).setProvince(provinceCode)
       .setCity(cityCode)
       .setArea(areaCode)
       .setAddress(personInfoDto.getAddress())
@@ -338,7 +388,34 @@ public class ExcelService {
       .setDisablityNum(personInfoDto.getDisablityNum())
       .setMatrtyrNum(personInfoDto.getMatrtyrNum())
       .setUpdateTime(new Date()).setCompanyId(companyId);
-    NaturalPerson naturalPerson1 = naturalPersonMapper.selectById(memberId);
+    if (personInfoDto.getCountry() != null) {
+      if(EnumUtil.getEnumByName(CountryType.class, personInfoDto.getCountry()) != null){
+        naturalPerson.setCountry(EnumUtil.getEnumByName(CountryType.class, personInfoDto.getCountry()).getCode());
+      } else {
+        throw new LogicException("国籍填写有误！");
+      }
+    }
+    if (personInfoDto.getGender() != null){
+      if (EnumUtil.getEnumByName(GenderEnum.class, personInfoDto.getGender()) != null){
+        naturalPerson.setGender(EnumUtil.getEnumByName(GenderEnum.class, personInfoDto.getGender()).getCode());
+      } else {
+        throw new LogicException("性别填写有误！");
+      }
+    }
+    if (personInfoDto.getCertificate() != null){
+      if (EnumUtil.getEnumByName(CertificateType.class, personInfoDto.getCertificate()) != null){
+        naturalPerson.setCertificate(EnumUtil.getEnumByName(CertificateType.class, personInfoDto.getCertificate()).getCode());
+      } else {
+        throw new LogicException("证照类型填写有误！");
+      }
+    }
+    try {
+      naturalPerson.setBirthday(TimeUtil.parseString(personInfoDto.getBirthday()));
+    } catch (ParseException e) {
+      throw new LogicException("生日请填写yyyy—MM-dd格式！");
+    }
+    NaturalPerson naturalPerson1 = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERTIFICATE, personInfoDto.getCertificate())
+      .eq(NaturalPerson.CERT_NUM, personInfoDto.getCertNum()));
     if(naturalPerson1 != null){
       BeanUtil.copyProperties(naturalPerson, naturalPerson1);
       naturalPersonMapper.updateById(naturalPerson1);
@@ -360,14 +437,79 @@ public class ExcelService {
     Integer workCity = locationDao.getCityCode(personInfoDto.getWorkCity(), null);
     companyUserInfo1.setCompanyUserId(companyUserId)
       .setJobNum(personInfoDto.getJobNum())
-      .setEducation(EnumUtil.getEnumByName(EducationEnum.class, personInfoDto.getEducation()).getCode())
-      .setPersonState(EnumUtil.getEnumByName(PersonStateEnum.class, personInfoDto.getPersonState()).getCode())
-      .setEmployee(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getEmployee()).getCode())
-      .setHireDate(TimeUtil.parseString(personInfoDto.getHireDate()))
       .setEmployeeType(personInfoDto.getEmployeeType())
       .setDepartment(personInfoDto.getDepartment())
       .setStation(personInfoDto.getStation())
-      .setTermDate(TimeUtil.parseString(personInfoDto.getTermDate()))
+      .setWorkCity(workCity)
+      .setBank(personInfoDto.getBank())
+      .setBankNum(personInfoDto.getBankNum())
+      .setSocialNum(personInfoDto.getSocialNum())
+      .setFundNum(personInfoDto.getFundNum())
+      .setEmail(personInfoDto.getEmail())
+      .setRemark(personInfoDto.getRemark());
+    if (personInfoDto.getEducation() != null){
+      if (EnumUtil.getEnumByName(EducationEnum.class, personInfoDto.getEducation()) != null){
+        companyUserInfo1.setEducation(EnumUtil.getEnumByName(EducationEnum.class, personInfoDto.getEducation()).getCode());
+      } else {
+        throw new LogicException("学历填写有误！");
+      }
+    }
+    if (personInfoDto.getPersonState() != null){
+      if (EnumUtil.getEnumByName(PersonStateEnum.class, personInfoDto.getPersonState()) != null){
+        companyUserInfo1.setPersonState(EnumUtil.getEnumByName(PersonStateEnum.class, personInfoDto.getPersonState()).getCode());
+      } else {
+        throw new LogicException("人员状态填写有误！");
+      }
+    } else {
+      throw new LogicException("人员状态为必填项！");
+    }
+    if (personInfoDto.getEmployee() != null){
+      if (EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getEmployee()) != null){
+        companyUserInfo1.setEmployee(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getEmployee()).getCode());
+      } else {
+        throw new LogicException("是否雇员填写有误！");
+      }
+    } else{
+      throw new LogicException("是否雇员为必填项！");
+    }
+    try {
+      companyUserInfo1.setHireDate(TimeUtil.parseString(personInfoDto.getHireDate()));
+    } catch (ParseException e) {
+      throw new LogicException("离职日期请填写yyyy—MM-dd格式！");
+    }
+    try {
+      companyUserInfo1.setTermDate(TimeUtil.parseString(personInfoDto.getTermDate()));
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    if (personInfoDto.getMaritalStatus() != null){
+      if (EnumUtil.getEnumByName(MaritalStatusEnum.class, personInfoDto.getMaritalStatus()) != null){
+        companyUserInfo1.setMaritalStatus(EnumUtil.getEnumByName(MaritalStatusEnum.class, personInfoDto.getMaritalStatus()).getCode());
+      } else {
+        throw new LogicException("婚姻状况填写有误！");
+      }
+    }
+    if (personInfoDto.getIntroduceTalents() != null){
+      if (EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getIntroduceTalents()) != null){
+        companyUserInfo1.setNtroduceTalents(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getIntroduceTalents()).getCode());
+      } else {
+        throw new LogicException("是否引进人才填写有误！");
+      }
+    }
+    if (personInfoDto.getSpecialIndustry() != null){
+      if (EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getSpecialIndustry()) != null){
+        companyUserInfo1.setSpecialIndustry(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getSpecialIndustry()).getCode());
+      } else {
+        throw new LogicException("是否特定行业填写有误！");
+      }
+    }
+    if (personInfoDto.getIsInvestor() != null){
+      if (EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getIsInvestor()) != null){
+        companyUserInfo1.setIsInvestor(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getIsInvestor()).getCode());
+      } else {
+        throw new LogicException("是否股东、投资人填写有误！");
+      }
+    }
       /* .setSocialComPer(new BigDecimal(personInfoDto.getSocialComPer()))
        .setComPension(new BigDecimal(personInfoDto.getComPension()))
        .setComMedical(new BigDecimal(personInfoDto.getComMedical()))
@@ -378,17 +520,6 @@ public class ExcelService {
        .setPersonPension(new BigDecimal(personInfoDto.getPersonPension()))
        .setPersonMedical(new BigDecimal(personInfoDto.getPersonMedical()))
        .setPersonUnemploy(new BigDecimal(personInfoDto.getPersonUnemploy()))*/
-      .setWorkCity(workCity)
-      .setMaritalStatus(EnumUtil.getEnumByName(MaritalStatusEnum.class, personInfoDto.getMaritalStatus()).getCode())
-      .setNtroduceTalents(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getNtroduceTalents()).getCode())
-      .setBank(personInfoDto.getBank())
-      .setBankNum(personInfoDto.getBankNum())
-      .setSocialNum(personInfoDto.getSocialNum())
-      .setFundNum(personInfoDto.getFundNum())
-      .setSpecialIndustry(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getSpecialIndustry()).getCode())
-      .setIsInvestor(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getIsInvestor()).getCode())
-      .setEmail(personInfoDto.getEmail())
-      .setRemark(personInfoDto.getRemark());
     if(companyUserInfo != null) {
       companyUserInfoMapper.updateById(companyUserInfo1);
     } else {

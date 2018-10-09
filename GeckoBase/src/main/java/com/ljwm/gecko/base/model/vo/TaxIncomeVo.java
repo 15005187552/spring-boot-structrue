@@ -14,8 +14,9 @@ import java.util.Date;
  */
 @Data
 public class TaxIncomeVo {
+
   @ApiModelProperty(value = "报税数据收入ID")
-  private Long incomeId;
+  private Long id;
 
   @ApiModelProperty(value = "报税数据ID")
   private Long taxId;
@@ -23,9 +24,6 @@ public class TaxIncomeVo {
   @JSONField(serializeUsing = IdToNameSerializer.IncomeTypeSerializer.class)
   @ApiModelProperty(value = "收入分类ID")
   private Long incomeTypeId;
-
-  @ApiModelProperty(value = "分类名称")
-  private String name;
 
   @ApiModelProperty(value = "排序")
   private String sort;

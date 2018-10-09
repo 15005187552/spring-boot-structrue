@@ -28,4 +28,6 @@ public interface SpecMapper extends BaseMapper<Spec> {
   SpecSimpleVo  findSpecSimpleVoById(@Param("id") Integer id);
 
   List<SpecVo> findByServiceId(@Param("serviceId") Integer serviceId);
+
+  List<SpecVo> children(@Param("pid") Integer pid);
 }

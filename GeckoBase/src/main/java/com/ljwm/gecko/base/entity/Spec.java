@@ -21,8 +21,8 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  * </p>
  *
- * @author Livis
- * @since 2018-09-26
+ * @author Levis
+ * @since 2018-10-09
  */
 @Data
 @SuppressWarnings("ALL")
@@ -53,6 +53,14 @@ public class Spec implements Serializable {
     @TableField("`SORT`")
     private Integer sort;
 
+    @ApiModelProperty(value = "父节点id")
+    @TableField("`PID`")
+    private Integer pid;
+
+    @ApiModelProperty(value = "级别")
+    @TableField("`LEVEL`")
+    private String level;
+
 
     public static final String ID = "`ID`";
 
@@ -63,5 +71,9 @@ public class Spec implements Serializable {
     public static final String CREATE_TIME = "`CREATE_TIME`";
 
     public static final String SORT = "`SORT`";
+
+    public static final String PID = "`PID`";
+
+    public static final String LEVEL = "`LEVEL`";
 
 }

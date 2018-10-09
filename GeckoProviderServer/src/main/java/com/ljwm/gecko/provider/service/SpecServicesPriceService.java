@@ -5,10 +5,14 @@ import cn.hutool.core.date.DateUtil;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
+import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.entity.SpecServicesPrice;
+import com.ljwm.gecko.base.enums.InfoValidateStateEnum;
+import com.ljwm.gecko.base.mapper.ProviderMapper;
 import com.ljwm.gecko.base.mapper.ProviderServicesMapper;
 import com.ljwm.gecko.base.mapper.SpecServicesPriceMapper;
 import com.ljwm.gecko.base.model.vo.ProviderServicesVo;
+import com.ljwm.gecko.base.model.vo.ProviderSimpleVo;
 import com.ljwm.gecko.base.model.vo.SpecServicesPriceSimpleVo;
 import com.ljwm.gecko.provider.model.form.SpecServicesPriceCommonQueryForm;
 import com.ljwm.gecko.provider.model.form.SpecServicesPriceForm;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -28,6 +33,9 @@ public class SpecServicesPriceService {
 
   @Autowired
   private ProviderServicesMapper providerServicesMapper;
+
+  @Autowired
+  private ProviderMapper providerMapper;
 
   @Transactional
   public void save(SpecServicesPriceForm specServicesPriceForm){
@@ -47,6 +55,15 @@ public class SpecServicesPriceService {
       specServicesPriceMapper.updateById(specServicesPrice);
     }else {
       //新增
+      /*
+      ProviderSimpleVo providerVo = providerMapper.findProviderSimpleVoByMemberId(SecurityKit.currentUser().getId());
+      if (providerVo!=null && Objects.equals(providerVo.getInfoValidateState(),InfoValidateStateEnum.CONFIRM_SUCCESS.getCode())){
+        specServicesPriceForm.setProviderId(providerVo.getId());
+      }else {
+        log.info("此用户{}非服务商管理员用户!",SecurityKit.currentUser().getId().toString());
+        throw new LogicException(ResultEnum.DATA_ERROR,"此用户非服务商管理员用户!");
+      }
+      */
       SpecServicesPrice specServicesPrice = new SpecServicesPrice();
       BeanUtil.copyProperties(specServicesPriceForm,specServicesPrice);
       specServicesPrice.setCreateTime(DateUtil.date());
@@ -64,6 +81,6 @@ public class SpecServicesPriceService {
 
   @Transactional
   public Boolean disabled(Long id){
-    return specServicesPriceMapper.disabled(id)>=1;
+    return specServicesPriceMapper.disabledSpecService(id)>=1;
   }
 }

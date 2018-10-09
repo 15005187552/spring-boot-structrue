@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Data
 @Accessors(chain = true)
@@ -14,6 +15,7 @@ public class OrderQueryDto extends CommonQuery {
   @ApiModelProperty("订单状态")
   private Integer status;
 
-  @ApiModelProperty(value = "服务商id",hidden = true)
+  @ApiModelProperty(value = "服务商id")
+  @NotBlank
   private Long providerId;
 }

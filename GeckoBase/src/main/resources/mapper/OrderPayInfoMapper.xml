@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.OrderPayInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.OrderPayInfo">
+        <id column="ID" property="id" />
+        <result column="MEMBER_ID" property="memberId" />
+        <result column="ORDER_NO" property="orderNo" />
+        <result column="WX_ORDER_NUM" property="wxOrderNum" />
+        <result column="STATUS" property="status" />
+        <result column="TYPE" property="type" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="PAY_AMOUNT" property="payAmount" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`MEMBER_ID`          ,`ORDER_NO`          ,`WX_ORDER_NUM`          ,`STATUS`          ,`TYPE`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`PAY_AMOUNT`
+    </sql>
+
+</mapper>

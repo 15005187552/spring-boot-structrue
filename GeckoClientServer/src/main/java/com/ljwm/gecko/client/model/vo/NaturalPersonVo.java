@@ -1,6 +1,8 @@
 package com.ljwm.gecko.client.model.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ljwm.gecko.base.entity.NaturalPerson;
+import com.ljwm.gecko.base.serializer.PathToUrlSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,30 +41,35 @@ public class NaturalPersonVo extends NaturalPerson {
   @ApiModelProperty(value = "残疾人证件号")
   private String disablityNum;
 
+  @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
   @ApiModelProperty(value = "残疾证件路径")
   private String disablityPath;
 
   @ApiModelProperty(value = "烈属证件号")
   private String matrtyrNum;
 
+  @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
   @ApiModelProperty(value = "烈属证件路径")
   private String matrtyrPath;
 
   @ApiModelProperty(value = "孤老证件号")
   private String oldNum;
 
+  @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
   @ApiModelProperty(value = "孤老路径")
   private String oldPath;
 
   @ApiModelProperty(value = "专家学者证件号")
   private String professorNum;
 
+  @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
   @ApiModelProperty(value = "专家学者证件路径")
   private String professorPath;
 
   @ApiModelProperty(value = "院士证件号")
   private String academicNum;
 
+  @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
   @ApiModelProperty(value = "院士证件路径")
   private String academicPath;
 

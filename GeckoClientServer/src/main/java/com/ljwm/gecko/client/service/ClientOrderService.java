@@ -28,6 +28,7 @@ import com.ljwm.gecko.client.model.vo.OrderPaymentVo;
 import com.ljwm.gecko.client.security.JwtUser;
 import com.ljwm.gecko.client.webservice.WeiXinXcxService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,7 +77,6 @@ public class ClientOrderService {
   @OrderLogger
   @Transactional
   public synchronized OrderVo placeOrder(OrderDto orderDto){
-    //多服务支付
     List<Long> orderItemOrderList = orderDto.getOrderItemNoList();
     if (CollectionUtils.isEmpty(orderItemOrderList)){
       log.info("提交订单,订单明细不能为空");
@@ -110,12 +110,16 @@ public class ClientOrderService {
     List<OrderItem> orderItemList = Lists.newArrayList();
     for (Long orderItemId:orderItemOrderList){
       OrderItem orderItem = orderItemMapper.selectById(orderItemId);
-      if (orderItem==null|| !Objects.equals(orderItem.getOrderItemStatus(),OrderStatusEnum.OVER_CONFIRM.getCode())){
-        log.info("订单号{},为非已定价状态,不能下单");
-        throw new LogicException(ResultEnum.DATA_ERROR,"订单非已定价状态,不能支付");
+      if (orderItem==null|| !Objects.equals(orderItem.getOrderItemStatus(),OrderStatusEnum.NO_PAID.getCode())){
+        log.info("订单号{},为非未支付状态,不能下单");
+        throw new LogicException(ResultEnum.DATA_ERROR,"订单非未支付状态,不能支付");
+      }
+      if (StringUtils.isNotEmpty(orderItem.getOrderNo())){
+        log.info("订单号{},已创建支付订单,不可重复创建!");
+        throw new LogicException(ResultEnum.DATA_ERROR,"已创建支付订单,不可重复创建!");
       }
       orderItemList.add(orderItem);
-      totalAmount = totalAmount.add(new BigDecimal(orderItem.getCurrentUnitPrice().doubleValue())) ;
+      totalAmount = totalAmount.add(new BigDecimal(orderItem.getTotalPrice().doubleValue())) ;
       downPaymentAmount = downPaymentAmount.add(new BigDecimal(orderItem.getDownPaymentAmount().doubleValue()));
       remainAmount = remainAmount.add(new BigDecimal(orderItem.getRemainAmount().doubleValue()));
     }
@@ -134,7 +138,7 @@ public class ClientOrderService {
     orderItem.setCreateTime(DateUtil.date());
     orderItem.setUpdateTime(DateUtil.date());
     if (orderItemDto.getSpecServiceId()!=null){
-      orderItem.setOrderItemStatus(OrderStatusEnum.OVER_CONFIRM.getCode());
+      orderItem.setOrderItemStatus(OrderStatusEnum.NO_PAID.getCode());
       SpecServicesPrice specServicesPrice =specServicesPriceMapper.selectById(orderItemDto.getSpecServiceId());
       if (specServicesPrice==null){
         log.info("根据商品规格id{}查询商品规格信息不存在!");
@@ -142,8 +146,9 @@ public class ClientOrderService {
       }
       orderItem.setCurrentUnitPrice(specServicesPrice.getPrice());
       orderItem.setDownPaymentRate(specServicesPrice.getDownPaymentRate());
-      orderItem.setTotalPrice(specServicesPrice.getPrice());
-      orderItem.setDownPaymentAmount(specServicesPrice.getPrice().multiply(specServicesPrice.getDownPaymentRate()));
+      orderItem.setTotalPrice(specServicesPrice.getPrice().multiply(new BigDecimal(orderItemDto.getQuantity())));
+      orderItem.setDownPaymentAmount(orderItem.getTotalPrice().multiply(specServicesPrice.getDownPaymentRate()));
+      orderItem.setRemainAmount(orderItem.getTotalPrice().subtract(orderItem.getDownPaymentAmount()));
     }else {
       orderItem.setOrderItemStatus(OrderStatusEnum.WAIT.getCode());
     }

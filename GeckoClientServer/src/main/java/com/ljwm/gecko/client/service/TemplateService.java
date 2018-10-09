@@ -1,20 +1,24 @@
 package com.ljwm.gecko.client.service;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.entity.AttendanceTemplate;
+import com.ljwm.gecko.base.entity.CompanyUserInfo;
+import com.ljwm.gecko.base.entity.NaturalPerson;
 import com.ljwm.gecko.base.entity.Template;
-import com.ljwm.gecko.base.mapper.AttendanceTemplateMapper;
-import com.ljwm.gecko.base.mapper.AttributeMapper;
-import com.ljwm.gecko.base.mapper.TemplateMapper;
+import com.ljwm.gecko.base.enums.CertificateType;
+import com.ljwm.gecko.base.mapper.*;
+import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
 import com.ljwm.gecko.client.model.dto.CompanyDto;
 import com.ljwm.gecko.client.model.dto.PersonInfoDto;
 import com.ljwm.gecko.client.model.dto.TemplateDto;
 import com.ljwm.gecko.client.model.dto.TemplateForm;
+import com.ljwm.gecko.client.model.vo.AttendanceExcelVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +33,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,12 +61,18 @@ public class TemplateService {
   @Autowired
   AttendanceTemplateMapper attendanceTemplateMapper;
 
+  @Autowired
+  NaturalPersonMapper naturalPersonMapper;
+
+  @Autowired
+  CompanyUserInfoMapper companyUserInfoMapper;
+
   String[] employeeStr = {"工号", "*姓名", "*证照类型", "*证照号码", "*国籍(地区)", "性别", "出生年月", "学历", "*人员状态", "*是否雇员",
     "*手机号码", "任职受雇日期", "员工类别", "部门", "岗位", "离职日期", "工作城市", "婚姻状况", "是否引进人才", "开户银行",
     "工资账号", "社保账号", "公积金账号", "是否特定行业", "是否股东、投资者", "是否残疾", "是否烈属", "是否孤老", "残疾证号", "烈属证号",
     "电子邮箱", "居住省份", "居住城市", "居住所在区", "居住详细地址", "备注"};
 
-  String[] str = {"*姓名", "*证照类型", "*证照号码", "*社保基数", "*公积金基数", "公积金比例"};
+  String[] str = {"*姓名", "*证照类型", "*证照号码", "*社保基数", "*公积金基数", "*公积金比例"};
   @Transactional
   public Result uploadTemplate(TemplateForm templateForm) {
     List<TemplateDto> list = templateForm.getList();
@@ -162,7 +173,7 @@ public class TemplateService {
       i++;
     }
     for (Template template : list) {
-      map.put(String.valueOf(template.getId()), attributeMapper.selectById(template.getAttributeId()).getName());
+      map.put(String.valueOf(template.getAttributeId()), attributeMapper.selectById(template.getAttributeId()).getName());
     }
     log.info("map : {}", map.toJSONString());
     return Result.success(map);
@@ -179,13 +190,27 @@ public class TemplateService {
       i++;
     }
     for (Template template : list) {
-      map.put(String.valueOf(template.getId()), attributeMapper.selectById(template.getAttributeId()).getName());
+      map.put(String.valueOf(template.getAttributeId()), attributeMapper.selectById(template.getAttributeId()).getName());
+    }
+    List<AttendanceExcelVo> dataList = new ArrayList();
+    List<NaturalPerson> naturalPersonList = naturalPersonMapper.selectList(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.COMPANY_ID, companyDto.getCompanyId()));
+    for (NaturalPerson naturalPerson : naturalPersonList){
+      AttendanceExcelVo attendanceExcelVo = new AttendanceExcelVo();
+      attendanceExcelVo.setCertificate(EnumUtil.getNameBycode(CertificateType.class,naturalPerson.getCertificate()))
+        .setCertNum(naturalPerson.getCertNum()).setName(naturalPerson.getName());
+      List<CompanyUserInfo> companyUserList = companyUserInfoMapper.selectCompanyUser(companyDto.getCompanyId(), naturalPerson.getMemberId());
+      if (CollectionUtil.isNotEmpty(companyUserList)){
+        CompanyUserInfo companyUserInfo = companyUserList.get(0);
+        attendanceExcelVo.setFundBase(companyUserInfo.getFundBase().toString()).setFundPer(companyUserInfo.getFundPer().toString())
+          .setSocialBase(companyUserInfo.getSocialBase().toString());
+      }
+      dataList.add(attendanceExcelVo);
     }
     response.reset();
     response.setContentType("multipart/form-data");
     response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("模板表.xlsx","UTF-8"));
     OutputStream output = response.getOutputStream();
-    ExcelUtil.exportExcel(map, null, output);
+    ExcelUtil.exportExcel(map, dataList, output);
     output.close();
     return Result.success("导出成功！");
   }

@@ -2,6 +2,7 @@ package com.ljwm.gecko.provider.controller;
 
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.model.vo.ProviderServicesVo;
 import com.ljwm.gecko.base.model.vo.SpecServicesPriceSimpleVo;
 import com.ljwm.gecko.provider.model.form.SpecServicesPriceCommonQueryForm;
@@ -10,6 +11,7 @@ import com.ljwm.gecko.provider.service.SpecServicesPriceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
