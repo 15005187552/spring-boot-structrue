@@ -80,7 +80,7 @@ public class PersonInfoService {
     if (naturalPerson != null) {
       NaturalPersonVo naturalPersonVo = new NaturalPersonVo();
       BeanUtil.copyProperties(naturalPerson, naturalPersonVo);
-      if (StrUtil.isNotBlank(naturalPersonVo.getAcademicPath())) {
+     /* if (StrUtil.isNotBlank(naturalPersonVo.getAcademicPath())) {
         naturalPersonVo.setAcademicPath(appInfo.getWebPath() + naturalPersonVo.getAcademicPath());
       }
       if (StrUtil.isNotBlank(naturalPersonVo.getDisablityPath())) {
@@ -94,7 +94,7 @@ public class PersonInfoService {
       }
       if (StrUtil.isNotBlank(naturalPersonVo.getProfessorPath())) {
         naturalPersonVo.setProfessorPath(appInfo.getWebPath() + naturalPersonVo.getProfessorPath());
-      }
+      }*/
       return Result.success(naturalPersonVo);
     }
     return Result.success(null);
