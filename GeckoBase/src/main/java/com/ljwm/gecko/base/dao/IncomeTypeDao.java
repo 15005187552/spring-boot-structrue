@@ -14,8 +14,13 @@ import org.springframework.stereotype.Repository;
 public class IncomeTypeDao {
   @Autowired
   IncomeTypeMapper incomeTypeMapper;
+
   public String idToName(Long id){
-    return incomeTypeMapper.selectOne(new QueryWrapper<IncomeType>().eq(IncomeType.ID, id)).getName();
+    IncomeType incomeType = incomeTypeMapper.selectOne(new QueryWrapper<IncomeType>().eq(IncomeType.ID, id));
+    if (incomeType !=null) {
+      return incomeType.getName();
+    }
+    return null;
   }
 
 }
