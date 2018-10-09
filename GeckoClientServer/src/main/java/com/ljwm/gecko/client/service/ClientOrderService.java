@@ -73,6 +73,9 @@ public class ClientOrderService {
   private OrderPayInfoMapper orderPayInfoMapper;
 
   @Autowired
+  private ServiceTypeMapper serviceTypeMapper;
+
+  @Autowired
   private AppInfo appInfo;
 
   private static final String MAIN_ORDER="MN";
@@ -171,6 +174,12 @@ public class ClientOrderService {
     orderItem.setOrderItemNo(SUB_ORDER+idWorkerUtil.nextId());
     orderItem.setCreateTime(DateUtil.date());
     orderItem.setUpdateTime(DateUtil.date());
+    ServiceType serviceType = serviceTypeMapper.selectById(orderItemDto.getServiceId());
+    if (serviceType==null){
+      log.info("根据服务id{},查询不到此服务");
+      throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此服务!");
+    }
+    orderItem.setServiceName(serviceType.getName());
     if (orderItemDto.getSpecServiceId()!=null){
       orderItem.setOrderItemStatus(OrderStatusEnum.NO_PAID.getCode());
       SpecServicesPrice specServicesPrice =specServicesPriceMapper.selectById(orderItemDto.getSpecServiceId());
