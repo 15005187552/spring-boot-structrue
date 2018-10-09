@@ -133,6 +133,11 @@ public class ClientProviderService {
         BeanUtil.copyProperties(providerDto,provider);
         provider.setVersion(1);
         provider.setValidateState(ProviderStatEnum.WAIT_CONFIRM.getCode());
+        provider.setCreateTime(DateUtil.date());
+        provider.setCreatorId(providerDto.getMemberId());
+        provider.setUpdateTime(DateUtil.date());
+        provider.setDisabled(DisabledEnum.ENABLED.getCode());
+        provider.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
         if (StringUtils.isNotEmpty(providerDto.getLogo())){
           if (!providerDto.getLogo().contains(Constant.PROVIDER)){
             File file = new File(appInfo.getFilePath() + Constant.PROVIDER + member.getId());
