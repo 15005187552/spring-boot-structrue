@@ -8,19 +8,21 @@ import java.util.List;
 
 public class Test {
   public static void main(String[] args) {
-    List memberIds =new ArrayList();
-    memberIds.add("1111");
-    memberIds.add("2222");
-    memberIds.add("3333");
+    List<String> keysList =new ArrayList();
+    keysList.add("1");
+    keysList.add("2");
+    keysList.add("3");
+    keysList.add("4");
+    keysList.add("5");
+    keysList.add("6");
+    keysList.add("13");
 
 
     List<String> addMemberIds = Lists.newArrayList();
-    addMemberIds.addAll(memberIds);
-    List oldMemberIds =new ArrayList();
-    oldMemberIds.add("3333");
-    oldMemberIds.add("4444");
-    oldMemberIds.add("5555");
-
+   // addMemberIds.addAll(memberIds);
+    List<String> list =new ArrayList();
+    list.add("6");
+    list.add("14");
 
 
     //并集
@@ -30,10 +32,10 @@ public class Test {
     //差集
     //memberIds.removeAll(oldMemberIds);
     //无重复并集
-    oldMemberIds.removeAll(memberIds);
-    memberIds.addAll(oldMemberIds);
+    list.removeAll(keysList);
+    keysList.addAll(list);
 
-    Iterator<String> it=memberIds.iterator();
+    Iterator<String> it=keysList.iterator();
     while (it.hasNext()) {
       System.out.println(it.next());
     }
