@@ -64,6 +64,6 @@ public class SpecServicesPriceService {
 
   @Transactional
   public Boolean disabled(Long id){
-    return specServicesPriceMapper.disabled(id)>=1;
+    return specServicesPriceMapper.disabledSpecService(id)>=1;
   }
 }
