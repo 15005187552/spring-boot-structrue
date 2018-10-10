@@ -119,7 +119,10 @@ public class CalcService {
     }
     newTax = calNew(money, newPort);
     BigDecimal difference = oldTax.subtract(newTax);
-    BigDecimal percent = difference.divide(oldTax, 4, BigDecimal.ROUND_HALF_UP);
+    BigDecimal percent = BigDecimal.ZERO;
+    if (oldTax != BigDecimal.ZERO) {
+      percent = difference.divide(oldTax, 4, BigDecimal.ROUND_HALF_UP);
+    }
     if(difference.compareTo(BigDecimal.ZERO)>=0){
       String id;
       if (SecurityKit.currentId() instanceof String){
