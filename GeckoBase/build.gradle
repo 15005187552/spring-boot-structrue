@@ -16,4 +16,7 @@ dependencies {
 
   // KafKa
   compile('org.springframework.kafka:spring-kafka:1.3.2.RELEASE')
+
+  // WeiXin SDK
+  compile('com.jfinal:jfinal-weixin:1.9')
 }
