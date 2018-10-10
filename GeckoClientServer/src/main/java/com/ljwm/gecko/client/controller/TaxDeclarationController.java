@@ -24,49 +24,49 @@ public class TaxDeclarationController {
   @Autowired
   TaxDeclarationService taxDeclarationService;
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/commitInfo")
   @ApiOperation("提交信息")
   public Result commit(@RequestBody @Valid TaxForm taxForm){
     return taxDeclarationService.commit(taxForm);
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/findInfo")
   @ApiOperation("查看信息")
   public Result findInfo(@RequestBody @Valid TaxInfoForm taxInfoForm){
     return Result.success(taxDeclarationService.find(taxInfoForm));
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/declareType")
   @ApiOperation("申报类型")
   public Result declareType(@RequestBody @Valid RecordForm recordForm){
     return taxDeclarationService.declareType(recordForm);
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/findTaxList")
   @ApiOperation("查看信息")
   public Result findTaxList(@RequestBody @Valid TaxListForm taxListForm){
     return taxDeclarationService.findTaxList(taxListForm);
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("findTaxById/{taxId}")
   @ApiOperation("查看账单详情")
   public Result findTaxById(@PathVariable Long taxId){
     return Result.success(taxDeclarationService.findTaxById(taxId));
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("findTaxInfo")
   @ApiOperation("查看账单详情")
   public Result findTaxInfo(@RequestParam("taxId") Long taxId){
     return Result.success(taxDeclarationService.findTaxInfo(taxId));
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("findListByCompanyId")
   @ApiOperation("查看公司报税列表")
   public Result findListByCompanyId(@RequestBody TaxFindForm taxFindForm){

@@ -23,13 +23,13 @@ public class AttributeController {
   @Autowired
   AttributeService attributeService;
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @RequestMapping(value = "/getEmployAttribute", method = RequestMethod.POST)
   public Result getAllAttribute(@RequestBody @Valid CompanyDto companyDto){
     return  attributeService.getAllAttribute(companyDto);
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @RequestMapping(value = "/getAttendanceAttribute", method = RequestMethod.POST)
   public Result getAttendanceAttribute(@RequestBody @Valid CompanyDto companyDto){
     return  attributeService.getAttendanceAttribute(companyDto);

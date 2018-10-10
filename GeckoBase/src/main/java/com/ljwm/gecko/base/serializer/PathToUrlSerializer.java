@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.serializer;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.ljwm.bootbase.kit.SpringKit;
@@ -25,6 +26,10 @@ public abstract class PathToUrlSerializer implements ObjectSerializer{
     }
 
     if (object instanceof String) {
+      if(StrUtil.isEmpty(object.toString())){
+        serializer.getWriter().writeNull();
+        return;
+      }
 //      Integer code = (Integer) object;
       String statusName = fieldName + "Url";
       serializer.getWriter()

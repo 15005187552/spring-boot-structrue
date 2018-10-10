@@ -29,7 +29,7 @@ public class ExcelController {
   @Autowired
   ExcelService excelService;
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/personInfo/import")
   @ApiOperation("人员信息导入")
   public Result importPersonInfo(@RequestParam("file")MultipartFile file, @RequestParam("companyId")Long companyId) throws Exception {
@@ -44,28 +44,28 @@ public class ExcelController {
     return Result.success("导入成功！");
   }*/
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/personInfo/export")
   @ApiOperation("人员信息导出")
   public Result exportPersonInfoExcel(HttpServletResponse response, @RequestParam("companyId")Long companyId)throws IOException {
     return Result.success(excelService.exportPersonInfoExcel(response, companyId));
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/normalSalary/export")
   @ApiOperation("正常工资薪金")
   public Result exportNormalSalary(HttpServletResponse response, @RequestBody NormalSalaryForm normalSalaryForm)throws IOException {
     return Result.success(excelService.exportNormalSalary(response, normalSalaryForm));
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/attendance/import")
   @ApiOperation("导入员工考勤信息")
   public Result importAttendance(@RequestParam("file")MultipartFile file, @RequestParam("companyId")Long companyId, @RequestParam("declareTime") String declareTime, @RequestParam("declareType") Integer declareType)throws IOException {
     return excelService.importAttendance(file, companyId, declareTime, declareType);
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/attendance/export")
   @ApiOperation("工资考勤信息导出")
   public Result exportPersonInfoExcel(HttpServletResponse response, @RequestBody AttendanceModel attendanceDto)throws IOException {

@@ -42,7 +42,7 @@ public class RegisterController extends BaseController {
     return registerService.register(registerMemberForm);
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/setPasswordWX")
   @ApiOperation("小程序设置或修改密码（短信验证码方式）")
   public Result setPasswordWX(@RequestBody @Valid PasswordForm passwordForm){
@@ -55,7 +55,7 @@ public class RegisterController extends BaseController {
     return registerService.registerPC(registerPCForm);
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/modifyPassword")
   @ApiOperation("修改密码")
   public Result modifyPassword(@RequestBody @Valid ModifyPasswordForm modifyPasswordForm){

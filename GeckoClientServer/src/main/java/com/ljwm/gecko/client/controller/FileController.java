@@ -30,14 +30,14 @@ public class FileController extends BaseController {
   @Autowired
   private AppInfo appInfo;
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/uploadfile")
   @ApiOperation("上传文件")
   public Result commit(@RequestParam("file") MultipartFile file){
     return fileService.upload(file);
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("delete")
   @ApiOperation("删除文件")
   public Result delete(@RequestBody String id){

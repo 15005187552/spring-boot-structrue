@@ -24,14 +24,14 @@ public class CompanyController {
   @Autowired
   CompanyService companyService;
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/commit")
   @ApiOperation("提交公司信息（包含修改）")
   public Result commit(@RequestBody @Valid CompanyForm companyForm){
     return companyService.commit(companyForm);
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/findByName")
   @ApiOperation("根据公司名搜索审核通过的公司")
   public Result findByName(@RequestParam("name") String name){

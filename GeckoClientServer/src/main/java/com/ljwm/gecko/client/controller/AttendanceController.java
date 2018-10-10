@@ -30,14 +30,14 @@ public class AttendanceController {
 
   @PostMapping("/commit")
   @ApiOperation("提交员工考勤信息")
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   public Result commit(@RequestBody @Valid AttendanceForm attendanceForm){
     return attendanceService.commit(attendanceForm);
   }
 
   @PostMapping("/findAttendanceList")
   @ApiOperation("获取工资考勤信息")
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   public Result findAttendanceList(@RequestBody TaxFindForm taxFindForm){
     return attendanceService.findAttendanceList(taxFindForm);
   }

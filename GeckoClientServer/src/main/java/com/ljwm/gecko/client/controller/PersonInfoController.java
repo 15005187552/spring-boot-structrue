@@ -24,14 +24,14 @@ public class PersonInfoController {
   @Autowired
   PersonInfoService personInfoService;
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/commitInfo")
   @ApiOperation("提交个人信息")
   public Result commit(@RequestBody @Valid PersonInfoForm personInfoForm){
     return personInfoService.commit(personInfoForm);
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/findInfo")
   @ApiOperation("查看个人信息")
   public Result commit(@RequestParam("memberId")Long memberId){

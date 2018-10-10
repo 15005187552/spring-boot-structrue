@@ -164,11 +164,12 @@ public class ExcelService {
             Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId).eq(Tax.DECLARE_TYPE, declareType));
             Date date = new Date();
             if (tax != null) {
-              tax.setUpdateTime(date);
+              tax.setUpdateTime(date).setStatus(TaxStatus.NEED_CONFIRM.getCode());
               taxMapper.updateById(tax);
             } else {
               tax = new Tax();
-              tax.setCreateTime(date).setUpdateTime(date).setDeclareTime(declareTime).setDeclareType(declareType).setMemberId(memberId);
+              tax.setCreateTime(date).setUpdateTime(date).setDeclareTime(declareTime).setDeclareType(declareType).setMemberId(memberId)
+                .setStatus(TaxStatus.NEED_CONFIRM.getCode());
               taxMapper.insert(tax);
             }
             if(!key.toString().contains("*")) {

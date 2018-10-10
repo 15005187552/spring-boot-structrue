@@ -41,14 +41,14 @@ public class AuthController extends BaseController {
     return Result.success(authService.loginSys(loginForm));
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @GetMapping("me")
   @ApiOperation("当前用户信息")
   public Result me() {
     return success(authService.me(SecurityKit.currentUser()));
   }
 
-  @PreAuthorize(JwtUser.HAS_MEMEBER_ROLE)
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("getFormId")
   @ApiOperation("获取formId")
   public Result getFormId(@RequestBody @Valid FormIdForm formIdForm){
