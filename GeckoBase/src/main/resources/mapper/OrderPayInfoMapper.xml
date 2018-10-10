@@ -24,4 +24,8 @@
       select t.*  from t_order_pay_info t where t.TYPE=#{params.type} and t.ORDER_NO=#{params.orderNo} limit 1
     </select>
 
+    <select id="findOrderPayByWxNum" parameterType="string" resultMap="BaseResultMap">
+      select t.*  from t_order_pay_info t where t.WX_ORDER_NUM=#{wxNum}
+    </select>
+
 </mapper>

@@ -91,5 +91,14 @@ public class OrderController extends BaseController {
   public void handlerWeixinNotify(HttpServletRequest request) {
     String xmlStr = HttpKit.readData(request);
     log.info("处理微信回调接口:{}",xmlStr);
+    clientOrderService.handlerWeixinNotify(xmlStr);
+  }
+
+  @RequestMapping("weixin/remainNotify")
+  @ApiOperation(hidden = true, value = "处理微信回调接口!")
+  public void handlerWeixinRemainNotify(HttpServletRequest request) {
+    String xmlStr = HttpKit.readData(request);
+    log.info("处理微信回调接口:{}",xmlStr);
+    clientOrderService.handlerWeixinRemainNotify(xmlStr);
   }
 }

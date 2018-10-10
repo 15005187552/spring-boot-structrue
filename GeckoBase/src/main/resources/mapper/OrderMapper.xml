@@ -16,14 +16,13 @@
         <result column="CLOSE_TIME" property="closeTime" />
         <result column="CREATE_TIME" property="createTime" />
         <result column="UPDATE_TIME" property="updateTime" />
-        <result column="WX_ORDER_NO" property="wxOrderNo" />
         <result column="DOWN_PAYMENT_AMOUNT" property="downPaymentAmount" />
         <result column="REMIAN_AMOUNT" property="remianAmount" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`ORDER_NO`          ,`MEMBER_ID`          ,`SHIPPING_ID`          ,`PAYMENT`          ,`PAYMENT_TYPE`          ,`STATUS`          ,`PAYMENT_TIME`          ,`END_TIME`          ,`CLOSE_TIME`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`WX_ORDER_NO`          ,`DOWN_PAYMENT_AMOUNT`          ,`REMIAN_AMOUNT`
+          `ID`          ,`ORDER_NO`          ,`MEMBER_ID`          ,`SHIPPING_ID`          ,`PAYMENT`          ,`PAYMENT_TYPE`          ,`STATUS`          ,`PAYMENT_TIME`          ,`END_TIME`          ,`CLOSE_TIME`          ,`CREATE_TIME`          ,`UPDATE_TIME`      ,`DOWN_PAYMENT_AMOUNT`          ,`REMIAN_AMOUNT`
     </sql>
 
 

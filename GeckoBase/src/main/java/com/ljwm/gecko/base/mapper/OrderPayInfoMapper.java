@@ -16,4 +16,6 @@ import org.apache.ibatis.annotations.Param;
 public interface OrderPayInfoMapper extends BaseMapper<OrderPayInfo> {
 
   OrderPayInfo findOrderPayByOrderNo(@Param("params") Kv kv);
+
+  OrderPayInfo findOrderPayByWxNum(@Param("params") String wxNum);
 }
