@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author xixil
@@ -81,8 +81,6 @@ public class Order implements Serializable {
     @ApiModelProperty(value = "更新时间")
     @TableField("`UPDATE_TIME`")
     private Date updateTime;
-    @TableField("`WX_ORDER_NO`")
-    private String wxOrderNo;
 
     @ApiModelProperty(value = "首付金额")
     @TableField("`DOWN_PAYMENT_AMOUNT`")
@@ -116,8 +114,6 @@ public class Order implements Serializable {
     public static final String CREATE_TIME = "`CREATE_TIME`";
 
     public static final String UPDATE_TIME = "`UPDATE_TIME`";
-
-    public static final String WX_ORDER_NO = "`WX_ORDER_NO`";
 
     public static final String DOWN_PAYMENT_AMOUNT = "`DOWN_PAYMENT_AMOUNT`";
 
