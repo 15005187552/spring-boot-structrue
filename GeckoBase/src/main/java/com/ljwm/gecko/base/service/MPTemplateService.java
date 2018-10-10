@@ -42,10 +42,10 @@ public class MPTemplateService {
 
   public Boolean send(Long memberId, MPTemplateEnum mpTemplateEnum, Kv kv) {
     // 1配置(可在启动时配置)
-    ApiConfig apiConfig = new ApiConfig();
-    apiConfig.setAppId(appId);
-    apiConfig.setAppSecret(appSecret);
-    ApiConfigKit.putApiConfig(apiConfig);
+    WxaConfig wxaConfig = new WxaConfig();
+    wxaConfig.setAppId(appId);
+    wxaConfig.setAppSecret(appSecret);
+    WxaConfigKit.setWxaConfig(wxaConfig);
     // 2数据
     // 2.1 模版id
     String formId = checkFormId(memberId);
