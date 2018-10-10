@@ -15,7 +15,7 @@ wx:
     mchId: 1500209732
     paySecret: d58316dc8bba2eba740c09213bf5072c
     notifyUrl: "https://mhs.1322.com/asm/order/weixin/notify"
-    notifyVipUrl: "https://mhs.1322.com/asm/vip/weixin/notifyVip"
+    notifyRemainUrl: "https://mhs.1322.com/order/weixin/remainNotify"
 appInfo:
   webRoot: "E://upload/"
   webPath: "https://mhs.1322.com"

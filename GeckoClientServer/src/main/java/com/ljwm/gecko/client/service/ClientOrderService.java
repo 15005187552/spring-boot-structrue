@@ -2,7 +2,9 @@ package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
@@ -277,7 +279,7 @@ public class ClientOrderService {
       jwtUser.getMember().getAccount().getAccount(),      // OPEN ID
       orderMapper.getOrderInfo(order.getOrderNo()),// 构造商品明细
       true,
-      false
+      true
     );
     // 4. 构造返回值
     return new OrderPaymentVo(id, map);
@@ -333,4 +335,78 @@ public class ClientOrderService {
   public Page<OrderVo> findOrderList(OrderQueryDto orderQueryDto){
     return commonService.find(orderQueryDto, (p, q) -> orderMapper.findPage(p, BeanUtil.beanToMap(orderQueryDto)));
   }
+
+  /**
+   * 处理微信的异步回调通知
+   *
+   * @return
+   */
+  public void handlerWeixinNotify(String xmlStr) {
+    // 1. XML 转JSON
+    log.info("微信异步通知 XML:\n{}", xmlStr);
+    cn.hutool.json.JSONObject json = JSONUtil.xmlToJson(xmlStr);
+
+    // 2. XML 转化为JSON
+    log.info("微信异步通知 XML->JSON: \n {}", JSONUtil.toJsonPrettyStr(json));
+
+    // 3. 解析JSON
+    String wxNum = UtilKit.getTargetByExpression("xml.out_trade_no", json);
+    String success = UtilKit.getTargetByExpression("xml.result_code", json);
+
+    // 4. 支付成功
+    if ("SUCCESS".equals(success)) {
+      OrderPayInfo orderPayInfo = orderPayInfoMapper.findOrderPayByWxNum(wxNum);
+      if (orderPayInfo != null && Objects.equals(0, orderPayInfo.getStatus())) {
+        // 4.1 设置订单为已付款
+        orderPayInfo.setUpdateTime(DateUtil.date());
+        orderPayInfo.setStatus(1);
+        orderPayInfoMapper.updateById(orderPayInfo);
+
+        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq(Order.ORDER_NO, orderPayInfo.getOrderNo()));
+        order.setStatus(OrderStatusEnum.NO_REMAIN_PAID.getCode());
+        order.setUpdateTime(DateUtil.date());
+        orderMapper.updateById(order);
+
+        //推送模版消息
+        //mpTemplateService.send(order,MPTemplateEnum.PAY);
+      }
+    }
+  }
+
+  /**
+   * 处理微信的异步回调通知
+   *
+   * @return
+   */
+  public void handlerWeixinRemainNotify(String xmlStr) {
+    // 1. XML 转JSON
+    log.info("微信异步通知 XML:\n{}", xmlStr);
+    cn.hutool.json.JSONObject json = JSONUtil.xmlToJson(xmlStr);
+
+    // 2. XML 转化为JSON
+    log.info("微信异步通知 XML->JSON: \n {}", JSONUtil.toJsonPrettyStr(json));
+
+    // 3. 解析JSON
+    String wxNum = UtilKit.getTargetByExpression("xml.out_trade_no", json);
+    String success = UtilKit.getTargetByExpression("xml.result_code", json);
+
+    // 4. 支付成功
+    if ("SUCCESS".equals(success)) {
+      OrderPayInfo orderPayInfo = orderPayInfoMapper.findOrderPayByWxNum(wxNum);
+      if (orderPayInfo != null && Objects.equals(0, orderPayInfo.getStatus())) {
+        // 4.1 设置订单为已付款
+        orderPayInfo.setUpdateTime(DateUtil.date());
+        orderPayInfo.setStatus(1);
+        orderPayInfoMapper.updateById(orderPayInfo);
+
+        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq(Order.ORDER_NO, orderPayInfo.getOrderNo()));
+        order.setStatus(OrderStatusEnum.PAID.getCode());
+        order.setUpdateTime(DateUtil.date());
+        orderMapper.updateById(order);
+        //推送模版消息
+        //mpTemplateService.send(order,MPTemplateEnum.PAY);
+      }
+    }
+  }
+
 }

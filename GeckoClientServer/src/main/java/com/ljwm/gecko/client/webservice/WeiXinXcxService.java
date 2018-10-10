@@ -106,7 +106,7 @@ public class WeiXinXcxService {
    * @param xcx    是否是小程序
    * @return
    */
-  public Map weixinPay(String ip, String num, String amount, String openId, String body, Boolean xcx,Boolean vip) {
+  public Map weixinPay(String ip, String num, String amount, String openId, String body, Boolean xcx,Boolean down) {
     // 统一下单文档地址：https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1
     // 调起微信支付，统一下单
     Map<String, String> params = new HashMap<String, String>();
@@ -125,7 +125,7 @@ public class WeiXinXcxService {
     params.put("total_fee", amount); //订单金额  单位为分
     params.put("spbill_create_ip", ip);  //终端ip
     params.put("nonce_str", String.valueOf(System.currentTimeMillis()));
-    params.put("notify_url", vip?weiXinMch.getNotifyVipUrl():weiXinMch.getNotifyUrl()); //支付后通知回调地址
+    params.put("notify_url", down?weiXinMch.getNotifyRemainUrl():weiXinMch.getNotifyUrl()); //支付后通知回调地址
     String sign = PaymentKit.createSign(params, weiXinMch.getPaySecret());    //生成签名
     params.put("sign", sign);
 
