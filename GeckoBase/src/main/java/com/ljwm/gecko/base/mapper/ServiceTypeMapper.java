@@ -29,6 +29,8 @@ public interface ServiceTypeMapper extends BaseMapper<ServiceType> {
 
   ServeSimpleVo findById(@Param("id") Integer id);
 
+  String findNameByPid(@Param("pId") Integer pId);
+
   @Select("SELECT st.* FROM `t_service_type` st LEFT JOIN `t_provider_services` ps ON st.`ID` = ps.`SERVICE_ID` \n" +
     "WHERE ps.`PROVIDER_ID` = #{id} ORDER BY st.`LEVEL`")
   List<ServiceType> findByProviderId(Integer id);

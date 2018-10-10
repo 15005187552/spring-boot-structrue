@@ -21,6 +21,8 @@
         <result column="DOWN_PAYMENT_AMOUNT" property="downPaymentAmount" />
         <result column="REMAIN_AMOUNT" property="remainAmount" />
         <result column="MEMBER_ID" property="memberId" />
+        <result column="SPEC_SERVICE_ID" property="specServiceId" />
+        <result column="SERVICE_NAME" property="serviceName" />
     </resultMap>
 
     <!-- 通用查询结果列 -->

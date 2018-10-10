@@ -16,6 +16,8 @@ public class ServeSimpleVo extends ServiceType {
   @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
   private String avatarPath;
 
+  private String pName;
+
   public ServeSimpleVo(ServiceType service){
     if (service!=null){
       BeanUtil.copyProperties(service,this);

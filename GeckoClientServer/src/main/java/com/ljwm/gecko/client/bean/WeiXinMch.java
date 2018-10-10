@@ -22,5 +22,5 @@ public class WeiXinMch {
 
   private String notifyUrl;
 
-  private String notifyVipUrl;
+  private String notifyRemainUrl;
 }

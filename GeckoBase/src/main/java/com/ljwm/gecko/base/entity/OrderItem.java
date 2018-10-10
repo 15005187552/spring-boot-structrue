@@ -98,6 +98,14 @@ public class OrderItem implements Serializable {
     @TableField("`MEMBER_ID`")
     private Long memberId;
 
+    @ApiModelProperty(value = "规格id")
+    @TableField("`SPEC_SERVICE_ID`")
+    private Long specServiceId;
+
+    @ApiModelProperty(value = "服务名称")
+    @TableField("`SERVICE_NAME`")
+    private String serviceName;
+
 
     public static final String ID = "`ID`";
 

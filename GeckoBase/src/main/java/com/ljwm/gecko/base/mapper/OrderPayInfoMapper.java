@@ -1,7 +1,9 @@
 package com.ljwm.gecko.base.mapper;
 
+import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.OrderPayInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +15,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface OrderPayInfoMapper extends BaseMapper<OrderPayInfo> {
 
+  OrderPayInfo findOrderPayByOrderNo(@Param("params") Kv kv);
+
+  OrderPayInfo findOrderPayByWxNum(@Param("params") String wxNum);
 }

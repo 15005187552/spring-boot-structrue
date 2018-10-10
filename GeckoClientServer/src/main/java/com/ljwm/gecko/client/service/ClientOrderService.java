@@ -2,10 +2,14 @@ package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.SecurityKit;
@@ -71,6 +75,9 @@ public class ClientOrderService {
   private OrderPayInfoMapper orderPayInfoMapper;
 
   @Autowired
+  private ServiceTypeMapper serviceTypeMapper;
+
+  @Autowired
   private AppInfo appInfo;
 
   private static final String MAIN_ORDER="MN";
@@ -114,6 +121,26 @@ public class ClientOrderService {
     return new OrderVo(order);
   }
 
+  @OrderLogger
+  @Transactional
+  public synchronized OrderVo placeRemainOrder(Long id){
+    Order order = orderMapper.selectById(id);
+    if (order==null){
+      log.info("根据订单id{},查询不到该订单信息!",id);
+      throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此订单信息!");
+    }
+    OrderPayInfo orderPayInfo = new OrderPayInfo();
+    orderPayInfo.setMemberId(SecurityKit.currentId());
+    orderPayInfo.setOrderNo(order.getOrderNo());
+    orderPayInfo.setStatus(0);//设置为未支付
+    orderPayInfo.setType(1);//设置为首付款
+    orderPayInfo.setPayAmount(order.getDownPaymentAmount());
+    orderPayInfo.setUpdateTime(DateUtil.date());
+    orderPayInfo.setCreateTime(DateUtil.date());
+    orderPayInfoMapper.insert(orderPayInfo);
+    return new OrderVo(order);
+  }
+
   public Map<String,Object> calMoney(List<Long> orderItemOrderList){
     Map<String,Object> retMap = Maps.newHashMap();
     BigDecimal totalAmount = BigDecimal.ZERO;
@@ -149,6 +176,12 @@ public class ClientOrderService {
     orderItem.setOrderItemNo(SUB_ORDER+idWorkerUtil.nextId());
     orderItem.setCreateTime(DateUtil.date());
     orderItem.setUpdateTime(DateUtil.date());
+    ServiceType serviceType = serviceTypeMapper.selectById(orderItemDto.getServiceId());
+    if (serviceType==null){
+      log.info("根据服务id{},查询不到此服务");
+      throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此服务!");
+    }
+    orderItem.setServiceName(serviceType.getName());
     if (orderItemDto.getSpecServiceId()!=null){
       orderItem.setOrderItemStatus(OrderStatusEnum.NO_PAID.getCode());
       SpecServicesPrice specServicesPrice =specServicesPriceMapper.selectById(orderItemDto.getSpecServiceId());
@@ -189,19 +222,29 @@ public class ClientOrderService {
       log.info("订单id{},查询不到该订单!",id);
       throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此订单!");
     }
-
+    OrderPayInfo orderPayInfo = orderPayInfoMapper.findOrderPayByOrderNo(Kv.by("orderNo",order.getOrderNo()).set("type",0));
+    if (!Objects.equals(orderPayInfo.getStatus(),0)){
+      log.info("订单首付款已经支付,无需重复发起支付!");
+      throw new LogicException(ResultEnum.DATA_ERROR,"订单首付款已经支付,无需重复发起支付!");
+    }
     // 2. 生成推送微信单号
     String wxNum = UtilKit.createNum("WX");
-    order.setWxOrderNo(wxNum);
-    orderMapper.updateById(order);
+    orderPayInfo.setWxOrderNum(wxNum);
+    orderPayInfo.setUpdateTime(DateUtil.date());
+    orderPayInfoMapper.updateById(orderPayInfo);
     JwtUser jwtUser = SecurityKit.currentUser();
     assert jwtUser != null;
+    JSONObject jsonObject =  JSONObject.parseObject(jwtUser.getMember().getAccount().getExtInfo());
+    String openId =StringUtils.EMPTY;
+    if (jsonObject!=null){
+      openId = jsonObject.getString("openId");
+    }
     // 3. 下单
     Map map = weiXinXcxService.weixinPay(
       UtilKit.currentIp(),                    // ip
       wxNum,                                  // 微信单号
-      MoneyKit.getFen(order.getPayment()),    // 金额
-      jwtUser.getMember().getAccount().getAccount(),      // OPEN ID
+      MoneyKit.getFen(orderPayInfo.getPayAmount()),    // 金额
+      openId,      // OPEN ID
       orderMapper.getOrderInfo(order.getOrderNo()),// 构造商品明细
       true,
       false
@@ -210,6 +253,37 @@ public class ClientOrderService {
     return new OrderPaymentVo(id, map);
   }
 
+  public OrderPaymentVo payRemainOrderXcx(Long id){
+    Order order = orderMapper.selectById(id);
+    if (order==null){
+      log.info("订单id{},查询不到该订单!",id);
+      throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此订单!");
+    }
+    OrderPayInfo orderPayInfo = orderPayInfoMapper.findOrderPayByOrderNo(Kv.by("orderNo",order.getOrderNo()).set("type",1));
+    if (!Objects.equals(orderPayInfo.getStatus(),0)){
+      log.info("订单首付款已经支付,无需重复发起支付!");
+      throw new LogicException(ResultEnum.DATA_ERROR,"订单首付款已经支付,无需重复发起支付!");
+    }
+    // 2. 生成推送微信单号
+    String wxNum = UtilKit.createNum("WX");
+    orderPayInfo.setWxOrderNum(wxNum);
+    orderPayInfo.setUpdateTime(DateUtil.date());
+    orderPayInfoMapper.updateById(orderPayInfo);
+    JwtUser jwtUser = SecurityKit.currentUser();
+    assert jwtUser != null;
+    // 3. 下单
+    Map map = weiXinXcxService.weixinPay(
+      UtilKit.currentIp(),                    // ip
+      wxNum,                                  // 微信单号
+      MoneyKit.getFen(orderPayInfo.getPayAmount()),    // 金额
+      jwtUser.getMember().getAccount().getAccount(),      // OPEN ID
+      orderMapper.getOrderInfo(order.getOrderNo()),// 构造商品明细
+      true,
+      true
+    );
+    // 4. 构造返回值
+    return new OrderPaymentVo(id, map);
+  }
   public OrderSimpleVo comments(OrderCommentsDto orderCommentsDto){
     Order order = orderMapper.selectById(orderCommentsDto.getId());
     if (order==null){
@@ -261,4 +335,78 @@ public class ClientOrderService {
   public Page<OrderVo> findOrderList(OrderQueryDto orderQueryDto){
     return commonService.find(orderQueryDto, (p, q) -> orderMapper.findPage(p, BeanUtil.beanToMap(orderQueryDto)));
   }
+
+  /**
+   * 处理微信的异步回调通知
+   *
+   * @return
+   */
+  public void handlerWeixinNotify(String xmlStr) {
+    // 1. XML 转JSON
+    log.info("微信异步通知 XML:\n{}", xmlStr);
+    cn.hutool.json.JSONObject json = JSONUtil.xmlToJson(xmlStr);
+
+    // 2. XML 转化为JSON
+    log.info("微信异步通知 XML->JSON: \n {}", JSONUtil.toJsonPrettyStr(json));
+
+    // 3. 解析JSON
+    String wxNum = UtilKit.getTargetByExpression("xml.out_trade_no", json);
+    String success = UtilKit.getTargetByExpression("xml.result_code", json);
+
+    // 4. 支付成功
+    if ("SUCCESS".equals(success)) {
+      OrderPayInfo orderPayInfo = orderPayInfoMapper.findOrderPayByWxNum(wxNum);
+      if (orderPayInfo != null && Objects.equals(0, orderPayInfo.getStatus())) {
+        // 4.1 设置订单为已付款
+        orderPayInfo.setUpdateTime(DateUtil.date());
+        orderPayInfo.setStatus(1);
+        orderPayInfoMapper.updateById(orderPayInfo);
+
+        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq(Order.ORDER_NO, orderPayInfo.getOrderNo()));
+        order.setStatus(OrderStatusEnum.NO_REMAIN_PAID.getCode());
+        order.setUpdateTime(DateUtil.date());
+        orderMapper.updateById(order);
+
+        //推送模版消息
+        //mpTemplateService.send(order,MPTemplateEnum.PAY);
+      }
+    }
+  }
+
+  /**
+   * 处理微信的异步回调通知
+   *
+   * @return
+   */
+  public void handlerWeixinRemainNotify(String xmlStr) {
+    // 1. XML 转JSON
+    log.info("微信异步通知 XML:\n{}", xmlStr);
+    cn.hutool.json.JSONObject json = JSONUtil.xmlToJson(xmlStr);
+
+    // 2. XML 转化为JSON
+    log.info("微信异步通知 XML->JSON: \n {}", JSONUtil.toJsonPrettyStr(json));
+
+    // 3. 解析JSON
+    String wxNum = UtilKit.getTargetByExpression("xml.out_trade_no", json);
+    String success = UtilKit.getTargetByExpression("xml.result_code", json);
+
+    // 4. 支付成功
+    if ("SUCCESS".equals(success)) {
+      OrderPayInfo orderPayInfo = orderPayInfoMapper.findOrderPayByWxNum(wxNum);
+      if (orderPayInfo != null && Objects.equals(0, orderPayInfo.getStatus())) {
+        // 4.1 设置订单为已付款
+        orderPayInfo.setUpdateTime(DateUtil.date());
+        orderPayInfo.setStatus(1);
+        orderPayInfoMapper.updateById(orderPayInfo);
+
+        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq(Order.ORDER_NO, orderPayInfo.getOrderNo()));
+        order.setStatus(OrderStatusEnum.PAID.getCode());
+        order.setUpdateTime(DateUtil.date());
+        orderMapper.updateById(order);
+        //推送模版消息
+        //mpTemplateService.send(order,MPTemplateEnum.PAY);
+      }
+    }
+  }
+
 }

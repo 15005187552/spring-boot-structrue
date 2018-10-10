@@ -49,27 +49,37 @@ public class PersonInfoService {
     if (StrUtil.isNotBlank(personInfoForm.getDisablityPath())) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getDisablityPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
-      naturalPerson.setDisablityPath(Constant.PERSON+ naturalPerson.getMemberId() + "/" + personInfoForm.getDisablityPath());
+      if(!naturalPerson.getDisablityPath().contains("/")) {
+        naturalPerson.setDisablityPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getDisablityPath());
+      }
     }
     if (StrUtil.isNotBlank(personInfoForm.getAcademicPath())) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getAcademicPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
-      naturalPerson.setAcademicPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getAcademicPath());
+      if(!naturalPerson.getAcademicPath().contains("/")) {
+        naturalPerson.setAcademicPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getAcademicPath());
+      }
     }
     if (StrUtil.isNotBlank(personInfoForm.getOldPath())) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getOldPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
-      naturalPerson.setOldPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getOldPath());
+      if(!naturalPerson.getOldPath().contains("/")) {
+        naturalPerson.setOldPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getOldPath());
+      }
     }
     if (StrUtil.isNotBlank(personInfoForm.getMatrtyrPath())) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getMatrtyrPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
-      naturalPerson.setMatrtyrPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getMatrtyrPath());
+      if(!naturalPerson.getMatrtyrPath().contains("/")) {
+        naturalPerson.setMatrtyrPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getMatrtyrPath());
+      }
     }
     if (StrUtil.isNotBlank(personInfoForm.getProfessorPath())) {
       String srcPath = appInfo.getFilePath()+Constant.CACHE + personInfoForm.getProfessorPath();
       Fileutil.cutGeneralFile(srcPath, destDir);
-      naturalPerson.setProfessorPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getProfessorPath());
+      if(!naturalPerson.getProfessorPath().contains("/")) {
+        naturalPerson.setProfessorPath(Constant.PERSON + naturalPerson.getMemberId() + "/" + personInfoForm.getProfessorPath());
+      }
     }
     naturalPersonMapper.updateById(naturalPerson);
     return Result.success("成功！");

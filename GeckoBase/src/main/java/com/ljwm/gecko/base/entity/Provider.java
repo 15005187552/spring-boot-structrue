@@ -54,7 +54,7 @@ public class Provider implements Serializable {
 
     @ApiModelProperty(value = "是否禁用")
     @TableField("`DISABLED`")
-    private Boolean disabled;
+    private Integer disabled;
 
     @ApiModelProperty(value = "服务商类型(个人：0，机构：1)")
     @TableField("`TYPE`")
