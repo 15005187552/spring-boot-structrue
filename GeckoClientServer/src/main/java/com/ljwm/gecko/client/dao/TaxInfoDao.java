@@ -8,6 +8,7 @@ import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.entity.*;
+import com.ljwm.gecko.base.enums.TaxStatus;
 import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.vo.*;
 import com.ljwm.gecko.base.utils.Fileutil;
@@ -59,11 +60,11 @@ public class TaxInfoDao {
     List<Tax> list = taxMapper.selectByMap(map);
     if(CollectionUtil.isNotEmpty(list)){
       tax = list.get(0);
-      tax.setUpdateTime(new Date());
+      tax.setUpdateTime(new Date()).setStatus(TaxStatus.CONFIRMED.getCode());
       taxMapper.updateById(tax);
     } else {
       Date date = new Date();
-      tax.setCreateTime(date).setUpdateTime(date);
+      tax.setCreateTime(date).setUpdateTime(date).setStatus(TaxStatus.CONFIRMED.getCode());
       taxMapper.insert(tax);
     }
     return tax;

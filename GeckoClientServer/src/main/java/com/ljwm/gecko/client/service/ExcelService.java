@@ -157,7 +157,7 @@ public class ExcelService {
                 companyUserInfo.setFundPer(new BigDecimal(fundPer.toString()));
               }
               if(socialBase != null){
-                companyUserInfo.setFundPer(new BigDecimal(socialBase.toString()));
+                companyUserInfo.setSocialBase(new BigDecimal(socialBase.toString()));
               }
               companyUserInfoMapper.updateById(companyUserInfo);
             }

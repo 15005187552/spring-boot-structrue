@@ -9,6 +9,7 @@ import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.enums.CertificateType;
 import com.ljwm.gecko.base.enums.TableNameEnum;
+import com.ljwm.gecko.base.enums.TaxStatus;
 import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.vo.TaxListVo;
 import com.ljwm.gecko.base.utils.EnumUtil;
@@ -94,10 +95,10 @@ public class AttendanceService {
         Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId).eq(Tax.DECLARE_TYPE, attendanceForm.getDeclareType()));
         Date date = new Date();
         if (tax != null){
-          tax.setUpdateTime(date);
+          tax.setUpdateTime(date).setStatus(TaxStatus.NEED_CONFIRM.getCode());
           taxMapper.updateById(tax);
         } else {
-          tax = new Tax().setUpdateTime(date).setDeclareType(attendanceForm.getDeclareType()).setDeclareTime(declareTime).setMemberId(memberId);
+          tax = new Tax().setUpdateTime(date).setDeclareType(attendanceForm.getDeclareType()).setDeclareTime(declareTime).setMemberId(memberId).setStatus(TaxStatus.NEED_CONFIRM.getCode());
           tax.setCreateTime(date);
           taxMapper.insert(tax);
         }
