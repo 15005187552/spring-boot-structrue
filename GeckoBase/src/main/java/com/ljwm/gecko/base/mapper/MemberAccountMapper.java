@@ -26,6 +26,6 @@ public interface MemberAccountMapper extends BaseMapper<MemberAccount> {
 
   @Select("SELECT * FROM `t_member_account` WHERE `MEMBER_ID` = #{id}")
   @ResultMap("BaseResultMap")
-  List<MemberAccount> findByMember(@Param("ID") Long id);
+  List<MemberAccount> findByMember(@Param("id") Long id);
 
 }
