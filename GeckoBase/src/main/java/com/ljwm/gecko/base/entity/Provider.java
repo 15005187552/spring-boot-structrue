@@ -114,6 +114,10 @@ public class Provider implements Serializable {
     @TableField("`CASH_DEPOSIT`")
     private BigDecimal cashDeposit;
 
+    @ApiModelProperty(value = "服务商详情")
+    @TableField("`DETAIL`")
+    private String detail;
+
 
     public static final String ID = "`ID`";
 

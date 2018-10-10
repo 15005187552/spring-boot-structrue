@@ -2,12 +2,14 @@ package com.ljwm.gecko.provider.service;
 
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
+import com.ljwm.gecko.base.entity.Provider;
 import com.ljwm.gecko.base.entity.ProviderServices;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.ProviderMapper;
 import com.ljwm.gecko.base.mapper.ProviderServicesMapper;
 import com.ljwm.gecko.base.mapper.SpecServicesPriceMapper;
 import com.ljwm.gecko.base.model.vo.ProviderVo;
+import com.ljwm.gecko.provider.model.form.ProviderDetailDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,5 +60,15 @@ public class ProviderProviderService {
       log.info("状态:{}非法,请核对后提交",status);
       throw new LogicException(ResultEnum.DATA_ERROR,"状态非法!");
     }
+  }
+
+  public void updateProviderDetail(ProviderDetailDto providerDetailDto) {
+    Provider provider = providerMapper.selectById(providerDetailDto.getId());
+    if (provider==null){
+      log.info("根据服务商id:{},查询不到此服务商信息!");
+      throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此服务商信息!");
+    }
+    provider.setDetail(providerDetailDto.getDetail());
+    providerMapper.updateById(provider);
   }
 }

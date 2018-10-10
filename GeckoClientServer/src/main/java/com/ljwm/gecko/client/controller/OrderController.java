@@ -68,6 +68,13 @@ public class OrderController extends BaseController {
     return success(clientOrderService.payRemainOrderXcx(id));
   }
 
+  @GetMapping("checkPayStatus/{id}")
+  @ApiOperation("前台--③-1 测试/正式 查询订单支付状态")
+  public Result checkPayStatus(@PathVariable @Valid Long id) {
+    clientOrderService.checkPayStatus(id);
+    return success();
+  }
+
   @PostMapping("findOrderItem")
   @ApiOperation("服务商查询订单子列表")
   public Result<Page<OrderItemVo>> find(@RequestBody OrderItemQueryDto orderItemQueryDto){

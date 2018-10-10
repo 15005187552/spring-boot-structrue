@@ -62,10 +62,6 @@ public class Order implements Serializable {
     @TableField("`STATUS`")
     private Integer status;
 
-    @ApiModelProperty(value = "支付时间")
-    @TableField("`PAYMENT_TIME`")
-    private Date paymentTime;
-
     @ApiModelProperty(value = "交易完成时间")
     @TableField("`END_TIME`")
     private Date endTime;
@@ -104,8 +100,6 @@ public class Order implements Serializable {
     public static final String PAYMENT_TYPE = "`PAYMENT_TYPE`";
 
     public static final String STATUS = "`STATUS`";
-
-    public static final String PAYMENT_TIME = "`PAYMENT_TIME`";
 
     public static final String END_TIME = "`END_TIME`";
 
