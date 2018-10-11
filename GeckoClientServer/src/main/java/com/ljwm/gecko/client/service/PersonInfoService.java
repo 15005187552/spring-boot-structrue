@@ -1,25 +1,33 @@
 package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
+import com.ljwm.gecko.base.entity.CompanyUserInfo;
 import com.ljwm.gecko.base.entity.NaturalPerson;
 import com.ljwm.gecko.base.entity.Tax;
+import com.ljwm.gecko.base.mapper.CompanyUserInfoMapper;
 import com.ljwm.gecko.base.mapper.NaturalPersonMapper;
 import com.ljwm.gecko.base.mapper.TaxMapper;
 import com.ljwm.gecko.base.utils.Fileutil;
+import com.ljwm.gecko.client.dao.AttendanceDao;
 import com.ljwm.gecko.client.model.dto.PersonInfoForm;
 import com.ljwm.gecko.client.model.dto.SallaryForm;
 import com.ljwm.gecko.client.model.vo.NaturalPersonVo;
+import com.ljwm.gecko.client.model.vo.SallaryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Janiffy
@@ -34,6 +42,18 @@ public class PersonInfoService {
   NaturalPersonMapper naturalPersonMapper;
   @Autowired
   TaxMapper taxMapper;
+
+  @Autowired
+  CompanyUserInfoMapper companyUserInfoMapper;
+
+  @Autowired
+  TaxIncomeService taxIncomeService;
+
+  @Autowired
+  AttendanceDao attendanceDao;
+
+  @Autowired
+  TaxSpecialService taxSpecialService;
 
   @Transactional
   public Result commit(PersonInfoForm personInfoForm){
@@ -118,6 +138,34 @@ public class PersonInfoService {
 
   public Result findSallary(SallaryForm sallaryForm) {
     Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, sallaryForm.getDeclareTime()));
+    Long taxId = tax.getId();
+    SallaryVo sallaryVo = new SallaryVo();
+    NaturalPerson naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.MEMBER_ID, SecurityKit.currentId()));
+    if (naturalPerson != null){
+      sallaryVo.setName(naturalPerson.getName());
+      if(naturalPerson.getCompanyId() != null){
+        List<CompanyUserInfo> list = companyUserInfoMapper.selectCompanyUser(naturalPerson.getCompanyId(), naturalPerson.getMemberId());
+        sallaryVo.setJobNum(CollectionUtil.isNotEmpty(list)?list.get(0).getJobNum():null);
+      }
+    }
+    sallaryVo.setBaseSallary(taxIncomeService.getMoney(taxId, "基本工资").toString());
+    BigDecimal bonus = new BigDecimal(attendanceDao.selectByAttribute("定期奖金", taxId))
+      .add(new BigDecimal(attendanceDao.selectByAttribute("考勤绩效", taxId)))
+      .add(new BigDecimal(attendanceDao.selectByAttribute("其他工资收入", taxId)));
+    BigDecimal sickDeduc = new BigDecimal(attendanceDao.selectByAttribute("事假", taxId))
+      .add(new BigDecimal(attendanceDao.selectByAttribute("病假", taxId)))
+      .add(new BigDecimal(attendanceDao.selectByAttribute("迟到早退", taxId)))
+      .add(new BigDecimal(attendanceDao.selectByAttribute("其他缺勤", taxId)));
+    BigDecimal otherDeduc = new BigDecimal(attendanceDao.selectByAttribute("旷工", taxId))
+      .add(new BigDecimal(attendanceDao.selectByAttribute("离岗", taxId)))
+      .add(new BigDecimal(attendanceDao.selectByAttribute("罚款", taxId)))
+      .add(new BigDecimal(attendanceDao.selectByAttribute("其他处罚", taxId)));
+    BigDecimal social = taxSpecialService.getSocialMoney(taxId);
+    BigDecimal fund = taxSpecialService.getFundMoney(taxId);
+    sallaryVo.setBonus(bonus.toString()).setBaseSallary(sickDeduc.toString()).setOtherDeduc(otherDeduc.toString())
+      .setPersonSocial(social.toString()).setPersonFund(fund.toString())
+      .setYearBonus(new BigDecimal(attendanceDao.selectByAttribute("全年一次性奖金补贴", taxId)).toString())
+      .setCompensation(new BigDecimal(attendanceDao.selectByAttribute("解除劳动关系一次性经济补偿金", taxId)).toString());
 
     return Result.success("");
   }

@@ -19,6 +19,9 @@ import java.util.List;
 @Repository
 public interface CompanyUserInfoMapper extends BaseMapper<CompanyUserInfo> {
 
-  @Select("SELECT * FROM t_company_user a, t_company_user_info b WHERE a.MEMBER_ID =#{memberId} AND a.COMPANY_ID =#{companyId} AND a.ID = b.COMPANY_USER_ID")
+  @Select("SELECT * \n" +
+    "FROM (SELECT * FROM t_company_user WHERE MEMBER_ID =#{memberId} AND COMPANY_ID =#{companyId}) a \n" +
+    "LEFT JOIN t_company_user_info c\n" +
+    "ON a.id = c.COMPANY_USER_ID")
   List<CompanyUserInfo> selectCompanyUser(@Param("companyId")Long companyId, @Param("memberId") Long memberId);
 }
