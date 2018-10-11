@@ -108,6 +108,7 @@ public class TaxDeclarationService {
     BigDecimal newTax = calcService.calNew(money, new BigDecimal("5000"));
     TaxResultVo taxResultVo = new TaxResultVo()
       .setSocialFee(specialDe).setTax(newTax).setAfterTax(money.subtract(newTax)).setIncomeAdvice("收入建议").setDeducAdvice("扣除建议");
+    
     return Result.success(taxResultVo);
   }
 

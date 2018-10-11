@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
@@ -60,6 +61,9 @@ public class TaxInfoDao {
     List<Tax> list = taxMapper.selectByMap(map);
     if(CollectionUtil.isNotEmpty(list)){
       tax = list.get(0);
+      if(tax.getStatus() != null && tax.getStatus() == TaxStatus.CONFIRMED.getCode()){
+        throw new LogicException("你已确认，无法提交，可联系人事进行授权修改！");
+      }
       tax.setUpdateTime(new Date()).setStatus(TaxStatus.CONFIRMED.getCode());
       taxMapper.updateById(tax);
     } else {
