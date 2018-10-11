@@ -32,7 +32,6 @@ public class CompanyUserDao {
     CompanyUser companyUser;
     if(CollectionUtil.isNotEmpty(list)){
       companyUser = list.get(0);
-      companyUser.setRolesCode(roleCode);
       companyUserMapper.updateById(companyUser);
     } else {
       Date date = new Date();

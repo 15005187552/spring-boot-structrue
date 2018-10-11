@@ -377,9 +377,9 @@ public class ExcelService {
       memberMapper.insert(member);
       memberId = member.getId();
     }
-    Integer provinceCode = locationDao.getProvinceCode(personInfoDto.getProvince());
-    Integer cityCode = locationDao.getCityCode(personInfoDto.getCity(), provinceCode);
-    Integer areaCode = locationDao.getAreaCode(personInfoDto.getArea(), cityCode);
+    String provinceCode = locationDao.getProvinceCode(personInfoDto.getProvince());
+    String cityCode = locationDao.getCityCode(personInfoDto.getCity(), provinceCode);
+    String areaCode = locationDao.getAreaCode(personInfoDto.getArea(), cityCode);
     NaturalPerson naturalPerson = new NaturalPerson();
     naturalPerson.setMemberId(memberId).setName(personInfoDto.getName()).setProvince(provinceCode)
       .setCity(cityCode)
@@ -437,7 +437,7 @@ public class ExcelService {
     Long companyUserId = companyUser.getId();
     CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUserId);
     CompanyUserInfo companyUserInfo1 = new CompanyUserInfo();
-    Integer workCity = locationDao.getCityCode(personInfoDto.getWorkCity(), null);
+    String workCity = locationDao.getCityCode(personInfoDto.getWorkCity(), null);
     companyUserInfo1.setCompanyUserId(companyUserId)
       .setJobNum(personInfoDto.getJobNum())
       .setEmployeeType(personInfoDto.getEmployeeType())
