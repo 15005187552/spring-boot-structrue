@@ -57,6 +57,27 @@ public class MPTemplateService {
     return TemplateUtil.doSend(formId,openId,mpTemplateEnum.getTemplateId(),kv);
   }
 
+  public Boolean sendSimple(Long memberId,String mpTemplateEnum,Kv kv) {
+    // 1配置(可在启动时配置)
+    WxaConfig wxaConfig = new WxaConfig();
+    wxaConfig.setAppId(appId);
+    wxaConfig.setAppSecret(appSecret);
+    WxaConfigKit.setWxaConfig(wxaConfig);
+    // 2数据
+    // 2.1 模版id
+    String formId = checkFormId(memberId);
+    if (formId == null) {
+      return false;
+    }
+    // 2.2 用户openid
+    String openId = getOpenid(memberId);
+    if (openId == null) {
+      return false;
+    }
+    // 3发送
+    return TemplateUtil.doSend(formId,openId,mpTemplateEnum,kv);
+  }
+
   /**
    * 用户openid
    * @param memberId

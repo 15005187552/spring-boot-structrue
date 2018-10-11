@@ -23,6 +23,7 @@ import java.util.Map;
 @Data
 @Accessors(chain = true)
 @AllArgsConstructor
+@SuppressWarnings("unchecked")
 public class JwtUser implements IJwtAndSecurityAble {
 
   public static final String ROLE_MEMBER = "ROLE_MEMBER";

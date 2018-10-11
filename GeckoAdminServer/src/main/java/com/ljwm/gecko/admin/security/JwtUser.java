@@ -18,6 +18,7 @@ import java.util.Map;
 @Data
 @Accessors(chain = true)
 @AllArgsConstructor
+@SuppressWarnings("unchecked")
 public class JwtUser implements IJwtAndSecurityAble {
 
   private AdminDto admin;
