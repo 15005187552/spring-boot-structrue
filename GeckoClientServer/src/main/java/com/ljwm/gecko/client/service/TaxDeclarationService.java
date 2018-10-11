@@ -73,6 +73,7 @@ public class TaxDeclarationService {
     List<TaxOtherReduceForm> taxOtherReduceFormList = taxForm.getTaxOtherReduceFormList();
     List<TaxSpecialForm> taxSpecialList = taxForm.getTaxSpecialFormList();
     List<TaxSpecialAddForm> taxSpecialAddFormList = taxForm.getTaxSpecialAddFormList();
+    BigDecimal otherReduce = BigDecimal.ZERO;
     if(CollectionUtil.isNotEmpty(taxIncomeFormList)){
       for (TaxIncomeForm taxIncomeForm :taxIncomeFormList){
         taxInfoDao.insertOrUpdateTaxIncome(taxIncomeForm, taxId);
@@ -80,6 +81,7 @@ public class TaxDeclarationService {
     }
     if(CollectionUtil.isNotEmpty(taxOtherReduceFormList)){
       for (TaxOtherReduceForm taxOtherReduceForm :taxOtherReduceFormList){
+        otherReduce = otherReduce.add(taxOtherReduceForm.getTaxMoney());
         taxInfoDao.insertOrUpdateTaxOther(taxOtherReduceForm, taxId, memberId);
       }
     }
@@ -106,9 +108,11 @@ public class TaxDeclarationService {
     }
     BigDecimal money = income.subtract(specialDe);
     BigDecimal newTax = calcService.calNew(money, new BigDecimal("5000"));
+
     TaxResultVo taxResultVo = new TaxResultVo()
-      .setSocialFee(specialDe).setTax(newTax).setAfterTax(money.subtract(newTax)).setIncomeAdvice("收入建议").setDeducAdvice("扣除建议");
-    
+      .setSocialFee(specialDe).setTax(newTax).setAfterTax(money.subtract(newTax).subtract(otherReduce)).setIncomeAdvice("收入建议").setDeducAdvice("扣除建议");
+    tax.setBeforeTax(money.subtract(newTax).subtract(otherReduce)).setBeforeTax(money);
+    taxMapper.updateById(tax);
     return Result.success(taxResultVo);
   }
 
