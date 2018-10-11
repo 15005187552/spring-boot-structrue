@@ -56,7 +56,7 @@ public class PMessageService extends MessageService {
     for (Long id : ids) {
       PushMessage pushMessage
         = new PushMessage()
-        .setType(1)                         // TODO: 根据业务逻辑写枚举进行划分
+//        .setType(1)                         // TODO: 根据业务逻辑写枚举进行划分
         .setCreateTime(now)                 // 创建时间
         .setRecevierId(id)             // 接受者ID
         .setMessage(message)                // 消息 可以自己去拓展标题字段

@@ -13,8 +13,10 @@ import com.ljwm.gecko.base.entity.AttendanceAttribute;
 import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.mapper.AttendanceAttributeMapper;
 import com.ljwm.gecko.base.mapper.MemberMapper;
+import com.ljwm.gecko.base.model.form.AttributeForm;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.model.vo.admin.AttendanceAtrVo;
+import com.ljwm.gecko.base.service.AttributeAdminService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,22 +40,32 @@ public class MaintenanceService {
   @Autowired
   private AttendanceAttributeMapper attendanceAttributeMapper;
 
+  @Autowired
+  private AttributeAdminService attributeAdminService;
+
   public Page<MemberVo> find(MemberQuery query) {
     return commonService.find(query,(p,q) -> memberMapper.find(p,BeanUtil.beanToMap(query)));
   }
 
   @Transactional
   public AttendanceAttribute save(AttendanceSaveForm form) {
-    return Optional.of(form).map(f -> {
-      AttendanceAttribute attribute = null;
-      if (!Objects.isNull(f.getId()))
-        attribute = attendanceAttributeMapper.selectById(f.getId()).setUpdateTime(DateTime.now());
-      if (Objects.isNull(attribute))
-        attribute = new AttendanceAttribute().setCreateTime(DateTime.now());
-      BeanUtil.copyProperties(form,attribute);
-      commonService.insertOrUpdate(attribute,attendanceAttributeMapper);
-      return attribute;
-    }).get();
+    return Optional.of(form)
+      .map(f -> {
+        AttendanceAttribute attribute = null;
+        if (!Objects.isNull(f.getId()))
+          attribute = attendanceAttributeMapper.selectById(f.getId()).setUpdateTime(DateTime.now());
+        if (Objects.isNull(attribute))
+          attribute = new AttendanceAttribute().setCreateTime(DateTime.now());
+        BeanUtil.copyProperties(form,attribute);
+        commonService.insertOrUpdate(attribute,attendanceAttributeMapper);
+        return attribute;
+      })
+      // TODO 简化添加 重复添加冗余数据 为客服端版服务
+      .map(bean -> {
+        attributeAdminService.save(bean.getClass(),new AttributeForm().setItemId(bean.getId()).setName(bean.getName()));
+        return bean;
+      })
+      .get();
   }
 
   public Page<AttendanceAtrVo> find(AttendanceQuery query) {

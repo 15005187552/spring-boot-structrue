@@ -12,6 +12,7 @@ import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.kit.SpringKit;
 import com.ljwm.bootbase.kit.UtilKit;
 import com.ljwm.gecko.base.entity.SocketInfo;
+import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.mapper.SocketInfoMapper;
 import com.ljwm.gecko.base.service.MessageService;
 import com.ljwm.gecko.im.ws.ShowcaseWsMsgHandler;
@@ -118,8 +119,20 @@ public class HandService {
     tioSendHandle(message,message.getString("receiverId"));
   }
 
+  @KafkaListener(topics = MessageService.PUSH_MESSAGE)
+  public void HandPushMessage(ConsumerRecord<?, ?> record) {
+    JSONObject message = getMesage(record);
+    JSONObject pushMessage = message.getJSONObject("pushMessage");
+    Integer type = message.getInteger("type");
+    if (Objects.equals(type,LoginType.WX_APP.getCode())) {
+    } else {
+      tioSendHandle(message,pushMessage.getString("receiverId"));
+    }
+  }
+
   /**
    * 解析监听数据
+   *
    * @param record
    * @return
    */
@@ -131,6 +144,7 @@ public class HandService {
 
   /**
    * tio 分发
+   *
    * @param message
    * @param id
    */

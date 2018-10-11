@@ -39,6 +39,8 @@ public class MessageService {
 
   public static final String TOPIC_TO_MEMBER = "TOPIC_TO_MEMBER";       // 发送至用户
 
+  public static final String PUSH_MESSAGE = "PUSH_MESSAGE";       // 推送消息
+
 
   @Autowired
   private CommonService commonService;
@@ -80,7 +82,7 @@ public class MessageService {
     log.info("OnLine Count : {}", socketInfo.size());
     PushMessage pushMessage
       = new PushMessage()
-      .setType(1)                         // TODO: 根据业务逻辑写枚举进行划分
+//      .setType(1)                         // TODO: 根据业务逻辑写枚举进行划分
       .setCreateTime(now)                 // 创建时间
       .setMessage(message)                // 消息 可以自己去拓展标题字段
       .setRecevierId(adminId)             // 接受者ID

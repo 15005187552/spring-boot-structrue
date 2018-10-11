@@ -1,11 +1,7 @@
-package com.ljwm.gecko.base.service;
-import com.jfinal.weixin.sdk.api.ApiConfig;
-import com.jfinal.weixin.sdk.api.ApiConfigKit;
-import com.jfinal.weixin.sdk.api.ApiResult;
+package com.ljwm.gecko.im.service;
+
 import com.jfinal.wxaapp.WxaConfig;
 import com.jfinal.wxaapp.WxaConfigKit;
-import com.jfinal.wxaapp.api.WxaTemplate;
-import com.jfinal.wxaapp.api.WxaTemplateApi;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.FormId;
 import com.ljwm.gecko.base.entity.MemberAccount;
@@ -13,12 +9,12 @@ import com.ljwm.gecko.base.enums.FormIdStatusEnum;
 import com.ljwm.gecko.base.enums.MPTemplateEnum;
 import com.ljwm.gecko.base.mapper.FormIdMapper;
 import com.ljwm.gecko.base.mapper.MemberAccountMapper;
-import com.ljwm.gecko.base.utils.FunctionUtil;
 import com.ljwm.gecko.base.utils.TemplateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Objects;
 
