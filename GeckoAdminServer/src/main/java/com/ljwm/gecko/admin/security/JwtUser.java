@@ -24,6 +24,10 @@ public class JwtUser implements IJwtAndSecurityAble {
 
   private Collection<? extends GrantedAuthority> grantedAuthorities;
 
+  public JwtUser(AdminDto admin){
+    this.admin = admin;
+  }
+
   @Override
   public <T extends Serializable> T getId() {
     return (T) admin.getId();

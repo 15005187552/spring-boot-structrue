@@ -4,7 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.enums.MPTemplateEnum;
-import com.ljwm.gecko.base.service.MPTemplateService;
+import com.ljwm.gecko.client.service.MPTemplateService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

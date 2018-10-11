@@ -41,7 +41,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
       JwtUser jwtUser = null ;
       if (jwtUser == null) {
         AdminDto admin = adminMapper.login(username);
-        LoginInfoHolder.setLoginType(loginType);
+//        LoginInfoHolder.setLoginType(loginType);
         jwtUser = new JwtUser(admin, getGrantedAuthorities(admin));
         userPool.put(username, jwtUser);
       }

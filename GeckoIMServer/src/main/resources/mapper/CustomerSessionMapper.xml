@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.im.mapper.ImCustomerSessionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.CustomerSession">
+        <id column="ID" property="id" />
+        <result column="NAME" property="name" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="CUSTOMER_MEMBER_ID" property="customerMemberId" />
+        <result column="CUSTOMER_GUEST_ID" property="customerGuestId" />
+        <result column="RECEPTIONIST_MEMBER_ID" property="receptionistMemberId" />
+        <result column="PROVIDER_ID" property="providerId" />
+        <result column="STATUS" property="status" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`NAME`          ,`CREATE_TIME`          ,`CUSTOMER_MEMBER_ID`          ,`CUSTOMER_GUEST_ID`          ,`RECEPTIONIST_MEMBER_ID`          ,`PROVIDER_ID`          ,`STATUS`
+    </sql>
+
+  <resultMap id="SessionVo" type="com.ljwm.gecko.im.model.vo.SessionVo" extends="BaseResultMap">
+    <collection property="customerMessages" column="ID" select="com.ljwm.gecko.base.mapper.CustomerMessageMapper.getCustomerMessages"/>
+  </resultMap>
+</mapper>
