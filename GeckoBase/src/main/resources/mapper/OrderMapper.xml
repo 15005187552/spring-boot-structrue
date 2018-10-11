@@ -11,7 +11,6 @@
         <result column="PAYMENT" property="payment" />
         <result column="PAYMENT_TYPE" property="paymentType" />
         <result column="STATUS" property="status" />
-        <result column="PAYMENT_TIME" property="paymentTime" />
         <result column="END_TIME" property="endTime" />
         <result column="CLOSE_TIME" property="closeTime" />
         <result column="CREATE_TIME" property="createTime" />
@@ -22,7 +21,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`ORDER_NO`          ,`MEMBER_ID`          ,`SHIPPING_ID`          ,`PAYMENT`          ,`PAYMENT_TYPE`          ,`STATUS`          ,`PAYMENT_TIME`          ,`END_TIME`          ,`CLOSE_TIME`          ,`CREATE_TIME`          ,`UPDATE_TIME`      ,`DOWN_PAYMENT_AMOUNT`          ,`REMIAN_AMOUNT`
+          `ID`          ,`ORDER_NO`          ,`MEMBER_ID`          ,`SHIPPING_ID`          ,`PAYMENT`          ,`PAYMENT_TYPE`          ,`STATUS`    ,`END_TIME`          ,`CLOSE_TIME`          ,`CREATE_TIME`          ,`UPDATE_TIME`      ,`DOWN_PAYMENT_AMOUNT`          ,`REMIAN_AMOUNT`
     </sql>
 
 
@@ -75,6 +74,24 @@
     <if test="!params.asc">
       DESC
     </if>
+  </select>
+
+  <select id="findProviderOrderCount" parameterType="long" resultType="integer">
+      <![CDATA[
+        SELECT
+            COUNT(temp .*)
+            FROM
+            (
+            SELECT DISTINCT
+            t.*
+            FROM
+            t_order t,
+            t_order_item toi
+            WHERE
+            t.ORDER_NO = toi.ORDER_NO
+            AND t.`STATUS` > 10
+            AND toi.PROVIDER_ID = #{providerId}) temp
+      ]]>
   </select>
 
 </mapper>

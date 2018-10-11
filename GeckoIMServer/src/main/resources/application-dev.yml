@@ -4,3 +4,15 @@ spring:
     url: jdbc:mysql://192.168.8.167:3306/geckodb?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8
     username: root
     password: root
+wx:
+  xcx:                  #小程序
+    appId: wxdefc6532215f6981
+    appSecret: da1df9c302a1dafa17a8b1ffbc72b2d5
+  gzh:
+    appId: wx32f9a57c9a3c31ac
+    appSecret: d58316dc8bba2eba740c09213bf5072c
+  mch:
+    mchId: 1515868511
+    paySecret: da1df9c302a1dafa17a8b1ffbc72b2d5
+    notifyUrl: "https://mhs.1322.com/order/weixin/notify"
+    notifyRemainUrl: "https://mhs.1322.com/order/weixin/remainNotify"

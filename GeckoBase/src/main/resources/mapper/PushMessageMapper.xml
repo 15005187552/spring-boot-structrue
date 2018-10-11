@@ -7,16 +7,12 @@
         <id column="ID" property="id" />
         <result column="MESSAGE" property="message" />
         <result column="RECEVIER_ID" property="recevierId" />
-        <result column="TYPE" property="type" />
-        <result column="STATUS" property="status" />
         <result column="CREATE_TIME" property="createTime" />
-        <result column="PUSH_TIME" property="pushTime" />
-        <result column="READ_TIME" property="readTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`MESSAGE`          ,`RECEVIER_ID`          ,`TYPE`          ,`STATUS`          ,`CREATE_TIME`          ,`PUSH_TIME`          ,`READ_TIME`
+          `ID`          ,`MESSAGE`          ,`RECEVIER_ID`          ,`CREATE_TIME`
     </sql>
 
 </mapper>

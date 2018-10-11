@@ -56,15 +56,12 @@ public class ShowcaseWsMsgHandler implements IWsMsgHandler {
 
   @Override
   public HttpResponse handshake(HttpRequest request,HttpResponse httpResponse,ChannelContext channelContext) throws Exception {
-    String id = request.getParam("id");
-    Tio.bindUser(channelContext,id);
+    String code = request.getParam("code");
+    Tio.bindUser(channelContext,code);
+    if (!Boolean.valueOf(request.getParam("tiows_reconnect")))
+      handleTio.connectHandle(code,request.getClientIp(),SocketChannelEnum.PROVIDER,channelContext.toString());
 
-    if (!Boolean.valueOf(request.getParam("tiows_reconnect"))) {
-      handleTio.connectHandle(id,request.getClientIp(),SocketChannelEnum.PROVIDER,channelContext.toString());
-    }
-
-    String clientip = request.getClientIp();
-    log.info("收到来自{}的ws握手包\r\n{}",clientip,request.toString());
+    log.info("收到来自{}的ws握手包\r\n{}",request.getClientIp(),request.toString());
     return httpResponse;
   }
 
@@ -91,10 +88,11 @@ public class ShowcaseWsMsgHandler implements IWsMsgHandler {
    */
   @Override
   public Object onClose(WsRequest wsRequest,byte[] bytes,ChannelContext channelContext) throws Exception {
-    Tio.remove(channelContext,"receive close flag");
-
     log.info("receive close flag");
+//    channelContext.getToken()
     handleTio.connetCloseHanle(channelContext.userid,channelContext.toString());
+
+    Tio.remove(channelContext,"receive close flag");
     return null;
   }
 
@@ -113,8 +111,8 @@ public class ShowcaseWsMsgHandler implements IWsMsgHandler {
       throw new LogicException("数据传输格式错误");
 
     if (StrUtil.equals(JSONObject.parseObject(message).getString("header"),"heartBeat")) {
-        log.debug("心跳");
-    }else{
+      log.debug("心跳");
+    } else {
       // 信息分发
       log.info("message start handle");
       handleTio.messageHandle(text);

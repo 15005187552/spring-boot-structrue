@@ -2,13 +2,17 @@ package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.entity.NaturalPerson;
+import com.ljwm.gecko.base.entity.Tax;
 import com.ljwm.gecko.base.mapper.NaturalPersonMapper;
+import com.ljwm.gecko.base.mapper.TaxMapper;
 import com.ljwm.gecko.base.utils.Fileutil;
 import com.ljwm.gecko.client.model.dto.PersonInfoForm;
+import com.ljwm.gecko.client.model.dto.SallaryForm;
 import com.ljwm.gecko.client.model.vo.NaturalPersonVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +32,8 @@ public class PersonInfoService {
   ApplicationInfo appInfo;
   @Autowired
   NaturalPersonMapper naturalPersonMapper;
+  @Autowired
+  TaxMapper taxMapper;
 
   @Transactional
   public Result commit(PersonInfoForm personInfoForm){
@@ -108,5 +114,11 @@ public class PersonInfoService {
       return Result.success(naturalPersonVo);
     }
     return Result.success(null);
+  }
+
+  public Result findSallary(SallaryForm sallaryForm) {
+    Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, sallaryForm.getDeclareTime()));
+
+    return Result.success("");
   }
 }

@@ -47,4 +47,9 @@ public class ProviderController extends BaseController {
     return success(clientProviderService.findProviderByProviderId(id));
   }
 
+  @GetMapping("findProviderOrderCount/{providerId}")
+  public Result findProviderOrderCount(@PathVariable Long providerId){
+    return success(clientProviderService.findProviderOrderCount(providerId));
+  }
+
 }

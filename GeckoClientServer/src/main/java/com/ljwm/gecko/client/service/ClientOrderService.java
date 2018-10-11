@@ -2,6 +2,7 @@ package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -211,7 +212,6 @@ public class ClientOrderService {
       throw new LogicException(ResultEnum.DATA_ERROR,"订单为非待付款状态1");
     }
     order.setStatus(OrderStatusEnum.PAID.getCode());
-    order.setPaymentTime(DateUtil.date());
     orderMapper.updateById(order);
     return new OrderSimpleVo(order);
   }
@@ -360,13 +360,14 @@ public class ClientOrderService {
         // 4.1 设置订单为已付款
         orderPayInfo.setUpdateTime(DateUtil.date());
         orderPayInfo.setStatus(1);
+        orderPayInfo.setPaymentTime(DateUtil.date());
         orderPayInfoMapper.updateById(orderPayInfo);
 
         Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq(Order.ORDER_NO, orderPayInfo.getOrderNo()));
         order.setStatus(OrderStatusEnum.NO_REMAIN_PAID.getCode());
         order.setUpdateTime(DateUtil.date());
         orderMapper.updateById(order);
-
+        orderItemMapper.updateOrderItemStatus(order.getOrderNo(),OrderStatusEnum.NO_REMAIN_PAID.getCode());
         //推送模版消息
         //mpTemplateService.send(order,MPTemplateEnum.PAY);
       }
@@ -397,15 +398,58 @@ public class ClientOrderService {
         // 4.1 设置订单为已付款
         orderPayInfo.setUpdateTime(DateUtil.date());
         orderPayInfo.setStatus(1);
+        orderPayInfo.setPaymentTime(DateUtil.date());
         orderPayInfoMapper.updateById(orderPayInfo);
-
         Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq(Order.ORDER_NO, orderPayInfo.getOrderNo()));
         order.setStatus(OrderStatusEnum.PAID.getCode());
         order.setUpdateTime(DateUtil.date());
         orderMapper.updateById(order);
+        orderItemMapper.updateOrderItemStatus(order.getOrderNo(),OrderStatusEnum.PAID.getCode());
         //推送模版消息
         //mpTemplateService.send(order,MPTemplateEnum.PAY);
       }
+    }
+  }
+
+  public void checkPayStatus(Long id){
+    // 1. 验证订单
+    Order order = orderMapper.selectById(id);
+    if (order == null)
+      throw new LogicException(ResultEnum.DATA_ERROR, "找不到订单ID为:" + id + "的订单!");
+    OrderPayInfo orderPayInfo = null;
+    Integer orderStatus = OrderStatusEnum.NO_REMAIN_PAID.getCode();
+    // 2. 如果为待付款
+    if (Objects.equals(order.getStatus(), OrderStatusEnum.NO_PAID.getCode())) {
+      // 2.1 去查询
+      orderPayInfo = orderPayInfoMapper.findOrderPayByOrderNo(Kv.by("orderNo",order.getOrderNo()).set("type",0));
+      if (orderPayInfo!=null&&!Objects.equals(orderPayInfo.getStatus(),0)){
+        log.info("订单首付款已经支付,无需重复发起支付!");
+        throw new LogicException(ResultEnum.DATA_ERROR,"订单首付款已经支付,无需重复发起支付!");
+      }
+    }else if (Objects.equals(order.getStatus(), OrderStatusEnum.NO_REMAIN_PAID.getCode())){
+      orderPayInfo = orderPayInfoMapper.findOrderPayByOrderNo(Kv.by("orderNo",order.getOrderNo()).set("type",1));
+      if (orderPayInfo!=null&&!Objects.equals(orderPayInfo.getStatus(),0)){
+        log.info("订单尾款已经支付,无需重复发起支付!");
+        throw new LogicException(ResultEnum.DATA_ERROR,"订单尾款已经支付,无需重复发起支付!");
+      }
+      orderStatus = OrderStatusEnum.PAID.getCode();
+    }
+    String wxNum = orderPayInfo.getWxOrderNum();
+    if (StrUtil.isBlank(wxNum))
+      throw new LogicException(ResultEnum.DATA_ERROR, "未查询到相关微信订单!");
+    // 2.2 确认返回结果
+    Map ret = weiXinXcxService.weixinPayQuery(wxNum);
+    if ("SUCCESS".equals(ret.get("trade_state"))) {
+      orderPayInfo.setStatus(1);
+      orderPayInfo.setUpdateTime(DateUtil.date());
+      orderPayInfo.setPaymentTime(DateUtil.date());
+      orderPayInfoMapper.updateById(orderPayInfo);
+      order.setStatus(orderStatus);
+      order.setUpdateTime(DateUtil.date());
+      orderMapper.updateById(order);
+      orderItemMapper.updateOrderItemStatus(order.getOrderNo(),orderStatus);
+    } else {
+      throw new LogicException(ResultEnum.DATA_ERROR, "付款失败请重试!");
     }
   }
 

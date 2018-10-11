@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.entity;
 
+import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
@@ -8,8 +9,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,7 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author Levis
- * @since 2018-09-06
+ * @since 2018-10-11
  */
 @Data
 @SuppressWarnings("ALL")
@@ -47,7 +50,7 @@ public class TaxOtherReduce implements Serializable {
 
     @ApiModelProperty(value = "个人缴纳金额")
     @TableField("`TAX_MONEY`")
-    private String taxMoney;
+    private BigDecimal taxMoney;
 
     @ApiModelProperty(value = "缴纳证明路径")
     @TableField("`TAX_DOC_PATH`")

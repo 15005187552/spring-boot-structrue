@@ -157,7 +157,7 @@ public class ExcelService {
                 companyUserInfo.setFundPer(new BigDecimal(fundPer.toString()));
               }
               if(socialBase != null){
-                companyUserInfo.setFundPer(new BigDecimal(socialBase.toString()));
+                companyUserInfo.setSocialBase(new BigDecimal(socialBase.toString()));
               }
               companyUserInfoMapper.updateById(companyUserInfo);
             }
@@ -292,13 +292,13 @@ public class ExcelService {
     }
     List<Object> dataList = new ArrayList<>();
     for (NaturalPerson naturalPerson : list) {
-      NormalSalaryVo normalSalaryVo = new NormalSalaryVo();
-      BeanUtil.copyProperties(naturalPerson, normalSalaryVo);
       Long memberId = naturalPerson.getMemberId();
       List<EmployeeDto> employeeDtoList = companyUserMapper.selectEmployeeList(companyId, memberId);
       if (CollectionUtil.isEmpty(employeeDtoList)){
         throw new LogicException("该公司下没有对应员工");
       }
+      NormalSalaryVo normalSalaryVo = new NormalSalaryVo();
+      BeanUtil.copyProperties(naturalPerson, normalSalaryVo);
       /*BigDecimal socialBase = employeeDtoList.get(0).getCompanyUserInfo().getSocialBase();
       BigDecimal fundBase = employeeDtoList.get(0).getCompanyUserInfo().getFundBase();
       BigDecimal entire = companySpecialMapper.selectByName("养老保险");

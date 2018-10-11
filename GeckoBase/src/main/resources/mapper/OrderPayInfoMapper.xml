@@ -13,6 +13,7 @@
         <result column="CREATE_TIME" property="createTime" />
         <result column="UPDATE_TIME" property="updateTime" />
         <result column="PAY_AMOUNT" property="payAmount" />
+        <result column="PAYMENT_TIME" property="paymentTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->

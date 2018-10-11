@@ -5,6 +5,10 @@ spring:
     multipart:
       maxRequestSize: 100Mb
       maxFileSize: 100Mb
+wx:
+  xcx:
+    appId: wxdefc6532215f6981
+    appSecret: da1df9c302a1dafa17a8b1ffbc72b2d5
 #appInfo:
 #  pic: "advertisement"
 #  webRoot: "D://upload/"

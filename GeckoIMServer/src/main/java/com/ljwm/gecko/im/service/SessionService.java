@@ -13,6 +13,7 @@ import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.mapper.ProviderUserMapper;
 import com.ljwm.gecko.base.packet.Packet;
 import com.ljwm.gecko.base.service.MessageService;
+import com.ljwm.gecko.im.enums.CustomerEnum;
 import com.ljwm.gecko.im.model.form.SendProviderForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +89,7 @@ public class SessionService {
     assert infos.size() > 0 : "未找到会话（session）";
 
     log.debug("3.插入新的消息");
-    CustomerMessage customerMessage = sessionDistributeService.insertCustomerMessage(form.getMemberId(),form.getMessage(),infos.get(0));
+    CustomerMessage customerMessage = sessionDistributeService.insertCustomerMessage(form.getMemberId(),form.getMessage(),infos.get(0),CustomerEnum.MEMBER);
 
     log.debug("4.获取用户上线数据");
     List<SocketInfo> socketInfos = sessionDistributeService.getSocketInfos(form.getMemberId());

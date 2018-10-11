@@ -26,4 +26,6 @@ public interface OrderMapper extends BaseMapper<Order> {
 
   @Select("SELECT IF((SELECT COUNT(`id`) FROM `t_order_item` WHERE `order_no`=#{orderNo})=1, `service_name` ,CONCAT(`service_name`,'等')) AS res FROM `t_order_item`  WHERE `order_no` = #{orderNo} LIMIT 0, 1   ")
   String getOrderInfo(String orderNo);
+
+  Integer findProviderOrderCount(@Param("providerId") Long providerId);
 }

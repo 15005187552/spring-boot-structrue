@@ -10,7 +10,9 @@ import lombok.Getter;
 public enum LoginType {
   GUEST(-1, "游客"),
   MOBILE(0, "手机号"),
-  WX_APP(1, "微信小程序")
+  WX_APP(1, "微信小程序"),
+  ADMIN(2,"后台"),
+  PROVIDER(3,"服务商")
   ;
 
   private Integer code;

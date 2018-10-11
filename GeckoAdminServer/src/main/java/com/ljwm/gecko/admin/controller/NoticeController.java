@@ -39,13 +39,13 @@ public class NoticeController extends BaseController {
     return success(noticeService.find(query));
   }
 
-  @PostMapping("disabled/{id}")
+  @GetMapping("disabled/{id}")
   @ApiOperation("公告启用禁用")
   public Result disabled(@PathVariable @Valid Long id) {
     return success(noticeService.disabled(id));
   }
 
-  @PostMapping("delete/{id}")
+  @GetMapping("delete/{id}")
   @ApiOperation("公告删除")
   public void delete(@PathVariable @Valid Long id) {
     noticeService.delete(id);
