@@ -6,6 +6,7 @@ import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.utils.FileKit;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import static com.ljwm.bootbase.dto.Result.success;
  * @date 2018/9/4 15:16
  */
 @Service
+@Slf4j
 public class FileService {
   @Autowired
   ApplicationInfo appInfo;
@@ -31,6 +33,7 @@ public class FileService {
       return fail(ResultEnum.FAIL_TO_SAVE_FILE);
     Map<String, Object> map = new HashedMap();
     map.put("fileName", filePath);
+    log.debug("filePath:"+filePath);
     return success(map);
   }
 }
