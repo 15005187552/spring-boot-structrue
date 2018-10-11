@@ -44,7 +44,7 @@ public class CityItem implements Serializable {
 
     @ApiModelProperty(value = "地区code")
     @TableField("`REGION_CODE`")
-    private Integer regionCode;
+    private String  regionCode;
 
     @ApiModelProperty(value = "上限")
     @TableField("`UPPER_LIMIT`")

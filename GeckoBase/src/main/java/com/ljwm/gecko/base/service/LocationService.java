@@ -27,11 +27,11 @@ public class LocationService {
     return locationDao.selectProvinceByLevel();
   }
 
-  public List<Location> getCityOrArea(Integer code) {
+  public List<Location> getCityOrArea(String code) {
     return locationDao.selectByCode(code);
   }
 
-  public Integer getProvinceCode(String name){
+  public String getProvinceCode(String name){
     return locationDao.getProvinceCode(name);
   }
 

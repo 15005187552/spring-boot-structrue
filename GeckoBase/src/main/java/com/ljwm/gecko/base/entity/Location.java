@@ -33,7 +33,7 @@ public class Location implements Serializable {
 
     @ApiModelProperty(value = "区划代码")
     @TableId(value = "CODE", type = IdType.INPUT)
-    private Integer code;
+    private String code;
 
     @ApiModelProperty(value = "区划名称")
     @TableField("NAME")
@@ -41,7 +41,7 @@ public class Location implements Serializable {
 
     @ApiModelProperty(value = "父级区域代码")
     @TableField("PCODE")
-    private Integer pcode;
+    private String pcode;
 
     @ApiModelProperty(value = "区划级别 省 0 市 1 区县 2")
     @TableField("LEVEL")

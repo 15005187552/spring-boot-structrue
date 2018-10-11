@@ -33,11 +33,11 @@ public class LocationDao {
     return locationMapper.selectProvinceByLevel();
   }
 
-  public List<Location> selectByCode(Integer code) {
+  public List<Location> selectByCode(String code) {
     return locationMapper.selectByCode(code);
   }
 
-  public Integer getProvinceCode(String name) {
+  public String getProvinceCode(String name) {
     Map<String, Object> map = new HashMap<>();
     map.put(Location.NAME, name);
     map.put(Location.LEVEL, "0");
@@ -48,11 +48,13 @@ public class LocationDao {
     return null;
   }
 
-  public Integer getCityCode(String city, Integer provinceCode) {
+  public String getCityCode(String city, String provinceCode) {
     Map<String, Object> map = new HashMap<>();
     map.put("NAME", city);
     map.put("LEVEL", "1");
-    map.put("PCODE", provinceCode);
+    if(provinceCode != null) {
+      map.put("PCODE", provinceCode);
+    }
     List<Location> list = locationMapper.selectByMap(map);
     if(CollectionUtil.isNotEmpty(list)){
       return list.get(0).getCode();
@@ -60,7 +62,7 @@ public class LocationDao {
     return null;
   }
 
-  public Integer getAreaCode(String area, Integer cityCode) {
+  public String getAreaCode(String area, String cityCode) {
     Map<String, Object> map = new HashMap<>();
     map.put("NAME", area);
     map.put("LEVEL", "2");

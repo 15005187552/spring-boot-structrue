@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class SimpleProv {
 
-  private Integer code;
+  private String code;
 
   private String name;
 
