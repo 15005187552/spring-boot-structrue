@@ -72,6 +72,9 @@ public class AttendanceService {
   @Autowired
   CompanyUserInfoMapper companyUserInfoMapper;
 
+  @Autowired
+  ExcelService excelService;
+
   @Transactional
   public Result commit(AttendanceForm attendanceForm) {
     Long companyId = attendanceForm.getCompanyId();
@@ -205,6 +208,7 @@ public class AttendanceService {
   }
 
   public Result findAttendanceList(TaxFindForm taxFindForm) {
+    excelService.isHasProperty(taxFindForm.getCompanyId());
     Page<TaxListVo> page = commonService.find(taxFindForm, (p, q) -> taxMapper.selectTaxVoList(p, BeanUtil.beanToMap(taxFindForm)));
     List<TaxListVo> list = page.getRecords();
     for (TaxListVo taxListVo :list){
