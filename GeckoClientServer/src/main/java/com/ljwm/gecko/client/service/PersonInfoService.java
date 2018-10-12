@@ -55,6 +55,9 @@ public class PersonInfoService {
   @Autowired
   TaxSpecialService taxSpecialService;
 
+  @Autowired
+  CalcService calcService;
+
   @Transactional
   public Result commit(PersonInfoForm personInfoForm){
     NaturalPerson naturalPerson = new NaturalPerson();
@@ -162,11 +165,47 @@ public class PersonInfoService {
       .add(new BigDecimal(attendanceDao.selectByAttribute("其他处罚", taxId)));
     BigDecimal social = taxSpecialService.getSocialMoney(taxId);
     BigDecimal fund = taxSpecialService.getFundMoney(taxId);
+    String yearBonus = attendanceDao.selectByAttribute("全年一次性奖金补贴", taxId);
+    String compensation = attendanceDao.selectByAttribute("解除劳动关系一次性经济补偿金", taxId);
+    String avaSallery = attendanceDao.selectByAttribute("本地区上年度平均职工工资", taxId);
+    BigDecimal income = taxIncomeService.getIncomeMoney(taxId);
+    BigDecimal yearDeduc = calYearBonus(new BigDecimal(yearBonus));
+    BigDecimal compensationDeduc = BigDecimal.ZERO;
+    if(new BigDecimal(compensation).subtract(new BigDecimal(avaSallery).multiply(new BigDecimal("3"))).compareTo(BigDecimal.ZERO)>=0){
+      compensationDeduc = calYearBonus(new BigDecimal(compensation).subtract(new BigDecimal(avaSallery).multiply(new BigDecimal("3"))));
+    }
+    BigDecimal incomeDeduc = calcService.calNew(income.add(bonus).subtract(sickDeduc).subtract(otherDeduc).subtract(social).subtract(fund), new BigDecimal("5000"));
     sallaryVo.setBonus(bonus.toString()).setBaseSallary(sickDeduc.toString()).setOtherDeduc(otherDeduc.toString())
       .setPersonSocial(social.toString()).setPersonFund(fund.toString())
-      .setYearBonus(new BigDecimal(attendanceDao.selectByAttribute("全年一次性奖金补贴", taxId)).toString())
-      .setCompensation(new BigDecimal(attendanceDao.selectByAttribute("解除劳动关系一次性经济补偿金", taxId)).toString());
+      .setYearBonus(yearBonus)
+      .setCompensation(compensation)
+      .setPersonTax(incomeDeduc.add(yearDeduc).add(compensationDeduc).toString());
+    sallaryVo.setAfterTax(income.add(bonus).subtract(sickDeduc).subtract(otherDeduc).subtract(social).subtract(fund).
+      add(new BigDecimal(compensation)).add(new BigDecimal(yearBonus)).subtract(new BigDecimal(sallaryVo.getPersonTax())).toString());
+    return Result.success(sallaryVo);
+  }
 
-    return Result.success("");
+  private BigDecimal calYearBonus(BigDecimal yearBonus) {
+    BigDecimal monthBonus = yearBonus.divide(new BigDecimal("12"));
+    BigDecimal newPort = new BigDecimal("5000");
+    BigDecimal newTax;
+    if(monthBonus.compareTo(new BigDecimal("85000"))>=0){
+      newTax = (yearBonus.subtract(newPort).multiply(new BigDecimal("0.45")).subtract(new BigDecimal("15160")));
+    } else if(monthBonus.compareTo(new BigDecimal("60000"))>=0){
+      newTax = (yearBonus.subtract(newPort).multiply(new BigDecimal("0.35")).subtract(new BigDecimal("7160")));
+    } else if(monthBonus.compareTo(new BigDecimal("40000"))>=0){
+      newTax = (yearBonus.subtract(newPort).multiply(new BigDecimal("0.30")).subtract(new BigDecimal("4410")));
+    } else if(monthBonus.compareTo(new BigDecimal("30000"))>=0){
+      newTax = (yearBonus.subtract(newPort).multiply(new BigDecimal("0.25")).subtract(new BigDecimal("2660")));
+    } else if(monthBonus.compareTo(new BigDecimal("17000"))>=0){
+      newTax = (yearBonus.subtract(newPort).multiply(new BigDecimal("0.20")).subtract(new BigDecimal("1410")));
+    } else if(monthBonus.compareTo(new BigDecimal("8000"))>=0){
+      newTax = (yearBonus.subtract(newPort).multiply(new BigDecimal("0.10")).subtract(new BigDecimal("210")));
+    } else if(monthBonus.compareTo(new BigDecimal("5000"))>=0){
+      newTax = (yearBonus.subtract(newPort).multiply(new BigDecimal("0.03")));
+    } else {
+      newTax = BigDecimal.ZERO;
+    }
+    return newTax;
   }
 }
