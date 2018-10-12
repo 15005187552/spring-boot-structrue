@@ -161,7 +161,7 @@ public class ExcelService {
               }
               companyUserInfoMapper.updateById(companyUserInfo);
             }
-            Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId).eq(Tax.DECLARE_TYPE, declareType));
+            Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId));
             Date date = new Date();
             if (tax != null) {
               tax.setUpdateTime(date).setStatus(TaxStatus.NEED_CONFIRM.getCode());
