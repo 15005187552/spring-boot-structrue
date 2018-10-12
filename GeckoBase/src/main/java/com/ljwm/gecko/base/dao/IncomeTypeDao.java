@@ -23,4 +23,8 @@ public class IncomeTypeDao {
     return null;
   }
 
+  public Long selectByName(String name){
+    IncomeType incomeType = incomeTypeMapper.selectOne(new QueryWrapper<IncomeType>().eq(IncomeType.NAME, name));
+    return incomeType!=null?incomeType.getId():null;
+  }
 }

@@ -289,9 +289,9 @@ public class MemberInfoService {
 
   @Transactional
   public void checkMemberInfo(MemberInfoConfirmDto memberInfoConfirmDto){
-    Member member = memberMapper.selectById(memberInfoConfirmDto.getMemberId());
+    Member member = memberMapper.selectById(memberInfoConfirmDto.getId());
     if (member == null) {
-      log.info("会员id:{} 会员信息不存在!", memberInfoConfirmDto.getMemberId());
+      log.info("会员id:{} 会员信息不存在!", memberInfoConfirmDto.getId());
       throw new LogicException(ResultEnum.DATA_ERROR, "会员查询不到");
     }
     if (!Objects.equals(member.getInfoValidateState(), InfoValidateStateEnum.INIT.getCode())){

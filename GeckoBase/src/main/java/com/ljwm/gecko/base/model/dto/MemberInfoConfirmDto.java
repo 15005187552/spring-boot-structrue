@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 public class MemberInfoConfirmDto {
 
   @ApiModelProperty("会员id")
-  private Long memberId;
+  private Long id;
 
   @ApiModelProperty(value = "认证人",hidden = true)
   private Long validatorId;

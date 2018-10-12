@@ -149,8 +149,8 @@ public class CompanyUserService {
          list) {
       CompanyUserVo companyUserVo = new CompanyUserVo();
       BeanUtil.copyProperties(companyUser, companyUserVo);
-      companyUserVo.setName(naturalPersonMapper.selectById(companyUser.getMemberId()).getName());
       Member member = memberMapper.selectById(companyUser.getMemberId());
+      companyUserVo.setName(member.getName());
       companyUserVo.setNickName(member.getNickName());
       companyUserVo.setAvatarPath(member.getAvatarPath());
       companyUserVoList.add(companyUserVo);

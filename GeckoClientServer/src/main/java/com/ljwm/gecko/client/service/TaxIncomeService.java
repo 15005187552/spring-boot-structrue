@@ -1,7 +1,7 @@
 package com.ljwm.gecko.client.service;
 
+import com.ljwm.gecko.base.dao.IncomeTypeDao;
 import com.ljwm.gecko.base.entity.TaxIncome;
-import com.ljwm.gecko.client.dao.IncomeTypeDao;
 import com.ljwm.gecko.client.dao.TaxIncomeDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,6 @@ public class TaxIncomeService {
 
   @Autowired
   IncomeTypeDao incomeTypeDao;
-
 
   public BigDecimal getIncomeMoney(Long taxId){
     BigDecimal income = BigDecimal.ZERO;
