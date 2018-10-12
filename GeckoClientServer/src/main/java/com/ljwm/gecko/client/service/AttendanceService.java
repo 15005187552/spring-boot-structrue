@@ -105,13 +105,14 @@ public class AttendanceService {
           tax.setCreateTime(date);
           taxMapper.insert(tax);
         }
+        insertOrUpdate(socialBase, fundBase, fundPer, companyId, date, tax);
         List<AttendanceForm.AttendanceDto.AttendanceData> dataList = attendanceDto.getDataList();
         for (AttendanceForm.AttendanceDto.AttendanceData attendanceData : dataList){
           Attribute attribute = attributeMapper.selectById(attendanceData.getId());
           Integer tableName = attribute.getTableName();
           Long itemId = attribute.getItemId();
           String value = attendanceData.getValue();
-          insertOrUpdate(tableName, itemId, date, value, tax, socialBase, fundBase, fundPer, companyId);
+          insertOrUpdate(tableName, itemId, date, value, tax);
         }
       }else {
         return Result.fail("证件号码或者证照类型有误！");
@@ -121,8 +122,7 @@ public class AttendanceService {
   }
 
 
-  public void insertOrUpdate(Integer tableName, Long itemId, Date date, String value, Tax tax, BigDecimal socialBase, BigDecimal fundBase,
-    BigDecimal fundPer, Long companyId){
+  public void insertOrUpdate(Integer tableName, Long itemId, Date date, String value, Tax tax){
     if(tableName == TableNameEnum.T_INCOME_TYPE.getCode()){
       TaxIncome taxIncome = taxIncomeMapper.selectOne(new QueryWrapper<TaxIncome>().eq(TaxIncome.TAX_ID, tax.getId())
         .eq(TaxIncome.INCOME_TYPE_ID, itemId));
@@ -147,7 +147,7 @@ public class AttendanceService {
         taxOtherReduceMapper.insert(taxOtherReduce);
       }
     }
-    List<CompanySpecial> companySpecialList = companySpecialMapper.selectList(new QueryWrapper<CompanySpecial>().eq(CompanySpecial.COMPANY_ID, companyId));
+    /*List<CompanySpecial> companySpecialList = companySpecialMapper.selectList(new QueryWrapper<CompanySpecial>().eq(CompanySpecial.COMPANY_ID, companyId));
     for (CompanySpecial companySpecial : companySpecialList){
       SpecialDeduction specialDeduction = specialDeductionMapper.selectOne(new QueryWrapper<SpecialDeduction>().like(SpecialDeduction.NAME, "公积金"));
       TaxSpecial taxSpecial = taxSpecialMapper.selectOne(new QueryWrapper<TaxSpecial>().eq(TaxSpecial.TAX_ID, tax.getId()).eq(TaxSpecial.SPECIAL_DEDU_ID, companySpecial.getSpecialId()));
@@ -180,7 +180,7 @@ public class AttendanceService {
           taxSpecialMapper.insert(taxSpecial);
         }
       }
-    }
+    }*/
     if(tableName == TableNameEnum.T_ADD_SPECIAL.getCode()){
       TaxSpecialAdd taxSpecialAdd = taxSpecialAddMapper.selectOne(new QueryWrapper<TaxSpecialAdd>()
         .eq(TaxSpecialAdd.TAX_ID, tax.getId()).eq(TaxSpecialAdd.SPECIAL_ADD_ID, itemId));
@@ -203,6 +203,43 @@ public class AttendanceService {
         attendance = new Attendance();
         attendance.setValue(value);
         attendanceMapper.insert(attendance);
+      }
+    }
+  }
+
+  public void insertOrUpdate(BigDecimal socialBase, BigDecimal fundBase, BigDecimal fundPer, Long companyId, Date date, Tax tax){
+    List<CompanySpecial> companySpecialList = companySpecialMapper.selectList(new QueryWrapper<CompanySpecial>().eq(CompanySpecial.COMPANY_ID, companyId));
+    SpecialDeduction specialDeduction = specialDeductionMapper.selectOne(new QueryWrapper<SpecialDeduction>().like(SpecialDeduction.NAME, "公积金"));
+    for (CompanySpecial companySpecial : companySpecialList){
+      TaxSpecial taxSpecial = taxSpecialMapper.selectOne(new QueryWrapper<TaxSpecial>().eq(TaxSpecial.TAX_ID, tax.getId()).eq(TaxSpecial.SPECIAL_DEDU_ID, companySpecial.getSpecialId()));
+      if (specialDeduction.getId().equals(companySpecial.getSpecialId())){
+        if(taxSpecial != null) {
+          taxSpecial.setUpdater(SecurityKit.currentId()).setUpdateTime(date).setCompanyMoney(fundBase.multiply(fundPer))
+            .setPersonalMoney(fundBase.multiply(fundPer)).setCompanyPercent(fundPer).setPersonalPercent(fundPer);
+          taxSpecialMapper.updateById(taxSpecial);
+        } else {
+          taxSpecial = new TaxSpecial();
+          taxSpecial.setUpdater(SecurityKit.currentId()).setUpdateTime(date).setCompanyMoney(fundBase.multiply(fundPer))
+            .setPersonalMoney(fundBase.multiply(fundPer)).setCompanyPercent(fundPer).setPersonalPercent(fundPer)
+            .setTaxId(tax.getId()).setSpecialDeduId(companySpecial.getSpecialId());
+          taxSpecialMapper.insert(taxSpecial);
+        }
+      } else {
+        if (taxSpecial != null) {
+          BigDecimal companyPer = companySpecial.getCompanyPer();
+          BigDecimal personPer = companySpecial.getPersonPer();
+          taxSpecial.setUpdateTime(date).setUpdater(SecurityKit.currentId()).setCompanyMoney(socialBase.multiply(companyPer))
+            .setPersonalMoney(socialBase.multiply(personPer)).setCompanyPercent(companyPer).setPersonalPercent(personPer);
+          taxSpecialMapper.updateById(taxSpecial);
+        } else {
+          BigDecimal companyPer = companySpecial.getCompanyPer();
+          BigDecimal personPer = companySpecial.getPersonPer();
+          taxSpecial = new TaxSpecial();
+          taxSpecial.setUpdateTime(date).setUpdater(SecurityKit.currentId()).setCompanyMoney(socialBase.multiply(companyPer))
+            .setPersonalMoney(socialBase.multiply(personPer)).setCompanyPercent(companyPer).setPersonalPercent(personPer)
+            .setTaxId(tax.getId()).setSpecialDeduId(companySpecial.getSpecialId());
+          taxSpecialMapper.insert(taxSpecial);
+        }
       }
     }
   }

@@ -41,7 +41,7 @@ public class PersonInfoController {
 
   @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/findSallary")
-  @ApiOperation("查看工资条")
+  @ApiOperation("员工查看工资条")
   public Result findSallary(@RequestBody @Valid SallaryForm sallaryForm){
     return personInfoService.findSallary(sallaryForm);
   }

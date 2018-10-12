@@ -150,13 +150,13 @@ public class ExcelService {
             CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, companyId).eq(CompanyUser.MEMBER_ID, memberId));
             CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUser.getId());
             if (companyUserInfo != null) {
-              if(fundBase !=null){
+              if (fundBase != null) {
                 companyUserInfo.setFundBase(new BigDecimal(fundBase.toString()));
               }
-              if (fundPer != null){
+              if (fundPer != null) {
                 companyUserInfo.setFundPer(new BigDecimal(fundPer.toString()));
               }
-              if(socialBase != null){
+              if (socialBase != null) {
                 companyUserInfo.setSocialBase(new BigDecimal(socialBase.toString()));
               }
               companyUserInfoMapper.updateById(companyUserInfo);
@@ -172,12 +172,15 @@ public class ExcelService {
                 .setStatus(TaxStatus.NEED_CONFIRM.getCode());
               taxMapper.insert(tax);
             }
-            if(!key.toString().contains("*")) {
+            if (!key.toString().contains("*")) {
               Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.NAME, key.toString()));
               Long itemId = attribute.getItemId();
               Integer tableName = attribute.getTableName();
               String value = m.get(key).toString();
-              attendanceService.insertOrUpdate(tableName, itemId, new Date(), value, tax, new BigDecimal(socialBase.toString()), new BigDecimal(fundBase.toString()), new BigDecimal(fundPer.toString()), companyId);
+              attendanceService.insertOrUpdate(tableName, itemId, date, value, tax);
+            }
+            if (socialBase != null && fundBase != null && fundPer != null) {
+              attendanceService.insertOrUpdate(new BigDecimal(socialBase.toString()), new BigDecimal(fundBase.toString()), new BigDecimal(fundPer.toString()), companyId, date, tax);
             }
           }
         }
