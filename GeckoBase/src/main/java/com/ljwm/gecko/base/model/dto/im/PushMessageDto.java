@@ -1,4 +1,4 @@
-package com.ljwm.gecko.im.model.dto;
+package com.ljwm.gecko.base.model.dto.im;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.ljwm.gecko.base.entity.PushMessage;

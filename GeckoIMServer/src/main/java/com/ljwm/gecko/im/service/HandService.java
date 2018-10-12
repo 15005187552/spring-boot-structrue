@@ -131,6 +131,7 @@ public class HandService {
     JSONObject pushMessage = message.getJSONObject("pushMessage");
     Integer type = message.getInteger("type");
     if (Objects.equals(type,LoginType.WX_APP.getCode())) {
+      // todo 优化报错
       mpTemplateService.sendSimple(message.getLong("receiverId"),
         pushMessage.getJSONObject("message").getString("templateString"),
         (Kv) BeanUtil.beanToMap(pushMessage.getJSONObject("message").getJSONObject("wxParams"))

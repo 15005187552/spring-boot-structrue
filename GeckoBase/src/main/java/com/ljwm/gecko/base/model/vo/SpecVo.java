@@ -16,4 +16,5 @@ public class SpecVo extends Spec {
   private List<SpecItemSimpleVo> specItemSimpleVoList;
 
   private List<SpecVo> children;
+  private Spec parent;
 }

@@ -5,10 +5,15 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.PushMessage;
+import com.ljwm.gecko.base.entity.PushMessageType;
 import com.ljwm.gecko.base.entity.SocketInfo;
+import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.enums.SocketStatusEnum;
 import com.ljwm.gecko.base.mapper.PushMessageMapper;
+import com.ljwm.gecko.base.mapper.PushMessageTypeMapper;
 import com.ljwm.gecko.base.mapper.SocketInfoMapper;
+import com.ljwm.gecko.base.model.dto.im.MessageDto;
+import com.ljwm.gecko.base.model.dto.im.PushMessageDto;
 import com.ljwm.gecko.base.packet.Packet;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * MessageService  Created by yunqisong on 2018/9/24.
@@ -42,63 +48,85 @@ public class MessageService {
   public static final String PUSH_MESSAGE = "PUSH_MESSAGE";       // 推送消息
 
 
-  @Autowired
-  private CommonService commonService;
 
   @Autowired
-  private SocketInfoMapper socketInfoMapper;
+  private PushMessageTypeMapper pushMessageTypeMapper;
 
   @Autowired
   private PushMessageMapper pushMessageMapper;
 
-
   @Autowired
-  private KafkaTemplate<String, String> kafkaTemplate;
-
+  private MessageService pushService;
 
   /**
-   * 给Adnmin推送消息
-   *
-   * @param adminId
-   * @param message
+   * 推送消息
+   * @param messageDto
    */
   @Transactional
-  public void pushMessageToAdmin(Long adminId, String message) {
+  public void pushMessage(MessageDto messageDto) {
 
-    DateTime now = DateTime.now();
+    // 存储信息
+    PushMessage pushMessage = new PushMessage();
+    pushMessage.setMessage(messageDto.getMessage())
+      .setRecevierId(messageDto.getReceiverId())
+      .setCreateTime(DateTime.now());
 
-    log.info("Push Time : {}", now);
+    pushMessageMapper.insert(pushMessage);
 
-    log.info("Check Admin Socket Status, Admin Id : {}", adminId);
+    for (LoginType loginType : messageDto.getLoginType()) {
+      // 存储 信息 接收端类型
+      PushMessageType pushMessageType = new PushMessageType();
+      pushMessageType.setPushMessageId(pushMessage.getId())
+        .setType(loginType.getCode())
+        .setStatus(0);
 
-    List<SocketInfo> socketInfo
-      = socketInfoMapper.selectList(
-      new QueryWrapper<SocketInfo>()
-        .eq(SocketInfo.TARGET_TABLE, "t_admin")
-        .eq(SocketInfo.TARGET_ID, adminId)
-        .eq(SocketInfo.STATUS, SocketStatusEnum.ON_LINE.getCode())
-    );
+      pushMessageTypeMapper.insert(pushMessageType);
 
-    log.info("OnLine Count : {}", socketInfo.size());
-    PushMessage pushMessage
-      = new PushMessage()
-//      .setType(1)                         // TODO: 根据业务逻辑写枚举进行划分
-      .setCreateTime(now)                 // 创建时间
-      .setMessage(message)                // 消息 可以自己去拓展标题字段
-      .setRecevierId(adminId)             // 接受者ID
-      ;
+      // 查询在线状态
+      List<SocketInfo> socketInfos = getSocketInfos(messageDto.getReceiverId(),loginType.getCode());
 
-    commonService.insertOrUpdate(pushMessage, pushMessageMapper);
-
-    log.info("PushMessage : {}", pushMessage);
-
-    if (socketInfo.size() > 0) {
-
-      kafkaTemplate.send(TOPIC_PUSH_TO_ADMIN, JSON.toJSONString(Packet.create(TOPIC_PUSH_TO_ADMIN, pushMessage)));
-
-      log.info("Send To Kafka Message Queue Successfully !");
+      if (Objects.equals(pushMessageType.getType(),LoginType.WX_APP.getCode()) ||
+        socketInfos.size() > 0) {
+        pushService.sendMessage(pushMessage,pushMessageType,MessageService.PUSH_MESSAGE);
+      }
     }
+  }
 
+  @Autowired
+  private KafkaTemplate kafkaTemplate;
+
+  /**
+   * kafka推送
+   * @param pushMessage
+   * @param pushMessageType
+   * @param topic
+   */
+  @Transactional
+  public void sendMessage(PushMessage pushMessage,PushMessageType pushMessageType,String topic) {
+    kafkaTemplate.send(topic,JSON.toJSONString(
+      Packet.create(topic,new PushMessageDto(pushMessageType,pushMessage))
+    ));
+    log.info("Send To Kafka Message Queue Successfully !");
+
+    pushMessageTypeMapper.updateById(pushMessageType.setStatus(1).setPushTime(DateTime.now()));
+    log.info("Message:{} 状态修改成功",pushMessage.getId());
+  }
+
+  @Autowired
+  private SocketInfoMapper socketInfoMapper;
+
+  /**
+   * 获取在线状态
+   * @param id
+   * @param loginCode
+   * @return
+   */
+  public List<SocketInfo> getSocketInfos(Long id,Integer loginCode) {
+    return socketInfoMapper.selectList(
+      new QueryWrapper<SocketInfo>()
+        .eq(SocketInfo.CHANNEL,loginCode)
+        .eq(SocketInfo.TARGET_ID,id)
+    );
   }
 }
 
