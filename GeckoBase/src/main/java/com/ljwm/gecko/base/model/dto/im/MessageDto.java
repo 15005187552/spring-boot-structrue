@@ -17,7 +17,7 @@ import java.util.List;
 @ApiModel("消息体")
 public class MessageDto {
 
-  @ApiModelProperty("接收着 ID")
+  @ApiModelProperty("接收者 ID")
   private Long receiverId;
 
   @ApiModelProperty("接收者类型 MOBILE 和 WX_APP 即是用户客户端版登陆")

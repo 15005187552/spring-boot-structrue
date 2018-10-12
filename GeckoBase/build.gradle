@@ -19,4 +19,7 @@ dependencies {
 
   // WeiXin SDK
   compile('com.jfinal:jfinal-weixin:1.9')
+
+  // Aliyun4j
+  compile('com.ljwm:aliyun4j-spring-boot-starter:1.0.0-SNAPSHOT')
 }

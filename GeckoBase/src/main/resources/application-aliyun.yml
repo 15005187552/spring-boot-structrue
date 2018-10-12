@@ -1,0 +1,14 @@
+aliyun:
+  accessKeyId: LTAIX27fl9cmQ9TR
+  accessKeySecret: lMkLOzqiotP0K73Oe60l67yuAF6UWg
+  sms:
+    enabled: true
+    accessKeyId: LTAIX27fl9cmQ9TR
+    accessKeySecret: lMkLOzqiotP0K73Oe60l67yuAF6UWg
+    signName: 阿里云短信测试专用
+    puller:
+      reportListener:
+        queueName: Alicom-Queue-1701292592213185-SmsReport
+        className: com.ljwm.demo.listener.SmsReportListener
+      conf:
+        threadQueueSize: 30

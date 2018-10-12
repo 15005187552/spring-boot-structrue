@@ -261,7 +261,7 @@ public class AttendanceService {
         return Result.success(null);
       }
       taxListVo.setIdCard(naturalPerson.getCertNum()).setName(naturalPerson.getName()).setCertificate(naturalPerson.getCertificate()).
-        setSocialBase(companyUserInfo.getSocialBase().toString()).setFundBase(companyUserInfo.getFundBase().toString()).setFundPer(companyUserInfo.getFundPer().toString());
+        setSocialBase(companyUserInfo.getSocialBase()!=null?companyUserInfo.getSocialBase().toString():null).setFundBase(companyUserInfo.getFundBase()!=null?companyUserInfo.getFundBase().toString():null).setFundPer(companyUserInfo.getFundPer()!=null?companyUserInfo.getFundPer().toString():null);
       taxListVo.setAttendanceTaxVo(taxDeclarationService.findTaxInfo(taxListVo.getId()));
     }
     return Result.success(page);
