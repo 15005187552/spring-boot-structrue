@@ -1,6 +1,7 @@
 package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Result;
@@ -11,15 +12,18 @@ import com.ljwm.gecko.base.enums.CertificateType;
 import com.ljwm.gecko.base.enums.TableNameEnum;
 import com.ljwm.gecko.base.enums.TaxStatus;
 import com.ljwm.gecko.base.mapper.*;
-import com.ljwm.gecko.base.model.vo.TaxListVo;
+import com.ljwm.gecko.base.model.vo.*;
 import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.client.model.dto.AttendanceForm;
 import com.ljwm.gecko.client.model.dto.TaxFindForm;
+import com.ljwm.gecko.client.model.vo.AttendanceData;
+import com.ljwm.gecko.client.model.vo.AttendanceTaxVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -263,4 +267,76 @@ public class AttendanceService {
     return Result.success(page);
   }
 
+
+  public Result findAttendanceVoList(TaxFindForm taxFindForm) {
+    excelService.isHasProperty(taxFindForm.getCompanyId());
+    Page<AttendanceTaxVo> page = commonService.find(taxFindForm, (p, q) -> taxMapper.selectTaxVoList(p, BeanUtil.beanToMap(taxFindForm)));
+    List<AttendanceTaxVo> list = page.getRecords();
+    for (AttendanceTaxVo attendanceTaxVo :list){
+      Long memberId = attendanceTaxVo.getMemberId();
+      CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, taxFindForm.getCompanyId()).eq(CompanyUser.MEMBER_ID, memberId));
+      CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUser.getId());
+      NaturalPerson naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.MEMBER_ID, memberId));
+      if(companyUserInfo == null || naturalPerson == null){
+        return Result.success(null);
+      }
+      attendanceTaxVo.setIdCard(naturalPerson.getCertNum()).setName(naturalPerson.getName()).setCertificate(naturalPerson.getCertificate()).
+        setSocialBase(companyUserInfo.getSocialBase().toString()).setFundBase(companyUserInfo.getFundBase().toString()).setFundPer(companyUserInfo.getFundPer().toString());
+      attendanceTaxVo.setDataList(getList(attendanceTaxVo.getId()));
+    }
+    return Result.success(page);
+  }
+
+  public List<AttendanceData> getList(Long taxId) {
+    List<AttendanceData> list = new ArrayList<>();
+    List<Attendance> attendanceList = attendanceMapper.selectList(new QueryWrapper<Attendance>().eq(Attendance.TAX_ID, taxId));
+    List<TaxIncome> taxIncomeList = taxIncomeMapper.selectList(new QueryWrapper<TaxIncome>().eq(TaxIncome.TAX_ID, taxId));
+    List<TaxSpecialAdd> taxSpecialAddList = taxSpecialAddMapper.selectList(new QueryWrapper<TaxSpecialAdd>().eq(TaxSpecialAdd.TAX_ID, taxId));
+    List<TaxOtherReduce> taxOtherReduceList = taxOtherReduceMapper.selectList(new QueryWrapper<TaxOtherReduce>().eq(TaxOtherReduce.TAX_ID, taxId));
+    if (CollectionUtil.isNotEmpty(attendanceList)) {
+      for (Attendance attendance : attendanceList) {
+        Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_ATTENDANCE.getCode())
+          .eq(Attribute.ITEM_ID, attendance.getId()));
+        if (attribute != null) {
+          AttendanceData attendanceData = new AttendanceData();
+          attendanceData.setId(attribute.getId()).setValue(attendance.getValue());
+          list.add(attendanceData);
+        }
+      }
+    }
+    if (CollectionUtil.isNotEmpty(taxIncomeList)) {
+      for (TaxIncome taxIncome : taxIncomeList) {
+        Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_INCOME_TYPE.getCode())
+          .eq(Attribute.ITEM_ID, taxIncome.getId()));
+        if (attribute != null) {
+          AttendanceData attendanceData = new AttendanceData();
+          attendanceData.setId(attribute.getId()).setValue(taxIncome.getIncome().toString());
+          list.add(attendanceData);
+        }
+      }
+    }
+    if (CollectionUtil.isNotEmpty(taxSpecialAddList)) {
+      for (TaxSpecialAdd taxSpecialAdd : taxSpecialAddList) {
+        Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_ADD_SPECIAL.getCode())
+          .eq(Attribute.ITEM_ID, taxSpecialAdd.getId()));
+        if (attribute != null) {
+          AttendanceData attendanceData = new AttendanceData();
+          attendanceData.setId(attribute.getId()).setValue(taxSpecialAdd.getTaxMoney().toString());
+          list.add(attendanceData);
+        }
+      }
+    }
+    if (CollectionUtil.isNotEmpty(taxOtherReduceList)) {
+      for (TaxOtherReduce taxOtherReduce : taxOtherReduceList) {
+        Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_OTHER_REDUCE.getCode())
+          .eq(Attribute.ITEM_ID, taxOtherReduce.getId()));
+        if (attribute != null) {
+          AttendanceData attendanceData = new AttendanceData();
+          attendanceData.setId(attribute.getId()).setValue(taxOtherReduce.getTaxMoney().toString());
+          list.add(attendanceData);
+        }
+      }
+    }
+    return list;
+  }
 }

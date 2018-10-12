@@ -42,4 +42,10 @@ public class AttendanceController {
     return attendanceService.findAttendanceList(taxFindForm);
   }
 
+  @PostMapping("/findAttendanceVoList")
+  @ApiOperation("获取工资考勤信息")
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
+  public Result findAttendanceVoList(@RequestBody TaxFindForm taxFindForm){
+    return attendanceService.findAttendanceVoList(taxFindForm);
+  }
 }

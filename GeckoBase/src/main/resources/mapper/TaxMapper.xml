@@ -20,7 +20,7 @@
           `ID`          ,`MEMBER_ID`          ,`DECLARE_TYPE`          ,`DECLARE_TIME`          ,`BEFORE_TAX`          ,`AFTER_TAX`          ,`STATUS`          ,`CREATE_TIME`          ,`UPDATE_TIME`
     </sql>
 
-  <resultMap id="TaxInfoMap" type="com.ljwm.gecko.base.model.vo.TaxListVo" extends="BaseResultMap">
+  <resultMap id="TaxInfoMap" type="com.ljwm.gecko.client.model.vo.AttendanceTaxVo" extends="BaseResultMap">
   </resultMap>
 
   <resultMap id="NaturalResultMap" type="com.ljwm.gecko.base.model.vo.NaturalPersonTaxVo">
