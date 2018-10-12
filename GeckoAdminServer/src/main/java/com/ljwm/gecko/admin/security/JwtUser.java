@@ -18,11 +18,16 @@ import java.util.Map;
 @Data
 @Accessors(chain = true)
 @AllArgsConstructor
+@SuppressWarnings("unchecked")
 public class JwtUser implements IJwtAndSecurityAble {
 
   private AdminDto admin;
 
   private Collection<? extends GrantedAuthority> grantedAuthorities;
+
+  public JwtUser(AdminDto admin){
+    this.admin = admin;
+  }
 
   @Override
   public <T extends Serializable> T getId() {

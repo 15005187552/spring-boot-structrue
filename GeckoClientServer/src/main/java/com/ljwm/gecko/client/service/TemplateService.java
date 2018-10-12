@@ -201,8 +201,15 @@ public class TemplateService {
       List<CompanyUserInfo> companyUserList = companyUserInfoMapper.selectCompanyUser(companyDto.getCompanyId(), naturalPerson.getMemberId());
       if (CollectionUtil.isNotEmpty(companyUserList)){
         CompanyUserInfo companyUserInfo = companyUserList.get(0);
-        attendanceExcelVo.setFundBase(companyUserInfo.getFundBase().toString()).setFundPer(companyUserInfo.getFundPer().toString())
-          .setSocialBase(companyUserInfo.getSocialBase().toString());
+        if(companyUserInfo.getFundBase() != null){
+          attendanceExcelVo.setFundBase(companyUserInfo.getFundBase().toString());
+        }
+        if (companyUserInfo.getFundPer() != null){
+          attendanceExcelVo.setFundPer(companyUserInfo.getFundPer().toString());
+        }
+        if (companyUserInfo.getSocialBase() != null){
+          attendanceExcelVo.setSocialBase(companyUserInfo.getSocialBase().toString());
+        }
       }
       dataList.add(attendanceExcelVo);
     }

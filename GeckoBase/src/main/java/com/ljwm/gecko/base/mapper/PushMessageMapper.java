@@ -2,6 +2,7 @@ package com.ljwm.gecko.base.mapper;
 
 import com.ljwm.gecko.base.entity.PushMessage;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author YunQiSong
  * @since 2018-09-24
  */
+@Repository
 public interface PushMessageMapper extends BaseMapper<PushMessage> {
 
 }

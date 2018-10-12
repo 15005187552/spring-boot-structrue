@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Levis
@@ -71,6 +71,10 @@ public class OrderPayInfo implements Serializable {
     @ApiModelProperty(value = "支付金额")
     @TableField("`PAY_AMOUNT`")
     private BigDecimal payAmount;
+
+    @ApiModelProperty(value = "支付时间")
+    @TableField("`PAYMENT_TIME`")
+    private Date paymentTime;
 
 
     public static final String ID = "`ID`";

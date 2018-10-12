@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
+
 /**
  * @author Janiffy
  * @date 2018/9/5 17:07
@@ -18,7 +20,7 @@ public class TaxOtherReduceForm {
   private Long otherReduceId;
 
   @ApiModelProperty(value = "个人缴纳金额")
-  private String taxMoney;
+  private BigDecimal taxMoney;
 
   @ApiModelProperty(value = "缴纳证明路径")
   private String taxDocPath;

@@ -1,11 +1,7 @@
-package com.ljwm.gecko.base.service;
-import com.jfinal.weixin.sdk.api.ApiConfig;
-import com.jfinal.weixin.sdk.api.ApiConfigKit;
-import com.jfinal.weixin.sdk.api.ApiResult;
+package com.ljwm.gecko.im.service;
+
 import com.jfinal.wxaapp.WxaConfig;
 import com.jfinal.wxaapp.WxaConfigKit;
-import com.jfinal.wxaapp.api.WxaTemplate;
-import com.jfinal.wxaapp.api.WxaTemplateApi;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.FormId;
 import com.ljwm.gecko.base.entity.MemberAccount;
@@ -13,12 +9,12 @@ import com.ljwm.gecko.base.enums.FormIdStatusEnum;
 import com.ljwm.gecko.base.enums.MPTemplateEnum;
 import com.ljwm.gecko.base.mapper.FormIdMapper;
 import com.ljwm.gecko.base.mapper.MemberAccountMapper;
-import com.ljwm.gecko.base.utils.FunctionUtil;
 import com.ljwm.gecko.base.utils.TemplateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -42,10 +38,10 @@ public class MPTemplateService {
 
   public Boolean send(Long memberId, MPTemplateEnum mpTemplateEnum, Kv kv) {
     // 1配置(可在启动时配置)
-    ApiConfig apiConfig = new ApiConfig();
-    apiConfig.setAppId(appId);
-    apiConfig.setAppSecret(appSecret);
-    ApiConfigKit.putApiConfig(apiConfig);
+    WxaConfig wxaConfig = new WxaConfig();
+    wxaConfig.setAppId(appId);
+    wxaConfig.setAppSecret(appSecret);
+    WxaConfigKit.setWxaConfig(wxaConfig);
     // 2数据
     // 2.1 模版id
     String formId = checkFormId(memberId);
@@ -59,6 +55,27 @@ public class MPTemplateService {
     }
     // 3发送
     return TemplateUtil.doSend(formId,openId,mpTemplateEnum.getTemplateId(),kv);
+  }
+
+  public Boolean sendSimple(Long memberId,String mpTemplateEnum,Kv kv) {
+    // 1配置(可在启动时配置)
+    WxaConfig wxaConfig = new WxaConfig();
+    wxaConfig.setAppId(appId);
+    wxaConfig.setAppSecret(appSecret);
+    WxaConfigKit.setWxaConfig(wxaConfig);
+    // 2数据
+    // 2.1 模版id
+    String formId = checkFormId(memberId);
+    if (formId == null) {
+      return false;
+    }
+    // 2.2 用户openid
+    String openId = getOpenid(memberId);
+    if (openId == null) {
+      return false;
+    }
+    // 3发送
+    return TemplateUtil.doSend(formId,openId,mpTemplateEnum,kv);
   }
 
   /**

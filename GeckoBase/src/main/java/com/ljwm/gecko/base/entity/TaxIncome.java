@@ -1,19 +1,21 @@
 package com.ljwm.gecko.base.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import com.baomidou.mybatisplus.annotation.IdType;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import java.io.Serializable;
+
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
-import java.util.Date;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
@@ -21,14 +23,12 @@ import java.util.Date;
  * </p>
  *
  * @author Levis
- * @since 2018-09-05
+ * @since 2018-10-11
  */
 @Data
 @SuppressWarnings("ALL")
 @Accessors(chain = true)
 @TableName("`t_tax_income`")
-@AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value = "报税数据收入表", subTypes = {TaxIncome.class})
 public class TaxIncome implements Serializable {
@@ -62,7 +62,7 @@ public class TaxIncome implements Serializable {
 
     @ApiModelProperty(value = "收入金额")
     @TableField("`INCOME`")
-    private String income;
+    private BigDecimal income;
 
 
     public static final String ID = "`ID`";

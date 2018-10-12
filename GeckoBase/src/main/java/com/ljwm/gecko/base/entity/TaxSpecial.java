@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.entity;
 
+import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
@@ -8,8 +9,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,7 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author Levis
- * @since 2018-09-06
+ * @since 2018-10-11
  */
 @Data
 @SuppressWarnings("ALL")
@@ -47,19 +50,19 @@ public class TaxSpecial implements Serializable {
 
     @ApiModelProperty(value = "个人缴纳金额")
     @TableField("`PERSONAL_MONEY`")
-    private String personalMoney;
+    private BigDecimal personalMoney;
 
     @ApiModelProperty(value = "单位纳税金额")
     @TableField("`COMPANY_MONEY`")
-    private String companyMoney;
+    private BigDecimal companyMoney;
 
     @ApiModelProperty(value = "个人缴纳比例")
     @TableField("`PERSONAL_PERCENT`")
-    private String personalPercent;
+    private BigDecimal personalPercent;
 
     @ApiModelProperty(value = "单位缴纳比例")
     @TableField("`COMPANY_PERCENT`")
-    private String companyPercent;
+    private BigDecimal companyPercent;
 
     @ApiModelProperty(value = "创建时间")
     @TableField("`CREATE_TIME`")

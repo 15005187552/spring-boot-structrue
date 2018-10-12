@@ -3,6 +3,7 @@ package com.ljwm.gecko.base.mapper;
 import com.ljwm.gecko.base.entity.ProviderUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import java.util.Map;
  * @author xixil
  * @since 2018-09-14
  */
+@Repository
 public interface ProviderUserMapper extends BaseMapper<ProviderUser> {
     void delete(@Param("providerId") Long providerId);
 

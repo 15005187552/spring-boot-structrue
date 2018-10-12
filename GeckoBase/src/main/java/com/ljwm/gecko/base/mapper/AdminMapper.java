@@ -7,6 +7,7 @@ import com.ljwm.gecko.base.entity.Function;
 import com.ljwm.gecko.base.model.dto.AdminDto;
 import com.ljwm.gecko.base.model.vo.AdminVo;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import java.util.Map;
  * @author xixil
  * @since 2018-08-23
  */
+@Repository
 public interface AdminMapper extends BaseMapper<Admin> {
 
   @Select("SELECT * FROM `t_admin` WHERE `USERNAME` = #{username} LIMIT 0,1")

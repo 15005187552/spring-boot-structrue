@@ -1,5 +1,6 @@
 package com.ljwm.gecko.im.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.ReflectUtil;
@@ -7,11 +8,14 @@ import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
+import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.kit.SpringKit;
 import com.ljwm.bootbase.kit.UtilKit;
+import com.ljwm.gecko.base.entity.PushMessage;
 import com.ljwm.gecko.base.entity.SocketInfo;
+import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.mapper.SocketInfoMapper;
 import com.ljwm.gecko.base.service.MessageService;
 import com.ljwm.gecko.im.ws.ShowcaseWsMsgHandler;
@@ -118,8 +122,27 @@ public class HandService {
     tioSendHandle(message,message.getString("receiverId"));
   }
 
+  @Autowired
+  private MPTemplateService mpTemplateService;
+
+  @KafkaListener(topics = MessageService.PUSH_MESSAGE)
+  public void HandPushMessage(ConsumerRecord<?, ?> record) {
+    JSONObject message = getMesage(record);
+    JSONObject pushMessage = message.getJSONObject("pushMessage");
+    Integer type = message.getInteger("type");
+    if (Objects.equals(type,LoginType.WX_APP.getCode())) {
+      mpTemplateService.sendSimple(message.getLong("receiverId"),
+        pushMessage.getJSONObject("message").getString("templateString"),
+        (Kv) BeanUtil.beanToMap(pushMessage.getJSONObject("message").getJSONObject("wxParams"))
+      );
+    } else {
+      tioSendHandle(message,pushMessage.getString("receiverId") + "_" + message.getString("type"));
+    }
+  }
+
   /**
    * 解析监听数据
+   *
    * @param record
    * @return
    */
@@ -131,6 +154,7 @@ public class HandService {
 
   /**
    * tio 分发
+   *
    * @param message
    * @param id
    */

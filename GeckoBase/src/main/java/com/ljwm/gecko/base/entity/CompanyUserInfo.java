@@ -75,7 +75,7 @@ public class CompanyUserInfo implements Serializable {
 
     @ApiModelProperty(value = "城市编码")
     @TableField("`WORK_CITY`")
-    private Integer workCity;
+    private String workCity;
 
     @ApiModelProperty(value = "婚姻状况")
     @TableField("`MARITAL_STATUS`")

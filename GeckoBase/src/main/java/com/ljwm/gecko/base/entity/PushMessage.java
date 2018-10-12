@@ -21,8 +21,8 @@ import io.swagger.annotations.ApiModelProperty;
  * 推送消息表
  * </p>
  *
- * @author YunQiSong
- * @since 2018-09-24
+ * @author xixil
+ * @since 2018-10-11
  */
 @Data
 @SuppressWarnings("ALL")
@@ -47,25 +47,9 @@ public class PushMessage implements Serializable {
     @TableField("`RECEVIER_ID`")
     private Long recevierId;
 
-    @ApiModelProperty(value = "消息类型（不同类型映射接受者查询不同的表）")
-    @TableField("`TYPE`")
-    private Integer type;
-
-    @ApiModelProperty(value = "状态（推送状态枚举）")
-    @TableField("`STATUS`")
-    private Integer status;
-
     @ApiModelProperty(value = "创建时间")
     @TableField("`CREATE_TIME`")
     private Date createTime;
-
-    @ApiModelProperty(value = "推送时间")
-    @TableField("`PUSH_TIME`")
-    private Date pushTime;
-
-    @ApiModelProperty(value = "阅读时间")
-    @TableField("`READ_TIME`")
-    private Date readTime;
 
 
     public static final String ID = "`ID`";
@@ -74,14 +58,6 @@ public class PushMessage implements Serializable {
 
     public static final String RECEVIER_ID = "`RECEVIER_ID`";
 
-    public static final String TYPE = "`TYPE`";
-
-    public static final String STATUS = "`STATUS`";
-
     public static final String CREATE_TIME = "`CREATE_TIME`";
-
-    public static final String PUSH_TIME = "`PUSH_TIME`";
-
-    public static final String READ_TIME = "`READ_TIME`";
 
 }

@@ -69,6 +69,9 @@ public class ClientProviderService {
   @Autowired
   private CommonService commonService;
 
+  @Autowired
+  private OrderMapper orderMapper;
+
   @Transactional
   public void saveProvider(ProviderDto providerDto) {
     //申请个人
@@ -371,5 +374,9 @@ public class ClientProviderService {
     page.setRecords(page.getRecords().stream().collect(Collectors.toList())
     );
     return page;
+  }
+
+  public Integer findProviderOrderCount(Long providerId){
+    return orderMapper.findProviderOrderCount(providerId);
   }
 }

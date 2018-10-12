@@ -7,6 +7,7 @@ import com.ljwm.bootbase.security.LoginInfoHolder;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.gecko.admin.model.form.LoginForm;
 import com.ljwm.gecko.admin.service.AuthService;
+import com.ljwm.gecko.base.enums.LoginType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class AuthController extends BaseController {
   @ApiOperation("登录接口")
   public Result login(@RequestBody LoginForm loginForm) {
 
-    LoginInfoHolder.setLoginType(loginType);
+    LoginInfoHolder.setLoginType(LoginType.ADMIN.getCode().toString());
 
     return success(authService.login(loginForm));
   }

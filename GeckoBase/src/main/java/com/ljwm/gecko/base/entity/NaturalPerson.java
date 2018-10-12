@@ -60,15 +60,15 @@ public class NaturalPerson implements Serializable {
 
     @ApiModelProperty(value = "省")
     @TableField("`PROVINCE`")
-    private Integer province;
+    private String province;
 
     @ApiModelProperty(value = "城市")
     @TableField("`CITY`")
-    private Integer city;
+    private String city;
 
     @ApiModelProperty(value = "区")
     @TableField("`AREA`")
-    private Integer area;
+    private String area;
 
     @ApiModelProperty(value = "详细地址")
     @TableField("`ADDRESS`")

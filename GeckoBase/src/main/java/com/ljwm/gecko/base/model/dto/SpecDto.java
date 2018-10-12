@@ -1,6 +1,7 @@
 package com.ljwm.gecko.base.model.dto;
 
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -19,4 +20,10 @@ public class SpecDto {
 
   @ApiModelProperty(value = "排序")
   private Integer sort;
+
+  @ApiModelProperty("父节点")
+  private Integer pid;
+
+  @ApiModelProperty("级别")
+  private Integer level;
 }

@@ -2,6 +2,7 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.client.model.dto.PersonInfoForm;
+import com.ljwm.gecko.client.model.dto.SallaryForm;
 import com.ljwm.gecko.client.security.JwtUser;
 import com.ljwm.gecko.client.service.PersonInfoService;
 import io.swagger.annotations.Api;
@@ -36,6 +37,13 @@ public class PersonInfoController {
   @ApiOperation("查看个人信息")
   public Result commit(@RequestParam("memberId")Long memberId){
     return personInfoService.findByMemberId(memberId);
+  }
+
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
+  @PostMapping("/findSallary")
+  @ApiOperation("查看工资条")
+  public Result findSallary(@RequestBody @Valid SallaryForm sallaryForm){
+    return personInfoService.findSallary(sallaryForm);
   }
 
 }

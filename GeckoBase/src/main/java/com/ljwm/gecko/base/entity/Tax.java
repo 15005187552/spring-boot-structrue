@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -19,7 +20,7 @@ import java.util.Date;
  * </p>
  *
  * @author Levis
- * @since 2018-10-10
+ * @since 2018-10-11
  */
 @Data
 @SuppressWarnings("ALL")
@@ -48,6 +49,14 @@ public class Tax implements Serializable {
     @TableField("`DECLARE_TIME`")
     private String declareTime;
 
+    @ApiModelProperty(value = "税前金额")
+    @TableField("`BEFORE_TAX`")
+    private BigDecimal beforeTax;
+
+    @ApiModelProperty(value = "税后金额")
+    @TableField("`AFTER_TAX`")
+    private BigDecimal afterTax;
+
     @ApiModelProperty(value = "数据状态")
     @TableField("`STATUS`")
     private Integer status;
@@ -68,6 +77,10 @@ public class Tax implements Serializable {
     public static final String DECLARE_TYPE = "`DECLARE_TYPE`";
 
     public static final String DECLARE_TIME = "`DECLARE_TIME`";
+
+    public static final String BEFORE_TAX = "`BEFORE_TAX`";
+
+    public static final String AFTER_TAX = "`AFTER_TAX`";
 
     public static final String STATUS = "`STATUS`";
 

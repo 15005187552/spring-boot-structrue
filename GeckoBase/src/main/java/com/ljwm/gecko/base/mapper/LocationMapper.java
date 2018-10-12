@@ -28,13 +28,13 @@ public interface LocationMapper extends BaseMapper<Location> {
 
   @Select("SELECT * FROM `t_location` WHERE `CODE`=#{code}")
   @ResultMap("BaseResultMap")
-  Location findByCode(Integer code);
+  Location findByCode(String code);
 
   @Select("SELECT * FROM t_location WHERE LEVEL = \"0\"")
   List<Location> selectProvinceByLevel();
 
   @Select("SELECT * FROM t_location WHERE PCODE =#{code}")
-  List<Location> selectByCode(Integer code);
+  List<Location> selectByCode(String code);
 
   Location findCodeByName(@Param("params") Kv kv);
 

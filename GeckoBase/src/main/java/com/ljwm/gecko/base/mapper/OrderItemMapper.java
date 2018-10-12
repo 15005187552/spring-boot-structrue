@@ -6,6 +6,7 @@ import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.OrderItem;
 import com.ljwm.gecko.base.model.vo.OrderItemVo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
@@ -26,4 +27,7 @@ public interface OrderItemMapper extends BaseMapper<OrderItem> {
   List<OrderItemVo> findOrderItemVoList(@Param("orderNo") String orderNo);
 
   List<OrderItemVo> findOrderItemList(Page<OrderItemVo> ret, @Param("params") Map params);
+
+  @Update("UPDATE t_order_item SET STATUS=#{status} WHERE ORDER_NO=#{orderNo}")
+  int updateOrderItemStatus(@Param("orderNo") String orderNo,@Param("status") Integer status);
 }

@@ -35,7 +35,7 @@ public class TemplateUtil {
     log.info("send template message {}", wxaTemplate);
     WxaTemplateApi wxaTemplateApi = new WxaTemplateApi();
     return FunctionUtil.retryOnException(3, () -> {
-      ApiResult result = wxaTemplateApi.send(wxaTemplate);
+      ApiResult result = wxaTemplateApi.send(wxaTemplate.build());
       log.info("send template message response {}",result);
       return result.isSucceed();
     });

@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
+@SuppressWarnings("unchecked")
 public class Test {
   public static void main(String[] args) {
     List<String> keysList =new ArrayList();

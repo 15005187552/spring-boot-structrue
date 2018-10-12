@@ -11,12 +11,14 @@ import com.ljwm.gecko.base.entity.CustomerMessage;
 import com.ljwm.gecko.base.entity.CustomerSession;
 import com.ljwm.gecko.base.entity.ProviderUser;
 import com.ljwm.gecko.base.entity.SocketInfo;
+import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.enums.TableNameEnum;
 import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.packet.Packet;
 import com.ljwm.gecko.base.service.MessageService;
 import com.ljwm.gecko.im.annotations.DynamicAnnotation;
 import com.ljwm.gecko.im.enums.ChatSessionEnum;
+import com.ljwm.gecko.im.enums.CustomerEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -33,17 +35,17 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-@SuppressWarnings("all")
+@SuppressWarnings("unchecked")
 public class SessionDistributeService extends MessageService implements IDynamicAble {
+
+  @Autowired
+  private SessionDistributeService sessionDistributeService;
 
   @Autowired
   private CustomerMessageMapper customerMessageMapper;
 
   @Autowired
   private CustomerSessionMapper customerSessionMapper;
-
-  @Autowired
-  private SessionDistributeService sessionDistributeService;
 
   @Autowired
   private ProviderUserMapper providerUserMapper;
@@ -82,22 +84,16 @@ public class SessionDistributeService extends MessageService implements IDynamic
 
     // 4.发送信息个所有服务商下的用户，并存储消息
     for (Long proUserId : memberIds) {
+
+      // todo 切换 获取当前用户登陆在那个客户端
       // 4.1存储信息
-      CustomerMessage customerMessage = sessionDistributeService.insertCustomerMessage(proUserId,text,customerSession);
+      CustomerMessage customerMessage = sessionDistributeService.insertCustomerMessage(proUserId,text,customerSession,CustomerEnum.MEMBER);
 
       // 4.2 验证是否在线
       List<SocketInfo> socketInfo = getSocketInfos(proUserId);
 
       // 4.3 用户在线
-      if (socketInfo.size() > 0) {
-        // 4.3.1 发送kafka
-        kafkaTemplate.send(TOPIC_TO_PROVIDER,JSON.toJSONString(Packet.create(TOPIC_TO_PROVIDER,customerMessage)));
-        log.info("Send To Kafka Message Queue Successfully !");
-
-        // 4.3.2 修改message状态
-        customerMessageMapper.updateById(customerMessage.setStatus(1).setPushTime(DateTime.now()));
-        log.info("Message:{} 状态修改成功",customerMessage.getId());
-      }
+      sessionDistributeService.sendMessage(customerMessage,socketInfo,TOPIC_TO_PROVIDER);
     }
   }
 
@@ -129,14 +125,20 @@ public class SessionDistributeService extends MessageService implements IDynamic
     CustomerSession customerSession = sessionDistributeService.createOrUpdateSessiom(sessionId,providerId,memberId,guestId,receiverId);
 
     // 4.
-    CustomerMessage customerMessage = sessionDistributeService.insertCustomerMessage(receiverId,text,customerSession);
+    CustomerMessage customerMessage =
+      sessionDistributeService.insertCustomerMessage(receiverId,text,customerSession,guestId == null ? CustomerEnum.MEMBER : CustomerEnum.GUEST);
 
     // 5.
     List<SocketInfo> socketInfo = getSocketInfos(receiverId);
 
+    sessionDistributeService.sendMessage(customerMessage,socketInfo,TOPIC_TO_MEMBER);
+  }
+
+  @Transactional
+  public void sendMessage(CustomerMessage customerMessage,List<SocketInfo> socketInfo,String topicToMember) {
     if (socketInfo.size() > 0) {
       // 4.3.1 发送kafka
-      kafkaTemplate.send(TOPIC_TO_MEMBER,JSON.toJSONString(Packet.create(TOPIC_TO_MEMBER,customerMessage)));
+      kafkaTemplate.send(topicToMember,JSON.toJSONString(Packet.create(topicToMember,customerMessage)));
       log.info("Send To Kafka Message Queue Successfully !");
 
       // 4.3.2 修改message状态
@@ -165,12 +167,12 @@ public class SessionDistributeService extends MessageService implements IDynamic
   }
 
   @Transactional
-  public CustomerMessage insertCustomerMessage(Long receiverId,String text,CustomerSession customerSession) {
+  public CustomerMessage insertCustomerMessage(Long receiverId,String text,CustomerSession customerSession,CustomerEnum customerEnum) {
     CustomerMessage customerMessage = new CustomerMessage();
     customerMessage.setCustomerSessionId(customerSession.getId())
       .setText(text)
       .setCreateTime(DateTime.now())
-      .setReceiverType(2) //todo 枚举
+      .setReceiverType(customerEnum.getCode()) //todo 枚举
       .setReceiverId(receiverId)
       .setStatus(0); //todo 枚举
 
@@ -181,8 +183,9 @@ public class SessionDistributeService extends MessageService implements IDynamic
   public List<SocketInfo> getSocketInfos(Long id) {
     return socketInfoMapper.selectList(
       new QueryWrapper<SocketInfo>()
-        .eq(SocketInfo.TARGET_TABLE,TableNameEnum.T_PROVIDER.getCode())
         .eq(SocketInfo.TARGET_ID,id)
+        .and(wrapper -> wrapper.eq(SocketInfo.CHANNEL,LoginType.WX_APP.getCode()))
+        .or().eq(SocketInfo.CHANNEL,LoginType.MOBILE.getCode())
     );
   }
 }
