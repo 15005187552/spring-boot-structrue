@@ -312,7 +312,7 @@ public class ExcelService {
       BigDecimal annuity = taxOtherReduceMapper.selectTaxMoney(memberId, "年金", declareTime);
       BigDecimal commercialInsurance = taxOtherReduceMapper.selectTaxMoney(memberId, "商业健康保险费", declareTime);
       BigDecimal otherEntireInsurance = taxOtherReduceMapper.selectTaxMoney(memberId, "养老保险", declareTime);
-      normalSalaryVo.setAnnuity(annuity.toString()).setCommercialInsurance(commercialInsurance.toString()).setOtherEntireInsurance(otherEntireInsurance.toString());
+      normalSalaryVo.setAnnuity(annuity!=null?annuity.toString():null).setCommercialInsurance(commercialInsurance!=null?commercialInsurance.toString():null).setOtherEntireInsurance(otherEntireInsurance!=null?otherEntireInsurance.toString():null);
       dataList.add(normalSalaryVo);
     }
     response.reset();
