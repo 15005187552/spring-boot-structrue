@@ -244,7 +244,7 @@ public class LocationRateService {
     List<LocationExcelBean> data = null;
 
     for (Location location : locations) {
-      List<RateVo> rates = cityItemMapper.findByLoCode(location.getCode());
+      List<RateVo> rates = cityItemMapper.findByLoCode(Integer.valueOf(location.getCode()));
       if (CollectionUtil.isNotEmpty(rates)) {
         data = rates.stream().map(LocationExcelBean::new).collect(Collectors.toList());
         ExportParams params = new ExportParams();
