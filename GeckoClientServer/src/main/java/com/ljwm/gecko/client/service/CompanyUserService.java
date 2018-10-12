@@ -2,18 +2,19 @@ package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.*;
-import com.ljwm.gecko.base.enums.ActivateEnum;
-import com.ljwm.gecko.base.enums.DisabledEnum;
+import com.ljwm.gecko.base.enums.*;
 import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.dto.MemberComForm;
 import com.ljwm.gecko.base.model.vo.CompanyVo;
 import com.ljwm.gecko.base.model.vo.PersonInfoVo;
+import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
 import com.ljwm.gecko.client.model.dto.*;
 import com.ljwm.gecko.client.model.vo.CompanyInfoVo;
@@ -177,6 +178,13 @@ public class CompanyUserService {
       if (CollectionUtil.isNotEmpty(companyUserInfoList)){
         BeanUtil.copyProperties(companyUserInfoList.get(0), personInfoVo);
       }
+      personInfoVo.setCertificate(StrUtil.isNotEmpty(personInfoVo.getCertificate())?EnumUtil.getNameBycode(CertificateType.class, Integer.valueOf(personInfoVo.getCertificate())):null)
+        .setCountry(StrUtil.isNotEmpty(personInfoVo.getCountry())?EnumUtil.getNameBycode(CountryType.class, Integer.valueOf(personInfoVo.getCountry())):null)
+        .setGender(StrUtil.isNotEmpty(personInfoVo.getGender())?EnumUtil.getNameBycode(GenderEnum.class, Integer.valueOf(personInfoVo.getGender())):null)
+        .setIsInvestor(StrUtil.isNotEmpty(personInfoVo.getIsInvestor())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getIsInvestor())):null)
+        .setEmployee(StrUtil.isNotEmpty(personInfoVo.getEmployee())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getEmployee())):null)
+        .setNtroduceTalents(StrUtil.isNotEmpty(personInfoVo.getNtroduceTalents())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getNtroduceTalents())):null)
+        .setSpecialIndustry(StrUtil.isNotEmpty(personInfoVo.getSpecialIndustry())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getSpecialIndustry())):null);
       Member member = memberMapper.selectById(personInfoVo.getMemberId());
       personInfoVo.setRegMobile(member.getRegMobile());
     }

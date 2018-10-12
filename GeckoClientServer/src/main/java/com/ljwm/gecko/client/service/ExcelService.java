@@ -353,7 +353,7 @@ public class ExcelService {
   }
 
   @Transactional
-  public Result commitEmployeeInfo(EmployeeInfoForm employeeInfoForm) throws ParseException {
+  public Result commitEmployeeInfo(EmployeeInfoForm employeeInfoForm){
     Long companyId = employeeInfoForm.getCompanyId();
     isHasProperty(companyId);
     List<PersonInfoDto> list = employeeInfoForm.getList();

@@ -2,6 +2,7 @@ package com.ljwm.gecko.base.model.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import java.util.Date;
  * @date 2018/9/29 11:17
  */
 @Data
+@Accessors(chain = true)
 public class PersonInfoVo {
 
   @ApiModelProperty("会员ID")

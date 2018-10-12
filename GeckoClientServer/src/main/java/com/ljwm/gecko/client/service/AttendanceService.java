@@ -189,11 +189,11 @@ public class AttendanceService {
       TaxSpecialAdd taxSpecialAdd = taxSpecialAddMapper.selectOne(new QueryWrapper<TaxSpecialAdd>()
         .eq(TaxSpecialAdd.TAX_ID, tax.getId()).eq(TaxSpecialAdd.SPECIAL_ADD_ID, itemId));
       if (taxSpecialAdd != null){
-        taxSpecialAdd.setUpdateTime(date).setTaxMoney(new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setTaxId(tax.getId());
+        taxSpecialAdd.setUpdateTime(date).setTaxMoney(new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setTaxId(tax.getId()).setSpecialAddId(itemId);
         taxSpecialAddMapper.updateById(taxSpecialAdd);
       } else {
         taxSpecialAdd = new TaxSpecialAdd();
-        taxSpecialAdd.setUpdateTime(date).setTaxMoney(new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setCreateTime(date).setTaxId(tax.getId());
+        taxSpecialAdd.setUpdateTime(date).setTaxMoney(new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setCreateTime(date).setTaxId(tax.getId()).setSpecialAddId(itemId);
         taxSpecialAddMapper.insert(taxSpecialAdd);
       }
     }
