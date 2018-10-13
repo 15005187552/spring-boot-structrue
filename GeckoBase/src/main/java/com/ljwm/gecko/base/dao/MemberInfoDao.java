@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.entity.MemberAccount;
 import com.ljwm.gecko.base.entity.MemberPassword;
+import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.CompanyUserMapper;
 import com.ljwm.gecko.base.mapper.MemberAccountMapper;
 import com.ljwm.gecko.base.mapper.MemberMapper;
@@ -46,16 +47,17 @@ public class MemberInfoDao {
     Member member = new Member();
     member.setRegMobile(phoneNum);
     member.setCreateTime(new Date());
+    member.setDisabled(DisabledEnum.ENABLED.getInfo());
     memberMapper.insert(member);
     return member;
   }
 
-  public Long select(String phoneNum) {
+  public Member select(String phoneNum) {
     Map<String, Object> map = new HashedMap();
     map.put("REG_MOBILE", phoneNum);
     List<Member> list = memberMapper.selectByMap(map);
     if (CollectionUtil.isNotEmpty(list)) {
-      return list.get(0).getId();
+      return list.get(0);
     }
     return null;
   }

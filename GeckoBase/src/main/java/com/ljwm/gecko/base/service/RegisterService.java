@@ -10,9 +10,11 @@ import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.entity.MemberAccount;
 import com.ljwm.gecko.base.entity.MemberPassword;
 import com.ljwm.gecko.base.entity.MobileCode;
+import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.mapper.GuestMapper;
 import com.ljwm.gecko.base.mapper.MemberAccountMapper;
+import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.mapper.MemberPasswordMapper;
 import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.utils.IpUtil;
@@ -56,11 +58,14 @@ public class RegisterService {
   @Autowired
   GuestMapper guestMapper;
 
+  @Autowired
+  MemberMapper memberMapper;
+
   @Transactional
   public Result getSMS(RegisterForm registerForm, HttpServletRequest request) {
     if(registerForm.getAction() == 1) {
-      Long memberId = memberInfoDao.select(registerForm.getPhoneNum());
-      if (memberId != null) {
+      Member member = memberInfoDao.select(registerForm.getPhoneNum());
+      if (member != null && member.getDisabled()== DisabledEnum.ENABLED.getInfo()) {
         return fail(ResultEnum.DATA_ERROR.getCode(), "该用户已注册！");
       }
     }
@@ -108,21 +113,22 @@ public class RegisterService {
     MobileCode mobileCode = mobileCodeDao.select(code, phoneNum);
     //小程序只是绑定手机号的操作，其账号密码无实际意义
     if(mobileCode != null){
-      Long memberId = memberInfoDao.select(phoneNum);
-      Member member = null;
-      if (memberId != null){
+      Member member = memberInfoDao.select(phoneNum);
+      Long memberId = null;
+      if (member != null){
+        memberId = member.getId();
         List<MemberAccount> list = memberInfoDao.selectAccount(userName, memberId);
         if(CollectionUtil.isNotEmpty(list)) {
           return fail(ResultEnum.DATA_ERROR.getCode(), "该用户已注册！");
         }
+        member.setDisabled(DisabledEnum.ENABLED.getInfo());
+        memberMapper.updateById(member);
       } else {
         member = memberInfoDao.insert(phoneNum);
         memberId = member.getId();
       }
       log.debug("Saved member :{}", member);
-      if(memberId != null) {
-        guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
-      }
+      guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
      /* String salt = StringUtil.salt();
       password = SecurityKit.passwordMD5(password, salt);
       MemberPassword memberPassword = memberInfoDao.insertPassword(salt, password, new Date());
@@ -151,9 +157,9 @@ public class RegisterService {
     String password = registerPCForm.getPassword();
     MobileCode mobileCode = mobileCodeDao.select(code, phoneNum);
     if(mobileCode != null){
-      Long memberId = memberInfoDao.select(phoneNum);
-      Member member = null;
-      if (memberId != null){
+      Member member = memberInfoDao.select(phoneNum);
+      Long memberId =null;
+      if (member != null && member.getDisabled()!=DisabledEnum.ENABLED.getInfo()){
         List<MemberAccount> list = memberInfoDao.selectAccount(phoneNum, memberId);
         if(CollectionUtil.isNotEmpty(list)) {
           return fail(ResultEnum.DATA_ERROR.getCode(), "该用户已注册！");
@@ -163,9 +169,7 @@ public class RegisterService {
         memberId = member.getId();
       }
       log.debug("Saved member :{}", member);
-      if(memberId != null) {
-        guestMapper.updateByGuestId(registerPCForm.getGuestId(), memberId);
-      }
+      guestMapper.updateByGuestId(registerPCForm.getGuestId(), memberId);
       String salt = StringUtil.salt();
       password = SecurityKit.passwordMD5(password, salt);
       MemberPassword memberPassword = memberInfoDao.insertPassword(salt, password, new Date());
@@ -185,10 +189,11 @@ public class RegisterService {
     String password = passwordForm.getPassword();
     MobileCode mobileCode = mobileCodeDao.select(code, phoneNum);
     if(mobileCode != null){
-      Long memberId = memberInfoDao.select(phoneNum);
+      Member member = memberInfoDao.select(phoneNum);
       String salt = StringUtil.salt();
       password = SecurityKit.passwordMD5(password, salt);
-      if(memberId != null){
+      if(member != null){
+        Long memberId = member.getId();
         List<MemberAccount> list = memberInfoDao.selectAccount(phoneNum, memberId);
         MemberPassword memberPassword;
         if (CollectionUtil.isNotEmpty(list)){
@@ -224,11 +229,11 @@ public class RegisterService {
     String phoneNum = modifyPasswordForm.getPhoneNum();
     String oldPassword = modifyPasswordForm.getOldPassword();
     String newPassword = modifyPasswordForm.getNewPassword();
-    Long memberId = memberInfoDao.select(phoneNum);
-    if(memberId == null){
+    Member member = memberInfoDao.select(phoneNum);
+    if(member == null){
       return fail(ResultEnum.DATA_ERROR.getCode(), "该手机号未注册！");
     }
-    List<MemberAccount> list = memberInfoDao.selectAccount(phoneNum, memberId);
+    List<MemberAccount> list = memberInfoDao.selectAccount(phoneNum, member.getId());
     if (CollectionUtil.isNotEmpty(list)){
       Long passwordId = list.get(0).getPasswordId();
       MemberPassword memberPassword = memberPasswordMapper.selectById(passwordId);
