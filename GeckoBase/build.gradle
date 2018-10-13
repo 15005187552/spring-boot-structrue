@@ -1,5 +1,5 @@
 dependencies {
-  compile('com.ljwm:BootBase:1.5.6-RELEASE')
+  compile('com.ljwm:BootBase:1.5.7-RELEASE')
 
   // EasyPoi Excel处理
   compile('cn.afterturn:easypoi-base:3.2.0')
