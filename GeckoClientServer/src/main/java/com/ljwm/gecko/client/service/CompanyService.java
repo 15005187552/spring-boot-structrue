@@ -102,12 +102,11 @@ public class CompanyService {
         companySpecialMapper.insert(companySpecial);
       }
       //把创建人添加到t_company_user
-      int codeLenth = RoleCodeType.values().length;
-      String[] code = new String[codeLenth];
+      int codeLength = RoleCodeType.values().length;
+      String[] code = new String[codeLength];
       for (RoleCodeType roleCodeType: RoleCodeType.values()){
-        code[codeLenth-roleCodeType.getDigit()] = String.valueOf(roleCodeType.getValue());
+        code[codeLength-roleCodeType.getDigit()] = String.valueOf(roleCodeType.getValue());
       }
-      code[codeLenth-RoleCodeType.ITIN.getDigit()] = "0";
       StringBuffer s = new StringBuffer();
       for(String str :code){
         s.append(str);

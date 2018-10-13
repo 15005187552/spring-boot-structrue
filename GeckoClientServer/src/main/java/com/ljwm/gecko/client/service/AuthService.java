@@ -116,10 +116,11 @@ public class AuthService {
         log.debug("The ext info for wixin app user: {}", extInfo);
         JSONObject js = JSON.parseObject(extInfo);
         String nickName = js.getString("nickName");
+        String avatarUrl = js.getString("avatarUrl");
         Long memberId = memberInfoService.updateExt(mpOpenId, extInfo, LoginType.WX_APP.getCode());
         String nName = memberInfoService.selectMember(memberId);
         if(StrUtil.isBlank(nName)){
-          memberInfoService.updateMember(nickName, memberId);
+          memberInfoService.updateMember(nickName, memberId, avatarUrl);
         }
       }
       guest = guestService.upsert(UserSource.codeOf(UserSource.WX_APP.getCode()), mpOpenId, null);

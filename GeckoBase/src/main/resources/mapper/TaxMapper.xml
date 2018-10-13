@@ -83,6 +83,7 @@
       a.COMPANY_ID = #{map.companyId} AND b.MEMBER_ID = a.MEMBER_ID
       <if test="map.name!=null and map.name != ''">AND a.`NAME` = #{map.name}</if>
       <if test="map.declareTime!=null and map.declareTime != ''">AND b.DECLARE_TIME = #{map.declareTime}</if>
+      <if test="map.declareType!=null and map.declareType != ''">AND b.DECLARE_TYPE = #{map.declareType}</if>
     </where>
   </select>
 </mapper>
