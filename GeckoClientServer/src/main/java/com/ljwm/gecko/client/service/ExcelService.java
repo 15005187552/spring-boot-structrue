@@ -164,7 +164,7 @@ public class ExcelService {
             Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId));
             Date date = new Date();
             if (tax != null) {
-              tax.setUpdateTime(date).setStatus(TaxStatus.NEED_CONFIRM.getCode());
+              tax.setUpdateTime(date).setStatus(TaxStatus.NEED_CONFIRM.getCode()).setDeclareType(declareType);
               taxMapper.updateById(tax);
             } else {
               tax = new Tax();
