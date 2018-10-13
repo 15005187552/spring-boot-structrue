@@ -187,8 +187,9 @@ public class CompanyUserService {
         .setEmployee(StrUtil.isNotEmpty(personInfoVo.getEmployee())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getEmployee())):null)
         .setNtroduceTalents(StrUtil.isNotEmpty(personInfoVo.getNtroduceTalents())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getNtroduceTalents())):null)
         .setSpecialIndustry(StrUtil.isNotEmpty(personInfoVo.getSpecialIndustry())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getSpecialIndustry())):null)
-        .setPersonState(StrUtil.isNotEmpty(personInfoVo.getPersonState())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getPersonState())):null)
+        .setPersonState(StrUtil.isNotEmpty(personInfoVo.getPersonState())?EnumUtil.getNameBycode(PersonStateEnum.class, Integer.valueOf(personInfoVo.getPersonState())):null)
         .setBirthday(personInfoVo.getBirthday())
+        .setEducation(personInfoVo.getEducation()!=null?EnumUtil.getNameBycode(EducationEnum.class, Integer.valueOf(personInfoVo.getEducation())):null)
         .setHireDate(personInfoVo.getHireDate()!=null?TimeUtil.parseDate(personInfoVo.getHireDate()):null)
         .setTermDate(personInfoVo.getTermDate()!=null?TimeUtil.parseDate(personInfoVo.getTermDate()):null);
       Member member = memberMapper.selectById(personInfoVo.getMemberId());

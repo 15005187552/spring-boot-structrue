@@ -45,6 +45,4 @@ public class FileController extends BaseController {
     Fileutil.deleteGeneralFile(srcPath);
     return success();
   }
-
-
 }
