@@ -185,7 +185,7 @@ public class CompanyUserService {
         .setGender(StrUtil.isNotEmpty(personInfoVo.getGender())?EnumUtil.getNameBycode(GenderEnum.class, Integer.valueOf(personInfoVo.getGender())):null)
         .setIsInvestor(StrUtil.isNotEmpty(personInfoVo.getIsInvestor())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getIsInvestor())):null)
         .setEmployee(StrUtil.isNotEmpty(personInfoVo.getEmployee())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getEmployee())):null)
-        .setNtroduceTalents(StrUtil.isNotEmpty(personInfoVo.getNtroduceTalents())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getNtroduceTalents())):null)
+        .setIntroduceTalents(StrUtil.isNotEmpty(personInfoVo.getIntroduceTalents())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getIntroduceTalents())):null)
         .setSpecialIndustry(StrUtil.isNotEmpty(personInfoVo.getSpecialIndustry())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getSpecialIndustry())):null)
         .setPersonState(StrUtil.isNotEmpty(personInfoVo.getPersonState())?EnumUtil.getNameBycode(PersonStateEnum.class, Integer.valueOf(personInfoVo.getPersonState())):null)
         .setBirthday(personInfoVo.getBirthday())

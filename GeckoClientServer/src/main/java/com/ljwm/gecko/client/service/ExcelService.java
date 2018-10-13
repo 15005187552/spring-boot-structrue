@@ -501,7 +501,7 @@ public class ExcelService {
     }
     if (StrUtil.isNotEmpty(personInfoDto.getIntroduceTalents())){
       if (EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getIntroduceTalents()) != null){
-        companyUserInfo1.setNtroduceTalents(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getIntroduceTalents()).getCode());
+        companyUserInfo1.setIntroduceTalents(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getIntroduceTalents()).getCode());
       } else {
         throw new LogicException("是否引进人才填写有误！");
       }

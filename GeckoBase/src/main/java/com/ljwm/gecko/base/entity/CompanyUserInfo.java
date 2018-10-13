@@ -20,7 +20,7 @@ import java.util.Date;
  * </p>
  *
  * @author Levis
- * @since 2018-09-29
+ * @since 2018-10-13
  */
 @Data
 @SuppressWarnings("ALL")
@@ -34,7 +34,7 @@ public class CompanyUserInfo implements Serializable {
 
 
     @ApiModelProperty(value = "ID主键")
-    @TableId(value = "`COMPANY_USER_ID`", type = IdType.INPUT)
+    @TableId(value = "`COMPANY_USER_ID`", type = IdType.AUTO)
     private Long companyUserId;
 
     @ApiModelProperty(value = "工号")
@@ -94,8 +94,8 @@ public class CompanyUserInfo implements Serializable {
     private BigDecimal socialBase;
 
     @ApiModelProperty(value = "是否引进人才")
-    @TableField("`NTRODUCE_TALENTS`")
-    private Integer ntroduceTalents;
+    @TableField("`INTRODUCE_TALENTS`")
+    private Integer introduceTalents;
 
     @ApiModelProperty(value = "开户银行")
     @TableField("`BANK`")
@@ -160,7 +160,7 @@ public class CompanyUserInfo implements Serializable {
 
     public static final String SOCIAL_BASE = "`SOCIAL_BASE`";
 
-    public static final String NTRODUCE_TALENTS = "`NTRODUCE_TALENTS`";
+    public static final String INTRODUCE_TALENTS = "`INTRODUCE_TALENTS`";
 
     public static final String BANK = "`BANK`";
 

@@ -101,7 +101,11 @@ public class RegisterService {
   }
 
   private String sendSMSCode(String phoneNum) {
-    return "123456";
+    String s = "";
+    while (s.length() < 6)
+      s += (int) (Math.random() * 10);
+
+    return s;
   }
 
   @Transactional

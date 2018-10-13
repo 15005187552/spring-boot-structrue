@@ -70,7 +70,7 @@ public class PersonInfoVo {
   private String maritalStatus;
 
   @ApiModelProperty(value = "是否引进人才")
-  private String ntroduceTalents;
+  private String introduceTalents;
 
   @ApiModelProperty(value = "开户银行")
   private String bank;

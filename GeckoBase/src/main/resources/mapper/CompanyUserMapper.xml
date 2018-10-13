@@ -76,7 +76,7 @@
     <result column="FUND_PERSON" property="fundPerson" />
     <result column="WORK_CITY" property="workCity" />
     <result column="MARITAL_STATUS" property="maritalStatus" />
-    <result column="NTRODUCE_TALENTS" property="ntroduceTalents" />
+    <result column="INTRODUCE_TALENTS" property="introduceTalents" />
     <result column="BANK" property="bank" />
     <result column="BANK_NUM" property="bankNum" />
     <result column="SOCIAL_NUM" property="socialNum" />
