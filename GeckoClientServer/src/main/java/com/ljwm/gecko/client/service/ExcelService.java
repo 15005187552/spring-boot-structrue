@@ -261,7 +261,7 @@ public class ExcelService {
         personExportVo.setPersonState(EnumUtil.getNameBycode(PersonStateEnum.class, Integer.valueOf(personExportVo.getPersonState())));
       }
       if(StrUtil.isNotBlank(personExportVo.getEmployee())){
-        personExportVo.setPersonState(EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personExportVo.getEmployee())));
+        personExportVo.setEmployee(EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personExportVo.getEmployee())));
       }
       objectList.add(personExportVo);
     }

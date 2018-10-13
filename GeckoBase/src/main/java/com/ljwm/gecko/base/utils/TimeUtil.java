@@ -32,4 +32,9 @@ public class TimeUtil {
     return sdf.parse(str);
   }
 
+  public static String parseDate(String str) throws ParseException {
+    Date date = new Date(str);
+    String sdf = new SimpleDateFormat("yyyy-MM-dd").format(date);
+    return sdf;
+  }
 }

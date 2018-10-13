@@ -15,6 +15,7 @@ import com.ljwm.gecko.base.model.dto.MemberComForm;
 import com.ljwm.gecko.base.model.vo.CompanyVo;
 import com.ljwm.gecko.base.model.vo.PersonInfoVo;
 import com.ljwm.gecko.base.utils.EnumUtil;
+import com.ljwm.gecko.base.utils.TimeUtil;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
 import com.ljwm.gecko.client.model.dto.*;
 import com.ljwm.gecko.client.model.vo.CompanyInfoVo;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -170,7 +172,7 @@ public class CompanyUserService {
       .eq(CompanyUser.ACTIVATED, ActivateEnum.ENABLED.getCode())));
   }
 
-  public Result findEmployeeInfo(CompanyPageDto companyPageDto) {
+  public Result findEmployeeInfo(CompanyPageDto companyPageDto) throws ParseException {
     Page<PersonInfoVo> page = commonService.find(companyPageDto, (p, q)->naturalPersonMapper.findList(p, companyPageDto.getCompanyId()));
     List<PersonInfoVo> personInfoDtoList = page.getRecords();
     for (PersonInfoVo personInfoVo:personInfoDtoList) {
@@ -184,7 +186,11 @@ public class CompanyUserService {
         .setIsInvestor(StrUtil.isNotEmpty(personInfoVo.getIsInvestor())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getIsInvestor())):null)
         .setEmployee(StrUtil.isNotEmpty(personInfoVo.getEmployee())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getEmployee())):null)
         .setNtroduceTalents(StrUtil.isNotEmpty(personInfoVo.getNtroduceTalents())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getNtroduceTalents())):null)
-        .setSpecialIndustry(StrUtil.isNotEmpty(personInfoVo.getSpecialIndustry())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getSpecialIndustry())):null);
+        .setSpecialIndustry(StrUtil.isNotEmpty(personInfoVo.getSpecialIndustry())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getSpecialIndustry())):null)
+        .setPersonState(StrUtil.isNotEmpty(personInfoVo.getPersonState())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getPersonState())):null)
+        .setBirthday(personInfoVo.getBirthday())
+        .setHireDate(personInfoVo.getHireDate()!=null?TimeUtil.parseDate(personInfoVo.getHireDate()):null)
+        .setTermDate(personInfoVo.getTermDate()!=null?TimeUtil.parseDate(personInfoVo.getTermDate()):null);
       Member member = memberMapper.selectById(personInfoVo.getMemberId());
       personInfoVo.setRegMobile(member.getRegMobile());
     }

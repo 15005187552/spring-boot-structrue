@@ -39,5 +39,9 @@ public class EnumService {
   public Result smsmTemplateType() {
     return Result.success(Arrays.stream(SMSTemplateEnum.values()).map(smsTemplateEnum -> Kv.by("code",smsTemplateEnum.getCode()).set("value",smsTemplateEnum.getName())).toArray());
   }
+
+  public Result educatiocnType() {
+    return Result.success(Arrays.stream(EducationEnum.values()).map(educationEnum -> Kv.by("code", educationEnum.getCode()).set("value", educationEnum.getName())).toArray());
+  }
 }
 

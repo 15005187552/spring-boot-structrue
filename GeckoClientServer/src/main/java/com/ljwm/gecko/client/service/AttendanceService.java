@@ -16,8 +16,6 @@ import com.ljwm.gecko.base.model.vo.*;
 import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.client.model.dto.AttendanceForm;
 import com.ljwm.gecko.client.model.dto.TaxFindForm;
-import com.ljwm.gecko.client.model.vo.AttendanceData;
-import com.ljwm.gecko.client.model.vo.AttendanceTaxVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -270,9 +268,9 @@ public class AttendanceService {
 
   public Result findAttendanceVoList(TaxFindForm taxFindForm) {
     excelService.isHasProperty(taxFindForm.getCompanyId());
-    Page<AttendanceTaxVo> page = commonService.find(taxFindForm, (p, q) -> taxMapper.selectTaxVoList(p, BeanUtil.beanToMap(taxFindForm)));
-    List<AttendanceTaxVo> list = page.getRecords();
-    for (AttendanceTaxVo attendanceTaxVo :list){
+    Page<AttendanceTaxInfoVo> page = commonService.find(taxFindForm, (p, q) -> taxMapper.selectTaxVoList(p, BeanUtil.beanToMap(taxFindForm)));
+    List<AttendanceTaxInfoVo> list = page.getRecords();
+    for (AttendanceTaxInfoVo attendanceTaxVo :list){
       Long memberId = attendanceTaxVo.getMemberId();
       CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, taxFindForm.getCompanyId()).eq(CompanyUser.MEMBER_ID, memberId));
       CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUser.getId());

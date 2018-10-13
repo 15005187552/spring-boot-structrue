@@ -60,4 +60,10 @@ public class EnumController extends BaseController {
   public Result smsmTemplateType(){
     return enumService.smsmTemplateType();
   }
+
+  @PostMapping("/educationType")
+  @ApiOperation("教育类型")
+  public Result educationType(){
+    return enumService.educatiocnType();
+  }
 }

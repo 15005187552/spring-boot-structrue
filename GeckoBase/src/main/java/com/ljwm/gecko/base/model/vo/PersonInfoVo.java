@@ -4,8 +4,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.Date;
-
 /**
  * @author Janiffy
  * @date 2018/9/29 11:17
@@ -36,7 +34,7 @@ public class PersonInfoVo {
   private String gender;
 
   @ApiModelProperty(value = "出生年月")
-  private Date birthday;
+  private String birthday;
 
   @ApiModelProperty(value = "学历")
   private String education;
@@ -51,7 +49,7 @@ public class PersonInfoVo {
   private String regMobile;
 
   @ApiModelProperty(value = "任职日期")
-  private Date hireDate;
+  private String hireDate;
 
   @ApiModelProperty(value = "员工类别")
   private String employeeType;
@@ -63,7 +61,7 @@ public class PersonInfoVo {
   private String station;
 
   @ApiModelProperty(value = "离职日期")
-  private Date termDate;
+  private String termDate;
 
   @ApiModelProperty(value = "工作城市")
   private String workCity;

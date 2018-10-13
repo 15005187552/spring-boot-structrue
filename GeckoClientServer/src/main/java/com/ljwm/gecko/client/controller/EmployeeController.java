@@ -37,7 +37,7 @@ public class EmployeeController {
 
   @PostMapping("/findEmployeeInfo")
   @ApiOperation("公司员工信息分页")
-  public Result findEmployeeInfo(@RequestBody @Valid CompanyPageDto companyPageDto){
+  public Result findEmployeeInfo(@RequestBody @Valid CompanyPageDto companyPageDto) throws ParseException {
     return companyUserService.findEmployeeInfo(companyPageDto);
   }
 
