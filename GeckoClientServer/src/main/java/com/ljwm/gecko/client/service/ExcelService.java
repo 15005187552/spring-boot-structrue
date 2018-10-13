@@ -116,7 +116,7 @@ public class ExcelService {
     InputStream inputStream = file.getInputStream();
     ExcelLogs logs =new ExcelLogs();
     Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs , 0);
-    Object name, certificate = null, certNum = null, socialBase = null, fundBase = null, fundPer = null;
+    Object name=null, certificate = null, certNum = null, socialBase = null, fundBase = null, fundPer = null;
     NaturalPerson naturalPerson = null;
     for(Map m:importExcel){
       for (Object key:m.keySet()) {
@@ -143,7 +143,7 @@ public class ExcelService {
             Integer certificateType = EnumUtil.getEnumByName(CertificateType.class, certificate.toString()).getCode();
             naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERT_NUM, certNum.toString()).eq(NaturalPerson.CERTIFICATE, certificateType));
             if(naturalPerson ==null){
-                return Result.fail("证件号码或者证照类型有误！");
+                return Result.fail("员工"+name.toString()+"证件号码或者证照类型有误！");
             }
           }else {
             Long memberId = naturalPerson.getMemberId();

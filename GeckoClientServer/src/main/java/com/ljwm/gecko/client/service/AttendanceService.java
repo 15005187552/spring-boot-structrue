@@ -117,7 +117,7 @@ public class AttendanceService {
           insertOrUpdate(tableName, itemId, date, value, tax);
         }
       }else {
-        return Result.fail("证件号码或者证照类型有误！");
+        return Result.fail("员工"+attendanceDto.getName()+"证件号码或者证照类型有误！");
       }
     }
     return Result.success("成功！");
