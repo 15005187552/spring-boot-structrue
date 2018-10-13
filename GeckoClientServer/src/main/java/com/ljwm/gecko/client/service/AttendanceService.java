@@ -12,10 +12,13 @@ import com.ljwm.gecko.base.enums.CertificateType;
 import com.ljwm.gecko.base.enums.TableNameEnum;
 import com.ljwm.gecko.base.enums.TaxStatus;
 import com.ljwm.gecko.base.mapper.*;
-import com.ljwm.gecko.base.model.vo.*;
+import com.ljwm.gecko.base.model.vo.AttendanceData;
+import com.ljwm.gecko.base.model.vo.AttendanceTaxInfoVo;
+import com.ljwm.gecko.base.model.vo.TaxListVo;
 import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.client.model.dto.AttendanceForm;
 import com.ljwm.gecko.client.model.dto.TaxFindForm;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +27,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Janiffy
@@ -76,6 +80,9 @@ public class AttendanceService {
 
   @Autowired
   ExcelService excelService;
+
+  @Autowired
+  TemplateMapper templateMapper;
 
   @Transactional
   public Result commit(AttendanceForm attendanceForm) {
@@ -280,13 +287,18 @@ public class AttendanceService {
       }
       attendanceTaxVo.setIdCard(naturalPerson.getCertNum()).setName(naturalPerson.getName()).setCertificate(EnumUtil.getNameBycode(CertificateType.class, Integer.valueOf(naturalPerson.getCertificate())))
         .setSocialBase(companyUserInfo.getSocialBase()!=null?companyUserInfo.getSocialBase().toString():null).setFundBase(companyUserInfo.getFundBase()!=null?companyUserInfo.getFundBase().toString():null).setFundPer(companyUserInfo.getFundPer()!=null?companyUserInfo.getFundPer().toString():null);
-      attendanceTaxVo.setDataList(getList(attendanceTaxVo.getId()));
+      attendanceTaxVo.setDataList(getList(attendanceTaxVo.getId(), taxFindForm.getCompanyId()));
     }
     return Result.success(page);
   }
 
-  public List<AttendanceData> getList(Long taxId) {
+  public List<AttendanceData> getList(Long taxId, Long companyId) {
     List<AttendanceData> list = new ArrayList<>();
+    List<Template> templateList = templateMapper.selectList(new QueryWrapper<Template>().eq(Template.COMPANY_ID, companyId));
+    Map<Long, String> map = new HashedMap();
+    for (Template template: templateList){
+      map.put(template.getAttributeId(), null);
+    }
     List<Attendance> attendanceList = attendanceMapper.selectList(new QueryWrapper<Attendance>().eq(Attendance.TAX_ID, taxId));
     List<TaxIncome> taxIncomeList = taxIncomeMapper.selectList(new QueryWrapper<TaxIncome>().eq(TaxIncome.TAX_ID, taxId));
     List<TaxSpecialAdd> taxSpecialAddList = taxSpecialAddMapper.selectList(new QueryWrapper<TaxSpecialAdd>().eq(TaxSpecialAdd.TAX_ID, taxId));
@@ -296,9 +308,10 @@ public class AttendanceService {
         Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_ATTENDANCE.getCode())
           .eq(Attribute.ITEM_ID, attendance.getAttributeId()));
         if (attribute != null) {
-          AttendanceData attendanceData = new AttendanceData();
+          map.put(attribute.getId(), attendance.getValue());
+          /*AttendanceData attendanceData = new AttendanceData();
           attendanceData.setId(attribute.getId()).setValue(attendance.getValue());
-          list.add(attendanceData);
+          list.add(attendanceData);*/
         }
       }
     }
@@ -307,9 +320,10 @@ public class AttendanceService {
         Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_INCOME_TYPE.getCode())
           .eq(Attribute.ITEM_ID, taxIncome.getIncomeTypeId()));
         if (attribute != null) {
-          AttendanceData attendanceData = new AttendanceData();
+          map.put(attribute.getId(), taxIncome.getIncome().toString());
+          /*AttendanceData attendanceData = new AttendanceData();
           attendanceData.setId(attribute.getId()).setValue(taxIncome.getIncome().toString());
-          list.add(attendanceData);
+          list.add(attendanceData);*/
         }
       }
     }
@@ -318,9 +332,10 @@ public class AttendanceService {
         Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_ADD_SPECIAL.getCode())
           .eq(Attribute.ITEM_ID, taxSpecialAdd.getSpecialAddId()));
         if (attribute != null) {
-          AttendanceData attendanceData = new AttendanceData();
+          map.put(attribute.getId(), taxSpecialAdd.getTaxMoney().toString());
+         /* AttendanceData attendanceData = new AttendanceData();
           attendanceData.setId(attribute.getId()).setValue(taxSpecialAdd.getTaxMoney().toString());
-          list.add(attendanceData);
+          list.add(attendanceData);*/
         }
       }
     }
@@ -329,11 +344,16 @@ public class AttendanceService {
         Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_OTHER_REDUCE.getCode())
           .eq(Attribute.ITEM_ID, taxOtherReduce.getOtherReduceId()));
         if (attribute != null) {
-          AttendanceData attendanceData = new AttendanceData();
+          map.put(attribute.getId(), taxOtherReduce.getTaxMoney().toString());
+         /* AttendanceData attendanceData = new AttendanceData();
           attendanceData.setId(attribute.getId()).setValue(taxOtherReduce.getTaxMoney().toString());
-          list.add(attendanceData);
+          list.add(attendanceData);*/
         }
       }
+    }
+    for (Long key : map.keySet()) {
+      AttendanceData attendanceData = new AttendanceData().setId(key).setValue(map.get(key));
+      list.add(attendanceData);
     }
     return list;
   }

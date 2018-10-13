@@ -14,6 +14,7 @@ import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.dto.MemberComForm;
 import com.ljwm.gecko.base.model.vo.CompanyVo;
 import com.ljwm.gecko.base.model.vo.PersonInfoVo;
+import com.ljwm.gecko.base.service.LocationService;
 import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.base.utils.TimeUtil;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
@@ -60,6 +61,9 @@ public class CompanyUserService {
 
   @Autowired
   CommonService commonService;
+
+  @Autowired
+  LocationService locationService;
 
   @Transactional
   public Result memberEnterCom(MemberComForm memberComForm) {
@@ -188,6 +192,11 @@ public class CompanyUserService {
         .setIntroduceTalents(StrUtil.isNotEmpty(personInfoVo.getIntroduceTalents())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getIntroduceTalents())):null)
         .setSpecialIndustry(StrUtil.isNotEmpty(personInfoVo.getSpecialIndustry())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personInfoVo.getSpecialIndustry())):null)
         .setPersonState(StrUtil.isNotEmpty(personInfoVo.getPersonState())?EnumUtil.getNameBycode(PersonStateEnum.class, Integer.valueOf(personInfoVo.getPersonState())):null)
+        .setMaritalStatus(StrUtil.isNotEmpty(personInfoVo.getMaritalStatus())?EnumUtil.getNameBycode(MaritalStatusEnum.class, Integer.valueOf(personInfoVo.getMaritalStatus())):null)
+        .setWorkCity(locationService.getNameByCode(personInfoVo.getWorkCity()))
+        .setProvince(locationService.getNameByCode(personInfoVo.getProvince()))
+        .setCity(locationService.getNameByCode(personInfoVo.getCity()))
+        .setArea(locationService.getNameByCode(personInfoVo.getArea()))
         .setBirthday(personInfoVo.getBirthday())
         .setEducation(personInfoVo.getEducation()!=null?EnumUtil.getNameBycode(EducationEnum.class, Integer.valueOf(personInfoVo.getEducation())):null)
         .setHireDate(personInfoVo.getHireDate()!=null?TimeUtil.parseDate(personInfoVo.getHireDate()):null)

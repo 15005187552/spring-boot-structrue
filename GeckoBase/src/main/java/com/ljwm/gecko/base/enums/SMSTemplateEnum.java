@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.enums;
 
+import com.ljwm.gecko.base.listener.CommonEnum;
 import lombok.Getter;
 
 /**
@@ -7,7 +8,7 @@ import lombok.Getter;
  * @date 2018/9/21 14:51
  */
 @Getter
-public enum SMSTemplateEnum {
+public enum SMSTemplateEnum implements CommonEnum {
 
   REGISTER(1, "注册模板", "SMS_147720230"),
   MODIFY_PASSWORD(2, "修改密码模板", "SMS_147720229");
