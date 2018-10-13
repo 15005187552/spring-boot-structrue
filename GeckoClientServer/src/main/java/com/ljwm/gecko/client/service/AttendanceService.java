@@ -97,7 +97,7 @@ public class AttendanceService {
           companyUserInfo.setFundBase(fundBase).setFundPer(fundPer).setSocialBase(socialBase);
           companyUserInfoMapper.updateById(companyUserInfo);
         }
-        Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId).eq(Tax.DECLARE_TYPE, attendanceForm.getDeclareType()));
+        Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId));
         Date date = new Date();
         if (tax != null){
           tax.setUpdateTime(date).setStatus(TaxStatus.NEED_CONFIRM.getCode());
@@ -187,11 +187,11 @@ public class AttendanceService {
       TaxSpecialAdd taxSpecialAdd = taxSpecialAddMapper.selectOne(new QueryWrapper<TaxSpecialAdd>()
         .eq(TaxSpecialAdd.TAX_ID, tax.getId()).eq(TaxSpecialAdd.SPECIAL_ADD_ID, itemId));
       if (taxSpecialAdd != null){
-        taxSpecialAdd.setUpdateTime(date).setTaxMoney(new BigDecimal(value)).setUpdater(SecurityKit.currentId());
+        taxSpecialAdd.setUpdateTime(date).setTaxMoney(new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setTaxId(tax.getId()).setSpecialAddId(itemId);
         taxSpecialAddMapper.updateById(taxSpecialAdd);
       } else {
         taxSpecialAdd = new TaxSpecialAdd();
-        taxSpecialAdd.setUpdateTime(date).setTaxMoney(new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setCreateTime(date);
+        taxSpecialAdd.setUpdateTime(date).setTaxMoney(new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setCreateTime(date).setTaxId(tax.getId()).setSpecialAddId(itemId);
         taxSpecialAddMapper.insert(taxSpecialAdd);
       }
     }
@@ -279,7 +279,7 @@ public class AttendanceService {
         return Result.success(null);
       }
       attendanceTaxVo.setIdCard(naturalPerson.getCertNum()).setName(naturalPerson.getName()).setCertificate(naturalPerson.getCertificate()).
-        setSocialBase(companyUserInfo.getSocialBase().toString()).setFundBase(companyUserInfo.getFundBase().toString()).setFundPer(companyUserInfo.getFundPer().toString());
+        setSocialBase(companyUserInfo.getSocialBase()!=null?companyUserInfo.getSocialBase().toString():null).setFundBase(companyUserInfo.getFundBase()!=null?companyUserInfo.getFundBase().toString():null).setFundPer(companyUserInfo.getFundPer()!=null?companyUserInfo.getFundPer().toString():null);
       attendanceTaxVo.setDataList(getList(attendanceTaxVo.getId()));
     }
     return Result.success(page);
@@ -294,7 +294,7 @@ public class AttendanceService {
     if (CollectionUtil.isNotEmpty(attendanceList)) {
       for (Attendance attendance : attendanceList) {
         Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_ATTENDANCE.getCode())
-          .eq(Attribute.ITEM_ID, attendance.getId()));
+          .eq(Attribute.ITEM_ID, attendance.getAttributeId()));
         if (attribute != null) {
           AttendanceData attendanceData = new AttendanceData();
           attendanceData.setId(attribute.getId()).setValue(attendance.getValue());
@@ -305,7 +305,7 @@ public class AttendanceService {
     if (CollectionUtil.isNotEmpty(taxIncomeList)) {
       for (TaxIncome taxIncome : taxIncomeList) {
         Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_INCOME_TYPE.getCode())
-          .eq(Attribute.ITEM_ID, taxIncome.getId()));
+          .eq(Attribute.ITEM_ID, taxIncome.getIncomeTypeId()));
         if (attribute != null) {
           AttendanceData attendanceData = new AttendanceData();
           attendanceData.setId(attribute.getId()).setValue(taxIncome.getIncome().toString());
@@ -316,7 +316,7 @@ public class AttendanceService {
     if (CollectionUtil.isNotEmpty(taxSpecialAddList)) {
       for (TaxSpecialAdd taxSpecialAdd : taxSpecialAddList) {
         Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_ADD_SPECIAL.getCode())
-          .eq(Attribute.ITEM_ID, taxSpecialAdd.getId()));
+          .eq(Attribute.ITEM_ID, taxSpecialAdd.getSpecialAddId()));
         if (attribute != null) {
           AttendanceData attendanceData = new AttendanceData();
           attendanceData.setId(attribute.getId()).setValue(taxSpecialAdd.getTaxMoney().toString());
@@ -327,7 +327,7 @@ public class AttendanceService {
     if (CollectionUtil.isNotEmpty(taxOtherReduceList)) {
       for (TaxOtherReduce taxOtherReduce : taxOtherReduceList) {
         Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_OTHER_REDUCE.getCode())
-          .eq(Attribute.ITEM_ID, taxOtherReduce.getId()));
+          .eq(Attribute.ITEM_ID, taxOtherReduce.getOtherReduceId()));
         if (attribute != null) {
           AttendanceData attendanceData = new AttendanceData();
           attendanceData.setId(attribute.getId()).setValue(taxOtherReduce.getTaxMoney().toString());

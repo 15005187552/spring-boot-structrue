@@ -1,6 +1,7 @@
 package com.ljwm.gecko.admin.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.service.CommonService;
@@ -40,9 +41,9 @@ public class NoticeService {
     if (form.getId() != null)
       notice = objNoTNull(form.getId());
     if (notice == null)
-      notice = new Notice();
+      notice = new Notice().setCreateTime(DateTime.now());
     BeanUtil.copyProperties(form,notice);
-    commonService.insert(notice,noticeMapper);
+    commonService.insertOrUpdate(notice,noticeMapper);
     return notice;
   }
 

@@ -43,7 +43,7 @@ public class LocationController extends BaseController {
       while ((s = br.readLine()) != null) {//使用readLine方法，一次读一行
         String[] str = s.split("\"");
         Location location = new Location();
-        location.setCode(Integer.valueOf(str[1]));
+        location.setCode(str[1]);
         location.setName(str[3]);
         locationService.insertOrUpdate(location);
       }
@@ -61,7 +61,7 @@ public class LocationController extends BaseController {
 
   @PostMapping("/getCityOrArea")
   @ApiOperation("根据联动获取市区")
-  public  Result getCityOrArea(@RequestParam Integer code){
+  public  Result getCityOrArea(@RequestParam String code){
     return success(locationService.getCityOrArea(code));
   }
 
