@@ -1,6 +1,7 @@
 package com.ljwm.gecko.base.dao;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.entity.MemberAccount;
 import com.ljwm.gecko.base.entity.MemberPassword;
@@ -108,9 +109,12 @@ public class MemberInfoDao {
     return null;
   }
 
-  public void updateMember(String nickName, Long memberId) {
+  public void updateMember(String nickName, Long memberId, String avatarUrl) {
     Member member = memberMapper.selectById(memberId);
     member.setNickName(nickName);
+    if (StrUtil.isNotBlank(avatarUrl)){
+      member.setAvatarPath(avatarUrl);
+    }
     memberMapper.updateById(member);
   }
 

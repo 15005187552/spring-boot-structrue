@@ -20,6 +20,9 @@ public class TaxFindForm extends CommonQuery {
   @ApiModelProperty("申报时间")
   private String declareTime;
 
+  @ApiModelProperty("申报类型")
+  private String declareType;
+
   @ApiModelProperty("姓名")
   private String name;
 }

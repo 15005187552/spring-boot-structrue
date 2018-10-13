@@ -93,8 +93,8 @@ public class MemberInfoService {
   }
 
   @Transactional
-  public void updateMember(String nickName, Long memberId) {
-    memberInfoDao.updateMember(nickName, memberId);
+  public void updateMember(String nickName, Long memberId, String avatarUrl) {
+    memberInfoDao.updateMember(nickName, memberId, avatarUrl);
   }
 
   @Transactional
