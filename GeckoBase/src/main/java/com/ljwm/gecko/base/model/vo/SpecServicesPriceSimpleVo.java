@@ -8,5 +8,6 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
 public class SpecServicesPriceSimpleVo extends SpecServicesPrice {
 }

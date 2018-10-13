@@ -20,6 +20,13 @@ public abstract class StatusWithNameSerializer implements ObjectSerializer {
     }
   }
 
+  public static class TagEnumSerializer extends StatusWithNameSerializer {
+    @Override
+    public String getNameByCode(Object code) {
+      return EnumUtil.getNameBycode(TagEnum.class, (Integer) code);
+    }
+  }
+
   public static class CountryTypeSerializer extends StatusWithNameSerializer {
     @Override
     public String getNameByCode(Object code) {

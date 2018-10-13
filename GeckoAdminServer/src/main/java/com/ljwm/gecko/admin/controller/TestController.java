@@ -48,7 +48,7 @@ public class TestController {
   public void baseSend(){
     MessageBean messageBean = new MessageBean();
     messageBean.setFromId(-1L).setCreateTime(DateUtil.date()).setMessage("Hello").setSubject("Test");
-    messageService.pushMessageToAdmin(6L,JSONUtil.toJsonStr(messageBean));
+//    messageService.pushMessageToAdmin(6L,JSONUtil.toJsonStr(messageBean));
   }
 
 }
