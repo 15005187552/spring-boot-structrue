@@ -4,8 +4,10 @@ import com.ljwm.gecko.base.enums.LoginType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.List;
+
 
 /**
  * Author: xixil
@@ -15,6 +17,7 @@ import java.util.List;
 
 @Data
 @ApiModel("消息体")
+@Accessors(chain = true)
 public class MessageDto {
 
   @ApiModelProperty("接收者 ID")

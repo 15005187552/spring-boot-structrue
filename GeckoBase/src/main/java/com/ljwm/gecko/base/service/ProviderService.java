@@ -74,7 +74,7 @@ public class ProviderService {
   }
 
   @Transactional
-  public List<ProviderServicesVo> confirmProvider(ConfirmProviderDto confirmProviderDto) {
+  public List<ProviderServicesVo>  confirmProvider(ConfirmProviderDto confirmProviderDto) {
     Provider provider = providerMapper.selectById(confirmProviderDto.getId());
     if (provider == null || !Objects.equals(provider.getValidateState(),ProviderStatEnum.WAIT_CONFIRM.getCode())) {
       log.info("服务商id:{} 服务商入驻信息不存在,或非待审核状态!",confirmProviderDto.getId());

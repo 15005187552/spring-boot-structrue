@@ -1,5 +1,6 @@
 package com.ljwm.gecko.im.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jfinal.wxaapp.WxaConfig;
 import com.jfinal.wxaapp.WxaConfigKit;
 import com.ljwm.bootbase.dto.Kv;
@@ -57,7 +58,7 @@ public class MPTemplateService {
     return TemplateUtil.doSend(formId,openId,mpTemplateEnum.getTemplateId(),kv);
   }
 
-  public Boolean sendSimple(Long memberId,String mpTemplateEnum,Kv kv) {
+  public Boolean sendSimple(Long memberId,String mpTemplateEnum,JSONObject kv) {
     // 1配置(可在启动时配置)
     WxaConfig wxaConfig = new WxaConfig();
     wxaConfig.setAppId(appId);
@@ -75,7 +76,7 @@ public class MPTemplateService {
       return false;
     }
     // 3发送
-    return TemplateUtil.doSend(formId,openId,mpTemplateEnum,kv);
+    return TemplateUtil.doSendJSON(formId,openId,mpTemplateEnum,kv);
   }
 
   /**
@@ -114,5 +115,6 @@ public class MPTemplateService {
     formIdMapper.updateById(formId.setStatus(FormIdStatusEnum.USE_LESS.getCode()));
     return formId.getFormId();
   }
+
 
 }

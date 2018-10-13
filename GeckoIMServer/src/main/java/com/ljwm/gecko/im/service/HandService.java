@@ -1,26 +1,14 @@
 package com.ljwm.gecko.im.service;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.ClassUtil;
-import cn.hutool.core.util.ReUtil;
-import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.ljwm.bootbase.dto.Kv;
-import com.ljwm.bootbase.enums.ResultEnum;
-import com.ljwm.bootbase.exception.LogicException;
-import com.ljwm.bootbase.kit.SpringKit;
-import com.ljwm.bootbase.kit.UtilKit;
-import com.ljwm.gecko.base.entity.PushMessage;
-import com.ljwm.gecko.base.entity.SocketInfo;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.mapper.SocketInfoMapper;
 import com.ljwm.gecko.base.service.MessageService;
 import com.ljwm.gecko.im.ws.ShowcaseWsMsgHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.SetUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -28,8 +16,8 @@ import org.springframework.stereotype.Component;
 import org.tio.core.ChannelContext;
 import org.tio.core.Tio;
 import org.tio.websocket.common.WsResponse;
-import sun.reflect.misc.MethodUtil;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -131,11 +119,13 @@ public class HandService {
     JSONObject pushMessage = message.getJSONObject("pushMessage");
     Integer type = message.getInteger("type");
     if (Objects.equals(type,LoginType.WX_APP.getCode())) {
+
       // todo 优化报错
-      mpTemplateService.sendSimple(message.getLong("receiverId"),
+      mpTemplateService.sendSimple(pushMessage.getLong("recevierId"),
         pushMessage.getJSONObject("message").getString("templateString"),
-        (Kv) BeanUtil.beanToMap(pushMessage.getJSONObject("message").getJSONObject("wxParams"))
+        pushMessage.getJSONObject("message").getJSONObject("wxParams")
       );
+
     } else {
       tioSendHandle(message,pushMessage.getString("receiverId") + "_" + message.getString("type"));
     }
