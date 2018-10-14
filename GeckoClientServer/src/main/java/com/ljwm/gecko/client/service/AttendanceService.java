@@ -2,20 +2,22 @@ package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.*;
-import com.ljwm.gecko.base.enums.CertificateType;
-import com.ljwm.gecko.base.enums.TableNameEnum;
-import com.ljwm.gecko.base.enums.TaxStatus;
+import com.ljwm.gecko.base.enums.*;
 import com.ljwm.gecko.base.mapper.*;
+import com.ljwm.gecko.base.model.vo.AttendanceAndPersonVo;
 import com.ljwm.gecko.base.model.vo.AttendanceData;
 import com.ljwm.gecko.base.model.vo.AttendanceTaxInfoVo;
 import com.ljwm.gecko.base.model.vo.TaxListVo;
+import com.ljwm.gecko.base.service.LocationService;
 import com.ljwm.gecko.base.utils.EnumUtil;
+import com.ljwm.gecko.base.utils.TimeUtil;
 import com.ljwm.gecko.client.model.dto.AttendanceForm;
 import com.ljwm.gecko.client.model.dto.TaxFindForm;
 import org.apache.commons.collections.map.HashedMap;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -83,6 +86,15 @@ public class AttendanceService {
 
   @Autowired
   TemplateMapper templateMapper;
+
+  @Autowired
+  LocationService locationService;
+
+  @Autowired
+  MemberMapper memberMapper;
+
+  @Autowired
+  NaturalPersonBackupMapper naturalPersonBackupMapper;
 
   @Transactional
   public Result commit(AttendanceForm attendanceForm) {
@@ -356,5 +368,51 @@ public class AttendanceService {
       list.add(attendanceData);
     }
     return list;
+  }
+
+  public Result findAttendanceAndPersonList(TaxFindForm taxFindForm) throws ParseException {
+    excelService.isHasProperty(taxFindForm.getCompanyId());
+    Page<AttendanceAndPersonVo> page = commonService.find(taxFindForm, (p, q) -> taxMapper.selectAttendanceAndPersonVoList(p, BeanUtil.beanToMap(taxFindForm)));
+    List<AttendanceAndPersonVo> list = page.getRecords();
+    for (AttendanceAndPersonVo attendanceAndPersonVo :list){
+      Long memberId = attendanceAndPersonVo.getMemberId();
+      CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, taxFindForm.getCompanyId()).eq(CompanyUser.MEMBER_ID, memberId));
+      CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUser.getId());
+      NaturalPersonBackup naturalPersonBackup = naturalPersonBackupMapper.selectOne(new QueryWrapper<NaturalPersonBackup>().eq(NaturalPersonBackup.TAX_ID, attendanceAndPersonVo.getId()));
+      NaturalPerson naturalPerson = null;
+      if(naturalPersonBackup !=null){
+        BeanUtil.copyProperties(naturalPersonBackup, naturalPerson);
+      } else {
+        naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.MEMBER_ID, memberId));
+      }
+      if(companyUserInfo == null || naturalPerson == null){
+        return Result.success(null);
+      }
+      BeanUtil.copyProperties(naturalPerson, attendanceAndPersonVo);
+      attendanceAndPersonVo.setIdCard(naturalPerson.getCertNum()).setName(naturalPerson.getName()).setCertificate(EnumUtil.getNameBycode(CertificateType.class, Integer.valueOf(naturalPerson.getCertificate())))
+        .setSocialBase(companyUserInfo.getSocialBase()!=null?companyUserInfo.getSocialBase().toString():null).setFundBase(companyUserInfo.getFundBase()!=null?companyUserInfo.getFundBase().toString():null).setFundPer(companyUserInfo.getFundPer()!=null?companyUserInfo.getFundPer().toString():null);
+      attendanceAndPersonVo.setDataList(getList(attendanceAndPersonVo.getId(), taxFindForm.getCompanyId()));
+      BeanUtil.copyProperties(companyUserInfo, attendanceAndPersonVo);
+      attendanceAndPersonVo.setCertificate(attendanceAndPersonVo.getCertificate())
+        .setCountry(StrUtil.isNotEmpty(attendanceAndPersonVo.getCountry())?EnumUtil.getNameBycode(CountryType.class, Integer.valueOf(attendanceAndPersonVo.getCountry())):null)
+        .setGender(StrUtil.isNotEmpty(attendanceAndPersonVo.getGender())?EnumUtil.getNameBycode(GenderEnum.class, Integer.valueOf(attendanceAndPersonVo.getGender())):null)
+        .setIsInvestor(StrUtil.isNotEmpty(attendanceAndPersonVo.getIsInvestor())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(attendanceAndPersonVo.getIsInvestor())):null)
+        .setEmployee(StrUtil.isNotEmpty(attendanceAndPersonVo.getEmployee())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(attendanceAndPersonVo.getEmployee())):null)
+        .setIntroduceTalents(StrUtil.isNotEmpty(attendanceAndPersonVo.getIntroduceTalents())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(attendanceAndPersonVo.getIntroduceTalents())):null)
+        .setSpecialIndustry(StrUtil.isNotEmpty(attendanceAndPersonVo.getSpecialIndustry())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(attendanceAndPersonVo.getSpecialIndustry())):null)
+        .setPersonState(StrUtil.isNotEmpty(attendanceAndPersonVo.getPersonState())?EnumUtil.getNameBycode(PersonStateEnum.class, Integer.valueOf(attendanceAndPersonVo.getPersonState())):null)
+        .setMaritalStatus(StrUtil.isNotEmpty(attendanceAndPersonVo.getMaritalStatus())?EnumUtil.getNameBycode(MaritalStatusEnum.class, Integer.valueOf(attendanceAndPersonVo.getMaritalStatus())):null)
+        .setWorkCity(locationService.getNameByCode(attendanceAndPersonVo.getWorkCity()))
+        .setProvince(locationService.getNameByCode(attendanceAndPersonVo.getProvince()))
+        .setCity(locationService.getNameByCode(attendanceAndPersonVo.getCity()))
+        .setArea(locationService.getNameByCode(attendanceAndPersonVo.getArea()))
+        .setBirthday(attendanceAndPersonVo.getBirthday()!=null?TimeUtil.parseDate(attendanceAndPersonVo.getBirthday()):null)
+        .setEducation(attendanceAndPersonVo.getEducation()!=null?EnumUtil.getNameBycode(EducationEnum.class, Integer.valueOf(attendanceAndPersonVo.getEducation())):null)
+        .setHireDate(attendanceAndPersonVo.getHireDate()!=null? TimeUtil.parseDate(attendanceAndPersonVo.getHireDate()):null)
+        .setTermDate(attendanceAndPersonVo.getTermDate()!=null?TimeUtil.parseDate(attendanceAndPersonVo.getTermDate()):null);
+      Member member = memberMapper.selectById(attendanceAndPersonVo.getMemberId());
+      attendanceAndPersonVo.setRegMobile(member.getRegMobile());
+    }
+    return Result.success(page);
   }
 }
