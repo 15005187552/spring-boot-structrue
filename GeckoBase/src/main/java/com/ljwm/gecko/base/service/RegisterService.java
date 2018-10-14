@@ -114,6 +114,8 @@ public class RegisterService {
       s += (int) (Math.random() * 10);
     Map params = new HashMap();
     params.put("code", s);
+    params.put("product", "短信测试应用");
+    String a =  EnumUtil.getEnumBycode(SMSTemplateEnum.class, action).getTemplateCode();
     SendSmsResponse response = smsService.send(phoneNum, EnumUtil.getEnumBycode(SMSTemplateEnum.class, action).getTemplateCode(), params);
     return s;
   }

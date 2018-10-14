@@ -23,6 +23,9 @@
   <resultMap id="TaxInfoMap" type="com.ljwm.gecko.base.model.vo.AttendanceTaxInfoVo" extends="BaseResultMap">
   </resultMap>
 
+  <resultMap id="AttendancePersonMap" type="com.ljwm.gecko.base.model.vo.AttendanceAndPersonVo" extends="BaseResultMap">
+  </resultMap>
+
   <resultMap id="NaturalResultMap" type="com.ljwm.gecko.base.model.vo.NaturalPersonTaxVo">
     <id column="MEMBER_ID" property="memberId" />
     <result column="COMPANY_ID" property="companyId" />
@@ -77,6 +80,16 @@
   </select>
 
   <select id="selectTaxVoList" resultMap="TaxInfoMap">
+    SELECT b.*
+    FROM t_natural_person a, t_tax b
+    <where>
+      a.COMPANY_ID = #{map.companyId} AND b.MEMBER_ID = a.MEMBER_ID
+      <if test="map.name!=null and map.name != ''">AND a.`NAME` = #{map.name}</if>
+      <if test="map.declareTime!=null and map.declareTime != ''">AND b.DECLARE_TIME = #{map.declareTime}</if>
+      <if test="map.declareType!=null and map.declareType != ''">AND b.DECLARE_TYPE = #{map.declareType}</if>
+    </where>
+  </select>
+  <select id="selectAttendanceAndPersonVoList" resultMap="AttendancePersonMap">
     SELECT b.*
     FROM t_natural_person a, t_tax b
     <where>

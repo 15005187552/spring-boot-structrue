@@ -3,6 +3,7 @@ package com.ljwm.gecko.base.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.gecko.base.entity.Tax;
+import com.ljwm.gecko.base.model.vo.AttendanceAndPersonVo;
 import com.ljwm.gecko.base.model.vo.AttendanceTaxVo;
 import com.ljwm.gecko.base.model.vo.NaturalPersonTaxVo;
 import org.apache.ibatis.annotations.Param;
@@ -40,6 +41,9 @@ public interface TaxMapper extends BaseMapper<Tax> {
 
   @ResultMap("TaxInfoMap")
   List<AttendanceTaxVo> selectTaxVoList(@Param("page") Page page, @Param("map") Map<String, Object> map);
+
+  @ResultMap("AttendancePersonMap")
+  List<AttendanceAndPersonVo> selectAttendanceAndPersonVoList(@Param("page") Page page, @Param("map") Map<String, Object> map);
 
   /*@Select("SELECT * FROM t_natural_person a, t_tax b WHERE a.COMPANY_ID = #{map.companyId} AND b.MEMBER_ID = a.MEMBER_ID <if test=\"map.name!=null and map.name != ''\">AND a.`NAME` = #{map.name}</if>\n" +
     "<if test=\"map.declareTime!=null and map.declareTime != ''\">AND b.DECLARE_TIME = #{map.declareTime}</if>")

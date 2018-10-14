@@ -82,6 +82,9 @@ public class ExcelService {
   @Autowired
   TaxMapper taxMapper;
 
+  @Autowired
+  NaturalPersonBackupMapper naturalPersonBackupMapper;
+
   @Transactional
   public void importPersonInfo(MultipartFile file, Long companyId) throws Exception {
     isHasProperty(companyId);
@@ -189,6 +192,8 @@ public class ExcelService {
     return Result.success("导入成功！");
   }
 
+
+  @Transactional
   public String exportPersonInfoExcel(HttpServletResponse response, Long companyId) throws IOException {
     /*Long memberId = SecurityKit.currentId();
     List<CompanyUser> list = companyUserMapper.selectList(new QueryWrapper<CompanyUser>()
@@ -276,6 +281,7 @@ public class ExcelService {
     return "导出成功！";
   }
 
+  @Transactional
   public String exportNormalSalary(HttpServletResponse response, NormalSalaryForm normalSalaryForm) throws IOException {
     Long companyId = normalSalaryForm.getCompanyId();
     String declareTime = normalSalaryForm.getDeclareTime();
@@ -295,6 +301,18 @@ public class ExcelService {
     }
     List<Object> dataList = new ArrayList<>();
     for (NaturalPerson naturalPerson : list) {
+      Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, normalSalaryForm.getDeclareTime()).eq(Tax.MEMBER_ID, naturalPerson.getMemberId()));
+      if (tax != null){
+        NaturalPersonBackup naturalPersonBackup = new NaturalPersonBackup();
+        BeanUtil.copyProperties(naturalPerson, naturalPersonBackup);
+        naturalPersonBackup.setTaxId(tax.getId());
+        NaturalPersonBackup naturalPersonBackupFind = naturalPersonBackupMapper.selectOne(new QueryWrapper<NaturalPersonBackup>().eq(NaturalPersonBackup.TAX_ID, tax.getId()));
+        if (naturalPersonBackupFind != null){
+          naturalPersonBackupMapper.updateById(naturalPersonBackup);
+        }else {
+          naturalPersonBackupMapper.insert(naturalPersonBackup);
+        }
+      }
       Long memberId = naturalPerson.getMemberId();
       List<EmployeeDto> employeeDtoList = companyUserMapper.selectEmployeeList(companyId, memberId);
       if (CollectionUtil.isEmpty(employeeDtoList)){
@@ -363,7 +381,6 @@ public class ExcelService {
     return Result.success("成功");
   }
 
-  @Transactional
   public void importEmployeeInfo(PersonInfoDto personInfoDto, Long companyId) {
     Map<String, Object> map = new HashedMap();
     map.put("REG_MOBILE", personInfoDto.getRegMobile());

@@ -72,4 +72,5 @@ public class TaxDeclarationController {
   public Result findListByCompanyId(@RequestBody TaxFindForm taxFindForm){
     return taxDeclarationService.findListByCompanyId(taxFindForm);
   }
+
 }
