@@ -427,6 +427,9 @@ public class ExcelService {
       naturalPersonMapper.updateById(naturalPerson1);
     } else {
       naturalPerson.setCreatTime(new Date());
+      if(naturalPerson.getMemberId()!=null){
+        throw new LogicException(personInfoDto.getRegMobile()+"该手机号码已注册");
+      }
       naturalPersonMapper.insert(naturalPerson);
     }
     String[] str = new String[RoleCodeType.values().length];
