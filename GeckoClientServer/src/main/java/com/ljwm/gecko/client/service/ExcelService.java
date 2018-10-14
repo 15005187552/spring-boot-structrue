@@ -437,7 +437,7 @@ public class ExcelService {
         throw new LogicException("生日请填写yyyy—MM-dd格式！");
       }
     }
-    NaturalPerson naturalPerson1 = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERTIFICATE, personInfoDto.getCertificate())
+    NaturalPerson naturalPerson1 = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERTIFICATE, EnumUtil.getEnumByName(CertificateType.class, personInfoDto.getCertificate()).getCode())
       .eq(NaturalPerson.CERT_NUM, personInfoDto.getCertNum()));
     if(naturalPerson1 != null){
       BeanUtil.copyProperties(naturalPerson, naturalPerson1);
