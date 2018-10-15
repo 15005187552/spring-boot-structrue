@@ -120,6 +120,7 @@ public class ClientProviderService {
             providerServices.setId(null);
             if (!Objects.equals(providerServices.getValidateState(),ProviderStatEnum.CONFIRM_SUCCESS.getCode())){
               providerServices.setValidateState(ProviderStatEnum.WAIT_CONFIRM.getCode());
+              providerServices.setValidateText(StringUtils.EMPTY);
             }
           }else {
             BeanUtil.copyProperties(providerServiceDto,providerServices);
@@ -234,6 +235,7 @@ public class ClientProviderService {
             providerServices.setId(null);
             if (!Objects.equals(providerServices.getValidateState(),ProviderStatEnum.CONFIRM_SUCCESS.getCode())){
               providerServices.setValidateState(ProviderStatEnum.WAIT_CONFIRM.getCode());
+              providerServices.setValidateText(StringUtils.EMPTY);
             }
           }else {
             BeanUtil.copyProperties(providerServiceDto,providerServices);
