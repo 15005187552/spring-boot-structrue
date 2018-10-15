@@ -3,7 +3,9 @@ package com.ljwm.gecko.provider.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.base.model.dto.OrderItemQueryDto;
 import com.ljwm.gecko.base.model.dto.OrderQueryDto;
+import com.ljwm.gecko.base.model.vo.OrderItemVo;
 import com.ljwm.gecko.base.model.vo.OrderVo;
 import com.ljwm.gecko.provider.model.form.OrderItemPriceDto;
 import com.ljwm.gecko.provider.service.OrderProviderService;
@@ -22,6 +24,14 @@ public class OrderController extends BaseController {
 
   @Autowired
   private OrderProviderService orderProviderService;
+
+
+  @PostMapping("findOrderItem")
+  @ApiOperation("会员查询订单子列表")
+  public Result<Page<OrderItemVo>> find(@RequestBody OrderItemQueryDto orderItemQueryDto){
+    return success(orderProviderService.findOrderItemList(orderItemQueryDto));
+  }
+
 
   @PostMapping("find")
   @ApiOperation("服务商查询订单列表")

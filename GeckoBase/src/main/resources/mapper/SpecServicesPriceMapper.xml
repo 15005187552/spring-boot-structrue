@@ -70,4 +70,8 @@
       select t.* from t_spec_services_price t where t.SERVICE_ID=#{serviceId} and t.PROVIDER_ID=#{providerId}
     </select>
 
+    <select id="findListByMap" parameterType="map" resultMap="BaseResultMap">
+      select t.* from t_spec_services_price t where t.SERVICE_ID=#{params.serviceId} and t.PROVIDER_ID=#{params.providerId}
+    </select>
+
 </mapper>

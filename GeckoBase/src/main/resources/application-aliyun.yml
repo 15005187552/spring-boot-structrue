@@ -1,14 +1,12 @@
 aliyun:
-  accessKeyId: LTAIX27fl9cmQ9TR
-  accessKeySecret: lMkLOzqiotP0K73Oe60l67yuAF6UWg
+  accessKeyId: LTAIIuCCUYL2ZDeu
+  accessKeySecret: A8Fs6bHJ7HPdFDoWoZEZ6zlYjL8fJe
   sms:
     enabled: true
-    accessKeyId: LTAIX27fl9cmQ9TR
-    accessKeySecret: lMkLOzqiotP0K73Oe60l67yuAF6UWg
-    signName: 阿里云短信测试专用
+    signName: 壁虎个税
     puller:
       reportListener:
-        queueName: Alicom-Queue-1701292592213185-SmsReport
+        queueName: Alicom-Queue-1220936721755616-SmsReport
         className: com.ljwm.gecko.base.listener.SmsReportListener
       conf:
         threadQueueSize: 30

@@ -72,6 +72,12 @@ public class ProviderService {
   private AppInfo appInfo;
 
 
+  @Autowired
+  private OrderMapper orderMapper;
+
+  @Autowired
+  private OrderCommentsMapper orderCommentsMapper;
+
   public Page<ProviderVo> findByPage(ProviderQueryDto query) {
     Page<ProviderVo> page = commonService.find(query,(p,q) ->
       providerMapper.findByPage(p,BeanUtil.beanToMap(query)));
@@ -229,6 +235,15 @@ public class ProviderService {
     provider.setCashDeposit(cashDeosit);
     providerMapper.updateById(provider);
     return provider;
+  }
+
+  public Integer starCount(Long providerId){
+    Integer totalOrderCount = orderMapper.findProviderOrderCount(providerId);
+    if (Objects.equals(0,totalOrderCount)){
+      return 0;
+    }
+    Integer totalStarCount = orderCommentsMapper.starCount(providerId);
+    return totalStarCount/totalOrderCount;
   }
 
 }

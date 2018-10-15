@@ -3,21 +3,27 @@ package com.ljwm.gecko.client.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.enums.*;
 import com.ljwm.gecko.base.mapper.*;
+import com.ljwm.gecko.base.model.dto.im.MessageDto;
 import com.ljwm.gecko.base.model.vo.AttendanceAndPersonVo;
 import com.ljwm.gecko.base.model.vo.AttendanceData;
 import com.ljwm.gecko.base.model.vo.AttendanceTaxInfoVo;
 import com.ljwm.gecko.base.model.vo.TaxListVo;
 import com.ljwm.gecko.base.service.LocationService;
+import com.ljwm.gecko.base.service.MessageService;
+import com.ljwm.gecko.base.service.RegisterService;
 import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.base.utils.TimeUtil;
+import com.ljwm.gecko.client.model.TaxConfirmForm;
 import com.ljwm.gecko.client.model.dto.AttendanceForm;
 import com.ljwm.gecko.client.model.dto.TaxFindForm;
 import org.apache.commons.collections.map.HashedMap;
@@ -27,10 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Janiffy
@@ -95,6 +98,15 @@ public class AttendanceService {
 
   @Autowired
   NaturalPersonBackupMapper naturalPersonBackupMapper;
+
+  @Autowired
+  CompanyMapper companyMapper;
+
+  @Autowired
+  MessageService messageService;
+
+  @Autowired
+  RegisterService registerService;
 
   @Transactional
   public Result commit(AttendanceForm attendanceForm) {
@@ -414,5 +426,37 @@ public class AttendanceService {
       attendanceAndPersonVo.setRegMobile(member.getRegMobile());
     }
     return Result.success(page);
+  }
+
+  public Result pushToEmployeeConfirm(TaxConfirmForm taxConfirmForm) {
+    Company company = companyMapper.selectOne(new QueryWrapper<Company>().eq(Company.ID, taxConfirmForm.getCompanyId()));
+    Long[] ids = taxConfirmForm.getIds();
+    if (ids == null){
+      List<NaturalPerson> list = naturalPersonMapper.selectList(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.COMPANY_ID,taxConfirmForm.getCompanyId()));
+      ids = new Long[list.size()];
+      int i = 0;
+      for (NaturalPerson naturalPerson : list){
+        ids[i] = naturalPerson.getMemberId();
+        i++;
+      }
+    }
+    for (int j = 0; j < ids.length; j++){
+      Long id = ids[j];
+      Member member = memberMapper.selectById(id);
+      MessageDto messageDto = new MessageDto();
+      JSONObject jsonObject = new JSONObject();
+      jsonObject.put("templateString",MPTemplateEnum.REMIND_CONFIRM.getName());
+      jsonObject.put("wxParams",
+        Kv.by("keyword1",company.getName()).set("keyword2", EnumUtil.getNameBycode(DeclareType.class, taxConfirmForm.getDeclareType()))
+          .set("keyword3", taxConfirmForm.getDeclareTime())
+      );
+      messageDto.setLoginType(Collections.singletonList(LoginType.WX_APP))
+        .setReceiverId(id)
+        .setMessage(jsonObject.toJSONString())
+      ;
+      registerService.sendSMSCode(member.getRegMobile(), SMSTemplateEnum.REMIND_CONFIRM.getCode());
+      messageService.pushMessage(messageDto);
+    }
+    return Result.success("成功！");
   }
 }

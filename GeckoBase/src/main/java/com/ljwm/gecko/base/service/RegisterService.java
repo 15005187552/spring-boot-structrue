@@ -108,13 +108,12 @@ public class RegisterService {
     return success("成功");
   }
 
-  private String sendSMSCode(String phoneNum, Integer action) {
+  public String sendSMSCode(String phoneNum, Integer action) {
     String s = "";
     while (s.length() < 6)
       s += (int) (Math.random() * 10);
     Map params = new HashMap();
     params.put("code", s);
-    params.put("product", "短信测试应用");
     String a =  EnumUtil.getEnumBycode(SMSTemplateEnum.class, action).getTemplateCode();
     SendSmsResponse response = smsService.send(phoneNum, EnumUtil.getEnumBycode(SMSTemplateEnum.class, action).getTemplateCode(), params);
     return s;

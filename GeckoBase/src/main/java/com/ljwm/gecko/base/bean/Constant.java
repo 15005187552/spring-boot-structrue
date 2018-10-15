@@ -1,14 +1,10 @@
 package com.ljwm.gecko.base.bean;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 /**
  * @author Janiffy
  * @date 2018/9/5 15:33
  */
 public class Constant {
-  @Autowired
-  ApplicationInfo appInfo;
 
   //微信登录code api
   public static final String LOGIN_URL = "https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code";
@@ -29,4 +25,6 @@ public class Constant {
   public static final String MEMBER = "member/";
 
   public static final String ZIP = "zip/";
+
+  public static final String MESSAGE = "message";
 }

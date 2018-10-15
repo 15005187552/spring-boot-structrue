@@ -30,7 +30,7 @@ public class ClientSpecServicesPriceService {
 
   public List<String> findProviderKeys(Integer serviceId,Long providerId){
     List keysList = Lists.newArrayList();
-    List<SpecServicesPrice> specServicesPriceList = specServicesPriceMapper.selectByMap(Kv.by("SERVICE_ID",serviceId).set("PROVIDER_ID",providerId));
+    List<SpecServicesPrice> specServicesPriceList = specServicesPriceMapper.findListByMap(Kv.by("serviceId",serviceId).set("providerId",providerId));
     if (CollectionUtils.isNotEmpty(specServicesPriceList)){
       for (SpecServicesPrice specServicesPrice: specServicesPriceList){
         List list = Arrays.asList(specServicesPrice.getKey().split("\\_"));

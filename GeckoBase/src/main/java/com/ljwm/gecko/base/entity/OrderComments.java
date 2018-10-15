@@ -61,6 +61,10 @@ public class OrderComments implements Serializable {
     @TableField("`CREATE_TIME`")
     private Date createTime;
 
+    @ApiModelProperty(value = "服务商id")
+    @TableField("PROVIDER_ID")
+    private Long providerId;
+
 
     public static final String ID = "`ID`";
 
