@@ -1,5 +1,6 @@
 package com.ljwm.gecko.provider.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.enums.ResultEnum;
@@ -9,7 +10,9 @@ import com.ljwm.gecko.base.entity.OrderItem;
 import com.ljwm.gecko.base.enums.OrderStatusEnum;
 import com.ljwm.gecko.base.mapper.OrderItemMapper;
 import com.ljwm.gecko.base.mapper.OrderMapper;
+import com.ljwm.gecko.base.model.dto.OrderItemQueryDto;
 import com.ljwm.gecko.base.model.dto.OrderQueryDto;
+import com.ljwm.gecko.base.model.vo.OrderItemVo;
 import com.ljwm.gecko.base.model.vo.OrderVo;
 import com.ljwm.gecko.provider.model.form.OrderItemPriceDto;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +38,10 @@ public class OrderProviderService {
 
   public Page<OrderVo> find(OrderQueryDto orderQueryDto){
     return commonService.find(orderQueryDto, (p, q) -> orderMapper.findPage(p, Kv.by("text", orderQueryDto.getText()).set("status",orderQueryDto.getStatus()).set("providerId",orderQueryDto.getProviderId())));
+  }
+
+  public Page<OrderItemVo> findOrderItemList(OrderItemQueryDto orderItemQueryDto){
+    return commonService.find(orderItemQueryDto, (p, q) -> orderItemMapper.findOrderItemList(p, BeanUtil.beanToMap(orderItemQueryDto)));
   }
 
   @Transactional
