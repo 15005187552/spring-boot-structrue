@@ -111,6 +111,7 @@ public class ClientProviderService {
             provider.setLogo(Constant.PROVIDER + member.getId() + "/" + providerDto.getLogo());
           }
         }
+        int changeCount = 0;
         for (ProviderServiceDto providerServiceDto: providerServiceDtoList){
           ProviderServices providerServices = new ProviderServices();
           if (providerServiceDto.getId()!=null){
@@ -120,6 +121,8 @@ public class ClientProviderService {
             providerServices.setId(null);
             if (!Objects.equals(providerServices.getValidateState(),ProviderStatEnum.CONFIRM_SUCCESS.getCode())){
               providerServices.setValidateState(ProviderStatEnum.WAIT_CONFIRM.getCode());
+              providerServices.setValidateText(StringUtils.EMPTY);
+              changeCount++;
             }
           }else {
             BeanUtil.copyProperties(providerServiceDto,providerServices);
@@ -127,9 +130,15 @@ public class ClientProviderService {
             providerServices.setVersion(provider.getVersion());
             providerServices.setUpdateTime(DateUtil.date());
             providerServices.setCreateTime(DateUtil.date());
+            changeCount++;
           }
           providerServicesMapper.insert(providerServices);
         }
+        if (changeCount>0){
+          provider.setValidateState(ProviderStatEnum.WAIT_CONFIRM.getCode());
+          provider.setValidateText(StringUtils.EMPTY);
+        }
+        providerMapper.updateById(provider);
       }else {
         //服务商为空,新增服务商
         Provider provider = new Provider();
@@ -224,6 +233,7 @@ public class ClientProviderService {
             provider.setLogo(Constant.PROVIDER + member.getId() + "/" + providerDto.getLogo());
           }
         }
+        int changeCount = 0;
         for (ProviderServiceDto providerServiceDto: providerServiceDtoList){
           ProviderServices providerServices = new ProviderServices();
           if (providerServiceDto.getId()!=null){
@@ -234,6 +244,8 @@ public class ClientProviderService {
             providerServices.setId(null);
             if (!Objects.equals(providerServices.getValidateState(),ProviderStatEnum.CONFIRM_SUCCESS.getCode())){
               providerServices.setValidateState(ProviderStatEnum.WAIT_CONFIRM.getCode());
+              providerServices.setValidateText(StringUtils.EMPTY);
+              changeCount++;
             }
           }else {
             BeanUtil.copyProperties(providerServiceDto,providerServices);
@@ -242,6 +254,7 @@ public class ClientProviderService {
             providerServices.setUpdateTime(DateUtil.date());
             providerServices.setCreateTime(DateUtil.date());
             providerServices.setProviderId(provider.getId());
+            changeCount++;
           }
           providerServicesMapper.insert(providerServices);
         }
@@ -297,6 +310,9 @@ public class ClientProviderService {
               }
             }
           }
+        }
+        if (changeCount>0){
+          provider.setValidateState(ProviderStatEnum.WAIT_CONFIRM.getCode());
         }
         providerMapper.updateById(provider);
       } else {

@@ -1,6 +1,8 @@
 package com.ljwm.gecko.base.service;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.ljwm.aliyun.springboot.service.SmsService;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.security.SecurityKit;
@@ -10,11 +12,15 @@ import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.entity.MemberAccount;
 import com.ljwm.gecko.base.entity.MemberPassword;
 import com.ljwm.gecko.base.entity.MobileCode;
+import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.enums.LoginType;
+import com.ljwm.gecko.base.enums.SMSTemplateEnum;
 import com.ljwm.gecko.base.mapper.GuestMapper;
 import com.ljwm.gecko.base.mapper.MemberAccountMapper;
+import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.mapper.MemberPasswordMapper;
 import com.ljwm.gecko.base.model.dto.*;
+import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.base.utils.IpUtil;
 import com.ljwm.gecko.base.utils.StringUtil;
 import com.ljwm.gecko.base.utils.TimeUtil;
@@ -26,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,11 +63,17 @@ public class RegisterService {
   @Autowired
   GuestMapper guestMapper;
 
+  @Autowired
+  MemberMapper memberMapper;
+
+  @Autowired
+  SmsService smsService;
+
   @Transactional
   public Result getSMS(RegisterForm registerForm, HttpServletRequest request) {
     if(registerForm.getAction() == 1) {
-      Long memberId = memberInfoDao.select(registerForm.getPhoneNum());
-      if (memberId != null) {
+      Member member = memberInfoDao.select(registerForm.getPhoneNum());
+      if (member != null && member.getDisabled()== DisabledEnum.ENABLED.getInfo()) {
         return fail(ResultEnum.DATA_ERROR.getCode(), "该用户已注册！");
       }
     }
@@ -80,23 +93,31 @@ public class RegisterService {
         if(mobileCode.getDayIndex() >= 5){
           return fail(ResultEnum.DATA_ERROR.getCode(),"你今天发送的验证码已经超过限制次数！");
         }
-        updateMobile = new MobileCode(mobileCode.getId(), sendSMSCode(phoneNum), phoneNum,
+        updateMobile = new MobileCode(mobileCode.getId(), sendSMSCode(phoneNum, registerForm.getAction()), phoneNum,
           IpUtil.getIPAddr(request), currentTime, Integer.valueOf(mobileCode.getDayIndex()+1));
       } else {
-        updateMobile = new MobileCode(mobileCode.getId(), sendSMSCode(phoneNum), phoneNum,
+        updateMobile = new MobileCode(mobileCode.getId(), sendSMSCode(phoneNum, registerForm.getAction()), phoneNum,
           IpUtil.getIPAddr(request), currentTime, 1);
       }
       mobileCodeDao.update(updateMobile);
     } else {
-      MobileCode insertMobile = new MobileCode(null, sendSMSCode(phoneNum), phoneNum,
+      MobileCode insertMobile = new MobileCode(null, sendSMSCode(phoneNum, registerForm.getAction()), phoneNum,
         IpUtil.getIPAddr(request), currentTime, 1);
       mobileCodeDao.insert(insertMobile);
     }
     return success("成功");
   }
 
-  private String sendSMSCode(String phoneNum) {
-    return "123456";
+  private String sendSMSCode(String phoneNum, Integer action) {
+    String s = "";
+    while (s.length() < 6)
+      s += (int) (Math.random() * 10);
+    Map params = new HashMap();
+    params.put("code", s);
+    params.put("product", "短信测试应用");
+    String a =  EnumUtil.getEnumBycode(SMSTemplateEnum.class, action).getTemplateCode();
+    SendSmsResponse response = smsService.send(phoneNum, EnumUtil.getEnumBycode(SMSTemplateEnum.class, action).getTemplateCode(), params);
+    return s;
   }
 
   @Transactional
@@ -108,21 +129,22 @@ public class RegisterService {
     MobileCode mobileCode = mobileCodeDao.select(code, phoneNum);
     //小程序只是绑定手机号的操作，其账号密码无实际意义
     if(mobileCode != null){
-      Long memberId = memberInfoDao.select(phoneNum);
-      Member member = null;
-      if (memberId != null){
+      Member member = memberInfoDao.select(phoneNum);
+      Long memberId = null;
+      if (member != null){
+        memberId = member.getId();
         List<MemberAccount> list = memberInfoDao.selectAccount(userName, memberId);
         if(CollectionUtil.isNotEmpty(list)) {
           return fail(ResultEnum.DATA_ERROR.getCode(), "该用户已注册！");
         }
+        member.setDisabled(DisabledEnum.ENABLED.getInfo());
+        memberMapper.updateById(member);
       } else {
         member = memberInfoDao.insert(phoneNum);
         memberId = member.getId();
       }
       log.debug("Saved member :{}", member);
-      if(memberId != null) {
-        guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
-      }
+      guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
      /* String salt = StringUtil.salt();
       password = SecurityKit.passwordMD5(password, salt);
       MemberPassword memberPassword = memberInfoDao.insertPassword(salt, password, new Date());
@@ -151,9 +173,9 @@ public class RegisterService {
     String password = registerPCForm.getPassword();
     MobileCode mobileCode = mobileCodeDao.select(code, phoneNum);
     if(mobileCode != null){
-      Long memberId = memberInfoDao.select(phoneNum);
-      Member member = null;
-      if (memberId != null){
+      Member member = memberInfoDao.select(phoneNum);
+      Long memberId =null;
+      if (member != null && member.getDisabled()!=DisabledEnum.ENABLED.getInfo()){
         List<MemberAccount> list = memberInfoDao.selectAccount(phoneNum, memberId);
         if(CollectionUtil.isNotEmpty(list)) {
           return fail(ResultEnum.DATA_ERROR.getCode(), "该用户已注册！");
@@ -163,9 +185,7 @@ public class RegisterService {
         memberId = member.getId();
       }
       log.debug("Saved member :{}", member);
-      if(memberId != null) {
-        guestMapper.updateByGuestId(registerPCForm.getGuestId(), memberId);
-      }
+      guestMapper.updateByGuestId(registerPCForm.getGuestId(), memberId);
       String salt = StringUtil.salt();
       password = SecurityKit.passwordMD5(password, salt);
       MemberPassword memberPassword = memberInfoDao.insertPassword(salt, password, new Date());
@@ -185,10 +205,11 @@ public class RegisterService {
     String password = passwordForm.getPassword();
     MobileCode mobileCode = mobileCodeDao.select(code, phoneNum);
     if(mobileCode != null){
-      Long memberId = memberInfoDao.select(phoneNum);
+      Member member = memberInfoDao.select(phoneNum);
       String salt = StringUtil.salt();
       password = SecurityKit.passwordMD5(password, salt);
-      if(memberId != null){
+      if(member != null){
+        Long memberId = member.getId();
         List<MemberAccount> list = memberInfoDao.selectAccount(phoneNum, memberId);
         MemberPassword memberPassword;
         if (CollectionUtil.isNotEmpty(list)){
@@ -224,11 +245,11 @@ public class RegisterService {
     String phoneNum = modifyPasswordForm.getPhoneNum();
     String oldPassword = modifyPasswordForm.getOldPassword();
     String newPassword = modifyPasswordForm.getNewPassword();
-    Long memberId = memberInfoDao.select(phoneNum);
-    if(memberId == null){
+    Member member = memberInfoDao.select(phoneNum);
+    if(member == null){
       return fail(ResultEnum.DATA_ERROR.getCode(), "该手机号未注册！");
     }
-    List<MemberAccount> list = memberInfoDao.selectAccount(phoneNum, memberId);
+    List<MemberAccount> list = memberInfoDao.selectAccount(phoneNum, member.getId());
     if (CollectionUtil.isNotEmpty(list)){
       Long passwordId = list.get(0).getPasswordId();
       MemberPassword memberPassword = memberPasswordMapper.selectById(passwordId);

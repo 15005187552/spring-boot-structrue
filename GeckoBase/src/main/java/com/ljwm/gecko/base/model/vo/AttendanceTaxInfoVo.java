@@ -21,7 +21,7 @@ public class AttendanceTaxInfoVo extends Tax {
   private String name;
 
   @ApiModelProperty("证件类型")
-  private Integer certificate;
+  private String certificate;
 
   @ApiModelProperty("证照号码")
   private String idCard;

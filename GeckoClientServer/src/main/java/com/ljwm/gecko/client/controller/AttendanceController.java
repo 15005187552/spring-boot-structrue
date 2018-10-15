@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.text.ParseException;
 
 /**
  * @author Janiffy
@@ -48,4 +49,13 @@ public class AttendanceController {
   public Result findAttendanceVoList(@RequestBody TaxFindForm taxFindForm){
     return attendanceService.findAttendanceVoList(taxFindForm);
   }
+
+  @PostMapping("/findAttendanceAndPersonList")
+  @ApiOperation("查看公司申报记录")
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
+  public Result findAttendanceAndPersonList(@RequestBody TaxFindForm taxFindForm) throws ParseException {
+    return attendanceService.findAttendanceAndPersonList(taxFindForm);
+  }
+
+
 }

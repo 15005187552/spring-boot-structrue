@@ -2,15 +2,17 @@ package com.ljwm.gecko.base.model.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
  * @author Janiffy
- * @date 2018/9/29 11:17
+ * @date 2018/10/14 12:24
  */
 @Data
 @Accessors(chain = true)
-public class PersonInfoVo {
+@EqualsAndHashCode(callSuper = false)
+public class AttendanceAndPersonVo extends AttendanceTaxInfoVo{
 
   @ApiModelProperty("会员ID")
   private Long memberId;
@@ -122,4 +124,5 @@ public class PersonInfoVo {
 
   @ApiModelProperty(value = "备注")
   private String remark;
+
 }

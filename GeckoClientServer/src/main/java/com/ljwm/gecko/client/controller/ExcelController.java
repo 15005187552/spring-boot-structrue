@@ -53,7 +53,7 @@ public class ExcelController {
 
   @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/normalSalary/export")
-  @ApiOperation("正常工资薪金")
+  @ApiOperation("正常工资薪金导出")
   public Result exportNormalSalary(HttpServletResponse response, @RequestBody NormalSalaryForm normalSalaryForm)throws IOException {
     return Result.success(excelService.exportNormalSalary(response, normalSalaryForm));
   }

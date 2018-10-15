@@ -82,6 +82,9 @@ public class ExcelService {
   @Autowired
   TaxMapper taxMapper;
 
+  @Autowired
+  NaturalPersonBackupMapper naturalPersonBackupMapper;
+
   @Transactional
   public void importPersonInfo(MultipartFile file, Long companyId) throws Exception {
     isHasProperty(companyId);
@@ -116,7 +119,7 @@ public class ExcelService {
     InputStream inputStream = file.getInputStream();
     ExcelLogs logs =new ExcelLogs();
     Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs , 0);
-    Object name, certificate = null, certNum = null, socialBase = null, fundBase = null, fundPer = null;
+    Object name=null, certificate = null, certNum = null, socialBase = null, fundBase = null, fundPer = null;
     NaturalPerson naturalPerson = null;
     for(Map m:importExcel){
       for (Object key:m.keySet()) {
@@ -143,7 +146,7 @@ public class ExcelService {
             Integer certificateType = EnumUtil.getEnumByName(CertificateType.class, certificate.toString()).getCode();
             naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERT_NUM, certNum.toString()).eq(NaturalPerson.CERTIFICATE, certificateType));
             if(naturalPerson ==null){
-                return Result.fail("证件号码或者证照类型有误！");
+                return Result.fail("员工"+name.toString()+"证件号码或者证照类型有误！");
             }
           }else {
             Long memberId = naturalPerson.getMemberId();
@@ -164,7 +167,7 @@ public class ExcelService {
             Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId));
             Date date = new Date();
             if (tax != null) {
-              tax.setUpdateTime(date).setStatus(TaxStatus.NEED_CONFIRM.getCode());
+              tax.setUpdateTime(date).setStatus(TaxStatus.NEED_CONFIRM.getCode()).setDeclareType(declareType);
               taxMapper.updateById(tax);
             } else {
               tax = new Tax();
@@ -189,6 +192,8 @@ public class ExcelService {
     return Result.success("导入成功！");
   }
 
+
+  @Transactional
   public String exportPersonInfoExcel(HttpServletResponse response, Long companyId) throws IOException {
     /*Long memberId = SecurityKit.currentId();
     List<CompanyUser> list = companyUserMapper.selectList(new QueryWrapper<CompanyUser>()
@@ -276,6 +281,7 @@ public class ExcelService {
     return "导出成功！";
   }
 
+  @Transactional
   public String exportNormalSalary(HttpServletResponse response, NormalSalaryForm normalSalaryForm) throws IOException {
     Long companyId = normalSalaryForm.getCompanyId();
     String declareTime = normalSalaryForm.getDeclareTime();
@@ -295,6 +301,18 @@ public class ExcelService {
     }
     List<Object> dataList = new ArrayList<>();
     for (NaturalPerson naturalPerson : list) {
+      Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, normalSalaryForm.getDeclareTime()).eq(Tax.MEMBER_ID, naturalPerson.getMemberId()));
+      if (tax != null){
+        NaturalPersonBackup naturalPersonBackup = new NaturalPersonBackup();
+        BeanUtil.copyProperties(naturalPerson, naturalPersonBackup);
+        naturalPersonBackup.setTaxId(tax.getId());
+        NaturalPersonBackup naturalPersonBackupFind = naturalPersonBackupMapper.selectOne(new QueryWrapper<NaturalPersonBackup>().eq(NaturalPersonBackup.TAX_ID, tax.getId()));
+        if (naturalPersonBackupFind != null){
+          naturalPersonBackupMapper.updateById(naturalPersonBackup);
+        }else {
+          naturalPersonBackupMapper.insert(naturalPersonBackup);
+        }
+      }
       Long memberId = naturalPerson.getMemberId();
       List<EmployeeDto> employeeDtoList = companyUserMapper.selectEmployeeList(companyId, memberId);
       if (CollectionUtil.isEmpty(employeeDtoList)){
@@ -363,7 +381,6 @@ public class ExcelService {
     return Result.success("成功");
   }
 
-  @Transactional
   public void importEmployeeInfo(PersonInfoDto personInfoDto, Long companyId) {
     Map<String, Object> map = new HashedMap();
     map.put("REG_MOBILE", personInfoDto.getRegMobile());
@@ -420,13 +437,16 @@ public class ExcelService {
         throw new LogicException("生日请填写yyyy—MM-dd格式！");
       }
     }
-    NaturalPerson naturalPerson1 = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERTIFICATE, personInfoDto.getCertificate())
+    NaturalPerson naturalPerson1 = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERTIFICATE, EnumUtil.getEnumByName(CertificateType.class, personInfoDto.getCertificate()).getCode())
       .eq(NaturalPerson.CERT_NUM, personInfoDto.getCertNum()));
     if(naturalPerson1 != null){
       BeanUtil.copyProperties(naturalPerson, naturalPerson1);
       naturalPersonMapper.updateById(naturalPerson1);
     } else {
       naturalPerson.setCreatTime(new Date());
+      if(naturalPerson.getMemberId()!=null){
+        throw new LogicException(personInfoDto.getRegMobile()+"该手机号码已注册");
+      }
       naturalPersonMapper.insert(naturalPerson);
     }
     String[] str = new String[RoleCodeType.values().length];
@@ -501,7 +521,7 @@ public class ExcelService {
     }
     if (StrUtil.isNotEmpty(personInfoDto.getIntroduceTalents())){
       if (EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getIntroduceTalents()) != null){
-        companyUserInfo1.setNtroduceTalents(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getIntroduceTalents()).getCode());
+        companyUserInfo1.setIntroduceTalents(EnumUtil.getEnumByName(YesOrNoEnum.class, personInfoDto.getIntroduceTalents()).getCode());
       } else {
         throw new LogicException("是否引进人才填写有误！");
       }

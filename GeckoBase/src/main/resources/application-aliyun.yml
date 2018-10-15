@@ -9,6 +9,6 @@ aliyun:
     puller:
       reportListener:
         queueName: Alicom-Queue-1701292592213185-SmsReport
-        className: com.ljwm.demo.listener.SmsReportListener
+        className: com.ljwm.gecko.base.listener.SmsReportListener
       conf:
         threadQueueSize: 30

@@ -29,8 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -70,7 +71,7 @@ public class CompanyService {
     company.setValidateState(form.getIsPass()).setValidateTime(DateTime.now())
       .setValidatorId(SecurityKit.currentId()).setValidateText(form.getText());
     companyMapper.updateById(company);
-    companyService.pushMessage(company);
+    pushMessage(company);
     return company;
   }
 
@@ -78,7 +79,6 @@ public class CompanyService {
     return companyMapper.selectList(null).stream().map(SimpleCompany::new).collect(Collectors.toList());
   }
 
-  @Transactional
   public void pushMessage(Company company) {
     CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>()
       .eq(CompanyUser.COMPANY_ID,company.getId())
