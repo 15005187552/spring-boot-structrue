@@ -80,13 +80,6 @@ public class CompanyService {
   }
 
   public void pushMessage(Company company) {
-    CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>()
-      .eq(CompanyUser.COMPANY_ID,company.getId())
-      .and(wrapper ->
-        wrapper.eq(CompanyUser.ROLES_CODE,"001")
-          .or().eq(CompanyUser.ROLES_CODE,"011")
-          .or().eq(CompanyUser.ROLES_CODE,"111")
-      ));
     MessageDto messageDto = new MessageDto();
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("templateString",MPTemplateEnum.AUDIT.getName());
@@ -95,7 +88,7 @@ public class CompanyService {
         .set("keyword3",company.getValidateText())
     );
     messageDto.setLoginType(Collections.singletonList(LoginType.WX_APP))
-      .setReceiverId(companyUser.getMemberId())
+      .setReceiverId(company.getCreaterId())
       .setMessage(jsonObject.toJSONString())
     ;
     messageService.pushMessage(messageDto);

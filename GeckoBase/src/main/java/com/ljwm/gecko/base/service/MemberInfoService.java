@@ -2,6 +2,7 @@ package com.ljwm.gecko.base.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -15,18 +16,16 @@ import com.ljwm.gecko.base.dao.MemberInfoDao;
 import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.entity.MemberPaper;
 import com.ljwm.gecko.base.entity.PaperPath;
-import com.ljwm.gecko.base.enums.InfoValidateStateEnum;
-import com.ljwm.gecko.base.enums.ValidateStatEnum;
+import com.ljwm.gecko.base.entity.Provider;
+import com.ljwm.gecko.base.enums.*;
 import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.mapper.MemberPaperMapper;
 import com.ljwm.gecko.base.mapper.MemberPasswordMapper;
 import com.ljwm.gecko.base.mapper.PaperPathMapper;
 import com.ljwm.gecko.base.model.bean.AppInfo;
 import com.ljwm.gecko.base.model.dto.*;
-import com.ljwm.gecko.base.model.vo.LoginVo;
-import com.ljwm.gecko.base.model.vo.MemberInfo;
-import com.ljwm.gecko.base.model.vo.MemberPaperVo;
-import com.ljwm.gecko.base.model.vo.MemberVo;
+import com.ljwm.gecko.base.model.dto.im.MessageDto;
+import com.ljwm.gecko.base.model.vo.*;
 import com.ljwm.gecko.base.utils.Fileutil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -35,8 +34,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author Janiffy
@@ -74,18 +75,21 @@ public class MemberInfoService {
   @Autowired
   private MemberInfoService memberInfoService;
 
+  @Autowired
+  private MessageService messageService;
 
-  public MemberVo selectMemberInfo(Long memberId, Integer code) {
-    return memberInfoDao.selectMemberInfo(memberId, code);
+
+  public MemberVo selectMemberInfo(Long memberId,Integer code) {
+    return memberInfoDao.selectMemberInfo(memberId,code);
   }
 
   @Transactional
-  public Long updateExt(String mpOpenId, String extInfo, Integer code) {
-    return memberInfoDao.updateAccount(mpOpenId, extInfo, code);
+  public Long updateExt(String mpOpenId,String extInfo,Integer code) {
+    return memberInfoDao.updateAccount(mpOpenId,extInfo,code);
   }
 
-  public MemberInfo selectMemberInfo(Long memberId, String type) {
-    return memberInfoDao.selectMemberInfo(memberId, type);
+  public MemberInfo selectMemberInfo(Long memberId,String type) {
+    return memberInfoDao.selectMemberInfo(memberId,type);
   }
 
   public String selectMember(Long memberId) {
@@ -93,21 +97,21 @@ public class MemberInfoService {
   }
 
   @Transactional
-  public void updateMember(String nickName, Long memberId, String avatarUrl) {
-    memberInfoDao.updateMember(nickName, memberId, avatarUrl);
+  public void updateMember(String nickName,Long memberId,String avatarUrl) {
+    memberInfoDao.updateMember(nickName,memberId,avatarUrl);
   }
 
   @Transactional
   public void validateMember(MemberDto memberDto) {
     Member member = memberMapper.selectById(memberDto.getId());
     if (member == null) {
-      log.info("根据会员id:{} 查询不到该会员信息", memberDto.getId());
-      throw new LogicException(ResultEnum.DATA_ERROR, "根据会员id" + memberDto.getId() + "查询不到该会员信息!");
+      log.info("根据会员id:{} 查询不到该会员信息",memberDto.getId());
+      throw new LogicException(ResultEnum.DATA_ERROR,"根据会员id" + memberDto.getId() + "查询不到该会员信息!");
     }
     List<FileDto> fileDtoList = memberDto.getFileDtoList();
     if (CollectionUtils.isEmpty(fileDtoList)) {
-      log.info("根据会员id:{}个人资质证件不能为空!", memberDto.getId());
-      throw new LogicException(ResultEnum.DATA_ERROR, "个人资质证件不能为空!");
+      log.info("根据会员id:{}个人资质证件不能为空!",memberDto.getId());
+      throw new LogicException(ResultEnum.DATA_ERROR,"个人资质证件不能为空!");
     }
     member.setMemberIdcard(memberDto.getMemberIdcard());
     member.setName(memberDto.getName());
@@ -115,95 +119,95 @@ public class MemberInfoService {
     if (!file.exists()) {
       file.mkdirs();
     }
-    if (StringUtils.isNotEmpty(memberDto.getPicFront())){
-      if (memberDto.getPicFront().contains(Constant.MEMBER)){
+    if (StringUtils.isNotEmpty(memberDto.getPicFront())) {
+      if (memberDto.getPicFront().contains(Constant.MEMBER)) {
         member.setPicFront(memberDto.getPicFront());
-      }else {
+      } else {
         String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicFront();
         String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
-        Fileutil.cutGeneralFile(srcPath, destDir);
+        Fileutil.cutGeneralFile(srcPath,destDir);
         member.setPicFront(Constant.MEMBER + member.getId() + "/" + memberDto.getPicFront());
         member.setInfoValidateState(0);
       }
     }
-    if (StringUtils.isNotEmpty(memberDto.getPicBack())){
-      if (memberDto.getPicBack().contains(Constant.MEMBER)){
+    if (StringUtils.isNotEmpty(memberDto.getPicBack())) {
+      if (memberDto.getPicBack().contains(Constant.MEMBER)) {
         member.setPicBack(memberDto.getPicBack());
-      }else {
+      } else {
         String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicBack();
         String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
-        Fileutil.cutGeneralFile(srcPath, destDir);
+        Fileutil.cutGeneralFile(srcPath,destDir);
         member.setPicBack(Constant.MEMBER + member.getId() + "/" + memberDto.getPicBack());
         member.setInfoValidateState(0);
         member.setValidateText(StringUtils.EMPTY);
       }
     }
-    if (StringUtils.isNotEmpty(memberDto.getPicPassport())){
-      if (memberDto.getPicPassport().contains(Constant.MEMBER)){
+    if (StringUtils.isNotEmpty(memberDto.getPicPassport())) {
+      if (memberDto.getPicPassport().contains(Constant.MEMBER)) {
         member.setPicPassport(memberDto.getPicBack());
-      }else {
+      } else {
         String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicPassport();
         String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
-        Fileutil.cutGeneralFile(srcPath, destDir);
+        Fileutil.cutGeneralFile(srcPath,destDir);
         member.setPicPassport(Constant.MEMBER + member.getId() + "/" + memberDto.getPicPassport());
         member.setInfoValidateState(0);
         member.setValidateText(StringUtils.EMPTY);
       }
     }
-    member.setVersion(member.getVersion()+1);
+    member.setVersion(member.getVersion() + 1);
     Integer validateStatus = member.getValidateState();
     for (FileDto fileDto : fileDtoList) {
-      if (fileDto.getId()!=null){
-       MemberPaper memberPaper = memberPaperMapper.selectById(fileDto.getId());
-       if (memberPaper==null){
-         log.info("会员{}资质认证详情查询不到该详情信息!",memberDto.getId());
-         throw new LogicException(ResultEnum.DATA_ERROR,"查询不到该资质详情!");
-       }
-       //如果没有修改
-       if (Objects.equals(fileDto.getIsChange(),0)){
-         MemberPaper tempPaper = new MemberPaper();
-         BeanUtil.copyProperties(memberPaper,tempPaper);
-         tempPaper.setVersion(member.getVersion());
-         tempPaper.setId(null);
-         memberPaperMapper.insert(tempPaper);
-         for (String fileName : fileDto.getFileNameList()){
-           PaperPath paperPath = new PaperPath();
-           paperPath.setMemberPaperId(tempPaper.getId());
-           paperPath.setPicPath(fileName);
-           paperPath.setMemberPaperId(memberPaper.getId());
-           paperPath.setCreateTime(DateUtil.date());
-           paperPath.setUpdateTime(DateUtil.date());
-           paperPathMapper.insert(paperPath);
-         }
-       }else {
+      if (fileDto.getId() != null) {
+        MemberPaper memberPaper = memberPaperMapper.selectById(fileDto.getId());
+        if (memberPaper == null) {
+          log.info("会员{}资质认证详情查询不到该详情信息!",memberDto.getId());
+          throw new LogicException(ResultEnum.DATA_ERROR,"查询不到该资质详情!");
+        }
+        //如果没有修改
+        if (Objects.equals(fileDto.getIsChange(),0)) {
+          MemberPaper tempPaper = new MemberPaper();
+          BeanUtil.copyProperties(memberPaper,tempPaper);
+          tempPaper.setVersion(member.getVersion());
+          tempPaper.setId(null);
+          memberPaperMapper.insert(tempPaper);
+          for (String fileName : fileDto.getFileNameList()) {
+            PaperPath paperPath = new PaperPath();
+            paperPath.setMemberPaperId(tempPaper.getId());
+            paperPath.setPicPath(fileName);
+            paperPath.setMemberPaperId(memberPaper.getId());
+            paperPath.setCreateTime(DateUtil.date());
+            paperPath.setUpdateTime(DateUtil.date());
+            paperPathMapper.insert(paperPath);
+          }
+        } else {
           //修改了信息
-         MemberPaper tempPaper = new MemberPaper();
-         BeanUtil.copyProperties(memberPaper,tempPaper);
-         tempPaper.setVersion(member.getVersion());
-         tempPaper.setId(null);
-         tempPaper.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
-         validateStatus = ValidateStatEnum.WAIT_CONFIRM.getCode();
-         memberPaperMapper.insert(tempPaper);
-         for (String fileName : fileDto.getFileNameList()){
-           PaperPath paperPath = new PaperPath();
-           if (fileName.contains(Constant.MEMBER)){
-             paperPath.setMemberPaperId(tempPaper.getId());
-             paperPath.setPicPath(fileName);
-           }else {
-             String srcPath = appInfo.getFilePath() + Constant.CACHE + fileName;
-             String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
-             Fileutil.cutGeneralFile(srcPath, destDir);
-             paperPath.setPicPath(Constant.MEMBER + member.getId() + "/" + fileName);
-           }
-           paperPath.setMemberPaperId(tempPaper.getId());
-           paperPath.setCreateTime(DateUtil.date());
-           paperPath.setUpdateTime(DateUtil.date());
-           paperPathMapper.insert(paperPath);
-         }
-       }
-      }else {
+          MemberPaper tempPaper = new MemberPaper();
+          BeanUtil.copyProperties(memberPaper,tempPaper);
+          tempPaper.setVersion(member.getVersion());
+          tempPaper.setId(null);
+          tempPaper.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
+          validateStatus = ValidateStatEnum.WAIT_CONFIRM.getCode();
+          memberPaperMapper.insert(tempPaper);
+          for (String fileName : fileDto.getFileNameList()) {
+            PaperPath paperPath = new PaperPath();
+            if (fileName.contains(Constant.MEMBER)) {
+              paperPath.setMemberPaperId(tempPaper.getId());
+              paperPath.setPicPath(fileName);
+            } else {
+              String srcPath = appInfo.getFilePath() + Constant.CACHE + fileName;
+              String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
+              Fileutil.cutGeneralFile(srcPath,destDir);
+              paperPath.setPicPath(Constant.MEMBER + member.getId() + "/" + fileName);
+            }
+            paperPath.setMemberPaperId(tempPaper.getId());
+            paperPath.setCreateTime(DateUtil.date());
+            paperPath.setUpdateTime(DateUtil.date());
+            paperPathMapper.insert(paperPath);
+          }
+        }
+      } else {
         List<String> fileNameList = fileDto.getFileNameList();
-        if (CollectionUtils.isEmpty(fileNameList)){
+        if (CollectionUtils.isEmpty(fileNameList)) {
           log.info("会员{}资质认证,认证文件不能为空!",memberDto.getId());
           throw new LogicException(ResultEnum.DATA_ERROR,"认证文件不能为空!");
         }
@@ -216,10 +220,10 @@ public class MemberInfoService {
         validateStatus = ValidateStatEnum.WAIT_CONFIRM.getCode();
         memberPaper.setVersion(member.getVersion());
         memberPaperMapper.insert(memberPaper);
-        for (String fileName : fileNameList){
+        for (String fileName : fileNameList) {
           String srcPath = appInfo.getFilePath() + Constant.CACHE + fileName;
           String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
-          Fileutil.cutGeneralFile(srcPath, destDir);
+          Fileutil.cutGeneralFile(srcPath,destDir);
           PaperPath paperPath = new PaperPath();
           paperPath.setMemberPaperId(memberPaper.getId());
           paperPath.setPicPath(Constant.MEMBER + member.getId() + "/" + fileName);
@@ -238,25 +242,25 @@ public class MemberInfoService {
   }
 
   public Page<MemberVo> findByPage(MemberQueryDto memberQueryDto) {
-    return commonService.find(memberQueryDto, (p, q) -> memberMapper.findByPage(p, Kv.by("text", memberQueryDto.getText()).set("disabled", memberQueryDto.getDisabled()).set("validateState", memberQueryDto.getValidateState()).set("infoValidateState",memberQueryDto.getInfoValidateState())));
+    return commonService.find(memberQueryDto,(p,q) -> memberMapper.findByPage(p,Kv.by("text",memberQueryDto.getText()).set("disabled",memberQueryDto.getDisabled()).set("validateState",memberQueryDto.getValidateState()).set("infoValidateState",memberQueryDto.getInfoValidateState())));
   }
 
   @Transactional
   public void checkMember(MemberConfirmDto memberConfirmDto) {
     Member member = memberMapper.selectById(memberConfirmDto.getMemberId());
     if (member == null) {
-      log.info("会员id:{} 会员信息不存在!", memberConfirmDto.getMemberId());
-      throw new LogicException(ResultEnum.DATA_ERROR, "会员查询不到或非认证状态!");
+      log.info("会员id:{} 会员信息不存在!",memberConfirmDto.getMemberId());
+      throw new LogicException(ResultEnum.DATA_ERROR,"会员查询不到或非认证状态!");
     }
     List<MemberPaperConfirmDto> memberPaperConfirmDtoList = memberConfirmDto.getPaperConfirmDtoList();
-    if (CollectionUtils.isEmpty(memberPaperConfirmDtoList)){
+    if (CollectionUtils.isEmpty(memberPaperConfirmDtoList)) {
       log.info("会员{} ,资质认证详情不能为空!",memberConfirmDto.getMemberId());
       throw new LogicException(ResultEnum.DATA_ERROR,"资质认证详情不能为空!");
     }
     Integer validateState = ValidateStatEnum.CONFIRM_SUCCESS.getCode();
-    for (MemberPaperConfirmDto memberPaperConfirmDto: memberPaperConfirmDtoList){
+    for (MemberPaperConfirmDto memberPaperConfirmDto : memberPaperConfirmDtoList) {
       MemberPaper memberPaper = memberPaperMapper.selectById(memberPaperConfirmDto.getId());
-      if (memberPaper==null){
+      if (memberPaper == null) {
         throw new LogicException(ResultEnum.DATA_ERROR,"会员资质信息不存在!");
       }
       memberPaper.setUpdateTime(DateUtil.date());
@@ -273,12 +277,12 @@ public class MemberInfoService {
     }
     List<MemberPaperVo> memberPaperVoList = memberPaperMapper.findMemberPaperVoListByMemberId(memberConfirmDto.getMemberId());
     Integer memberValidateStatus = ValidateStatEnum.CONFIRM_SUCCESS.getCode();
-    for (MemberPaperVo memberPaperVo: memberPaperVoList){
-      if (Objects.equals(memberPaperVo.getValidateState(),ValidateStatEnum.WAIT_CONFIRM.getCode())){
+    for (MemberPaperVo memberPaperVo : memberPaperVoList) {
+      if (Objects.equals(memberPaperVo.getValidateState(),ValidateStatEnum.WAIT_CONFIRM.getCode())) {
         memberValidateStatus = ValidateStatEnum.WAIT_CONFIRM.getCode();
         break;
       }
-      if (Objects.equals(memberPaperVo.getValidateState(),ValidateStatEnum.CONFIRM_FAILED.getCode())){
+      if (Objects.equals(memberPaperVo.getValidateState(),ValidateStatEnum.CONFIRM_FAILED.getCode())) {
         memberValidateStatus = ValidateStatEnum.CONFIRM_FAILED.getCode();
         break;
       }
@@ -288,19 +292,19 @@ public class MemberInfoService {
   }
 
   @Transactional
-  public void checkMemberInfo(MemberInfoConfirmDto memberInfoConfirmDto){
+  public void checkMemberInfo(MemberInfoConfirmDto memberInfoConfirmDto) {
     Member member = memberMapper.selectById(memberInfoConfirmDto.getId());
     if (member == null) {
-      log.info("会员id:{} 会员信息不存在!", memberInfoConfirmDto.getId());
-      throw new LogicException(ResultEnum.DATA_ERROR, "会员查询不到");
+      log.info("会员id:{} 会员信息不存在!",memberInfoConfirmDto.getId());
+      throw new LogicException(ResultEnum.DATA_ERROR,"会员查询不到");
     }
-    if (!Objects.equals(member.getInfoValidateState(), InfoValidateStateEnum.INIT.getCode())){
+    if (!Objects.equals(member.getInfoValidateState(),InfoValidateStateEnum.INIT.getCode())) {
       log.info("会员基本信息非待认证状态!");
       throw new LogicException(ResultEnum.DATA_ERROR,"会员基本信息非待认证状态!");
     }
-    if (memberInfoConfirmDto.isAgree()){
+    if (memberInfoConfirmDto.isAgree()) {
       member.setInfoValidateState(InfoValidateStateEnum.CONFIRM_SUCCESS.getCode());
-    }else {
+    } else {
       member.setInfoValidateState(InfoValidateStateEnum.CONFIRM_FAILED.getCode());
       member.setValidateText(memberInfoConfirmDto.getValidateText());
     }
@@ -308,19 +312,78 @@ public class MemberInfoService {
     memberMapper.updateById(member);
   }
 
+  /**
+   * 会员审核内容结果消息推送
+   * @param member
+   * @param memberPaperVoList
+   */
+  public void pushMessage(Member member,List<MemberPaperVo> memberPaperVoList) {
+    // 1.获取审核失败内容
+    List<MemberPaperVo> fails = memberPaperVoList.stream()
+      .filter(item -> Objects.equals(item.getValidateState(),ValidateStatEnum.CONFIRM_FAILED.getCode()))
+      .collect(Collectors.toList());
+    StringBuffer temp = new StringBuffer();
+    if (fails != null) {
+      temp.append("失败服务内容：");
+      for (MemberPaperVo memberPaperVo : fails) {
+        temp.append(memberPaperVo.getPaperVo().getName());
+        temp.append(",");
+      }
+      temp.substring(temp.length() - 1,temp.length());
+    }
+    // 2.bean实例化
+    MessageDto messageDto = new MessageDto();
+    JSONObject message = new JSONObject();
+    // 3.写入参数
+    message.put("templateString",MPTemplateEnum.AUDIT.getName());
+    message.put("wxParams",
+      Kv.by("keyword1",member.getName()).set("keyword2",InfoValidateStateEnum.getName(member.getInfoValidateState()))
+        .set("keyword3",temp.toString())
+    );
+    messageDto.setLoginType(Collections.singletonList(LoginType.WX_APP))
+      .setReceiverId(member.getId())
+      .setMessage(message.toJSONString());
+    // 4.发送消息
+    log.info("发送会员审核消息");
+    messageService.pushMessage(messageDto);
+  }
+
+  /**
+   * 推送基本信息审核消息
+   *
+   * @param member
+   */
+  public void pushInfoMessage(Member member) {
+    // 1.bean 实例化
+    MessageDto messageDto = new MessageDto();
+    JSONObject message = new JSONObject();
+    // 2.写入参数
+    message.put("templateString",MPTemplateEnum.AUDIT.getName());
+    message.put("wxParams",
+      Kv.by("keyword1",member.getName()).set("keyword2",ValidateStatEnum.getName(member.getInfoValidateState()))
+        .set("keyword3",member.getValidateText()) // 这里的validateText 是基本信息审核失败的内容
+    );
+    messageDto.setLoginType(Collections.singletonList(LoginType.WX_APP))
+      .setReceiverId(member.getId())
+      .setMessage(message.toJSONString());
+    // 3.发送消息
+    log.info("发送会员基本信息审核消息");
+    messageService.pushMessage(messageDto);
+  }
+
   public LoginVo selectByPhone(String phoneNum) {
     List<LoginVo> list = memberPasswordMapper.selectByPhone(phoneNum);
-    if(CollectionUtils.isNotEmpty(list)){
+    if (CollectionUtils.isNotEmpty(list)) {
       return list.get(0);
     }
     return null;
   }
 
-  public MemberVo findMemberVoByMemberId(Long memberId){
+  public MemberVo findMemberVoByMemberId(Long memberId) {
     return memberMapper.findMemberVoByMemberId(memberId);
   }
 
   public Member findMemberByMobile(String regMobile) {
-    return memberMapper.selectOne(new QueryWrapper<Member>().eq(Member.REG_MOBILE, regMobile));
+    return memberMapper.selectOne(new QueryWrapper<Member>().eq(Member.REG_MOBILE,regMobile));
   }
 }
