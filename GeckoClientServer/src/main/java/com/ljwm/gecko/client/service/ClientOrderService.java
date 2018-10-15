@@ -303,8 +303,14 @@ public class ClientOrderService {
       throw new LogicException(ResultEnum.DATA_ERROR,"评价列表不能为空!");
     }
     for (OrderItemCommentsDto orderItemCommentsDto: commentsList){
+      OrderItem orderItem = orderItemMapper.selectById(orderItemCommentsDto.getId());
+      if (orderItem==null){
+        log.info("根据订单明细id:{},查询不到此订单明细!");
+        throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此订单明细");
+      }
       OrderComments orderComments = new OrderComments();
       orderComments.setMemberId(SecurityKit.currentId());
+      orderComments.setProviderId(orderItem.getProviderId());
       orderComments.setOrderId(orderCommentsDto.getId());
       orderComments.setOrderItemId(orderItemCommentsDto.getId());
       orderComments.setName(SecurityKit.currentUser().getUsername());
