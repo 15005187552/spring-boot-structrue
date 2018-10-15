@@ -93,6 +93,7 @@
     <result column="ADDRESS" property="address"/>
     <result column="PIC_PATH" property="picPath"/>
     <result column="LOGO" property="logo"/>
+    <result column="CASH_DEPOSIT" property="cashDeposit"/>
     <association property="locationStr" column="AREA_CODE"
                  select="com.ljwm.gecko.base.mapper.LocationMapper.getLocationByArea"/>
     <collection property="providerServicesVoList" column="ID"

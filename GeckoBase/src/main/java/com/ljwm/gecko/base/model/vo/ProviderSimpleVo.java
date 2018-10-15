@@ -5,6 +5,7 @@ import com.ljwm.gecko.base.serializer.PathToUrlSerializer;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -26,6 +27,8 @@ public class ProviderSimpleVo {
   private String address;
 
   private Integer infoValidateState;
+
+  private BigDecimal cashDeposit;
 
   @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
   private String logo;

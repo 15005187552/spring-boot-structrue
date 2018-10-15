@@ -433,16 +433,12 @@ public class ExcelService {
     if (StrUtil.isNotEmpty(personInfoDto.getBirthday())) {
       naturalPerson.setBirthday(TimeUtil.parseString(personInfoDto.getBirthday()));
     }
-    NaturalPerson naturalPerson1 = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERTIFICATE, EnumUtil.getEnumByName(CertificateType.class, personInfoDto.getCertificate()).getCode())
-      .eq(NaturalPerson.CERT_NUM, personInfoDto.getCertNum()));
+    NaturalPerson naturalPerson1 = naturalPersonMapper.selectById(memberId);
     if(naturalPerson1 != null){
       BeanUtil.copyProperties(naturalPerson, naturalPerson1);
       naturalPersonMapper.updateById(naturalPerson1);
     } else {
       naturalPerson.setCreatTime(new Date());
-      if(naturalPerson.getMemberId()!=null){
-        throw new LogicException(personInfoDto.getRegMobile()+"该手机号码已注册");
-      }
       naturalPersonMapper.insert(naturalPerson);
     }
     String[] str = new String[RoleCodeType.values().length];
