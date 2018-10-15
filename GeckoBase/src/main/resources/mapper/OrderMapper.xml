@@ -79,7 +79,7 @@
   <select id="findProviderOrderCount" parameterType="long" resultType="integer">
       <![CDATA[
         SELECT
-            COUNT(temp .*)
+            COUNT(*)
             FROM
             (
             SELECT DISTINCT
