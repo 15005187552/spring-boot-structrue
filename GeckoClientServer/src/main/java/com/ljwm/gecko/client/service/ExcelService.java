@@ -2,9 +2,9 @@ package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.ZipUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.exception.LogicException;
@@ -19,6 +19,7 @@ import com.ljwm.gecko.base.model.dto.EmployeeDto;
 import com.ljwm.gecko.base.model.dto.NaturalPersonDto;
 import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.base.utils.TimeUtil;
+import com.ljwm.gecko.base.utils.ZipUtil;
 import com.ljwm.gecko.base.utils.excelutil.ExcelLogs;
 import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
 import com.ljwm.gecko.client.dao.CompanyUserDao;
@@ -551,13 +552,20 @@ public class ExcelService {
 
   public String exportZip(HttpServletResponse response, NormalSalaryForm normalSalaryForm) throws IOException, ParseException {
     String uuid = RandomUtil.simpleUUID();
-    exportPersonInfoExcel(response, normalSalaryForm.getCompanyId(), uuid);
-    exportNormalSalary(response ,normalSalaryForm, uuid);
-    File file = ZipUtil.zip(appInfo.getFilePath()+ Constant.ZIP + uuid);
+    File personFile = exportPersonInfoExcel(response, normalSalaryForm.getCompanyId(), uuid);
+    File sallaryFile = exportNormalSalary(response ,normalSalaryForm, uuid);
+    List<File> list = new ArrayList<>();
+    list.add(personFile);
+    list.add(sallaryFile);
+    String filePath = appInfo.getFilePath()+ Constant.ZIP + uuid;
     response.reset();
     response.setContentType("multipart/form-data");
     response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("压缩.zip","UTF-8"));
-    OutputStream output = new FileOutputStream(file);
+    OutputStream output = ZipUtil.zipFiles(list, new File(appInfo.getFilePath()+ Constant.ZIP + uuid+".zip"));
+    FileUtil.del(filePath);
+    FileUtil.del(filePath+".zi");
+    /*File f = new File(filePath+".zip");
+    output =new FileOutputStream(f);*/
     output.close();
     return "成功！";
   }
