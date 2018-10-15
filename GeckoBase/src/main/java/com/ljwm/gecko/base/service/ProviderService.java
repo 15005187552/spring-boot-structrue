@@ -108,7 +108,6 @@ public class ProviderService {
     }
 
     List<ProviderServicesVo> providerServicesVoList = providerServicesMapper.findProviderServicesVoListByProviderId(confirmProviderDto.getId());
-    /*
     Integer providerValidateStatus = ValidateStatEnum.CONFIRM_SUCCESS.getCode();
     for (ProviderServicesVo providerServicesVo : providerServicesVoList) {
       if (Objects.equals(providerServicesVo.getValidateState(),ValidateStatEnum.WAIT_CONFIRM.getCode())) {
@@ -126,7 +125,6 @@ public class ProviderService {
     }
     provider.setValidateState(providerValidateStatus);
     providerMapper.updateById(provider);
-    */
     List<ProviderServicesVo> servicesVoList = providerServicesMapper.findProviderServicesVoListByProviderId(provider.getId());
     return servicesVoList;
   }
