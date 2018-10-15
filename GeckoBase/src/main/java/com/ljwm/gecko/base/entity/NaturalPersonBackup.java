@@ -1,17 +1,17 @@
 package com.ljwm.gecko.base.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import com.baomidou.mybatisplus.annotation.IdType;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableField;
+import java.io.Serializable;
+
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
-import java.util.Date;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
@@ -19,7 +19,7 @@ import java.util.Date;
  * </p>
  *
  * @author Levis
- * @since 2018-10-14
+ * @since 2018-10-15
  */
 @Data
 @SuppressWarnings("ALL")
@@ -31,9 +31,11 @@ public class NaturalPersonBackup implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableField("`ID`")
+    private Long id;
 
     @ApiModelProperty(value = "会员ID")
-    @TableId(value = "`MEMBER_ID`", type = IdType.AUTO)
+    @TableField("`MEMBER_ID`")
     private Long memberId;
     @TableField("`COMPANY_ID`")
     private Long companyId;
@@ -140,6 +142,8 @@ public class NaturalPersonBackup implements Serializable {
     @TableField("`UPDATE_TIME`")
     private Date updateTime;
 
+
+    public static final String ID = "`ID`";
 
     public static final String MEMBER_ID = "`MEMBER_ID`";
 

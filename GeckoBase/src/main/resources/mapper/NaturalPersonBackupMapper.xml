@@ -4,7 +4,8 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.NaturalPersonBackup">
-        <id column="MEMBER_ID" property="memberId" />
+        <result column="ID" property="id" />
+        <result column="MEMBER_ID" property="memberId" />
         <result column="COMPANY_ID" property="companyId" />
         <result column="TAX_ID" property="taxId" />
         <result column="COUNTRY" property="country" />
@@ -36,7 +37,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `MEMBER_ID`          ,`COMPANY_ID`          ,`TAX_ID`          ,`COUNTRY`          ,`NAME`          ,`GENDER`          ,`BIRTHDAY`          ,`CERTIFICATE`          ,`PROVINCE`          ,`CITY`          ,`AREA`          ,`ADDRESS`          ,`CERT_NUM`          ,`CERT_POS_PATH`          ,`CERT_OPPO_PATH`          ,`DISABLITY_NUM`          ,`DISABLITY_PATH`          ,`MATRTYR_NUM`          ,`MATRTYR_PATH`          ,`OLD_NUM`          ,`OLD_PATH`          ,`PROFESSOR_NUM`          ,`PROFESSOR_PATH`          ,`ACADEMIC_NUM`          ,`ACADEMIC_PATH`          ,`SOCIAL_SECU`          ,`CREAT_TIME`          ,`UPDATE_TIME`
+          `ID`          ,`MEMBER_ID`          ,`COMPANY_ID`          ,`TAX_ID`          ,`COUNTRY`          ,`NAME`          ,`GENDER`          ,`BIRTHDAY`          ,`CERTIFICATE`          ,`PROVINCE`          ,`CITY`          ,`AREA`          ,`ADDRESS`          ,`CERT_NUM`          ,`CERT_POS_PATH`          ,`CERT_OPPO_PATH`          ,`DISABLITY_NUM`          ,`DISABLITY_PATH`          ,`MATRTYR_NUM`          ,`MATRTYR_PATH`          ,`OLD_NUM`          ,`OLD_PATH`          ,`PROFESSOR_NUM`          ,`PROFESSOR_PATH`          ,`ACADEMIC_NUM`          ,`ACADEMIC_PATH`          ,`SOCIAL_SECU`          ,`CREAT_TIME`          ,`UPDATE_TIME`
     </sql>
 
 </mapper>

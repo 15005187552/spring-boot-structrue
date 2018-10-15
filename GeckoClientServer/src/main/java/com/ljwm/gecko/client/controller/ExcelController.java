@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
 
 /**
  * @author Janiffy
@@ -47,15 +48,15 @@ public class ExcelController {
   @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/personInfo/export")
   @ApiOperation("人员信息导出")
-  public Result exportPersonInfoExcel(HttpServletResponse response, @RequestParam("companyId")Long companyId)throws IOException {
-    return Result.success(excelService.exportPersonInfoExcel(response, companyId));
+  public Result exportPersonInfoExcel(HttpServletResponse response, @RequestParam("companyId")Long companyId) throws IOException, ParseException {
+    return Result.success(excelService.exportPersonInfoExcel(response, companyId, null));
   }
 
   @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
   @PostMapping("/normalSalary/export")
   @ApiOperation("正常工资薪金导出")
   public Result exportNormalSalary(HttpServletResponse response, @RequestBody NormalSalaryForm normalSalaryForm)throws IOException {
-    return Result.success(excelService.exportNormalSalary(response, normalSalaryForm));
+    return Result.success(excelService.exportNormalSalary(response, normalSalaryForm, null));
   }
 
   @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
@@ -70,6 +71,13 @@ public class ExcelController {
   @ApiOperation("工资考勤信息导出")
   public Result exportPersonInfoExcel(HttpServletResponse response, @RequestBody AttendanceModel attendanceDto)throws IOException {
     return Result.success(excelService.exportAttendanceExcel(response, attendanceDto));
+  }
+
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
+  @PostMapping("exportZip")
+  @ApiOperation("一键导出压缩包")
+  public Result exportZip(HttpServletResponse response, @RequestBody NormalSalaryForm normalSalaryForm) throws IOException, ParseException {
+    return Result.success(excelService.exportZip(response, normalSalaryForm));
   }
 
 }

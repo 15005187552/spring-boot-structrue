@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
  * </p>
  *
  * @author Levis
- * @since 2018-10-14
+ * @since 2018-10-15
  */
 @Repository
 public interface NaturalPersonBackupMapper extends BaseMapper<NaturalPersonBackup> {

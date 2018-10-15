@@ -24,9 +24,9 @@ public class Constant {
   //税务文件存储路径
   public static final String TAX = "tax/";
 
-  public static final String HTTP = "http";
-
   public static final String CACHE = "cache/";
 
   public static final String MEMBER = "member/";
+
+  public static final String ZIP = "zip/";
 }

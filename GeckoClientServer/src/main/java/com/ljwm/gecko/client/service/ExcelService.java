@@ -2,11 +2,15 @@ package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.security.SecurityKit;
+import com.ljwm.gecko.base.bean.ApplicationInfo;
+import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.dao.LocationDao;
 import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.enums.*;
@@ -32,9 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
@@ -84,6 +86,9 @@ public class ExcelService {
 
   @Autowired
   NaturalPersonBackupMapper naturalPersonBackupMapper;
+
+  @Autowired
+  ApplicationInfo appInfo;
 
   @Transactional
   public void importPersonInfo(MultipartFile file, Long companyId) throws Exception {
@@ -194,21 +199,7 @@ public class ExcelService {
 
 
   @Transactional
-  public String exportPersonInfoExcel(HttpServletResponse response, Long companyId) throws IOException {
-    /*Long memberId = SecurityKit.currentId();
-    List<CompanyUser> list = companyUserMapper.selectList(new QueryWrapper<CompanyUser>()
-        .eq(CompanyUser.COMPANY_ID, companyId).eq(CompanyUser.MEMBER_ID, memberId)
-        .eq(CompanyUser.DISABLED, DisabledEnum.ENABLED.getCode()).eq(CompanyUser.ACTIVATED, DisabledEnum.ENABLED.getCode()));
-    if(CollectionUtil.isEmpty(list)){
-      throw new LogicException("你没有该操作的权限");
-    }
-    CompanyUser companyUser = list.get(0);
-    String roleCode = companyUser.getRolesCode();
-    int c = roleCode.length()- RoleCodeType.ITIN.getDigit();
-    Integer code = Integer.valueOf(roleCode.substring(c, c+1));
-    if (!code.equals(RoleCodeType.ITIN.getValue())){
-      throw new LogicException("你没有该操作的权限");
-    }*/
+  public File exportPersonInfoExcel(HttpServletResponse response, Long companyId, String uuid) throws IOException, ParseException {
     Long memberId = isHasProperty(companyId);
     List<NaturalPersonDto> naturalPersonDtoList = naturalPersonMapper.selectByCompanyId(companyId);
     if(CollectionUtil.isEmpty(naturalPersonDtoList)){
@@ -230,6 +221,9 @@ public class ExcelService {
     for (NaturalPersonDto naturalPersonDto : naturalPersonDtoList) {
       PersonExportVo personExportVo = new PersonExportVo();
       BeanUtil.copyProperties(naturalPersonDto, personExportVo);
+      if (StrUtil.isNotBlank(personExportVo.getBirthday())){
+        personExportVo.setBirthday(TimeUtil.parseDate(personExportVo.getBirthday()));
+      }
       if(StrUtil.isNotBlank(personExportVo.getDisablityNum())){
         personExportVo.setIsDisability("是");
       }
@@ -270,19 +264,23 @@ public class ExcelService {
       }
       objectList.add(personExportVo);
     }
-    response.reset();
+   /* response.reset();
     response.setContentType("multipart/form-data");
     response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("人员信息.xlsx","UTF-8"));
-    OutputStream output = response.getOutputStream();
-   /* File file = new File("C:\\Users\\Administrator\\Desktop\\a.xlsx");
-    OutputStream output = new FileOutputStream(file);*/
+    OutputStream output = response.getOutputStream();*/
+    File filePath = new File(appInfo.getFilePath()+ Constant.ZIP + uuid);
+    if(!filePath.exists()){
+      filePath.mkdirs();
+    }
+    File file = new File(appInfo.getFilePath()+ Constant.ZIP + uuid + "/人员信息.xlsx");
+    OutputStream output = new FileOutputStream(file);
     ExcelUtil.exportExcel(map, objectList, output);
     output.close();
-    return "导出成功！";
+    return file;
   }
 
   @Transactional
-  public String exportNormalSalary(HttpServletResponse response, NormalSalaryForm normalSalaryForm) throws IOException {
+  public File exportNormalSalary(HttpServletResponse response, NormalSalaryForm normalSalaryForm, String uuid) throws IOException {
     Long companyId = normalSalaryForm.getCompanyId();
     String declareTime = normalSalaryForm.getDeclareTime();
     isHasProperty(companyId);
@@ -303,6 +301,7 @@ public class ExcelService {
     for (NaturalPerson naturalPerson : list) {
       Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, normalSalaryForm.getDeclareTime()).eq(Tax.MEMBER_ID, naturalPerson.getMemberId()));
       if (tax != null){
+        //备份员工信息
         NaturalPersonBackup naturalPersonBackup = new NaturalPersonBackup();
         BeanUtil.copyProperties(naturalPerson, naturalPersonBackup);
         naturalPersonBackup.setTaxId(tax.getId());
@@ -336,15 +335,15 @@ public class ExcelService {
       normalSalaryVo.setAnnuity(annuity!=null?annuity.toString():null).setCommercialInsurance(commercialInsurance!=null?commercialInsurance.toString():null).setOtherEntireInsurance(otherEntireInsurance!=null?otherEntireInsurance.toString():null);
       dataList.add(normalSalaryVo);
     }
-    response.reset();
+    /*response.reset();
     response.setContentType("multipart/form-data");
     response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("人员信息.xlsx","UTF-8"));
-    OutputStream output = response.getOutputStream();
-   /* File file = new File("C:\\Users\\Administrator\\Desktop\\a.xlsx");
-    OutputStream output = new FileOutputStream(file);*/
+    OutputStream output = response.getOutputStream();*/
+    File file = new File(appInfo.getFilePath()+ Constant.ZIP + uuid+"/正常工资薪金.xlsx");
+    OutputStream output = new FileOutputStream(file);
     ExcelUtil.exportExcel(map, dataList, output);
     output.close();
-    return "导出成功！";
+    return file;
   }
 
   /**
@@ -371,7 +370,7 @@ public class ExcelService {
   }
 
   @Transactional
-  public Result commitEmployeeInfo(EmployeeInfoForm employeeInfoForm){
+  public Result commitEmployeeInfo(EmployeeInfoForm employeeInfoForm) throws ParseException {
     Long companyId = employeeInfoForm.getCompanyId();
     isHasProperty(companyId);
     List<PersonInfoDto> list = employeeInfoForm.getList();
@@ -381,7 +380,7 @@ public class ExcelService {
     return Result.success("成功");
   }
 
-  public void importEmployeeInfo(PersonInfoDto personInfoDto, Long companyId) {
+  public void importEmployeeInfo(PersonInfoDto personInfoDto, Long companyId) throws ParseException {
     Map<String, Object> map = new HashedMap();
     map.put("REG_MOBILE", personInfoDto.getRegMobile());
     List<Member> list = memberMapper.selectByMap(map);
@@ -431,11 +430,7 @@ public class ExcelService {
       }
     }
     if (StrUtil.isNotEmpty(personInfoDto.getBirthday())) {
-      try {
-        naturalPerson.setBirthday(TimeUtil.parseString(personInfoDto.getBirthday()));
-      } catch (ParseException e) {
-        throw new LogicException("生日请填写yyyy—MM-dd格式！");
-      }
+      naturalPerson.setBirthday(TimeUtil.parseString(personInfoDto.getBirthday()));
     }
     NaturalPerson naturalPerson1 = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERTIFICATE, EnumUtil.getEnumByName(CertificateType.class, personInfoDto.getCertificate()).getCode())
       .eq(NaturalPerson.CERT_NUM, personInfoDto.getCertNum()));
@@ -499,18 +494,10 @@ public class ExcelService {
       throw new LogicException("是否雇员为必填项！");
     }
     if (StrUtil.isNotEmpty(personInfoDto.getHireDate())) {
-      try {
         companyUserInfo1.setHireDate(TimeUtil.parseString(personInfoDto.getHireDate()));
-      } catch (ParseException e) {
-        throw new LogicException("离职日期请填写yyyy—MM-dd格式！");
-      }
     }
     if (StrUtil.isNotEmpty(personInfoDto.getTermDate())) {
-      try {
-        companyUserInfo1.setTermDate(TimeUtil.parseString(personInfoDto.getTermDate()));
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
+      companyUserInfo1.setTermDate(TimeUtil.parseString(personInfoDto.getTermDate()));
     }
     if (StrUtil.isNotEmpty(personInfoDto.getMaritalStatus())){
       if (EnumUtil.getEnumByName(MaritalStatusEnum.class, personInfoDto.getMaritalStatus()) != null){
@@ -559,6 +546,19 @@ public class ExcelService {
 
   public String exportAttendanceExcel(HttpServletResponse response, AttendanceModel attendanceDto) {
 
+    return "成功！";
+  }
+
+  public String exportZip(HttpServletResponse response, NormalSalaryForm normalSalaryForm) throws IOException, ParseException {
+    String uuid = RandomUtil.simpleUUID();
+    exportPersonInfoExcel(response, normalSalaryForm.getCompanyId(), uuid);
+    exportNormalSalary(response ,normalSalaryForm, uuid);
+    File file = ZipUtil.zip(appInfo.getFilePath()+ Constant.ZIP + uuid);
+    response.reset();
+    response.setContentType("multipart/form-data");
+    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("压缩.zip","UTF-8"));
+    OutputStream output = new FileOutputStream(file);
+    output.close();
     return "成功！";
   }
 }
