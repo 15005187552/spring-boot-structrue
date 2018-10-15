@@ -1,6 +1,7 @@
 package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.client.model.TaxConfirmForm;
 import com.ljwm.gecko.client.model.dto.AttendanceForm;
 import com.ljwm.gecko.client.model.dto.TaxFindForm;
 import com.ljwm.gecko.client.security.JwtUser;
@@ -57,5 +58,11 @@ public class AttendanceController {
     return attendanceService.findAttendanceAndPersonList(taxFindForm);
   }
 
+  @PostMapping("/pushToEmployeeConfirm")
+  @ApiOperation("推送给员工确认申报记录")
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
+  public Result pushToEmployeeConfirm(@RequestBody TaxConfirmForm taxConfirmForm) throws ParseException {
+    return attendanceService.pushToEmployeeConfirm(taxConfirmForm);
+  }
 
 }

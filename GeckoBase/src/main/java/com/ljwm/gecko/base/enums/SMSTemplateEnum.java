@@ -11,7 +11,9 @@ import lombok.Getter;
 public enum SMSTemplateEnum implements CommonEnum {
 
   REGISTER(1, "注册模板", "SMS_147720230"),
-  MODIFY_PASSWORD(2, "修改密码模板", "SMS_147720229");
+  MODIFY_PASSWORD(2, "修改密码模板", "SMS_147720229"),
+  REMIND_CONFIRM(3, "提醒确认工资条模板", "SMS_147720232");
+
 
   private Integer code;
 
