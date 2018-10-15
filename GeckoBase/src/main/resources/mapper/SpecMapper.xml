@@ -21,7 +21,7 @@
     <resultMap id="specVo" type="com.ljwm.gecko.base.model.vo.SpecVo" extends="BaseResultMap">
       <association property="serveSimpleVo" column="SERVICE_ID" select="com.ljwm.gecko.base.mapper.ServiceTypeMapper.findById"/>
       <collection property="specItemSimpleVoList" column="ID" select="com.ljwm.gecko.base.mapper.SpecItemMapper.findBySpecId"/>
-      <collection property="parent" column="PID" select="com.ljwm.gecko.base.mapper.SpecMapper.selectById"/>
+      <collection property="children" column="PID" select="com.ljwm.gecko.base.mapper.SpecMapper.children"/>
     </resultMap>
 
     <resultMap id="specSimpleVo" type="com.ljwm.gecko.base.model.vo.SpecSimpleVo" extends="BaseResultMap">
