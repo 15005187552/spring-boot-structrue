@@ -72,6 +72,9 @@ public class ClientProviderService {
   @Autowired
   private OrderMapper orderMapper;
 
+  @Autowired
+  private OrderCommentsMapper orderCommentsMapper;
+
   @Transactional
   public void saveProvider(ProviderDto providerDto) {
     //申请个人

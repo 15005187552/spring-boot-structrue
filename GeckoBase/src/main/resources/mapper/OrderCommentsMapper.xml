@@ -18,4 +18,8 @@
           `ID`          ,`ORDER_ID`          ,`ORDER_ITEM_ID`          ,`MEMBER_ID`          ,`NAME`          ,`STAR`          ,`CREATE_TIME`
     </sql>
 
+    <select id="starCount" parameterType="long" resultType="integer">
+      select sum(toc.STAR) as totalStar  from t_order_comments toc where toc.PROVIDER_ID=#{providerId}
+    </select>
+
 </mapper>

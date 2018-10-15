@@ -3,12 +3,14 @@ package com.ljwm.gecko.base.model.vo;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.ljwm.bootbase.kit.SpringKit;
 import com.ljwm.gecko.base.entity.Provider;
 import com.ljwm.gecko.base.entity.ProviderUser;
 import com.ljwm.gecko.base.entity.ServiceType;
 import com.ljwm.gecko.base.model.vo.admin.ServiceTypeTree;
 import com.ljwm.gecko.base.serializer.PathToUrlSerializer;
 import com.ljwm.gecko.base.serializer.StatusWithNameSerializer;
+import com.ljwm.gecko.base.service.ProviderService;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,6 +43,16 @@ public class ProviderVo extends Provider {
   private List<MemberVo> memberVoList;
 
   private Integer orderCount;
+
+  private Integer starAvg;
+
+  public Integer getStarAvg(){
+    if (getId()!=null){
+      ProviderService providerService =  SpringKit.getBean(ProviderService.class);
+      return providerService.starCount(getId());
+    }
+    return 0;
+  }
 
 
 }
