@@ -48,6 +48,7 @@ public class ProviderController extends BaseController {
   }
 
   @GetMapping("findProviderOrderCount/{providerId}")
+  @ApiOperation("根据服务商id查询服务商订单数量")
   public Result findProviderOrderCount(@PathVariable Long providerId){
     return success(clientProviderService.findProviderOrderCount(providerId));
   }

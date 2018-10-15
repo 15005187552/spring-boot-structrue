@@ -35,6 +35,7 @@
 
 
   <resultMap id="providerVo" type="com.ljwm.gecko.base.model.vo.ProviderVo" extends="BaseResultMap">
+    <association property="orderCount" column="ID" select="com.ljwm.gecko.base.mapper.OrderMapper.findProviderOrderCount"/>
     <association property="locationStr" column="AREA_CODE"
                  select="com.ljwm.gecko.base.mapper.LocationMapper.getLocationByArea"/>
     <collection property="providerServicesVoList" column="ID"

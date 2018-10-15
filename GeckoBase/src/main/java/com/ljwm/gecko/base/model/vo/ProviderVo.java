@@ -40,5 +40,7 @@ public class ProviderVo extends Provider {
 
   private List<MemberVo> memberVoList;
 
+  private Integer orderCount;
+
 
 }
