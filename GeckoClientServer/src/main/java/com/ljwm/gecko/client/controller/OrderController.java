@@ -76,13 +76,13 @@ public class OrderController extends BaseController {
   }
 
   @PostMapping("findOrderItem")
-  @ApiOperation("服务商查询订单子列表")
+  @ApiOperation("会员查询订单子列表")
   public Result<Page<OrderItemVo>> find(@RequestBody OrderItemQueryDto orderItemQueryDto){
     return success(clientOrderService.findOrderItemList(orderItemQueryDto));
   }
 
   @PostMapping("findOrder")
-  @ApiOperation("服务商查询订单列表")
+  @ApiOperation("会员查询订单列表")
   public Result<Page<OrderVo>> find(@RequestBody OrderQueryDto orderQueryDto){
     return success(clientOrderService.findOrderList(orderQueryDto));
   }
