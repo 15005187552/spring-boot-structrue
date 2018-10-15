@@ -41,7 +41,7 @@ public class OtherReduceService {
    * @return
    */
   public Page<OtherReduceVo> findByPage(OtherReduceQuery query) {
-    return commonService.find(query, (p, q) -> otherReduceMapper.findByPage(p, BeanUtil.beanToMap(query)));
+    return commonService.find(query,(p,q) -> otherReduceMapper.findByPage(p,BeanUtil.beanToMap(query)));
   }
 
   public List<OtherReduceVo> find() {
@@ -68,20 +68,21 @@ public class OtherReduceService {
             otherReduce = otherReduceMapper.selectById(f.getId());
           if (otherReduce == null)
             otherReduce = new OtherReduce();
-          BeanUtil.copyProperties(f, otherReduce);
-          commonService.insertOrUpdate(otherReduce, otherReduceMapper);
+          BeanUtil.copyProperties(f,otherReduce);
+          commonService.insertOrUpdate(otherReduce,otherReduceMapper);
           return otherReduce;
         }).map(bean -> {
-          attributeAdminService.save(bean.getClass(), new AttributeForm().setItemId(bean.getId()).setName(bean.getName()));
-          return bean;
-        }).get();
+        attributeAdminService.save(bean.getClass(),new AttributeForm().setItemId(bean.getId()).setName(bean.getName()));
+        return bean;
+      }).get();
   }
 
   @Transactional
   public void delete(Long id) {
     if (!otherReduceMapper.deleteAble(id)) {
-      throw new LogicException(ResultEnum.DATA_ERROR, "节点已被使用,无法删除!");
+      throw new LogicException(ResultEnum.DATA_ERROR,"节点已被使用,无法删除!");
     }
     otherReduceMapper.deleteById(id);
+    attributeAdminService.delete(OtherReduce.class,id);
   }
 }

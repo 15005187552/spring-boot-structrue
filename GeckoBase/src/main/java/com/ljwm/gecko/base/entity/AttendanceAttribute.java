@@ -8,10 +8,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author xixil
- * @since 2018-09-27
+ * @since 2018-10-15
  */
 @Data
 @SuppressWarnings("ALL")
@@ -42,12 +40,12 @@ public class AttendanceAttribute implements Serializable {
     private String name;
 
     @ApiModelProperty(value = "描述")
-    @TableField("`DESC`")
-    private String desc;
+    @TableField("`DESCRIPTION`")
+    private String description;
 
-    @ApiModelProperty(value = "是否前台输入 0-不需要 1-需要")
+    @ApiModelProperty(value = "是否需要输出到前台 0-不需要 1-需要")
     @TableField("`IS_NEED_ENTER`")
-    private Boolean isNeedEnter;
+    private Integer isNeedEnter;
     @TableField("`CREATE_TIME`")
     private Date createTime;
     @TableField("`UPDATE_TIME`")
@@ -66,7 +64,7 @@ public class AttendanceAttribute implements Serializable {
 
     public static final String NAME = "`NAME`";
 
-    public static final String DESC = "`DESC`";
+    public static final String DESCRIPTION = "`DESCRIPTION`";
 
     public static final String IS_NEED_ENTER = "`IS_NEED_ENTER`";
 

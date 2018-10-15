@@ -36,7 +36,7 @@ public class IncomeTypeService {
   private AttributeAdminService attributeAdminService;
 
   public Page<IncomeTypeVo> findPage(IncomeTypeQueryDto incomeTypeQueryDto) {
-    return commonService.find(incomeTypeQueryDto, (p, q) -> incomeTypeMapper.findPage(p, Kv.by("text", incomeTypeQueryDto.getText()).set("pId", incomeTypeQueryDto.getPId())));
+    return commonService.find(incomeTypeQueryDto,(p,q) -> incomeTypeMapper.findPage(p,Kv.by("text",incomeTypeQueryDto.getText()).set("pId",incomeTypeQueryDto.getPId())));
   }
 
   public List<IncomeTypeVo> find() {
@@ -46,9 +46,10 @@ public class IncomeTypeService {
   @Transactional
   public void delete(Long id) {
     if (!incomeTypeMapper.deleteAble(id)) {
-      throw new LogicException(ResultEnum.DATA_ERROR, "节点已使用,无法删除");
+      throw new LogicException(ResultEnum.DATA_ERROR,"节点已使用,无法删除");
     }
     incomeTypeMapper.deleteById(id);
+    attributeAdminService.delete(IncomeType.class,id);
   }
 
   @Transactional
@@ -59,11 +60,11 @@ public class IncomeTypeService {
         if (f.getPId() != null) {
           IncomeType incomeType = incomeTypeMapper.selectById(f.getPId());
           if (incomeType == null) {
-            throw new LogicException(ResultEnum.DATA_ERROR, "找不到要修改的“id为" + f.getId() + "”节点!");
+            throw new LogicException(ResultEnum.DATA_ERROR,"找不到要修改的“id为" + f.getId() + "”节点!");
           }
         }
         IncomeType incomeType = new IncomeType();
-        BeanUtil.copyProperties(f, incomeType);
+        BeanUtil.copyProperties(f,incomeType);
         if (f.getId() == null) {
           incomeTypeMapper.insert(incomeType);
         } else {
@@ -73,7 +74,7 @@ public class IncomeTypeService {
       })
       // TODO 简化添加 重复添加冗余数据 为客服端版服务
       .map(bean -> {
-        attributeAdminService.save(bean.getClass(), new AttributeForm().setItemId(bean.getId()).setName(bean.getName()));
+        attributeAdminService.save(bean.getClass(),new AttributeForm().setItemId(bean.getId()).setName(bean.getName()));
         return bean;
       })
       .map(IncomeTypeSimpleVo::new).get();

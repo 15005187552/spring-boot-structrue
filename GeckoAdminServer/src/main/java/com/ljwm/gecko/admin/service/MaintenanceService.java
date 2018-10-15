@@ -77,5 +77,6 @@ public class MaintenanceService {
     AttendanceAttribute attribute = attendanceAttributeMapper.selectById(id);
     if (attribute == null) throw new LogicException(ResultEnum.DATA_ERROR,"未找到id为" + id + "的考情字段");
     attendanceAttributeMapper.deleteById(attribute);
+    attributeAdminService.delete(attribute.getClass(),attribute.getId());
   }
 }

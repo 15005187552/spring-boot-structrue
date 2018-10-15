@@ -31,7 +31,8 @@ public class AttendanceController extends BaseController {
   }
 
   @GetMapping("delete/{id}")
-  public void delete(@PathVariable Long id) {
+  public Result delete(@PathVariable Long id) {
     maintenanceService.delete(id);
+    return success();
   }
 }

@@ -33,13 +33,13 @@ public class SpecialDeductionService {
   private SpecialDeductionMapper specialDeductionMapper;
 
   @Transactional
-  public SpecialDeductionVo save(SpecialDeductionDto specialDeductionDto){
+  public SpecialDeductionVo save(SpecialDeductionDto specialDeductionDto) {
     return Optional
       .ofNullable(specialDeductionDto)
       .map(f -> {
         SpecialDeduction specialDeduction = new SpecialDeduction();
-        BeanUtil.copyProperties(f, specialDeduction);
-        if (f.getId()!=null){
+        BeanUtil.copyProperties(f,specialDeduction);
+        if (f.getId() != null) {
           specialDeductionMapper.updateById(specialDeduction);
         } else {
           specialDeductionMapper.insert(specialDeduction);
@@ -54,19 +54,20 @@ public class SpecialDeductionService {
       .map(SpecialDeductionVo::new).get();
   }
 
-  public List<SpecialDeductionVo> find(){
+  public List<SpecialDeductionVo> find() {
     return specialDeductionMapper.find();
   }
 
   @Transactional
-  public void delete(Long id){
-    if (!specialDeductionMapper.deleteAble(id)){
+  public void delete(Long id) {
+    if (!specialDeductionMapper.deleteAble(id)) {
       throw new LogicException(ResultEnum.DATA_ERROR,"节点已被使用,无法删除!");
     }
     specialDeductionMapper.deleteById(id);
+    attributeAdminService.delete(SpecialDeduction.class,id);
   }
 
   public Page<SpecialDeductionVo> findPage(SpecialDeductionQueryDto specialDeductionQueryDto) {
-    return commonService.find(specialDeductionQueryDto, (p, q) -> specialDeductionMapper.findPage(p, Kv.by("text", specialDeductionQueryDto.getText())));
+    return commonService.find(specialDeductionQueryDto,(p,q) -> specialDeductionMapper.findPage(p,Kv.by("text",specialDeductionQueryDto.getText())));
   }
 }

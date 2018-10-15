@@ -36,7 +36,7 @@ public class NoticeService {
   private NoticeMapper noticeMapper;
 
   @Transactional
-  public Notice save(NoticeSaveForm form) {
+  public NoticeVo save(NoticeSaveForm form) {
     Notice notice = null;
     if (form.getId() != null)
       notice = objNoTNull(form.getId());
@@ -44,7 +44,7 @@ public class NoticeService {
       notice = new Notice().setCreateTime(DateTime.now());
     BeanUtil.copyProperties(form,notice);
     commonService.insertOrUpdate(notice,noticeMapper);
-    return notice;
+    return new NoticeVo(notice);
   }
 
   public Page<NoticeVo> find(NoticeQuery query) {

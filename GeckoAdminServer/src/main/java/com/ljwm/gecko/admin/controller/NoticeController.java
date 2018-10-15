@@ -52,8 +52,9 @@ public class NoticeController extends BaseController {
 
   @GetMapping("delete/{id}")
   @ApiOperation("公告删除")
-  public void delete(@PathVariable @Valid Long id) {
+  public Result delete(@PathVariable @Valid Long id) {
     noticeService.delete(id);
+    return success();
   }
 
 

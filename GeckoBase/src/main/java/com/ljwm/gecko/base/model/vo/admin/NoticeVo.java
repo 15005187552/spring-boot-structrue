@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.model.vo.admin;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ljwm.gecko.base.entity.Notice;
 import com.ljwm.gecko.base.serializer.StatusWithNameSerializer;
@@ -21,4 +22,8 @@ public class NoticeVo extends Notice {
   @JSONField(serializeUsing = StatusWithNameSerializer.TagEnumSerializer.class)
   private Integer tagId;
 
+  public NoticeVo(Notice notice) {
+    if (notice != null)
+      BeanUtil.copyProperties(notice,this);
+  }
 }

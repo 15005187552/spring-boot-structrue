@@ -41,7 +41,7 @@ public class AddSpecialService {
       .ofNullable(addSpecialDto)
       .map(f -> {
         AddSpecial addSpecial = new AddSpecial();
-        BeanUtil.copyProperties(f, addSpecial);
+        BeanUtil.copyProperties(f,addSpecial);
         if (f.getId() != null) {
           addSpecialMapper.updateById(addSpecial);
         } else {
@@ -51,7 +51,7 @@ public class AddSpecialService {
       })
       // TODO 简化添加 重复添加冗余数据 为客服端版服务
       .map(bean -> {
-        attributeAdminService.save(bean.getClass(), new AttributeForm().setItemId(bean.getId()).setName(bean.getName()));
+        attributeAdminService.save(bean.getClass(),new AttributeForm().setItemId(bean.getId()).setName(bean.getName()));
         return bean;
       })
       .map(AddSpecialVo::new).get();
@@ -62,14 +62,15 @@ public class AddSpecialService {
   }
 
   public Page<AddSpecialVo> findPage(AddSpecialQueryDto addSpecialQueryDto) {
-    return commonService.find(addSpecialQueryDto, (p, q) -> addSpecialMapper.findPage(p, Kv.by("text", addSpecialQueryDto.getText())));
+    return commonService.find(addSpecialQueryDto,(p,q) -> addSpecialMapper.findPage(p,Kv.by("text",addSpecialQueryDto.getText())));
   }
 
   @Transactional
   public void delete(Long id) {
     if (!addSpecialMapper.deleteAble(id)) {
-      throw new LogicException(ResultEnum.DATA_ERROR, "该节点已经被使用,无法删除");
+      throw new LogicException(ResultEnum.DATA_ERROR,"该节点已经被使用,无法删除");
     }
     addSpecialMapper.deleteById(id);
+    attributeAdminService.delete(AddSpecial.class,id);
   }
 }

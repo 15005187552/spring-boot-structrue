@@ -12,6 +12,8 @@ public class AttendanceSaveForm {
 
   private String name;
 
+  private String description;
+
   private Integer sort;
 
   @ApiModelProperty("是否需要输出到前台")
