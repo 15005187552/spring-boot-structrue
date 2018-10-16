@@ -26,6 +26,7 @@ import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.model.vo.OrderItemVo;
 import com.ljwm.gecko.base.model.vo.OrderSimpleVo;
 import com.ljwm.gecko.base.model.vo.OrderVo;
+import com.ljwm.gecko.base.model.vo.SpecServicesPriceSimpleVo;
 import com.ljwm.gecko.base.utils.Fileutil;
 import com.ljwm.gecko.base.utils.IdWorkerUtil;
 import com.ljwm.gecko.base.utils.MoneyKit;
@@ -189,7 +190,7 @@ public class ClientOrderService {
     orderItem.setServiceName(serviceType.getName());
     if (orderItemDto.getSpecServiceId()!=null){
       orderItem.setOrderItemStatus(OrderStatusEnum.NO_PAID.getCode());
-      SpecServicesPrice specServicesPrice =specServicesPriceMapper.selectById(orderItemDto.getSpecServiceId());
+      SpecServicesPriceSimpleVo specServicesPrice =specServicesPriceMapper.findById(orderItemDto.getSpecServiceId());
       if (specServicesPrice==null){
         log.info("根据商品规格id{}查询商品规格信息不存在!");
         throw new LogicException(ResultEnum.DATA_ERROR,"查询商品规格信息不存在!");

@@ -5,6 +5,7 @@ import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.SpecServicesPrice;
 import com.ljwm.gecko.base.model.vo.SpecServicesPriceSimpleVo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
