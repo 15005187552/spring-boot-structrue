@@ -172,6 +172,7 @@ public class ProviderService {
 
   /**
    * 服务商基本信息审核消息推送
+   *
    * @param provider
    */
   public void pushInfoMessage(Provider provider) {
@@ -194,6 +195,7 @@ public class ProviderService {
 
   /**
    * 服务商内容审核结果消息推送
+   *
    * @param provider
    * @param servicesVoList
    */
@@ -203,7 +205,7 @@ public class ProviderService {
       .filter(item -> Objects.equals(item.getValidateState(),ProviderStatEnum.CONFIRM_FAILED.getCode()))
       .collect(Collectors.toList());
     StringBuffer temp = new StringBuffer();
-    if (fails != null) {
+    if (fails.size() > 0) {
       temp.append("失败服务内容：");
       for (ProviderServicesVo providerServicesVo : fails) {
         temp.append(providerServicesVo.getServeSimpleVo().getName());
@@ -237,13 +239,13 @@ public class ProviderService {
     return provider;
   }
 
-  public Integer starCount(Long providerId){
+  public Integer starCount(Long providerId) {
     Integer totalOrderCount = orderMapper.findProviderOrderCount(providerId);
-    if (Objects.equals(0,totalOrderCount)){
+    if (Objects.equals(0,totalOrderCount)) {
       return 0;
     }
     Integer totalStarCount = orderCommentsMapper.starCount(providerId);
-    return totalStarCount/totalOrderCount;
+    return totalStarCount / totalOrderCount;
   }
 
 }

@@ -314,6 +314,7 @@ public class MemberInfoService {
 
   /**
    * 会员审核内容结果消息推送
+   *
    * @param member
    * @param memberPaperVoList
    */
@@ -323,7 +324,7 @@ public class MemberInfoService {
       .filter(item -> Objects.equals(item.getValidateState(),ValidateStatEnum.CONFIRM_FAILED.getCode()))
       .collect(Collectors.toList());
     StringBuffer temp = new StringBuffer();
-    if (fails != null) {
+    if (fails.size() > 0) {
       temp.append("失败服务内容：");
       for (MemberPaperVo memberPaperVo : fails) {
         temp.append(memberPaperVo.getPaperVo().getName());
