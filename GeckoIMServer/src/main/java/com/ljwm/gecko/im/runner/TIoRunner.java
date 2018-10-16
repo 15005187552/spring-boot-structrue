@@ -1,5 +1,6 @@
 package com.ljwm.gecko.im.runner;
 
+import com.ljwm.gecko.im.GeckoIMServerApp;
 import com.ljwm.gecko.im.ws.ShowcaseIpStatListener;
 import com.ljwm.gecko.im.ws.ShowcaseServerAioListener;
 import com.ljwm.gecko.im.ws.ShowcaseServerConfig;
@@ -44,7 +45,7 @@ public class TIoRunner implements ApplicationRunner {
     wsServerStarter = new WsServerStarter(port, wsMsgHandler);
 
     serverGroupContext = wsServerStarter.getServerGroupContext();
-    serverGroupContext.setName(showcaseServerConfig.getPROTOCOL_NAME());
+    serverGroupContext.setName(showcaseServerConfig.getProtocolName());
     ShowcaseWsMsgHandler.GROUP_CONTEXT = serverGroupContext;
 //    serverGroupContext.setServerAioListener(showcaseServerAioListener);
     //设置ip监控
@@ -53,7 +54,7 @@ public class TIoRunner implements ApplicationRunner {
 //    serverGroupContext.ipStats.addDurations(showcaseServerConfig.getIpStatDuration().getIPSTAT_DURATIONS());
 
     //设置心跳超时时间
-    serverGroupContext.setHeartbeatTimeout(showcaseServerConfig.getHEARTBEAT_TIMEOUT());
+    serverGroupContext.setHeartbeatTimeout(showcaseServerConfig.getHeartBeatTimeOut());
 
     log.info("Tio Config : {}", showcaseServerConfig);
 
@@ -70,9 +71,9 @@ public class TIoRunner implements ApplicationRunner {
   @Override
   public void run(ApplicationArguments args) throws Exception {
 
-    showcaseWebsocketStarter(showcaseServerConfig.getSERVER_PORT(), showcaseWsMsgHandler);
+    showcaseWebsocketStarter(showcaseServerConfig.getServerPort(), showcaseWsMsgHandler);
     wsServerStarter.start();
 
-    log.info("Tio Started On Port : {}", showcaseServerConfig.getSERVER_PORT());
+    log.info("Tio Started On Port : {}", showcaseServerConfig.getServerPort());
   }
 }

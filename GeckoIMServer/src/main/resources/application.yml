@@ -3,4 +3,5 @@ server:
 spring:
   profiles:
     active: dev,devLocal
-    include: base,common,gecko,kafka,aliyun
+    include: base,common,gecko,kafka,aliyun,tio
+

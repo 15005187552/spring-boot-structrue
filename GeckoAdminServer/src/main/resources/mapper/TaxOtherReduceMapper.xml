@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.admin.mapper.AdminTaxOtherReduceMapper">
+
+  <!-- 通用查询映射结果 -->
+  <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.TaxOtherReduce">
+    <id column="ID" property="id"/>
+    <result column="TAX_ID" property="taxId"/>
+    <result column="OTHER_REDUCE_ID" property="otherReduceId"/>
+    <result column="TAX_MONEY" property="taxMoney"/>
+    <result column="TAX_DOC_PATH" property="taxDocPath"/>
+    <result column="CREATE_TIME" property="createTime"/>
+    <result column="UPDATE_TIME" property="updateTime"/>
+    <result column="UPDATER" property="updater"/>
+  </resultMap>
+
+  <!-- 通用查询结果列 -->
+  <sql id="Base_Column_List">
+          `ID`          ,`TAX_ID`          ,`OTHER_REDUCE_ID`          ,`TAX_MONEY`          ,`TAX_DOC_PATH`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`UPDATER`
+    </sql>
+
+  <resultMap id="TaxOtherVo" type="com.ljwm.gecko.admin.model.vo.TaxOtherVo" extends="BaseResultMap">
+    <association property="otherReduce" column="OTHER_REDUCE_ID"
+                 select="com.ljwm.gecko.base.mapper.OtherReduceMapper.selectById"/>
+  </resultMap>
+</mapper>

@@ -6,9 +6,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.service.CommonService;
+import com.ljwm.gecko.admin.mapper.ReportLogMapper;
 import com.ljwm.gecko.admin.model.form.AttendanceQuery;
 import com.ljwm.gecko.admin.model.form.AttendanceSaveForm;
 import com.ljwm.gecko.admin.model.form.MemberQuery;
+import com.ljwm.gecko.admin.model.form.ReportLogQuery;
+import com.ljwm.gecko.admin.model.vo.ReportLogVo;
 import com.ljwm.gecko.base.entity.AttendanceAttribute;
 import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.mapper.AttendanceAttributeMapper;
@@ -23,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -36,6 +40,9 @@ public class MaintenanceService {
 
   @Autowired
   private CommonService commonService;
+
+  @Autowired
+  private ReportLogMapper reportLogMapper;
 
   @Autowired
   private AttendanceAttributeMapper attendanceAttributeMapper;
@@ -78,5 +85,14 @@ public class MaintenanceService {
     if (attribute == null) throw new LogicException(ResultEnum.DATA_ERROR,"未找到id为" + id + "的考情字段");
     attendanceAttributeMapper.deleteById(attribute);
     attributeAdminService.delete(attribute.getClass(),attribute.getId());
+  }
+
+  /**
+   * 查询  申报记录
+   * @param query
+   * @return
+   */
+  public List<ReportLogVo> findReportLog(ReportLogQuery query){
+    return reportLogMapper.findReportLog();
   }
 }

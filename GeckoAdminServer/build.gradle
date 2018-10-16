@@ -8,6 +8,7 @@ dependencies {
   compile("cn.afterturn:easypoi-base:3.2.0")
   compile("cn.afterturn:easypoi-web:3.2.0")
   compile("cn.afterturn:easypoi-annotation:3.2.0")
+  testCompile('junit:junit:4.12')
 
   // mysql 连接
   compile("mysql:mysql-connector-java:8.0.11")

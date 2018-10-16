@@ -3,13 +3,12 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/gecko_localtest?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.8.167:3306/gecko_localtest?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8
     username: root
     password: root
 appInfo:
   pic: "advertisement"
   servicePic: "serviceType"
   webRoot: "D://upload/"
-  webPath: "http://192.168.8.167:7005/gecko/"
   filePath: "${appInfo.webRoot}gecko/"
   adminPath: "http://192.168.8.167:7005/gecko/"
