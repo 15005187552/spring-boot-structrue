@@ -15,4 +15,7 @@ public class OrderItemPriceDto {
 
   @ApiModelProperty("价格")
   private BigDecimal price;
+
+  @ApiModelProperty("服务商说明")
+  private String providerContent;
 }

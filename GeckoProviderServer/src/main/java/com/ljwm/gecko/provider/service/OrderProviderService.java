@@ -59,6 +59,7 @@ public class OrderProviderService {
     orderItem.setTotalPrice(orderItemPriceDto.getPrice().multiply(new BigDecimal(orderItem.getQuantity())));
     orderItem.setDownPaymentAmount(orderItem.getTotalPrice().multiply(orderItem.getDownPaymentRate()));
     orderItem.setRemainAmount(orderItem.getTotalPrice().subtract(orderItem.getDownPaymentAmount()));
+    orderItem.setProviderContent(orderItemPriceDto.getProviderContent());
     orderItemMapper.updateById(orderItem);
   }
 }
