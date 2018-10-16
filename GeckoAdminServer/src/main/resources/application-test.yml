@@ -3,13 +3,20 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://rm-bp16x49cok67o9i8y.mysql.rds.aliyuncs.com:3306/gecko_localtest?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://rm-bp16x49cok67o9i8y.mysql.rds.aliyuncs.com:3306/bhgsdb_test?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8
     username: bhgs
     password: Bhgs_2018
 appInfo:
   pic: "advertisement"
   servicePic: "serviceType"
   webRoot: "/home/bhtest/upload/"
-  webPath: "https://static.bihugs.com/bhtest/"
   filePath: "${appInfo.webRoot}"
   adminPath: "https://static.bihugs.com/bhtest/"
+logging:
+  level:
+    org.springframework:
+      data: info
+      security: info
+      jta: info
+    com.ljwm: debug
+  file: "/home/bhtest/log/admin-server.log"
