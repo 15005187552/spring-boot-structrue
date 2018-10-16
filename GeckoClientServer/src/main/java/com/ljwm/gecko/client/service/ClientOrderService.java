@@ -17,6 +17,7 @@ import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.bean.Constant;
 import com.ljwm.gecko.base.entity.*;
+import com.ljwm.gecko.base.enums.DictEnum;
 import com.ljwm.gecko.base.enums.OrderStatusEnum;
 import com.ljwm.gecko.base.enums.PaymentTypeEnum;
 import com.ljwm.gecko.base.mapper.*;
@@ -77,6 +78,9 @@ public class ClientOrderService {
 
   @Autowired
   private ServiceTypeMapper serviceTypeMapper;
+
+  @Autowired
+  private DictMapper dictMapper;
 
   @Autowired
   private AppInfo appInfo;
@@ -191,11 +195,18 @@ public class ClientOrderService {
         throw new LogicException(ResultEnum.DATA_ERROR,"查询商品规格信息不存在!");
       }
       orderItem.setCurrentUnitPrice(specServicesPrice.getPrice());
-      orderItem.setDownPaymentRate(specServicesPrice.getDownPaymentRate());
+      if (specServicesPrice.getDownPaymentRate()!=null){
+        orderItem.setDownPaymentRate(specServicesPrice.getDownPaymentRate());
+      }else {
+        String downPayRate = dictMapper.findValueByKey(DictEnum.DOWN_PAY_RATE.getKey());
+        orderItem.setDownPaymentRate(new BigDecimal(downPayRate));
+      }
       orderItem.setTotalPrice(specServicesPrice.getPrice().multiply(new BigDecimal(orderItemDto.getQuantity())));
       orderItem.setDownPaymentAmount(orderItem.getTotalPrice().multiply(specServicesPrice.getDownPaymentRate()));
       orderItem.setRemainAmount(orderItem.getTotalPrice().subtract(orderItem.getDownPaymentAmount()));
     }else {
+      String downPayRate = dictMapper.findValueByKey(DictEnum.DOWN_PAY_RATE.getKey());
+      orderItem.setDownPaymentRate(new BigDecimal(downPayRate));
       orderItem.setOrderItemStatus(OrderStatusEnum.WAIT.getCode());
     }
     orderItemMapper.insert(orderItem);

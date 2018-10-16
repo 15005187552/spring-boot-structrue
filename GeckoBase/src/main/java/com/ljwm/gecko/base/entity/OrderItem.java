@@ -106,6 +106,10 @@ public class OrderItem implements Serializable {
     @TableField("`SERVICE_NAME`")
     private String serviceName;
 
+    @ApiModelProperty(value = "最小金额")
+    @TableField("MIN_MONEY")
+    private BigDecimal minMoney;
+
 
     public static final String ID = "`ID`";
 

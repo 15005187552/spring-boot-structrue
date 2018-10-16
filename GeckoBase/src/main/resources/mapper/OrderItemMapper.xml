@@ -23,6 +23,7 @@
         <result column="MEMBER_ID" property="memberId" />
         <result column="SPEC_SERVICE_ID" property="specServiceId" />
         <result column="SERVICE_NAME" property="serviceName" />
+        <result column="MIN_MONEY" property="minMoney" />
     </resultMap>
 
     <!-- 通用查询结果列 -->

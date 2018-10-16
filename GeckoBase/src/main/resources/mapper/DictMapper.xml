@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljwm.gecko.base.mapper.DictMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.Dict">
+        <id column="KEY" property="key" />
+        <result column="VALUE" property="value" />
+        <result column="DESC" property="desc" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `KEY`          ,`VALUE`          ,`DESC`
+    </sql>
+
+    <resultMap id="dictVo" type="com.ljwm.gecko.base.model.vo.DictVo" extends="BaseResultMap">
+
+    </resultMap>
+
+    <select id="findByPage" parameterType="map" resultMap="dictVo">
+      select t.*  from t_dict t
+      <where>
+        <if test="params.text != null and params.text != ''">
+          AND (
+          t.`KEY` LIKE CONCAT('%',#{params.text},'%')
+          OR t.`VALUE` LIKE CONCAT('%',#{params.text},'%')
+          )
+        </if>
+      </where>
+      ORDER BY t.`KEY`
+      <if test="params.asc">
+        ASC
+      </if>
+      <if test="!params.asc">
+        DESC
+      </if>
+    </select>
+
+    <select id="findValueByKey" parameterType="string" resultType="string">
+      select t.`VALUE` from t_dict t where t.`KEY`=#{key} limit 1
+    </select>
+
+</mapper>
