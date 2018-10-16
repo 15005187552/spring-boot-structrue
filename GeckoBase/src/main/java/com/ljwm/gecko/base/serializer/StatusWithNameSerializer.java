@@ -9,6 +9,7 @@ import com.ljwm.gecko.base.utils.EnumUtil;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 
 public abstract class StatusWithNameSerializer implements ObjectSerializer {
@@ -80,6 +81,13 @@ public abstract class StatusWithNameSerializer implements ObjectSerializer {
     @Override
     public String getNameByCode(Object code) {
       return SpringKit.getBean(LocationService.class).getNameByCode(code.toString());
+    }
+  }
+
+  public static class OrderStatusSerializer extends StatusWithNameSerializer {
+    @Override
+    public String getNameByCode(Object code) {
+      return OrderStatusEnum.codeOf((Integer) code);
     }
   }
 

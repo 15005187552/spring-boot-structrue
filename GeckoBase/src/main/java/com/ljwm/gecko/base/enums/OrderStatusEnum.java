@@ -1,9 +1,11 @@
 package com.ljwm.gecko.base.enums;
 
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
+@Getter
 public enum OrderStatusEnum {
   CANCELED(0,"已取消"),
   WAIT(5,"待服务定价"),
@@ -19,7 +21,7 @@ public enum OrderStatusEnum {
     this.value = value;
   }
   private String value;
-  private int code;
+  private Integer code;
 
   public String getValue() {
     return value;
