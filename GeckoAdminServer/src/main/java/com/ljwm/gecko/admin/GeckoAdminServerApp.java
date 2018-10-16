@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @SpringBootApplication(scanBasePackages =  "com.ljwm")
 @MapperScan(value = {
-  "com.ljwm.gecko.base.mapper*",
+  "com.ljwm.gecko.*.mapper*",
   "com.ljwm.bootbase.mapper*"
 })
 @EnableAspectJAutoProxy(proxyTargetClass = true)                            // 允许使用自定义JDK代理切面

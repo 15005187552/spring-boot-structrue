@@ -3,6 +3,8 @@ package com.ljwm.gecko.admin.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.admin.model.form.ReportLogQuery;
+import com.ljwm.gecko.admin.service.MaintenanceService;
 import com.ljwm.gecko.base.entity.OtherReduce;
 import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.model.form.OtherReduceForm;
@@ -28,13 +30,16 @@ public class ReportDataController extends BaseController {
   private IncomeTypeService incomeTypeService;
 
   @Autowired
-  private SpecialDeductionService specialDeductionService;
+  private AddSpecialService addSpecialService;
 
   @Autowired
   private OtherReduceService otherReduceService;
 
   @Autowired
-  private AddSpecialService addSpecialService;
+  private MaintenanceService maintenanceService;
+
+  @Autowired
+  private SpecialDeductionService specialDeductionService;
 
   @GetMapping("findIncomeType")
   @ApiOperation(value = "查询收入类型列表--不带分页")
@@ -136,10 +141,16 @@ public class ReportDataController extends BaseController {
     return success();
   }
 
-  @GetMapping("exportReportData")
-  @ApiOperation("导出所有申报数据的excel模块")
-  public void exportReportData() {
+//  @GetMapping("exportReportData")
+//  @ApiOperation("导出所有申报数据的excel模块")
+//  public void exportReportData() {
+//
+//  }
 
+  @PostMapping("findReportLog")
+  @ApiOperation("查询--申报记录")
+  public Result findReportLog(@RequestBody ReportLogQuery query) {
+    return success(maintenanceService.findReportLog(query));
   }
 
 }

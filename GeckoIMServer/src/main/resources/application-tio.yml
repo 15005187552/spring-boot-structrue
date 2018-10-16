@@ -1,0 +1,6 @@
+showcaseServerConfig:
+  serverPort: 7400
+  CHARSET: "utf-8"
+  protocolName: showcase
+#  SERVER_IP: null
+  heartBeatTimeOut: 60000
