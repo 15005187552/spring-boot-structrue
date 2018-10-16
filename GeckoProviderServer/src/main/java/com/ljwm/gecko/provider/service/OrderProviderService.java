@@ -60,6 +60,7 @@ public class OrderProviderService {
     orderItem.setDownPaymentAmount(orderItem.getTotalPrice().multiply(orderItem.getDownPaymentRate()));
     orderItem.setRemainAmount(orderItem.getTotalPrice().subtract(orderItem.getDownPaymentAmount()));
     orderItem.setProviderContent(orderItemPriceDto.getProviderContent());
+    orderItem.setOrderItemStatus(OrderStatusEnum.NO_PAID.getCode());
     orderItemMapper.updateById(orderItem);
   }
 }
