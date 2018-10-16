@@ -24,7 +24,7 @@
         <result column="SPEC_SERVICE_ID" property="specServiceId" />
         <result column="SERVICE_NAME" property="serviceName" />
         <result column="MIN_MONEY" property="minMoney" />
-        <result column="PROVIDER_COMTEMT" property="providerContent" />
+        <result column="PROVIDER_CONTENT" property="providerContent" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
