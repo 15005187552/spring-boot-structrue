@@ -49,9 +49,10 @@ public class ProviderVo extends Provider {
   public Integer getStarAvg(){
     if (getId()!=null){
       ProviderService providerService =  SpringKit.getBean(ProviderService.class);
-      return providerService.starCount(getId());
+      Integer star = providerService.starCount(getId());
+      return Objects.equals(0,star)?5:star;
     }
-    return 0;
+    return 5;
   }
 
 

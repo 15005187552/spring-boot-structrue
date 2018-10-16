@@ -188,6 +188,7 @@ public class ClientOrderService {
       throw new LogicException(ResultEnum.DATA_ERROR,"查询不到此服务!");
     }
     orderItem.setServiceName(serviceType.getName());
+    orderItem.setMinMoney(serviceType.getMinMoney());
     if (orderItemDto.getSpecServiceId()!=null){
       orderItem.setOrderItemStatus(OrderStatusEnum.NO_PAID.getCode());
       SpecServicesPriceSimpleVo specServicesPrice =specServicesPriceMapper.findById(orderItemDto.getSpecServiceId());
