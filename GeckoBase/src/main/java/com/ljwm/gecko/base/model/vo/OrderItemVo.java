@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.model.vo;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ljwm.gecko.base.entity.OrderItem;
 import com.ljwm.gecko.base.serializer.StatusWithNameSerializer;
@@ -18,4 +19,10 @@ public class OrderItemVo extends OrderItem {
   private ProviderGoodsVo providerGoodsVo;
 
   private SpecServicesPriceSimpleVo specServicesPriceSimpleVo;
+
+  public OrderItemVo(OrderItem orderItem){
+    if (orderItem!=null){
+      BeanUtil.copyProperties(orderItem,this);
+    }
+  }
 }

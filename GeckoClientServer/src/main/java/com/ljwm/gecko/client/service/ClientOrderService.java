@@ -176,7 +176,7 @@ public class ClientOrderService {
   }
 
   @Transactional
-  public void createOrderItem(OrderItemDto orderItemDto){
+  public OrderItemVo createOrderItem(OrderItemDto orderItemDto){
     OrderItem orderItem = new OrderItem();
     BeanUtil.copyProperties(orderItemDto,orderItem);
     orderItem.setOrderItemNo(SUB_ORDER+idWorkerUtil.nextId());
@@ -211,6 +211,7 @@ public class ClientOrderService {
       orderItem.setOrderItemStatus(OrderStatusEnum.WAIT.getCode());
     }
     orderItemMapper.insert(orderItem);
+    return new OrderItemVo(orderItem);
   }
 
   public OrderSimpleVo setOrderPaid(Long id){

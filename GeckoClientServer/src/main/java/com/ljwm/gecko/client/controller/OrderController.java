@@ -32,10 +32,9 @@ public class OrderController extends BaseController {
 
   @PostMapping("createOrderItem")
   @ApiOperation("前台--① 创建子订单")
-  public Result createOrderItem(@RequestBody OrderItemDto orderItemDto){
+  public Result<OrderItemVo> createOrderItem(@RequestBody OrderItemDto orderItemDto){
     orderItemDto.setMemberId(SecurityKit.currentId());
-    clientOrderService.createOrderItem(orderItemDto);
-    return success();
+    return success(clientOrderService.createOrderItem(orderItemDto));
   }
 
   @PostMapping("placeDownOrder")
