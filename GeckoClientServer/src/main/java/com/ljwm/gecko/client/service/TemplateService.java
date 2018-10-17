@@ -6,11 +6,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.bean.ApplicationInfo;
-import com.ljwm.gecko.base.entity.AttendanceTemplate;
-import com.ljwm.gecko.base.entity.CompanyUserInfo;
-import com.ljwm.gecko.base.entity.NaturalPerson;
-import com.ljwm.gecko.base.entity.Template;
+import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.enums.CertificateType;
+import com.ljwm.gecko.base.enums.TableNameEnum;
 import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
@@ -188,6 +186,10 @@ public class TemplateService {
     for (String string : str){
       map.put(String.valueOf(i), string);
       i++;
+    }
+    List<Attribute> attributeList = attributeMapper.selectList(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_ADD_SPECIAL));
+    for (Attribute attribute : attributeList){
+      map.put(String.valueOf(attribute.getId()), attribute.getName());
     }
     for (Template template : list) {
       map.put(String.valueOf(template.getAttributeId()), attributeMapper.selectById(template.getAttributeId()).getName());

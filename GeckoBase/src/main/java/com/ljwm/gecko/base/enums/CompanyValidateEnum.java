@@ -7,9 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 @Getter
 public enum CompanyValidateEnum implements CommonEnum {
 
-  UN_VALIDATE(0,"未认证"),
-  PASS_VALIDATE(1,"认证通过"),
-  REJECT_VALIDATE(2,"认证失败");
+  UN_VALIDATE(0,"待审核"),
+  PASS_VALIDATE(1,"审核通过"),
+  REJECT_VALIDATE(2,"审核失败");
 
   private Integer code;
   private String name;

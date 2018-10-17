@@ -566,7 +566,7 @@ public class ExcelService {
     response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("压缩.zip","UTF-8"));
     OutputStream output = ZipUtil.zipFiles(list, new File(appInfo.getFilePath()+ Constant.ZIP + uuid+".zip"));
     FileUtil.del(filePath);
-    FileUtil.del(filePath+".zi");
+    FileUtil.del(filePath+".zip");
     /*File f = new File(filePath+".zip");
     output =new FileOutputStream(f);*/
     output.close();
