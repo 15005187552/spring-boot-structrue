@@ -98,7 +98,7 @@ public class AdminService {
     if (Objects.isNull(adminSaveForm.getId()))
       adminMapper.insert(admin.setCreateTime(DateUtil.date()));
     else if (!SqlHelper.retBool(adminMapper.updateById(admin.setUpdateTime(adminSaveForm.getUpdateTime() ? DateTime.now() : null))))
-      adminMapper.insertAll(admin);
+      adminMapper.insertAll(admin.setCreateTime(DateTime.now()).setDisabled(0).setUpdateTime(DateTime.now()));
     //3.更新用户角色
     if (CollectionUtil.isNotEmpty(adminSaveForm.getRoleIds()))
       adminService.updateRoles(admin.getId(), adminSaveForm.getRoleIds());
