@@ -160,11 +160,11 @@ public class AttendanceService {
       TaxIncome taxIncome = taxIncomeMapper.selectOne(new QueryWrapper<TaxIncome>().eq(TaxIncome.TAX_ID, tax.getId())
         .eq(TaxIncome.INCOME_TYPE_ID, itemId));
       if (taxIncome != null){
-        taxIncome.setUpdateTime(date).setIncome(new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setIncomeTypeId(itemId).setTaxId(tax.getId());
+        taxIncome.setUpdateTime(date).setIncome(Objects.isNull(value)? null:new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setIncomeTypeId(itemId).setTaxId(tax.getId());
         taxIncomeMapper.updateById(taxIncome);
       } else {
         taxIncome = new TaxIncome();
-        taxIncome.setUpdateTime(date).setIncome(new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setCreateTime(date).setIncomeTypeId(itemId).setTaxId(tax.getId());
+        taxIncome.setUpdateTime(date).setIncome(Objects.isNull(value)? null:new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setCreateTime(date).setIncomeTypeId(itemId).setTaxId(tax.getId());
         taxIncomeMapper.insert(taxIncome);
       }
     }
@@ -172,11 +172,11 @@ public class AttendanceService {
       TaxOtherReduce taxOtherReduce = taxOtherReduceMapper.selectOne(new QueryWrapper<TaxOtherReduce>()
         .eq(TaxOtherReduce.TAX_ID, tax.getId()).eq(TaxOtherReduce.OTHER_REDUCE_ID, itemId));
       if (taxOtherReduce != null){
-        taxOtherReduce.setUpdateTime(date).setTaxMoney(new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setOtherReduceId(itemId).setTaxId(tax.getId());
+        taxOtherReduce.setUpdateTime(date).setTaxMoney(Objects.isNull(value)? null:new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setOtherReduceId(itemId).setTaxId(tax.getId());
         taxOtherReduceMapper.updateById(taxOtherReduce);
       } else {
         taxOtherReduce = new TaxOtherReduce();
-        taxOtherReduce.setUpdateTime(date).setTaxMoney(new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setCreateTime(date).setOtherReduceId(itemId).setTaxId(tax.getId());
+        taxOtherReduce.setUpdateTime(date).setTaxMoney(Objects.isNull(value)? null:new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setCreateTime(date).setOtherReduceId(itemId).setTaxId(tax.getId());
         taxOtherReduceMapper.insert(taxOtherReduce);
       }
     }
@@ -218,11 +218,17 @@ public class AttendanceService {
       TaxSpecialAdd taxSpecialAdd = taxSpecialAddMapper.selectOne(new QueryWrapper<TaxSpecialAdd>()
         .eq(TaxSpecialAdd.TAX_ID, tax.getId()).eq(TaxSpecialAdd.SPECIAL_ADD_ID, itemId));
       if (taxSpecialAdd != null){
-        taxSpecialAdd.setUpdateTime(date).setTaxMoney(new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setTaxId(tax.getId()).setSpecialAddId(itemId);
+        if(StrUtil.isNotEmpty(value)){
+          taxSpecialAdd.setTaxMoney(new BigDecimal(value));
+        }
+        taxSpecialAdd.setUpdateTime(date).setUpdater(SecurityKit.currentId()).setTaxId(tax.getId()).setSpecialAddId(itemId);
         taxSpecialAddMapper.updateById(taxSpecialAdd);
       } else {
         taxSpecialAdd = new TaxSpecialAdd();
-        taxSpecialAdd.setUpdateTime(date).setTaxMoney(new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setCreateTime(date).setTaxId(tax.getId()).setSpecialAddId(itemId);
+        if(StrUtil.isNotEmpty(value)){
+          taxSpecialAdd.setTaxMoney(new BigDecimal(value));
+        }
+        taxSpecialAdd.setUpdateTime(date).setUpdater(SecurityKit.currentId()).setCreateTime(date).setTaxId(tax.getId()).setSpecialAddId(itemId);
         taxSpecialAddMapper.insert(taxSpecialAdd);
       }
     }
@@ -344,7 +350,7 @@ public class AttendanceService {
         Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_INCOME_TYPE.getCode())
           .eq(Attribute.ITEM_ID, taxIncome.getIncomeTypeId()));
         if (attribute != null) {
-          map.put(attribute.getId(), taxIncome.getIncome().toString());
+          map.put(attribute.getId(), taxIncome.getIncome()!=null?taxIncome.getIncome().toString():null);
           /*AttendanceData attendanceData = new AttendanceData();
           attendanceData.setId(attribute.getId()).setValue(taxIncome.getIncome().toString());
           list.add(attendanceData);*/
@@ -356,7 +362,7 @@ public class AttendanceService {
         Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_ADD_SPECIAL.getCode())
           .eq(Attribute.ITEM_ID, taxSpecialAdd.getSpecialAddId()));
         if (attribute != null) {
-          map.put(attribute.getId(), taxSpecialAdd.getTaxMoney().toString());
+          map.put(attribute.getId(), taxSpecialAdd.getTaxMoney()!=null?taxSpecialAdd.getTaxMoney().toString():null);
          /* AttendanceData attendanceData = new AttendanceData();
           attendanceData.setId(attribute.getId()).setValue(taxSpecialAdd.getTaxMoney().toString());
           list.add(attendanceData);*/
@@ -368,7 +374,7 @@ public class AttendanceService {
         Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_OTHER_REDUCE.getCode())
           .eq(Attribute.ITEM_ID, taxOtherReduce.getOtherReduceId()));
         if (attribute != null) {
-          map.put(attribute.getId(), taxOtherReduce.getTaxMoney().toString());
+          map.put(attribute.getId(), taxOtherReduce.getTaxMoney()!=null?taxOtherReduce.getTaxMoney().toString():null);
          /* AttendanceData attendanceData = new AttendanceData();
           attendanceData.setId(attribute.getId()).setValue(taxOtherReduce.getTaxMoney().toString());
           list.add(attendanceData);*/
@@ -391,8 +397,9 @@ public class AttendanceService {
       CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, taxFindForm.getCompanyId()).eq(CompanyUser.MEMBER_ID, memberId));
       CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUser.getId());
       NaturalPersonBackup naturalPersonBackup = naturalPersonBackupMapper.selectOne(new QueryWrapper<NaturalPersonBackup>().eq(NaturalPersonBackup.TAX_ID, attendanceAndPersonVo.getId()));
-      NaturalPerson naturalPerson = null;
+      NaturalPerson naturalPerson;
       if(naturalPersonBackup !=null){
+        naturalPerson =  new NaturalPerson();
         BeanUtil.copyProperties(naturalPersonBackup, naturalPerson);
       } else {
         naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.MEMBER_ID, memberId));
