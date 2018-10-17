@@ -265,19 +265,26 @@ public class ExcelService {
       }
       objectList.add(personExportVo);
     }
-   /* response.reset();
-    response.setContentType("multipart/form-data");
-    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("人员信息.xlsx","UTF-8"));
-    OutputStream output = response.getOutputStream();*/
-    File filePath = new File(appInfo.getFilePath()+ Constant.ZIP + uuid);
-    if(!filePath.exists()){
-      filePath.mkdirs();
+    OutputStream output = null;
+    if (uuid == null) {
+      response.reset();
+      response.setContentType("multipart/form-data");
+      response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("人员信息.xlsx","UTF-8"));
+      output = response.getOutputStream();
+      ExcelUtil.exportExcel(map, objectList, output);
+      output.close();
+      return null;
+    }else {
+      File filePath = new File(appInfo.getFilePath() + Constant.ZIP + uuid);
+      if (!filePath.exists()) {
+        filePath.mkdirs();
+      }
+      File file = new File(appInfo.getFilePath() + Constant.ZIP + uuid + "/人员信息.xlsx");
+      output = new FileOutputStream(file);
+      ExcelUtil.exportExcel(map, objectList, output);
+      output.close();
+      return file;
     }
-    File file = new File(appInfo.getFilePath()+ Constant.ZIP + uuid + "/人员信息.xlsx");
-    OutputStream output = new FileOutputStream(file);
-    ExcelUtil.exportExcel(map, objectList, output);
-    output.close();
-    return file;
   }
 
   @Transactional
