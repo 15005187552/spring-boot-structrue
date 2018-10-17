@@ -391,8 +391,9 @@ public class AttendanceService {
       CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, taxFindForm.getCompanyId()).eq(CompanyUser.MEMBER_ID, memberId));
       CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUser.getId());
       NaturalPersonBackup naturalPersonBackup = naturalPersonBackupMapper.selectOne(new QueryWrapper<NaturalPersonBackup>().eq(NaturalPersonBackup.TAX_ID, attendanceAndPersonVo.getId()));
-      NaturalPerson naturalPerson = new NaturalPerson();
+      NaturalPerson naturalPerson;
       if(naturalPersonBackup !=null){
+        naturalPerson =  new NaturalPerson();
         BeanUtil.copyProperties(naturalPersonBackup, naturalPerson);
       } else {
         naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.MEMBER_ID, memberId));
