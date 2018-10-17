@@ -95,36 +95,38 @@ public class AuthService {
   public ResultMe login(GuestForm guestForm) {
     Guest guest = null;
     String mpOpenId = null;
-      // 1. 验证CODE 并换取用户信息
-      JSONObject jsonObject = new JSONObject();
-      FunctionUtil.retryOnException(3, () -> wechatXCXService.doCodeLogin(guestForm.getCode(), jsonObject));
-      if (StrUtil.isNotBlank(jsonObject.getString("errcode"))) // 认证出错
-        throw new LogicException(ResultEnum.DATA_ERROR, jsonObject.getString("errcode"));
-      String unionId = jsonObject.getString("unionid");
-      mpOpenId = jsonObject.getString("openid");
-      String sessionKey = jsonObject.getString("session_key");
-      log.info("Json from code: {}", jsonObject.toJSONString());
-      log.info("befor {}", LoginInfoHolder.getExtInfo());
-      // 存入TOKEN
-      LoginInfoHolder.setExtInfo(
-        Kv.by(SESSION_KEY, sessionKey)
-          .set(MPOPENID, mpOpenId)
-          .set(UNNIONID, unionId)
-      );
-      if(StrUtil.isNotBlank(guestForm.getRawData())&&StrUtil.isBlank(unionId)){
-        String extInfo = wechatXCXService.getUserInfo(guestForm.getEncryptedData(), sessionKey, guestForm.getIv());
-        log.debug("The ext info for wixin app user: {}", extInfo);
-        JSONObject js = JSON.parseObject(extInfo);
-        String nickName = js.getString("nickName");
-        String avatarUrl = js.getString("avatarUrl");
-        Long memberId = memberInfoService.updateExt(mpOpenId, extInfo, LoginType.WX_APP.getCode());
-        String nName = memberInfoService.selectMember(memberId);
-        if(StrUtil.isBlank(nName)){
-          memberInfoService.updateMember(nickName, memberId, avatarUrl);
-        }
+    // 1. 验证CODE 并换取用户信息
+    JSONObject jsonObject = new JSONObject();
+    FunctionUtil.retryOnException(3, () -> wechatXCXService.doCodeLogin(guestForm.getCode(), jsonObject));
+    if (StrUtil.isNotBlank(jsonObject.getString("errcode"))) // 认证出错
+      throw new LogicException(ResultEnum.DATA_ERROR, jsonObject.getString("errcode"));
+    String unionId = jsonObject.getString("unionid");
+    mpOpenId = jsonObject.getString("openid");
+    String sessionKey = jsonObject.getString("session_key");
+    log.info("Json from code: {}", jsonObject.toJSONString());
+    log.info("before {}", LoginInfoHolder.getExtInfo());
+    // 存入TOKEN
+    LoginInfoHolder.setExtInfo(
+      Kv.by(SESSION_KEY, sessionKey)
+        .set(MPOPENID, mpOpenId)
+        .set(UNNIONID, unionId)
+    );
+
+    if (StrUtil.isNotBlank(guestForm.getRawData()) && StrUtil.isBlank(unionId)) {
+      String extInfo = wechatXCXService.getUserInfo(guestForm.getEncryptedData(), sessionKey, guestForm.getIv());
+      log.debug("The ext info for wixin app user: {}", extInfo);
+      JSONObject js = JSON.parseObject(extInfo);
+      String nickName = js.getString("nickName");
+      String avatarUrl = js.getString("avatarUrl");
+      Long memberId = memberInfoService.updateExt(mpOpenId, extInfo, LoginType.WX_APP.getCode());
+      String nName = memberInfoService.selectMember(memberId);
+      if (StrUtil.isBlank(nName)) {
+        memberInfoService.updateMember(nickName, memberId, avatarUrl);
       }
-      guest = guestService.upsert(UserSource.codeOf(UserSource.WX_APP.getCode()), mpOpenId, null);
-    if(guest.getMemberId() == null) {
+    }
+
+    guest = guestService.upsert(UserSource.codeOf(UserSource.WX_APP.getCode()), mpOpenId, null);
+    if (guest.getMemberId() == null) {
       LoginInfoHolder.setLoginType(LoginType.GUEST.getCode().toString());
       JwtUser jwtUser = new JwtUser(guest);
       ResultMe resultMe = new ResultMe();
@@ -136,10 +138,10 @@ public class AuthService {
     }
     LoginInfoHolder.setLoginType(LoginType.WX_APP.getCode().toString());
 //    MemberVo memberVo = memberInfoService.selectMemberInfo(guest.getMemberId(), LoginType.WX_APP.getCode());
-   // MemberAccount account = memberAccountMapper.selectOne(new QueryWrapper<MemberAccount>().eq(MemberAccount.USERNAME,mpOpenId));
-    JwtUser jwtUser = validate(new LoginForm(mpOpenId,mpOpenId));
+    // MemberAccount account = memberAccountMapper.selectOne(new QueryWrapper<MemberAccount>().eq(MemberAccount.USERNAME,mpOpenId));
+    JwtUser jwtUser = validate(new LoginForm(mpOpenId, mpOpenId));
 
-    return  me(jwtUser).setToken(JwtKit.generateToken(jwtUser));
+    return me(jwtUser).setToken(JwtKit.generateToken(jwtUser));
   }
 
   public ResultMe me(JwtUser jwtUser) {

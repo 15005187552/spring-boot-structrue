@@ -49,6 +49,9 @@ public class WechatXCXService {
       if (null != resultByte && resultByte.length > 0) {
         String userInfo = new String(resultByte, "UTF-8");
         return userInfo;
+      } else {
+        log.error("Bad result {} when decrypt data {} with {}， {}", resultByte, encryptedData, sessionKey, iv);
+        throw new LogicException(ResultEnum.DATA_ERROR, "解密微信签名数据失败!");
       }
     } catch (Exception e) {
       log.error("Error when decrypt data {} with {}， {}", encryptedData,sessionKey, iv, e );
