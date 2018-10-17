@@ -185,7 +185,7 @@ public class ExcelService {
               Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.NAME, key.toString()));
               Long itemId = attribute.getItemId();
               Integer tableName = attribute.getTableName();
-              String value = m.get(key).toString();
+              String value = Objects.isNull(m.get(key))? null: m.get(key).toString();
               attendanceService.insertOrUpdate(tableName, itemId, date, value, tax);
             }
             if (socialBase != null && fundBase != null && fundPer != null) {

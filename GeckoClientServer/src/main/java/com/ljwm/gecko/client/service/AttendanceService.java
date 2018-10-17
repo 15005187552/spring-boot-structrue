@@ -160,7 +160,7 @@ public class AttendanceService {
       TaxIncome taxIncome = taxIncomeMapper.selectOne(new QueryWrapper<TaxIncome>().eq(TaxIncome.TAX_ID, tax.getId())
         .eq(TaxIncome.INCOME_TYPE_ID, itemId));
       if (taxIncome != null){
-        taxIncome.setUpdateTime(date).setIncome(new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setIncomeTypeId(itemId).setTaxId(tax.getId());
+        taxIncome.setUpdateTime(date).setIncome(Objects.isNull(value)? null:new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setIncomeTypeId(itemId).setTaxId(tax.getId());
         taxIncomeMapper.updateById(taxIncome);
       } else {
         taxIncome = new TaxIncome();
@@ -391,7 +391,7 @@ public class AttendanceService {
       CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, taxFindForm.getCompanyId()).eq(CompanyUser.MEMBER_ID, memberId));
       CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUser.getId());
       NaturalPersonBackup naturalPersonBackup = naturalPersonBackupMapper.selectOne(new QueryWrapper<NaturalPersonBackup>().eq(NaturalPersonBackup.TAX_ID, attendanceAndPersonVo.getId()));
-      NaturalPerson naturalPerson = null;
+      NaturalPerson naturalPerson = new NaturalPerson();
       if(naturalPersonBackup !=null){
         BeanUtil.copyProperties(naturalPersonBackup, naturalPerson);
       } else {
