@@ -21,10 +21,9 @@ import java.util.List;
 @Repository
 public interface AttributeMapper extends BaseMapper<Attribute> {
 
-  @Select("SELECT * FROM t_attribute b LEFT JOIN t_template a\n" +
-    "ON a.COMPANY_ID = #{companyId} AND a.ATTRIBUTE_ID = b.ID")
+  @Select("SELECT * FROM (SELECT * FROM t_attribute WHERE TABLE_NAME!=3) b LEFT JOIN t_template a ON a.COMPANY_ID =#{companyId} AND a.ATTRIBUTE_ID = b.ID")
   @ResultMap("ResultMap")
-  List<AttributeEmployVo> selectAllAttribute(Long companyId);
+  List<AttributeEmployVo> selectAllAttribute(Long companyId, Integer tableName);
 
 
   @Select("SELECT * FROM t_attribute b LEFT JOIN t_attendance_template a\n" +
