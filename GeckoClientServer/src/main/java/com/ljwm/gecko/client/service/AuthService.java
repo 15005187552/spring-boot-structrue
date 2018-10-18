@@ -35,7 +35,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -91,55 +93,79 @@ public class AuthService {
   }
 
 
+  /**
+   * 小程序游客登录
+   * @param guestForm
+   * @return
+   */
   @Transactional
   public ResultMe login(GuestForm guestForm) {
-    Guest guest = null;
-    String mpOpenId = null;
-      // 1. 验证CODE 并换取用户信息
+
+    String mpOpenId;
+    String unionId;
+    String sessionKey;
+
+    Map extInfo = LoginInfoHolder.getExtInfo();
+    log.info("Ext info of current user  {} and login type {}", extInfo, LoginInfoHolder.getLoginType());
+
+    String code = guestForm.getCode();
+    if (StringUtils.isEmpty(code)) { // code 为空时，从用户的token中获取信息
+      // TODO: 没有传CODE的时间是否需要先判断 extInfo是否为空
+      mpOpenId = (String)extInfo.get(MPOPENID);
+      unionId = (String) extInfo.get(UNNIONID);
+      sessionKey = (String)extInfo.get(SESSION_KEY);
+    } else { // 如果前端传入CODE, 通过CODE到微信服务器换取用户信息
       JSONObject jsonObject = new JSONObject();
-      FunctionUtil.retryOnException(3, () -> wechatXCXService.doCodeLogin(guestForm.getCode(), jsonObject));
+      FunctionUtil.retryOnException(3, () -> wechatXCXService.doCodeLogin(code, jsonObject));
       if (StrUtil.isNotBlank(jsonObject.getString("errcode"))) // 认证出错
         throw new LogicException(ResultEnum.DATA_ERROR, jsonObject.getString("errcode"));
-      String unionId = jsonObject.getString("unionid");
+      log.info("Json info from code: {}", jsonObject.toJSONString());
+      unionId = jsonObject.getString("unionid");
       mpOpenId = jsonObject.getString("openid");
-      String sessionKey = jsonObject.getString("session_key");
-      log.info("Json from code: {}", jsonObject.toJSONString());
-      log.info("befor {}", LoginInfoHolder.getExtInfo());
+      sessionKey = jsonObject.getString("session_key");
+
+      LoginInfoHolder.setLoginType(LoginType.WX_APP.getCode().toString());
       // 存入TOKEN
-      LoginInfoHolder.setExtInfo(
-        Kv.by(SESSION_KEY, sessionKey)
+      LoginInfoHolder.setExtInfo(Kv.by(SESSION_KEY, sessionKey)
           .set(MPOPENID, mpOpenId)
-          .set(UNNIONID, unionId)
-      );
-      if(StrUtil.isNotBlank(guestForm.getRawData())&&StrUtil.isBlank(unionId)){
-        String extInfo = wechatXCXService.getUserInfo(guestForm.getEncryptedData(), sessionKey, guestForm.getIv());
-        log.debug("The ext info for wixin app user: {}", extInfo);
-        JSONObject js = JSON.parseObject(extInfo);
-        String nickName = js.getString("nickName");
-        String avatarUrl = js.getString("avatarUrl");
-        Long memberId = memberInfoService.updateExt(mpOpenId, extInfo, LoginType.WX_APP.getCode());
-        String nName = memberInfoService.selectMember(memberId);
-        if(StrUtil.isBlank(nName)){
-          memberInfoService.updateMember(nickName, memberId, avatarUrl);
-        }
-      }
-      guest = guestService.upsert(UserSource.codeOf(UserSource.WX_APP.getCode()), mpOpenId, null);
-    if(guest.getMemberId() == null) {
+          .set(UNNIONID, unionId));
+    }
+
+    if(mpOpenId == null) {
+      throw new LogicException(ResultEnum.DATA_ERROR, "微信OpenID获取失败");
+    }
+
+    Guest guest = guestService.upsert(UserSource.codeOf(UserSource.WX_APP.getCode()), mpOpenId, null);
+    if (guest.getMemberId() == null) { // 当前微信小程序用户仍然是游客
       LoginInfoHolder.setLoginType(LoginType.GUEST.getCode().toString());
-      JwtUser jwtUser = new JwtUser(guest);
+      JwtUser jwtUser = new JwtUser(guest, LoginInfoHolder.getExtInfo());
       ResultMe resultMe = new ResultMe();
       resultMe.setId(jwtUser.getId());
       resultMe.setIsGuest(true);
       resultMe.setUsername(jwtUser.getUsername());
       resultMe.setToken(JwtKit.generateToken(jwtUser));
       return resultMe;
-    }
-    LoginInfoHolder.setLoginType(LoginType.WX_APP.getCode().toString());
-//    MemberVo memberVo = memberInfoService.selectMemberInfo(guest.getMemberId(), LoginType.WX_APP.getCode());
-   // MemberAccount account = memberAccountMapper.selectOne(new QueryWrapper<MemberAccount>().eq(MemberAccount.USERNAME,mpOpenId));
-    JwtUser jwtUser = validate(new LoginForm(mpOpenId,mpOpenId));
+    } else { // 当前小程序用户已经是会员
+      // 获取微信小程序用户的用户详情
+      if (StrUtil.isNotBlank(guestForm.getRawData()) && StrUtil.isBlank(unionId)) {
+        String userInfo = wechatXCXService.getUserInfo(guestForm.getEncryptedData(), sessionKey, guestForm.getIv());
+        log.debug("The detail info for wixin app user: {}", userInfo);
+        JSONObject js = JSON.parseObject(userInfo);
+        String nickName = js.getString("nickName");
+        String avatarUrl = js.getString("avatarUrl");
 
-    return  me(jwtUser).setToken(JwtKit.generateToken(jwtUser));
+        Long memberId = memberInfoService.updateExt(mpOpenId, userInfo, LoginType.WX_APP.getCode());
+        String nName = memberInfoService.selectMember(memberId);
+        if (StrUtil.isBlank(nName)) {
+          memberInfoService.updateMember(nickName, memberId, avatarUrl);
+        }
+      }
+
+      // MemberVo memberVo = memberInfoService.selectMemberInfo(guest.getMemberId(), LoginType.WX_APP.getCode());
+      // MemberAccount account = memberAccountMapper.selectOne(new QueryWrapper<MemberAccount>().eq(MemberAccount.USERNAME,mpOpenId));
+      JwtUser jwtUser = validate(new LoginForm(mpOpenId, mpOpenId));
+      return me(jwtUser).setToken(JwtKit.generateToken(jwtUser));
+    }
   }
 
   public ResultMe me(JwtUser jwtUser) {

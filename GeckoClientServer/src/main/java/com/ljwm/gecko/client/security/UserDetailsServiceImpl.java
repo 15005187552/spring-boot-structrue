@@ -46,7 +46,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (guest == null) {
           throw new UsernameNotFoundException("用户不存在");
         }
-        return new JwtUser(guest);
+        return new JwtUser(guest, LoginInfoHolder.getExtInfo());
 
       case WX_APP:
         MemberInfo memberInfo = memberInfoDao.selectAccountByUserName(username);
@@ -57,14 +57,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         BeanUtil.copyProperties(memberInfo, memberVo);
         memberVo.getAccount().setPassword(new MemberPassword().setLastModifyTime(DateUtil.offset(DateTime.now(), DateField.YEAR,-10)).setPassword(SecurityKit.passwordMD5(username,username)));
         LoginInfoHolder.setSalt(username);
-        return new JwtUser(memberVo);
+        return new JwtUser(memberVo, LoginInfoHolder.getExtInfo());
       default:
         memberVo = memberInfoDao.selectByUserName(username);
         if(memberVo == null) {
           throw new UsernameNotFoundException("用户不存在");
         }
         LoginInfoHolder.setSalt(memberVo.getAccount().getPassword().getSalt());
-        return new JwtUser(memberVo);
+        return new JwtUser(memberVo, LoginInfoHolder.getExtInfo());
     }
   }
 }

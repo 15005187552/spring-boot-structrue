@@ -6,6 +6,7 @@ import com.ljwm.gecko.base.entity.AddSpecial;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ljwm.gecko.base.model.vo.AddSpecialVo;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * @author Levis
  * @since 2018-08-29
  */
+@Repository
 public interface AddSpecialMapper extends BaseMapper<AddSpecial> {
 
   List<AddSpecialVo> find();

@@ -1,6 +1,7 @@
 package com.ljwm.gecko.client.service;
 
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.base.enums.TableNameEnum;
 import com.ljwm.gecko.base.mapper.AttributeMapper;
 import com.ljwm.gecko.base.model.vo.AttributeAttendanceVo;
 import com.ljwm.gecko.base.model.vo.AttributeEmployVo;
@@ -21,7 +22,7 @@ public class AttributeService {
 
   public Result getAllAttribute(CompanyDto companyDto) {
 
-    List<AttributeEmployVo> list = attributeMapper.selectAllAttribute(companyDto.getCompanyId());
+    List<AttributeEmployVo> list = attributeMapper.selectAllAttribute(companyDto.getCompanyId(), TableNameEnum.T_ADD_SPECIAL.getCode());
     return Result.success(list);
   }
 
