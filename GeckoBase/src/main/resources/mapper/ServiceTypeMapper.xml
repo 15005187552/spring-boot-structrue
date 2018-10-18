@@ -2,22 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljwm.gecko.base.mapper.ServiceTypeMapper">
 
-  <!-- 通用查询映射结果 -->
-  <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.ServiceType">
-    <id column="ID" property="id"/>
-    <result column="NAME" property="name"/>
-    <result column="MIN_MONEY" property="minMoney"/>
-    <result column="AVATAR_PATH" property="avatarPath"/>
-    <result column="PID" property="pid"/>
-    <result column="LEVEL" property="level"/>
-    <result column="DISABLED" property="disabled"/>
-    <result column="IS_TOP" property="isTop"/>
-  </resultMap>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.ServiceType">
+        <id column="ID" property="id" />
+        <result column="NAME" property="name" />
+        <result column="MIN_MONEY" property="minMoney" />
+        <result column="AVATAR_PATH" property="avatarPath" />
+        <result column="PID" property="pid" />
+        <result column="LEVEL" property="level" />
+        <result column="DISABLED" property="disabled" />
+        <result column="IS_TOP" property="isTop" />
+        <result column="SORT" property="sort" />
+    </resultMap>
 
-  <!-- 通用查询结果列 -->
-  <sql id="Base_Column_List">
-          `ID`          ,`NAME`          ,`MIN_MONEY`          ,`AVATAR_PATH`          ,`PID`          ,`LEVEL`          ,`DISABLED`          ,`IS_TOP`
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          `ID`          ,`NAME`          ,`MIN_MONEY`          ,`AVATAR_PATH`          ,`PID`          ,`LEVEL`          ,`DISABLED`          ,`IS_TOP`          ,`SORT`
     </sql>
+
 
 
   <resultMap id="serviceVo" type="com.ljwm.gecko.base.model.vo.ServiceVo" extends="BaseResultMap">
@@ -54,7 +56,7 @@
   </select>
 
   <resultMap id="serverSimpleVo" type="com.ljwm.gecko.base.model.vo.ServeSimpleVo" extends="BaseResultMap">
-      <association property="pName" column="PID" select="com.ljwm.gecko.base.mapper.ServiceTypeMapper.findNameByPid" notNullColumn="PID"/>
+    <association property="pName" column="PID" select="com.ljwm.gecko.base.mapper.ServiceTypeMapper.findNameByPid" notNullColumn="PID"/>
   </resultMap>
 
   <select id="findById" parameterType="integer" resultMap="serverSimpleVo">
@@ -72,5 +74,4 @@
   <select id="findNameByPid" parameterType="integer" resultType="string">
     select t.name from t_service_type t where t.ID=#{pId}
   </select>
-
 </mapper>
