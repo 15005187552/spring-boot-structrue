@@ -7,7 +7,6 @@ spring:
       buffer-memory: 33554432
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      servers: 192.168.8.17:9092
 #      zookeeper:
 #        connect: 192.168.8.17:2181
     consumer:
