@@ -460,7 +460,9 @@ public class AttendanceService {
         .setReceiverId(id)
         .setMessage(jsonObject.toJSONString())
       ;
-      registerService.sendSMSCode(member.getRegMobile(), SMSTemplateEnum.REMIND_CONFIRM.getCode());
+      Map value = new HashedMap();
+      value.put("companyAndTime", company.getName()+taxConfirmForm.getDeclareTime())
+      registerService.sendSMSCode(member.getRegMobile(), SMSTemplateEnum.REMIND_CONFIRM.getCode(), value);
       messageService.pushMessage(messageDto);
     }
     return Result.success("成功！");

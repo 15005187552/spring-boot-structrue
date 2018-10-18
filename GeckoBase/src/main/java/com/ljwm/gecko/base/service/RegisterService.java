@@ -106,10 +106,10 @@ public class RegisterService {
         mobileCode.setDayIndex(1);
       }
       mobileCode.setUpdateTime(currentTime)
-        .setCode(sendSMSCode(phoneNum, registerForm.getAction())).setFromIp(IpUtil.getIPAddr(request));
+        .setCode(sendSMSCode(phoneNum, registerForm.getAction(), null)).setFromIp(IpUtil.getIPAddr(request));
       mobileCodeDao.update(mobileCode);
     } else {
-      mobileCode = new MobileCode().setCode(sendSMSCode(phoneNum, registerForm.getAction())).setCode(phoneNum)
+      mobileCode = new MobileCode().setCode(sendSMSCode(phoneNum, registerForm.getAction(), nulll)).setCode(phoneNum)
         .setFromIp(IpUtil.getIPAddr(request)).setCreateTime(currentTime).setDayIndex(1).setUpdateTime(currentTime)
         .setType(registerForm.getAction());
       mobileCodeDao.insert(mobileCode);
@@ -117,14 +117,19 @@ public class RegisterService {
     return success("成功");
   }
 
-  public String sendSMSCode(String phoneNum, Integer action) {
+  public String sendSMSCode(String phoneNum, Integer action, Map values) {
+    SMSTemplateEnum smsTemplateEnum = EnumUtil.getEnumBycode(SMSTemplateEnum.class, action);
     String s = "";
-    while (s.length() < 6)
-      s += (int) (Math.random() * 10);
     Map params = new HashMap();
-    params.put("code", s);
-    String a =  EnumUtil.getEnumBycode(SMSTemplateEnum.class, action).getTemplateCode();
-    SendSmsResponse response = smsService.send(phoneNum, EnumUtil.getEnumBycode(SMSTemplateEnum.class, action).getTemplateCode(), params);
+    if (smsTemplateEnum.isSMSCode()) {
+      while (s.length() < 6) {
+        s += (int) (Math.random() * 10);
+      }
+      params.put("code", s);
+      SendSmsResponse response = smsService.send(phoneNum, EnumUtil.getEnumBycode(SMSTemplateEnum.class, action).getTemplateCode(), params);
+    } else {
+      SendSmsResponse response = smsService.send(phoneNum, EnumUtil.getEnumBycode(SMSTemplateEnum.class, action).getTemplateCode(), values);
+    }
     return s;
   }
 
