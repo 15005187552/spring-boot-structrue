@@ -100,7 +100,7 @@ public class AuthService {
    */
   @Transactional
   public ResultMe login(GuestForm guestForm) {
-    Guest guest = null;
+
     String mpOpenId;
     String unionId;
     String sessionKey;
@@ -131,7 +131,7 @@ public class AuthService {
           .set(UNNIONID, unionId));
     }
 
-    guest = guestService.upsert(UserSource.codeOf(UserSource.WX_APP.getCode()), mpOpenId, null);
+    Guest guest = guestService.upsert(UserSource.codeOf(UserSource.WX_APP.getCode()), mpOpenId, null);
     if (guest.getMemberId() == null) { // 当前微信小程序用户仍然是游客
       LoginInfoHolder.setLoginType(LoginType.GUEST.getCode().toString());
       JwtUser jwtUser = new JwtUser(guest);
