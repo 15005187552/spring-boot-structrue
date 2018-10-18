@@ -11,7 +11,8 @@ appInfo:
   servicePic: "serviceType"
   webRoot: "/home/bhtest/upload/"
   filePath: "${appInfo.webRoot}"
-  adminPath: "https://static.bihugs.com/bhtest/"
+  webPath: "https://static.bihugs.com/bhtest/"
+  adminPath: "${appInfo.webPath}"
 logging:
   level:
     org.springframework:
