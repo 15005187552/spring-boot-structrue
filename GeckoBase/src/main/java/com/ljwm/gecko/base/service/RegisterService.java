@@ -109,8 +109,13 @@ public class RegisterService {
         .setCode(sendSMSCode(phoneNum, registerForm.getAction(), null)).setFromIp(IpUtil.getIPAddr(request));
       mobileCodeDao.update(mobileCode);
     } else {
-      mobileCode = new MobileCode().setCode(sendSMSCode(phoneNum, registerForm.getAction(), null)).setCode(phoneNum)
-        .setFromIp(IpUtil.getIPAddr(request)).setCreateTime(currentTime).setDayIndex(1).setUpdateTime(currentTime)
+      mobileCode = new MobileCode()
+        .setCode(sendSMSCode(phoneNum, registerForm.getAction(), null))
+        .setMobile(phoneNum)
+        .setFromIp(IpUtil.getIPAddr(request))
+        .setCreateTime(currentTime)
+        .setDayIndex(1)
+        .setUpdateTime(currentTime)
         .setType(registerForm.getAction());
       mobileCodeDao.insert(mobileCode);
     }
