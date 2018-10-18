@@ -89,7 +89,7 @@ public class ProviderService {
   @Transactional
   public List<ProviderServicesVo> confirmProvider(ConfirmProviderDto confirmProviderDto) {
     Provider provider = providerMapper.selectById(confirmProviderDto.getId());
-    if (provider == null || !Objects.equals(provider.getInfoValidateState(),1)) {
+    if (provider == null || !Objects.equals(provider.getInfoValidateState(),InfoValidateStateEnum.CONFIRM_SUCCESS.getCode())) {
       log.info("服务商id:{} 服务商入驻信息不存在,或基本信息为非已审核状态!",confirmProviderDto.getId());
       throw new LogicException(ResultEnum.DATA_ERROR,"服务商查询不到或基本信息为非已审核状态!");
     }
