@@ -1,8 +1,8 @@
 #### KAFKA 安装
   - http://kafka.apache.org/downloads中 获取下载链接 下载包
-  - 解压包，并修改conf/server.properties 中 log.dirs 为自己的目录
-  - 修改 conf/zookeeper.properties 中 dataDir=/tmp/zookeeper 为自己的目录
-  - bin/zookeeper-server-start.sh conf/zookeeper.properties 启动zookeeper
+  - 解压包，并修改config/server.properties 中 log.dirs 为自己的目录
+  - 修改 config/zookeeper.properties 中 dataDir=/tmp/zookeeper 为自己的目录
+  - bin/zookeeper-server-start.sh config/zookeeper.properties 启动zookeeper
   - bin/kafka-server-start.sh config/server.properties 启动kafka
 #### KAFKA 远程配置
   - conf/server.properties 中 放开listeners=PLAINTEXT://:9092的注释
