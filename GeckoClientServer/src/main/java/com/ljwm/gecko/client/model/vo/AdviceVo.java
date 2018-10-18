@@ -8,14 +8,11 @@ import java.math.BigDecimal;
 
 /**
  * @author Janiffy
- * @date 2018/10/8 11:20
+ * @date 2018/10/18 14:19
  */
 @Data
 @Accessors(chain = true)
-public class TaxResultVo {
-
-  @ApiModelProperty("社保费用")
-  private BigDecimal socialFee;
+public class AdviceVo {
 
   @ApiModelProperty("纳税金额")
   private BigDecimal tax;
@@ -28,5 +25,4 @@ public class TaxResultVo {
 
   @ApiModelProperty("扣除建议")
   private String deducAdvice;
-
 }
