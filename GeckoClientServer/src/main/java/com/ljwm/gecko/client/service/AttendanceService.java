@@ -461,7 +461,7 @@ public class AttendanceService {
         .setMessage(jsonObject.toJSONString())
       ;
       Map value = new HashedMap();
-      value.put("companyAndTime", company.getName()+taxConfirmForm.getDeclareTime())
+      value.put("companyAndTime", company.getName()+taxConfirmForm.getDeclareTime());
       registerService.sendSMSCode(member.getRegMobile(), SMSTemplateEnum.REMIND_CONFIRM.getCode(), value);
       messageService.pushMessage(messageDto);
     }
