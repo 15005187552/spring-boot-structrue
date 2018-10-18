@@ -8,7 +8,7 @@ spring:
     password: Bhgs_2018
 appInfo:
   webRoot: "/home/bhtest/upload/"
-  webPath: "https://static.bihugs.com/bhtest/"
+  webPath: "http://static.bihugs.com/bhtest/"
   filePath: "${appInfo.webRoot}"
 logging:
   level:
