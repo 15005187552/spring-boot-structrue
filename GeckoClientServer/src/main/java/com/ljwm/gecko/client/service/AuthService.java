@@ -131,6 +131,10 @@ public class AuthService {
           .set(UNNIONID, unionId));
     }
 
+    if(mpOpenId == null) {
+      throw new LogicException(ResultEnum.DATA_ERROR, "微信OpenID获取失败");
+    }
+
     Guest guest = guestService.upsert(UserSource.codeOf(UserSource.WX_APP.getCode()), mpOpenId, null);
     if (guest.getMemberId() == null) { // 当前微信小程序用户仍然是游客
       LoginInfoHolder.setLoginType(LoginType.GUEST.getCode().toString());
