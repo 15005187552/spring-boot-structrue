@@ -6,6 +6,14 @@ spring:
     url: jdbc:mysql://rm-bp16x49cok67o9i8y.mysql.rds.aliyuncs.com:3306/bhgsdb_test?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8
     username: bhgs
     password: Bhgs_2018
+logging:
+  level:
+    org.springframework:
+      data: info
+      security: info
+      jta: info
+    com.ljwm: debug
+  file: "/home/bhtest/log/im-server.log"
 wx:
   xcx:                  #小程序
     appId: wxdefc6532215f6981
