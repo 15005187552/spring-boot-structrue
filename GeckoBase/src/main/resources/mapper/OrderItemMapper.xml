@@ -62,5 +62,12 @@
           AND t.`PROVIDER_ID` = #{params.providerId}
         </if>
       </where>
+      ORDER BY t.CREATE_TIME
+      <if test="params.asc">
+        ASC
+      </if>
+      <if test="!params.asc">
+        DESC
+      </if>
     </select>
 </mapper>
