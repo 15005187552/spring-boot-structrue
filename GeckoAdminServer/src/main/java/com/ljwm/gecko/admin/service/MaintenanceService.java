@@ -13,20 +13,17 @@ import com.ljwm.gecko.admin.model.form.MemberQuery;
 import com.ljwm.gecko.admin.model.form.ReportLogQuery;
 import com.ljwm.gecko.admin.model.vo.ReportLogVo;
 import com.ljwm.gecko.base.entity.AttendanceAttribute;
-import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.mapper.AttendanceAttributeMapper;
 import com.ljwm.gecko.base.mapper.MemberMapper;
 import com.ljwm.gecko.base.model.form.AttributeForm;
 import com.ljwm.gecko.base.model.vo.MemberVo;
 import com.ljwm.gecko.base.model.vo.admin.AttendanceAtrVo;
 import com.ljwm.gecko.base.service.AttributeAdminService;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -89,10 +86,11 @@ public class MaintenanceService {
 
   /**
    * 查询  申报记录
+   *
    * @param query
    * @return
    */
-  public List<ReportLogVo> findReportLog(ReportLogQuery query){
-    return reportLogMapper.findReportLog();
+  public Page<ReportLogVo> findReportLog(ReportLogQuery query) {
+    return commonService.find(query,(p,q) -> reportLogMapper.findReportLog(p,BeanUtil.beanToMap(q)));
   }
 }

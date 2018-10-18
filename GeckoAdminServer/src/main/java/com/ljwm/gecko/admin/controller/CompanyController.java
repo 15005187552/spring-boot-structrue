@@ -62,4 +62,10 @@ public class CompanyController extends BaseController {
   public Result getCompany() {
     return success(companyService.getCompany());
   }
+
+  @GetMapping("getOnlineCompany")
+  @ApiOperation("获取所有认证通过的公司")
+  public Result getOnlineCompany(){
+    return success(companyService.getOnlineCompany());
+  }
 }

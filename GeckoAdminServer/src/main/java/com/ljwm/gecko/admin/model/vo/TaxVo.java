@@ -18,12 +18,15 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 public class TaxVo extends Tax {
 
+  @JSONField(serializeUsing = TaxCompute.OtherCompute.class)
   private List<TaxOtherVo> taxOthers;
 
   @JSONField(serializeUsing = TaxCompute.IncomeCompute.class)
   private List<TaxIncomeVo> taxIncomes;
 
+  @JSONField(serializeUsing = TaxCompute.SpecialCompute.class)
   private List<TaxSpecialVo> taxSpecials;
 
+  @JSONField(serializeUsing = TaxCompute.SpecialAddCompute.class)
   private List<TaxSpecialAddVo> taxSpecialAdds;
 }

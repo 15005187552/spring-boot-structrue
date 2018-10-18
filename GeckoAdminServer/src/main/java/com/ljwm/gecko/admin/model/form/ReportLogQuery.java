@@ -23,5 +23,5 @@ public class ReportLogQuery  extends CommonQuery{
 
     private Integer declareType;
 
-    private Date declareTime;
+    private String declareTime;
 }
