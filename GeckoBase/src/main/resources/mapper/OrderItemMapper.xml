@@ -33,6 +33,7 @@
     </sql>
 
     <resultMap id="orderItemVo" type="com.ljwm.gecko.base.model.vo.OrderItemVo" extends="BaseResultMap">
+        <association property="orderSimpleVo" column="ORDER_NO" select="com.ljwm.gecko.base.mapper.OrderMapper.findOrderSimpleByOrderNo" notNullColumn="ORDER_NO"/>
         <association property="providerSimpleVo" column="PROVIDER_ID" select="com.ljwm.gecko.base.mapper.ProviderMapper.findProviderSimpleVoById"/>
         <association property="specServicesPriceSimpleVo" column="SPEC_SERVICE_ID" select="com.ljwm.gecko.base.mapper.SpecServicesPriceMapper.findById" notNullColumn="SPEC_SERVICE_ID"/>
     </resultMap>

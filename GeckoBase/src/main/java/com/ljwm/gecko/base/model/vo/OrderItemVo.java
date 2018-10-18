@@ -20,6 +20,8 @@ public class OrderItemVo extends OrderItem {
 
   private ProviderSimpleVo providerSimpleVo;
 
+  private OrderSimpleVo orderSimpleVo;
+
   public OrderItemVo(OrderItem orderItem){
     if (orderItem!=null){
       BeanUtil.copyProperties(orderItem,this);
