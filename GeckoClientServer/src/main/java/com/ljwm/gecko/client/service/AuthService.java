@@ -123,8 +123,6 @@ public class AuthService {
       unionId = jsonObject.getString("unionid");
       mpOpenId = jsonObject.getString("openid");
       sessionKey = jsonObject.getString("session_key");
-
-      LoginInfoHolder.setLoginType(LoginType.WX_APP.getCode().toString());
       // 存入TOKEN
       LoginInfoHolder.setExtInfo(Kv.by(SESSION_KEY, sessionKey)
           .set(MPOPENID, mpOpenId)
@@ -146,6 +144,7 @@ public class AuthService {
       resultMe.setToken(JwtKit.generateToken(jwtUser));
       return resultMe;
     } else { // 当前小程序用户已经是会员
+      LoginInfoHolder.setLoginType(LoginType.WX_APP.getCode().toString());
       // 获取微信小程序用户的用户详情
       if (StrUtil.isNotBlank(guestForm.getRawData()) && StrUtil.isBlank(unionId)) {
         String userInfo = wechatXCXService.getUserInfo(guestForm.getEncryptedData(), sessionKey, guestForm.getIv());
