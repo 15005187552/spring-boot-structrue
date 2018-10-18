@@ -247,5 +247,4 @@ public class ProviderService {
     Integer totalStarCount = orderCommentsMapper.starCount(providerId);
     return totalStarCount / totalOrderCount;
   }
-
 }

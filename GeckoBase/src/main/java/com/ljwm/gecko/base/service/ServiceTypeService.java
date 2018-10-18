@@ -8,6 +8,7 @@ import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.base.entity.ServiceType;
 import com.ljwm.gecko.base.enums.DisabledEnum;
+import com.ljwm.gecko.base.enums.IsTopEnum;
 import com.ljwm.gecko.base.mapper.ServiceTypeMapper;
 import com.ljwm.gecko.base.model.dto.ServeDto;
 import com.ljwm.gecko.base.model.form.ServicePathForm;
@@ -88,5 +89,18 @@ public class ServiceTypeService {
     if (serviceType == null) throw new LogicException("未找到id为" + form.getId() + "的服务类型");
     serviceType.setAvatarPath(form.getPath());
     return serviceTypeMapper.updateById(serviceType);
+  }
+
+  @Transactional
+  public void saveTop(Integer id) {
+    List<ServiceType> serviceTypes = serviceTypeMapper.selectList(new QueryWrapper<ServiceType>().eq("IS_TOP",IsTopEnum.TOP.getCode()));
+    ServiceType serviceType = serviceTypeMapper.selectById(id);
+    if (serviceType == null) throw new LogicException(ResultEnum.DATA_ERROR,"未找到id为" + id + "的服务类型");
+    serviceTypeMapper.updateById(
+      serviceType.setIsTop(
+        Objects.equals(serviceType.getIsTop(),IsTopEnum.TOP.getCode()) ? IsTopEnum.NOT_TOP.getCode() : IsTopEnum.TOP.getCode()
+      )
+    );
+
   }
 }
