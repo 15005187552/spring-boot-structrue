@@ -62,6 +62,7 @@
   <resultMap id="AdminCompanyDto" type="com.ljwm.gecko.base.model.dto.AdminCompanyDto" extends="BaseResultMap">
     <association property="location" column="AREA_CODE"
                  select="com.ljwm.gecko.base.mapper.LocationMapper.getLocationByArea"/>
+    <association property="creator" column="CREATER_ID" select="com.ljwm.gecko.base.mapper.MemberMapper.selectById"/>
     <association property="validator" column="VALIDATOR_ID" select="com.ljwm.gecko.base.mapper.AdminMapper.selectById"/>
     <collection property="companyUsers" column="ID"
                 select="com.ljwm.gecko.base.mapper.CompanyUserMapper.findCompanyUser"/>
