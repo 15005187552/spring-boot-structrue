@@ -18,6 +18,7 @@ import com.ljwm.gecko.base.entity.CompanyUser;
 import com.ljwm.gecko.base.enums.CompanyValidateEnum;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.enums.MPTemplateEnum;
+import com.ljwm.gecko.base.enums.ValidateStatEnum;
 import com.ljwm.gecko.base.mapper.CompanyMapper;
 import com.ljwm.gecko.base.mapper.CompanyUserMapper;
 import com.ljwm.gecko.base.model.dto.AdminCompanyDto;
@@ -77,6 +78,11 @@ public class CompanyService {
 
   public List<SimpleCompany> getCompany() {
     return companyMapper.selectList(null).stream().map(SimpleCompany::new).collect(Collectors.toList());
+  }
+
+  public List<SimpleCompany> getOnlineCompany(){
+    return companyMapper.selectList(new QueryWrapper<Company>().eq("VALIDATE_STATE",CompanyValidateEnum.PASS_VALIDATE.getCode()))
+      .stream().map(SimpleCompany::new).collect(Collectors.toList());
   }
 
   public void pushMessage(Company company) {
