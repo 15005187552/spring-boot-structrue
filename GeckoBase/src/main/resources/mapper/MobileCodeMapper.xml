@@ -6,15 +6,17 @@
     <resultMap id="BaseResultMap" type="com.ljwm.gecko.base.entity.MobileCode">
         <id column="ID" property="id" />
         <result column="CODE" property="code" />
+        <result column="TYPE" property="type" />
         <result column="MOBILE" property="mobile" />
         <result column="FROM_IP" property="fromIp" />
         <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
         <result column="DAY_INDEX" property="dayIndex" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`CODE`          ,`MOBILE`          ,`FROM_IP`          ,`CREATE_TIME`          ,`DAY_INDEX`
+          `ID`          ,`CODE`          ,`TYPE`          ,`MOBILE`          ,`FROM_IP`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`DAY_INDEX`
     </sql>
 
 </mapper>

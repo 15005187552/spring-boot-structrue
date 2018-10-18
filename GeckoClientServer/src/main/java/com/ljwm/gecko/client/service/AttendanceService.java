@@ -26,6 +26,7 @@ import com.ljwm.gecko.base.utils.TimeUtil;
 import com.ljwm.gecko.client.model.TaxConfirmForm;
 import com.ljwm.gecko.client.model.dto.AttendanceForm;
 import com.ljwm.gecko.client.model.dto.TaxFindForm;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ import java.util.*;
  * @date 2018/9/17 15:06
  */
 @Service
+@Slf4j
 public class AttendanceService {
 
   @Autowired
@@ -218,10 +220,7 @@ public class AttendanceService {
       TaxSpecialAdd taxSpecialAdd = taxSpecialAddMapper.selectOne(new QueryWrapper<TaxSpecialAdd>()
         .eq(TaxSpecialAdd.TAX_ID, tax.getId()).eq(TaxSpecialAdd.SPECIAL_ADD_ID, itemId));
       if (taxSpecialAdd != null){
-        if(StrUtil.isNotEmpty(value)){
-          taxSpecialAdd.setTaxMoney(new BigDecimal(value));
-        }
-        taxSpecialAdd.setUpdateTime(date).setUpdater(SecurityKit.currentId()).setTaxId(tax.getId()).setSpecialAddId(itemId);
+        taxSpecialAdd.setUpdateTime(date).setTaxMoney(Objects.isNull(value)?null:new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setTaxId(tax.getId()).setSpecialAddId(itemId);
         taxSpecialAddMapper.updateById(taxSpecialAdd);
       } else {
         taxSpecialAdd = new TaxSpecialAdd();
@@ -260,7 +259,7 @@ public class AttendanceService {
           taxSpecial = new TaxSpecial();
           taxSpecial.setUpdater(SecurityKit.currentId()).setUpdateTime(date).setCompanyMoney(fundBase.multiply(fundPer))
             .setPersonalMoney(fundBase.multiply(fundPer)).setCompanyPercent(fundPer).setPersonalPercent(fundPer)
-            .setTaxId(tax.getId()).setSpecialDeduId(companySpecial.getSpecialId());
+            .setTaxId(tax.getId()).setSpecialDeduId(companySpecial.getSpecialId()).setCreateTime(date);
           taxSpecialMapper.insert(taxSpecial);
         }
       } else {
@@ -276,7 +275,7 @@ public class AttendanceService {
           taxSpecial = new TaxSpecial();
           taxSpecial.setUpdateTime(date).setUpdater(SecurityKit.currentId()).setCompanyMoney(socialBase.multiply(companyPer))
             .setPersonalMoney(socialBase.multiply(personPer)).setCompanyPercent(companyPer).setPersonalPercent(personPer)
-            .setTaxId(tax.getId()).setSpecialDeduId(companySpecial.getSpecialId());
+            .setTaxId(tax.getId()).setSpecialDeduId(companySpecial.getSpecialId()).setCreateTime(date);
           taxSpecialMapper.insert(taxSpecial);
         }
       }

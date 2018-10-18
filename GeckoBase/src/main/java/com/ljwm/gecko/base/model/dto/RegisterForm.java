@@ -25,5 +25,5 @@ public class RegisterForm {
 
   @ApiModelProperty("短信模板类型")
   @NotNull(message = "请输入action类型值")
-  private int action;
+  private Integer action;
 }

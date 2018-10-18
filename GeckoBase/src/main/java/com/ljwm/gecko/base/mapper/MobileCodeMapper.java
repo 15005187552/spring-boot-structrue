@@ -1,7 +1,7 @@
 package com.ljwm.gecko.base.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ljwm.gecko.base.entity.MobileCode;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
  * 手机验证码表 Mapper 接口
  * </p>
  *
- * @author yuzhou
- * @since 2018-08-28
+ * @author Levis
+ * @since 2018-10-18
  */
 @Repository
 public interface MobileCodeMapper extends BaseMapper<MobileCode> {
