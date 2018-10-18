@@ -1,23 +1,11 @@
 server:
-  port: 17001
+  port: 17004
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://rm-bp16x49cok67o9i8y.mysql.rds.aliyuncs.com:3306/bhgsdb_test?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8
     username: bhgs
     password: Bhgs_2018
-appInfo:
-  webRoot: "/home/bhtest/upload/"
-  webPath: "http://static.bihugs.com/bhtest/"
-  filePath: "${appInfo.webRoot}"
-logging:
-  level:
-    org.springframework:
-      data: info
-      security: info
-      jta: info
-    com.ljwm: debug
-  file: "/home/bhtest/log/client-server.log"
 wx:
   xcx:                  #小程序
     appId: wxdefc6532215f6981
