@@ -111,9 +111,9 @@ public class AuthService {
     String code = guestForm.getCode();
     if (StringUtils.isEmpty(code)) { // code 为空时，从用户的token中获取信息
       // TODO: 没有传CODE的时间是否需要先判断 extInfo是否为空
-      mpOpenId = (String)extInfo.get("openid");
-      unionId = (String) extInfo.get("unionid");
-      sessionKey = (String)extInfo.get("session_key");
+      mpOpenId = (String)extInfo.get(MPOPENID);
+      unionId = (String) extInfo.get(UNNIONID);
+      sessionKey = (String)extInfo.get(SESSION_KEY);
     } else { // 如果前端传入CODE, 通过CODE到微信服务器换取用户信息
       JSONObject jsonObject = new JSONObject();
       FunctionUtil.retryOnException(3, () -> wechatXCXService.doCodeLogin(code, jsonObject));
