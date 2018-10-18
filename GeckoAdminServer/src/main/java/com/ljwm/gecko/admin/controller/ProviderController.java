@@ -106,7 +106,6 @@ public class ProviderController extends BaseController {
   @GetMapping("saveTop/{id}")
   @ApiOperation("置顶")
   public Result saveTop(@PathVariable Integer id){
-//    providerService.saveTop(id)
-    return success();
+    return success(serviceTypeService.saveTop(id));
   }
 }

@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -92,15 +93,22 @@ public class ServiceTypeService {
   }
 
   @Transactional
-  public void saveTop(Integer id) {
+  public Integer saveTop(Integer id) {
     List<ServiceType> serviceTypes = serviceTypeMapper.selectList(new QueryWrapper<ServiceType>().eq("IS_TOP",IsTopEnum.TOP.getCode()));
+
     ServiceType serviceType = serviceTypeMapper.selectById(id);
     if (serviceType == null) throw new LogicException(ResultEnum.DATA_ERROR,"未找到id为" + id + "的服务类型");
-    serviceTypeMapper.updateById(
-      serviceType.setIsTop(
-        Objects.equals(serviceType.getIsTop(),IsTopEnum.TOP.getCode()) ? IsTopEnum.NOT_TOP.getCode() : IsTopEnum.TOP.getCode()
-      )
-    );
 
+    Integer maxSort = serviceTypes.stream()
+      .filter(i -> !Objects.isNull(i.getSort()))
+      .mapToInt(ServiceType::getSort).max()
+      .orElse(0);
+
+    serviceTypeMapper.updateById(
+      serviceType
+        .setSort(Objects.equals(serviceType.getIsTop(),IsTopEnum.TOP.getCode()) ? serviceType.getSort() : maxSort + 1)
+        .setIsTop(Objects.equals(serviceType.getIsTop(),IsTopEnum.TOP.getCode()) ? IsTopEnum.NOT_TOP.getCode() : IsTopEnum.TOP.getCode())
+    );
+    return serviceType.getIsTop();
   }
 }

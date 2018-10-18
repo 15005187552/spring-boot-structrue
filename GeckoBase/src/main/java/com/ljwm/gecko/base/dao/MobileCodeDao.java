@@ -1,6 +1,7 @@
 package com.ljwm.gecko.base.dao;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.gecko.base.entity.MobileCode;
 import com.ljwm.gecko.base.mapper.MobileCodeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,10 @@ public class MobileCodeDao {
   @Autowired
   MobileCodeMapper mobileCodeMapper;
 
-  public MobileCode find(String phoneNum) {
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("MOBILE", phoneNum);
-    List<MobileCode> list = mobileCodeMapper.selectByMap(map);
-    if(CollectionUtil.isNotEmpty(list)) {
-      return mobileCodeMapper.selectByMap(map).get(0);
-    }
-    return null;
+  public MobileCode find(String phoneNum, Integer action) {
+    MobileCode mobileCode = mobileCodeMapper.selectOne(new QueryWrapper<MobileCode>().eq(MobileCode.MOBILE, phoneNum)
+      .eq(MobileCode.TYPE, action));
+    return mobileCode;
   }
 
   public void update(MobileCode updateMobile) {
