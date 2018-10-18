@@ -134,7 +134,7 @@ public class AuthService {
     Guest guest = guestService.upsert(UserSource.codeOf(UserSource.WX_APP.getCode()), mpOpenId, null);
     if (guest.getMemberId() == null) { // 当前微信小程序用户仍然是游客
       LoginInfoHolder.setLoginType(LoginType.GUEST.getCode().toString());
-      JwtUser jwtUser = new JwtUser(guest);
+      JwtUser jwtUser = new JwtUser(guest, LoginInfoHolder.getExtInfo());
       ResultMe resultMe = new ResultMe();
       resultMe.setId(jwtUser.getId());
       resultMe.setIsGuest(true);

@@ -27,18 +27,21 @@ public class JwtUser implements IJwtAndSecurityAble {
   public static final String ROLE_MEMBER = "ROLE_MEMBER";
   public static final String HAS_MEMBER_ROLE = "hasRole('ROLE_MEMBER')";
 
-  public JwtUser(Guest guest) {
+  public JwtUser(Guest guest, Map exInfo) {
     this.guest = guest;
     this.member = null;
+    this.exInfo = exInfo;
   }
 
-  public JwtUser(MemberVo member) {
+  public JwtUser(MemberVo member, Map exInfo) {
     this.member = member;
     this.guest = null;
+    this.exInfo = exInfo;
   }
 
   private Guest guest;
   private MemberVo member;
+  private Map<String, String> exInfo;
 
   private boolean isGuest() {
     return guest != null;
@@ -70,7 +73,7 @@ public class JwtUser implements IJwtAndSecurityAble {
 
   @Override
   public Map<String, String> extInfo() {
-    return Kv.create();
+    return  exInfo == null ? Kv.create() : exInfo;
   }
 
   @Override
