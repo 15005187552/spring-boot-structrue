@@ -8,10 +8,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author xixil
- * @since 2018-10-08
+ * @since 2018-10-18
  */
 @Data
 @SuppressWarnings("ALL")
@@ -67,6 +65,10 @@ public class ServiceType implements Serializable {
     @TableField("`IS_TOP`")
     private Integer isTop;
 
+    @ApiModelProperty(value = "排序")
+    @TableField("`SORT`")
+    private Integer sort;
+
 
     public static final String ID = "`ID`";
 
@@ -83,5 +85,7 @@ public class ServiceType implements Serializable {
     public static final String DISABLED = "`DISABLED`";
 
     public static final String IS_TOP = "`IS_TOP`";
+
+    public static final String SORT = "`SORT`";
 
 }

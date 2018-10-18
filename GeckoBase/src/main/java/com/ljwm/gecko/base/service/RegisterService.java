@@ -2,6 +2,7 @@ package com.ljwm.gecko.base.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.aliyun.springboot.service.SmsService;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.enums.ResultEnum;
@@ -15,10 +16,7 @@ import com.ljwm.gecko.base.entity.MobileCode;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.enums.SMSTemplateEnum;
-import com.ljwm.gecko.base.mapper.GuestMapper;
-import com.ljwm.gecko.base.mapper.MemberAccountMapper;
-import com.ljwm.gecko.base.mapper.MemberMapper;
-import com.ljwm.gecko.base.mapper.MemberPasswordMapper;
+import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.base.utils.IpUtil;
@@ -52,6 +50,9 @@ public class RegisterService {
   MobileCodeDao mobileCodeDao;
 
   @Autowired
+  MobileCodeMapper mobileCodeMapper;
+
+  @Autowired
   MemberInfoDao memberInfoDao;
 
   @Autowired
@@ -79,43 +80,56 @@ public class RegisterService {
     }
     Long currentTime = System.currentTimeMillis();//获取当前时间
     String phoneNum = registerForm.getPhoneNum();
-    MobileCode mobileCode = mobileCodeDao.find(phoneNum);
+    MobileCode mobileCode = mobileCodeDao.find(phoneNum, registerForm.getAction());
     if(mobileCode != null){
-      Long lastTime = mobileCode.getCreateTime();
+      Long lastTime = mobileCode.getUpdateTime();
       Long time = currentTime - lastTime;
       if(time < 60000){
         return fail(ResultEnum.DATA_ERROR.getCode(),"60秒内请不要重复发送");
       }
-      MobileCode updateMobile = null;
+      List<MobileCode> list = mobileCodeMapper.selectList(new QueryWrapper<MobileCode>().eq(MobileCode.MOBILE, phoneNum));
+      int index = 0;
+      for (MobileCode mobileCode1 : list){
+        Long lastTime1 = mobileCode1.getUpdateTime();
+        if(TimeUtil.isSameDay(lastTime1, currentTime)){
+          index = index + mobileCode1.getDayIndex();
+        }
+      }
+      //如果同一天，看是否超过了5条短信
+      if(index >= 5){
+        return fail(ResultEnum.DATA_ERROR.getCode(),"你今天发送的验证码已经超过限制次数！");
+      }
       //判断是否为同一天,
       if(TimeUtil.isSameDay(lastTime, currentTime)){
-        //如果同一天，看是否超过了5条短信
-        if(mobileCode.getDayIndex() >= 5){
-          return fail(ResultEnum.DATA_ERROR.getCode(),"你今天发送的验证码已经超过限制次数！");
-        }
-        updateMobile = new MobileCode(mobileCode.getId(), sendSMSCode(phoneNum, registerForm.getAction()), phoneNum,
-          IpUtil.getIPAddr(request), currentTime, Integer.valueOf(mobileCode.getDayIndex()+1));
+        mobileCode.setDayIndex(Integer.valueOf(mobileCode.getDayIndex()+1));
       } else {
-        updateMobile = new MobileCode(mobileCode.getId(), sendSMSCode(phoneNum, registerForm.getAction()), phoneNum,
-          IpUtil.getIPAddr(request), currentTime, 1);
+        mobileCode.setDayIndex(1);
       }
-      mobileCodeDao.update(updateMobile);
+      mobileCode.setUpdateTime(currentTime)
+        .setCode(sendSMSCode(phoneNum, registerForm.getAction(), null)).setFromIp(IpUtil.getIPAddr(request));
+      mobileCodeDao.update(mobileCode);
     } else {
-      MobileCode insertMobile = new MobileCode(null, sendSMSCode(phoneNum, registerForm.getAction()), phoneNum,
-        IpUtil.getIPAddr(request), currentTime, 1);
-      mobileCodeDao.insert(insertMobile);
+      mobileCode = new MobileCode().setCode(sendSMSCode(phoneNum, registerForm.getAction(), null)).setCode(phoneNum)
+        .setFromIp(IpUtil.getIPAddr(request)).setCreateTime(currentTime).setDayIndex(1).setUpdateTime(currentTime)
+        .setType(registerForm.getAction());
+      mobileCodeDao.insert(mobileCode);
     }
     return success("成功");
   }
 
-  public String sendSMSCode(String phoneNum, Integer action) {
+  public String sendSMSCode(String phoneNum, Integer action, Map values) {
+    SMSTemplateEnum smsTemplateEnum = EnumUtil.getEnumBycode(SMSTemplateEnum.class, action);
     String s = "";
-    while (s.length() < 6)
-      s += (int) (Math.random() * 10);
     Map params = new HashMap();
-    params.put("code", s);
-    String a =  EnumUtil.getEnumBycode(SMSTemplateEnum.class, action).getTemplateCode();
-    SendSmsResponse response = smsService.send(phoneNum, EnumUtil.getEnumBycode(SMSTemplateEnum.class, action).getTemplateCode(), params);
+    if (smsTemplateEnum.isSMSCode()) {
+      while (s.length() < 6) {
+        s += (int) (Math.random() * 10);
+      }
+      params.put("code", s);
+      SendSmsResponse response = smsService.send(phoneNum, EnumUtil.getEnumBycode(SMSTemplateEnum.class, action).getTemplateCode(), params);
+    } else {
+      SendSmsResponse response = smsService.send(phoneNum, EnumUtil.getEnumBycode(SMSTemplateEnum.class, action).getTemplateCode(), values);
+    }
     return s;
   }
 

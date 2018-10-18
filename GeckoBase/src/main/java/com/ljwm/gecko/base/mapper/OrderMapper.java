@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.Order;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ljwm.gecko.base.model.vo.OrderSimpleVo;
 import com.ljwm.gecko.base.model.vo.OrderVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -28,4 +29,6 @@ public interface OrderMapper extends BaseMapper<Order> {
   String getOrderInfo(String orderNo);
 
   Integer findProviderOrderCount(@Param("providerId") Long providerId);
+
+  OrderSimpleVo findOrderSimpleByOrderNo(@Param("orderNo") String orderNo);
 }

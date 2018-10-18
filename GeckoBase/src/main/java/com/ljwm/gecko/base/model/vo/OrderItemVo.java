@@ -16,9 +16,11 @@ public class OrderItemVo extends OrderItem {
   @JSONField(serializeUsing = StatusWithNameSerializer.OrderStatusSerializer.class)
   private Integer orderItemStatus;
 
-  private ProviderGoodsVo providerGoodsVo;
-
   private SpecServicesPriceSimpleVo specServicesPriceSimpleVo;
+
+  private ProviderSimpleVo providerSimpleVo;
+
+  private OrderSimpleVo orderSimpleVo;
 
   public OrderItemVo(OrderItem orderItem){
     if (orderItem!=null){

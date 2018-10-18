@@ -554,6 +554,8 @@ public class ExcelService {
   }
 
   public String exportZip(HttpServletResponse response, NormalSalaryForm normalSalaryForm) throws IOException, ParseException {
+    BufferedInputStream bis = null;
+    BufferedOutputStream bos = null;
     String uuid = RandomUtil.simpleUUID();
     File personFile = exportPersonInfoExcel(response, normalSalaryForm.getCompanyId(), uuid);
     File sallaryFile = exportNormalSalary(response ,normalSalaryForm, uuid);
@@ -564,12 +566,21 @@ public class ExcelService {
     response.reset();
     response.setContentType("multipart/form-data");
     response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("压缩.zip","UTF-8"));
-    OutputStream output = ZipUtil.zipFiles(list, new File(appInfo.getFilePath()+ Constant.ZIP + uuid+".zip"));
+    ZipUtil.zipFiles(list, new File(appInfo.getFilePath()+ Constant.ZIP + uuid+".zip"));
+    bis = new BufferedInputStream(new FileInputStream(new File(filePath+".zip")));
+    bos = new BufferedOutputStream(response.getOutputStream());
+    byte[] buff = new byte[2048];
+    int bytesRead;
+    while (-1 != (bytesRead = bis.read(buff, 0, buff.length)))
+      bos.write(buff, 0, bytesRead);
+    System.out.println("success");
+    bos.flush();
+    bis.close();
+    bos.close();
     FileUtil.del(filePath);
     FileUtil.del(filePath+".zip");
     /*File f = new File(filePath+".zip");
     output =new FileOutputStream(f);*/
-    output.close();
     return "成功！";
   }
 }

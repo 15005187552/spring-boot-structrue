@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.ljwm.gecko.base.config.CompanyEnumCodeToName;
 import com.ljwm.gecko.base.entity.Admin;
 import com.ljwm.gecko.base.entity.Company;
+import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.model.vo.admin.CompanyUserVo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +18,8 @@ import java.util.List;
 public class AdminCompanyDto extends Company {
 
   private Admin validator;
+
+  private Member creator;
 
   private String location;
 

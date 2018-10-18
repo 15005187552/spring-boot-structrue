@@ -98,7 +98,14 @@ public class ProviderController extends BaseController {
   }
 
   @GetMapping("saveCashDeposit")
+  @ApiOperation("保存限额")
   public Result saveCashDeposit(@RequestParam Long providerId,@RequestParam BigDecimal cashDeposit) {
     return success(providerService.saveCashDeposit(providerId,cashDeposit));
+  }
+
+  @GetMapping("saveTop/{id}")
+  @ApiOperation("置顶")
+  public Result saveTop(@PathVariable Integer id){
+    return success(serviceTypeService.saveTop(id));
   }
 }

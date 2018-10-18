@@ -34,6 +34,14 @@
     <collection property="orderItemVoList" column="{orderNo=ORDER_NO,providerId=providerId}" select="com.ljwm.gecko.base.mapper.OrderItemMapper.findProviderOrderItemVoList"/>
   </resultMap>
 
+  <resultMap id="orderSimpleVo" type="com.ljwm.gecko.base.model.vo.OrderSimpleVo" extends="BaseResultMap">
+
+  </resultMap>
+
+  <select id="findOrderSimpleByOrderNo" parameterType="string" resultMap="orderSimpleVo">
+    select t.*  from t_order t where t.ORDER_NO=#{orderNo} limit 1
+  </select>
+
   <select id="findPage" parameterType="map" resultMap="orderVo">
     select DISTINCT t.* from t_order t LEFT JOIN t_order_item toi on t.ORDER_NO=toi.ORDER_NO
     <where>

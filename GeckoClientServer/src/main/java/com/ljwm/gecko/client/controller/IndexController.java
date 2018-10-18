@@ -2,6 +2,8 @@ package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.gecko.client.model.dto.CalcForm;
+import com.ljwm.gecko.client.model.dto.EvaluateForm;
+import com.ljwm.gecko.client.model.dto.NoticeQuery;
 import com.ljwm.gecko.client.service.CalcService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,9 +21,9 @@ import javax.validation.Valid;
  */
 
 @RestController
-@Api(tags = "个税计算相关 API")
+@Api(tags = "首页相关 API")
 @RequestMapping("/index")
-public class CalcController {
+public class IndexController {
 
   @Autowired
   CalcService calcService;
@@ -36,6 +38,18 @@ public class CalcController {
   @ApiOperation("领红包")
   public Result redPackage(){
     return calcService.redPackage();
+  }
+
+  @PostMapping("/notice/find")
+  @ApiOperation("公告查询")
+  public Result find(@RequestBody NoticeQuery query) {
+    return calcService.find(query);
+  }
+
+  @PostMapping("evaluateTax")
+  @ApiOperation("个税评估")
+  public Result evaluateTax(@RequestBody @Valid EvaluateForm evaluateForm){
+    return calcService.evaluateTax(evaluateForm);
   }
 
 }

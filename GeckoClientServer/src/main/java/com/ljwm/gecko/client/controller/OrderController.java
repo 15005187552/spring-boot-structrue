@@ -5,7 +5,6 @@ import com.jfinal.kit.HttpKit;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.SecurityKit;
-import com.ljwm.gecko.base.entity.OrderItem;
 import com.ljwm.gecko.base.model.dto.*;
 import com.ljwm.gecko.base.model.vo.OrderItemVo;
 import com.ljwm.gecko.base.model.vo.OrderSimpleVo;
