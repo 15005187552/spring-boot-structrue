@@ -7,16 +7,10 @@ import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.security.LoginInfoHolder;
 import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
-import com.ljwm.gecko.base.entity.CalTax;
-import com.ljwm.gecko.base.entity.CityItem;
-import com.ljwm.gecko.base.entity.Guest;
-import com.ljwm.gecko.base.entity.SpecialDeduction;
+import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.enums.LoginType;
 import com.ljwm.gecko.base.enums.SpecialType;
-import com.ljwm.gecko.base.mapper.CalTaxMapper;
-import com.ljwm.gecko.base.mapper.GuestMapper;
-import com.ljwm.gecko.base.mapper.NoticeMapper;
-import com.ljwm.gecko.base.mapper.SpecialDeductionMapper;
+import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.client.dao.CalTaxDao;
 import com.ljwm.gecko.client.dao.CalcDao;
 import com.ljwm.gecko.client.model.dto.CalcForm;
@@ -25,7 +19,6 @@ import com.ljwm.gecko.client.model.dto.EvaluateForm.IncomeDto;
 import com.ljwm.gecko.client.model.dto.NoticeQuery;
 import com.ljwm.gecko.client.model.vo.AdviceVo;
 import com.ljwm.gecko.client.model.vo.CalcVo;
-import io.swagger.models.auth.In;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +56,9 @@ public class CalcService {
 
   @Autowired
   CommonService commonService;
+
+  @Autowired
+  ProtocolMapper protocolMapper;
 
   @Transactional
   public Result calc(CalcForm calcForm) {
@@ -213,5 +209,10 @@ public class CalcService {
     BigDecimal newTax = calNew(income.subtract(special).subtract(specialAdd), new BigDecimal(5000));
     AdviceVo adviceVo = new AdviceVo().setTax(newTax).setAfterTax(income.subtract(special).subtract(specialAdd).subtract(newTax));
     return Result.success(adviceVo);
+  }
+
+  public Result protocol(Integer code) {
+    Protocol protocol = protocolMapper.selectOne(new QueryWrapper<Protocol>().eq(Protocol.CODE, code));
+    return Result.success(protocol);
   }
 }
