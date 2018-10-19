@@ -6,4 +6,4 @@ swagger2:
   version: "V1.0"
 jwt:
   route:
-    freeRouters: "/auth/login,/test/**"
+    freeRouters: "/auth/login,/test/**,/UEditor/**"

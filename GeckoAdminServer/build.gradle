@@ -12,4 +12,7 @@ dependencies {
 
   // mysql 连接
   compile("mysql:mysql-connector-java:8.0.11")
+
+  // 富文本 SDK
+  compile("net.dreamlu:JFinal-ueditor:0.0.3")
 }

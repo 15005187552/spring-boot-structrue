@@ -2,7 +2,7 @@ server:
   port: 7003
 spring:
   profiles:
-    active: dev,devLocal,localTest
+    active: dev,devLocal
     include: base,common,gecko,kafka,aliyun
 dict:
   # ID:用户名:密码:(属于角色1,属于角色2)

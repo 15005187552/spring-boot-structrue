@@ -2,13 +2,13 @@ package com.ljwm.gecko.base.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.gecko.base.entity.IncomeType;
 import com.ljwm.gecko.base.model.vo.IncomeTypeVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -27,5 +27,5 @@ public interface IncomeTypeMapper extends BaseMapper<IncomeType> {
 
   Boolean deleteAble(@Param("id") Long id);
 
-  List<IncomeTypeVo> findPage(Page<IncomeTypeVo> ret, @Param("params") Kv params);
+  List<IncomeTypeVo> findPage(Page<IncomeTypeVo> page,@Param("params") Map params);
 }

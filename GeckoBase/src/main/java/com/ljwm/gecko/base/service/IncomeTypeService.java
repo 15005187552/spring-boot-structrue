@@ -35,8 +35,8 @@ public class IncomeTypeService {
   @Autowired
   private AttributeAdminService attributeAdminService;
 
-  public Page<IncomeTypeVo> findPage(IncomeTypeQueryDto incomeTypeQueryDto) {
-    return commonService.find(incomeTypeQueryDto,(p,q) -> incomeTypeMapper.findPage(p,Kv.by("text",incomeTypeQueryDto.getText()).set("pId",incomeTypeQueryDto.getPId())));
+  public Page<IncomeTypeVo> findPage(IncomeTypeQueryDto queryDto) {
+    return commonService.find(queryDto,(p,q)->incomeTypeMapper.findPage(p,BeanUtil.beanToMap(q)));
   }
 
   public List<IncomeTypeVo> find() {

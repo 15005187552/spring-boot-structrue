@@ -32,19 +32,20 @@
       order by sort
     </select>
 
-    <select id="findPage" parameterType="map" resultMap="incomeTypeVO">
+    <select id="findPage"  resultMap="incomeTypeVO">
       select
       <include refid="Base_Column_List"/>
-      from t_income_type where 1=1
-      <if test="params != null">
+      from `t_income_type`
+      <where>
+        `P_ID` IS NULL
         <if test="params.text != null and params.text != ''">
           AND `NAME` LIKE CONCAT('%',#{params.text},'%')
         </if>
         <if test="params.pId != null and params.pId != ''">
           AND `P_ID`=#{params.pId}
         </if>
-      </if>
-      ORDER BY `SORT`
+      </where>
+      ORDER BY `SORT` ASC
     </select>
 
     <select id="children" parameterType="long" resultMap="incomeTypeVO">
