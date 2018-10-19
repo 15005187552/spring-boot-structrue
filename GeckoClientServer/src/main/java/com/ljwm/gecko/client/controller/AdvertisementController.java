@@ -35,7 +35,17 @@ public class AdvertisementController extends BaseController {
     FilePathAppend.path = appInfo.getWebPath();
     ClientAdvertisementDto clientAdvertisementDto = new ClientAdvertisementDto();
     clientAdvertisementDto.setDisabled(DisabledEnum.ENABLED.getCode());
-    //clientAdvertisementDto.setEquipType(EquipTypeEnum.WEIXIN.getCode());
+    clientAdvertisementDto.setEquipType(EquipTypeEnum.WEIXIN.getCode());
+    return success(advertisementService.findClient(clientAdvertisementDto));
+  }
+
+  @GetMapping("findPcClient")
+  @ApiOperation(value = "查询客户端广告列表")
+  public Result<List<AdvertisementVo>> findPcClient(){
+    FilePathAppend.path = appInfo.getWebPath();
+    ClientAdvertisementDto clientAdvertisementDto = new ClientAdvertisementDto();
+    clientAdvertisementDto.setDisabled(DisabledEnum.ENABLED.getCode());
+    clientAdvertisementDto.setEquipType(EquipTypeEnum.PC.getCode());
     return success(advertisementService.findClient(clientAdvertisementDto));
   }
 
