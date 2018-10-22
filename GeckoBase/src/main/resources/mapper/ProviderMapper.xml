@@ -130,8 +130,11 @@
       <if test="params.validateState != null ">
         AND tp.`VALIDATE_STATE` = #{params.validateState}
       </if>
-      <if test="params.serviceId != null ">
-        AND tps.`SERVICE_ID` = #{params.serviceId}
+      <if test="params.serviceIds != null ">
+        AND tps.`SERVICE_ID` in
+        <foreach collection="params.serviceIds" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
       </if>
     </where>
     ORDER BY tp.ID

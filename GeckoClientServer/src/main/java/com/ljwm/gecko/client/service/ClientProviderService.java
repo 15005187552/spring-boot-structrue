@@ -1,6 +1,7 @@
 package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.Joiner;
@@ -24,7 +25,9 @@ import com.ljwm.gecko.base.model.dto.ProviderServiceDto;
 import com.ljwm.gecko.base.model.vo.MemberPaperVo;
 import com.ljwm.gecko.base.model.vo.ProviderSimpleVo;
 import com.ljwm.gecko.base.model.vo.ProviderVo;
+import com.ljwm.gecko.base.model.vo.ServiceVo;
 import com.ljwm.gecko.base.utils.Fileutil;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,9 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -74,6 +75,9 @@ public class ClientProviderService {
 
   @Autowired
   private OrderCommentsMapper orderCommentsMapper;
+
+  @Autowired
+  private ServiceTypeMapper serviceTypeMapper;
 
   @Transactional
   public void saveProvider(ProviderDto providerDto) {
@@ -388,9 +392,15 @@ public class ClientProviderService {
   }
 
   public Page<ProviderSimpleVo> findClientByPage(ProviderQueryDto query) {
+
+    List<Integer> serviceIds = new LinkedList<>();
     //查询serviceId及子节点
     if (query.getServiceId()!=null){
-
+      ServiceVo serviceVo = serviceTypeMapper.findServiceVoById(query.getServiceId());
+        serviceIds =findChildNodes(serviceIds,serviceVo);
+    }
+    if (CollectionUtil.isNotEmpty(serviceIds)){
+      query.setServiceIds(serviceIds);
     }
     Page<ProviderSimpleVo> page = commonService.find(query, (p, q) ->
       providerMapper.findClientByPage(p, BeanUtil.beanToMap(query)));
@@ -399,6 +409,18 @@ public class ClientProviderService {
     return page;
   }
 
+  private static List<Integer> findChildNodes(List<Integer> serviceIds,ServiceVo serviceVo){
+    if(serviceVo==null){
+      return  Collections.EMPTY_LIST;
+    }
+    serviceIds.add(serviceVo.getId());
+    if (CollectionUtil.isNotEmpty(serviceVo.getChildren())){
+      for (ServiceVo temp: serviceVo.getChildren()){
+        findChildNodes(serviceIds,temp);
+      }
+    }
+    return serviceIds;
+  }
   public Integer findProviderOrderCount(Long providerId){
     return orderMapper.findProviderOrderCount(providerId);
   }
