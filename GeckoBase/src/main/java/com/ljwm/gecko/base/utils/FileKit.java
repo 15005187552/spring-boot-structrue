@@ -1,11 +1,8 @@
 package com.ljwm.gecko.base.utils;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.URLUtil;
-import com.ljwm.bootbase.enums.ResultEnum;
-import com.ljwm.bootbase.exception.LogicException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;

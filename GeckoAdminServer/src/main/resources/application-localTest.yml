@@ -7,8 +7,6 @@ spring:
     username: root
     password: root
 appInfo:
-  pic: "advertisement"
-  servicePic: "serviceType"
   webRoot: "D://upload/"
   filePath: "${appInfo.webRoot}gecko/"
-  adminPath: "http://192.168.8.167:7005/gecko/"
+  webPath: "http://192.168.8.167:7005/gecko/"

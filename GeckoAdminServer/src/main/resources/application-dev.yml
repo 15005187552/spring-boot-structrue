@@ -5,10 +5,7 @@ spring:
     username: root
     password: root
 appInfo:
-  pic: "advertisement"
-  servicePic: "serviceType"
   webRoot: "D://upload/"
   webPath: "http://192.168.8.208:7005/gecko/"
   filePath: "${appInfo.webRoot}gecko/"
   neditorEnv: "neditor/dev.ueditor.config.json"
-  adminPath: "http://192.168.8.208:7005/gecko/"
