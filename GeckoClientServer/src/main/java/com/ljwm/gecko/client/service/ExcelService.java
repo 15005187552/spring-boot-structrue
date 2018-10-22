@@ -226,9 +226,6 @@ public class ExcelService {
     for (NaturalPersonDto naturalPersonDto : naturalPersonDtoList) {
       PersonExportVo personExportVo = new PersonExportVo();
       BeanUtil.copyProperties(naturalPersonDto, personExportVo);
-      if (StrUtil.isNotBlank(personExportVo.getBirthday())){
-        personExportVo.setBirthday(TimeUtil.parseDate(personExportVo.getBirthday()));
-      }
       if(StrUtil.isNotBlank(personExportVo.getDisablityNum())){
         personExportVo.setIsDisability("是");
       }
