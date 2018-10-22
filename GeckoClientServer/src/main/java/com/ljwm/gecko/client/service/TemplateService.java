@@ -170,6 +170,10 @@ public class TemplateService {
       map.put(String.valueOf(i), string);
       i++;
     }
+    List<Attribute> attributeList = attributeMapper.selectList(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_ADD_SPECIAL.getCode()));
+    for (Attribute attribute : attributeList){
+      map.put(String.valueOf(attribute.getId()), attribute.getName());
+    }
     for (Template template : list) {
       map.put(String.valueOf(template.getAttributeId()), attributeMapper.selectById(template.getAttributeId()).getName());
     }
