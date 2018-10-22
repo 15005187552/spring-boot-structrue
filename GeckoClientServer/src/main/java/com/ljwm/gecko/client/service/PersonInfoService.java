@@ -69,10 +69,10 @@ public class PersonInfoService {
     } else {
       naturalPerson.setCreatTime(date);
       naturalPersonMapper.insert(naturalPerson);
-      File file = new File(appInfo.getFilePath()+ Constant.PERSON + personInfoForm.getMemberId());
-      if(!file.exists()){
-        file.mkdirs();
-      }
+    }
+    File file = new File(appInfo.getFilePath()+ Constant.PERSON + personInfoForm.getMemberId());
+    if(!file.exists()){
+      file.mkdirs();
     }
     String destDir = appInfo.getFilePath() + Constant.PERSON + naturalPerson.getMemberId() + "/";
     if (StrUtil.isNotBlank(personInfoForm.getDisablityPath())) {
