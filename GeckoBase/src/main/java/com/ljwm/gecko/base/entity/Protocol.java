@@ -50,10 +50,6 @@ public class Protocol implements Serializable {
     @TableField("`CONTENT`")
     private String content;
 
-    @ApiModelProperty(value = "协议图片")
-    @TableField("`PIC_PATH`")
-    private String picPath;
-
     @ApiModelProperty(value = "禁用/启用")
     @TableField("`DISABLED`")
     private Boolean disabled;
@@ -68,8 +64,6 @@ public class Protocol implements Serializable {
     public static final String DESCRIPTION = "`DESCRIPTION`";
 
     public static final String CONTENT = "`CONTENT`";
-
-    public static final String PIC_PATH = "`PIC_PATH`";
 
     public static final String DISABLED = "`DISABLED`";
 

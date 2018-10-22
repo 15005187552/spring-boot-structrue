@@ -6,6 +6,7 @@ import com.ljwm.gecko.base.entity.Protocol;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ljwm.gecko.base.model.vo.admin.ProtocolVO;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
@@ -40,5 +41,6 @@ public interface ProtocolMapper extends BaseMapper<Protocol> {
     "</where>",
     "</script>"
   })
-  List<ProtocolVO> find(Page<ProtocolVO> page,@Param("params")Map map);
+  @ResultMap("ProtocolVO")
+  List<ProtocolVO> find(Page<ProtocolVO> page,@Param("params") Map map);
 }
