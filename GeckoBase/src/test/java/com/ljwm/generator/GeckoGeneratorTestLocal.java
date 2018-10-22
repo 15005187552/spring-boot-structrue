@@ -21,7 +21,7 @@ public class GeckoGeneratorTestLocal {
         .basePackage("com.ljwm.gecko.base")
         .path(PathKit.getProjectPath())
         .prefix("t_")             // 前缀t_
-        .url("jdbc:mysql://192.168.8.167:3306/geckodb?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8")
+        .url("jdbc:mysql://192.168.8.212:3306/geckodb?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8")
         .username("root")
         .password("root")
         .created(false)    // 第一次建类用创建

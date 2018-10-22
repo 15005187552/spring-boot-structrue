@@ -10,11 +10,12 @@
         <result column="DESCRIPTION" property="description" />
         <result column="CONTENT" property="content" />
         <result column="PIC_PATH" property="picPath" />
+        <result column="DISABLED" property="disabled" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`CODE`          ,`NAME`          ,`DESCRIPTION`          ,`CONTENT`          ,`PIC_PATH`
+          `ID`          ,`CODE`          ,`NAME`          ,`DESCRIPTION`          ,`CONTENT`          ,`PIC_PATH`          ,`DISABLED`
     </sql>
 
 </mapper>

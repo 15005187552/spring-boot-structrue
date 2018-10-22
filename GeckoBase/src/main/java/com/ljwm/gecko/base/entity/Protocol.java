@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author xixil
- * @since 2018-10-18
+ * @since 2018-10-22
  */
 @Data
 @SuppressWarnings("ALL")
@@ -54,6 +54,10 @@ public class Protocol implements Serializable {
     @TableField("`PIC_PATH`")
     private String picPath;
 
+    @ApiModelProperty(value = "禁用/启用")
+    @TableField("`DISABLED`")
+    private Boolean disabled;
+
 
     public static final String ID = "`ID`";
 
@@ -66,5 +70,7 @@ public class Protocol implements Serializable {
     public static final String CONTENT = "`CONTENT`";
 
     public static final String PIC_PATH = "`PIC_PATH`";
+
+    public static final String DISABLED = "`DISABLED`";
 
 }
