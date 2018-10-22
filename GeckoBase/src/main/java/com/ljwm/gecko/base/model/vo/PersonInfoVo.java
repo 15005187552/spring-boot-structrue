@@ -105,6 +105,9 @@ public class PersonInfoVo {
   @ApiModelProperty(value = "烈属证号")
   private String matrtyrNum;
 
+  @ApiModelProperty(value = "孤老证号")
+  private String oldNum;
+
   @ApiModelProperty(value = "电子邮箱")
   private String email;
 

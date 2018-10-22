@@ -200,6 +200,8 @@ public class CompanyUserService {
         .setBirthday(personInfoVo.getBirthday())
         .setEducation(personInfoVo.getEducation()!=null?EnumUtil.getNameBycode(EducationEnum.class, Integer.valueOf(personInfoVo.getEducation())):null)
         .setHireDate(personInfoVo.getHireDate()!=null?TimeUtil.parseDate(personInfoVo.getHireDate()):null)
+        .setIsMatrtyr(StrUtil.isNotEmpty(personInfoVo.getMatrtyrNum())?YesOrNoEnum.YES.getName():YesOrNoEnum.NO.getName())
+        .setIsOld(StrUtil.isNotEmpty(personInfoVo.getOldNum())?YesOrNoEnum.YES.getName():YesOrNoEnum.NO.getName())
         .setTermDate(personInfoVo.getTermDate()!=null?TimeUtil.parseDate(personInfoVo.getTermDate()):null);
       Member member = memberMapper.selectById(personInfoVo.getMemberId());
       personInfoVo.setRegMobile(member.getRegMobile());

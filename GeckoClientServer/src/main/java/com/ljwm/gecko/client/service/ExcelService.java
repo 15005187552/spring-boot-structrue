@@ -258,15 +258,6 @@ public class ExcelService {
         throw new LogicException("该公司下没有对应员工");
       }
       BeanUtil.copyProperties(employeeDtoList.get(0).getCompanyUserInfo(), personExportVo);
-      if(StrUtil.isNotBlank(personExportVo.getEducation())){
-        personExportVo.setEducation(EnumUtil.getNameBycode(EducationEnum.class, Integer.valueOf(personExportVo.getEducation())));
-      }
-      if(StrUtil.isNotBlank(personExportVo.getPersonState())){
-        personExportVo.setPersonState(EnumUtil.getNameBycode(PersonStateEnum.class, Integer.valueOf(personExportVo.getPersonState())));
-      }
-      if(StrUtil.isNotBlank(personExportVo.getEmployee())){
-        personExportVo.setEmployee(EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personExportVo.getEmployee())));
-      }
       personExportVo.setCertificate(StrUtil.isNotEmpty(personExportVo.getCountry())?EnumUtil.getNameBycode(CertificateType.class, Integer.valueOf(personExportVo.getCertificate())):null)
         .setCountry(StrUtil.isNotEmpty(personExportVo.getCountry())?EnumUtil.getNameBycode(CountryType.class, Integer.valueOf(personExportVo.getCountry())):null)
         .setGender(StrUtil.isNotEmpty(personExportVo.getGender())?EnumUtil.getNameBycode(GenderEnum.class, Integer.valueOf(personExportVo.getGender())):null)
@@ -277,10 +268,10 @@ public class ExcelService {
         .setProvince(locationService.getNameByCode(personExportVo.getProvince()))
         .setCity(locationService.getNameByCode(personExportVo.getCity()))
         .setArea(locationService.getNameByCode(personExportVo.getArea()))
-        .setBirthday(personExportVo.getBirthday()!=null?TimeUtil.parseDate(personExportVo.getBirthday()):null)
-        .setEducation(personExportVo.getEducation()!=null?EnumUtil.getNameBycode(EducationEnum.class, Integer.valueOf(personExportVo.getEducation())):null)
-        .setHireDate(personExportVo.getHireDate()!=null? TimeUtil.parseDate(personExportVo.getHireDate()):null)
-        .setTermDate(personExportVo.getTermDate()!=null?TimeUtil.parseDate(personExportVo.getTermDate()):null);
+        .setBirthday(StrUtil.isNotEmpty(personExportVo.getBirthday())?TimeUtil.parseDate(personExportVo.getBirthday()):null)
+        .setEducation(StrUtil.isNotEmpty(personExportVo.getEducation())?EnumUtil.getNameBycode(EducationEnum.class, Integer.valueOf(personExportVo.getEducation())):null)
+        .setHireDate(StrUtil.isNotEmpty(personExportVo.getHireDate())? TimeUtil.parseDate(personExportVo.getHireDate()):null)
+        .setTermDate(StrUtil.isNotEmpty(personExportVo.getTermDate())?TimeUtil.parseDate(personExportVo.getTermDate()):null);
       objectList.add(personExportVo);
     }
     OutputStream output = null;

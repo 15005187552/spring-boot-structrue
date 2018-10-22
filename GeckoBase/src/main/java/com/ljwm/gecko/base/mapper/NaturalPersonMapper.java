@@ -24,7 +24,7 @@ import java.util.List;
 public interface NaturalPersonMapper extends BaseMapper<NaturalPerson> {
 
   @ResultMap("NaturalPersonDto")
-  @Select("SELECT a.*, b.REG_MOBILE FROM t_natural_person a LEFT JOIN t_member b ON a.COMPANY_ID = #{companyId} AND a.MEMBER_ID = b.ID")
+  @Select("SELECT a.*, b.REG_MOBILE FROM t_natural_person a, t_member b WHERE a.COMPANY_ID = 10 AND a.MEMBER_ID = b.ID")
   List<NaturalPersonDto> selectByCompanyId(Long companyId);
 
 

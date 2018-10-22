@@ -1,6 +1,7 @@
 package com.ljwm.gecko.base.service;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.aliyun.springboot.service.SmsService;
@@ -144,7 +145,9 @@ public class RegisterService {
     String code = registerMemberForm.getCheckCode();
     String phoneNum = registerMemberForm.getPhoneNum();
     String userName = registerMemberForm.getUserName();
-    MobileCode mobileCode = mobileCodeDao.select(code, phoneNum);
+    String password = registerMemberForm.getPassword();
+    MobileCode mobileCode = mobileCodeMapper.selectOne(new QueryWrapper<MobileCode>().eq(MobileCode.TYPE, SMSTemplateEnum.REGISTER.getCode())
+      .eq(MobileCode.MOBILE, phoneNum).eq(MobileCode.CODE, code));
     //小程序只是绑定手机号的操作，其账号密码无实际意义
     if(mobileCode != null){
       Member member = memberInfoDao.select(phoneNum);
@@ -163,23 +166,22 @@ public class RegisterService {
       }
       log.debug("Saved member :{}", member);
       guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
-     /* String salt = StringUtil.salt();
+      String salt = StringUtil.salt();
       password = SecurityKit.passwordMD5(password, salt);
       MemberPassword memberPassword = memberInfoDao.insertPassword(salt, password, new Date());
       log.debug("Saved password: {}", memberPassword);
       MemberAccount memberAccount;
-      if(StrUtil.isBlank(password)) {*/
-      MemberAccount memberAccount = memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, null);
+      if(StrUtil.isBlank(password)) {
+       memberAccount = memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, null);
       memberInfoDao.insertAccount(phoneNum, LoginType.MOBILE.getCode(), memberId, null);
-     /* } else {
+      } else {
         memberAccount = memberInfoDao.insertAccount(userName, LoginType.MOBILE.getCode(), memberId, memberPassword.getId());
-      }*/
+      }
       log.debug("Saved account: {}", memberAccount);
       Map<String, Object> map = new HashedMap();
       map.put("phoneNum", phoneNum);
       return success(map);
     }
-
     return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");
   }
 
@@ -244,14 +246,6 @@ public class RegisterService {
           memberAccount.setPasswordId(memberPassword.getId());
           memberAccountMapper.updateById(memberAccount);
         }
-        /*List<MemberAccount> accountList = memberAccountMapper.selectList(new QueryWrapper<MemberAccount>().eq(MemberAccount.MEMBER_ID, memberId));
-        if(CollectionUtil.isEmpty(accountList)){
-          throw new LogicException("该用户不是会员");
-        }
-        for (MemberAccount memberAccount :accountList){
-          memberAccount.setPasswordId(memberPassword.getId());
-          memberAccountMapper.updateById(memberAccount);
-        }*/
       }
       return success("成功！");
     }
