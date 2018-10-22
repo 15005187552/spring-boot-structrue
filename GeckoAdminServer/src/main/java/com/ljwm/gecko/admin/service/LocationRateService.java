@@ -74,7 +74,7 @@ public class LocationRateService {
       log.debug("上传的文件名为：" + fileName);
       String suffixName = fileName.substring(fileName.lastIndexOf("."));
       log.debug("上传的后缀名为：" + suffixName);
-      if (!suffixName.endsWith("xls") && !suffixName.endsWith("xlsx")) {
+      if (!suffixName.endsWith("xls") && !suffixName.endsWith("xls")) {
         log.error("上传文件不是XLS 或  XLSX类型");
         throw new LogicException(ResultEnum.DATA_ERROR, "上传文件格式不正确!");
       }
@@ -255,6 +255,6 @@ public class LocationRateService {
     }
     Workbook workbook = ExcelExportUtil.exportExcel(sheetsList, ExcelType.HSSF);
     String fileName = locations.stream().filter(i -> Objects.equals(i.getCode(), code)).findFirst().map(i -> i.getName()).get();
-    ExportKit.downLoadExcel(fileName + ".xlsx", response, workbook);
+    ExportKit.downLoadExcel(fileName + ".xls", response, workbook);
   }
 }

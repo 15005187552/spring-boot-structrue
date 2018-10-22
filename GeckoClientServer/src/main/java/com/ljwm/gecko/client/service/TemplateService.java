@@ -93,7 +93,7 @@ public class TemplateService {
     // 下载网络文件
     int bytesum = 0;
     int byteread = 0;
-    String fileName = appInfo.getWebPath()+"template/员工信息表.xlsx";
+    String fileName = appInfo.getWebPath()+"template/员工信息表.xls";
     URL url = new URL(fileName);
 
     try {
@@ -124,7 +124,7 @@ public class TemplateService {
     }
     response.reset();
     response.setContentType("multipart/form-data");
-    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("模板表.xlsx","UTF-8"));
+    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("模板表.xls","UTF-8"));
     OutputStream output = response.getOutputStream();
     ExcelUtil.exportExcel(map, null, output);
     output.close();
@@ -187,7 +187,7 @@ public class TemplateService {
       map.put(String.valueOf(i), string);
       i++;
     }
-    List<Attribute> attributeList = attributeMapper.selectList(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_ADD_SPECIAL));
+    List<Attribute> attributeList = attributeMapper.selectList(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_ADD_SPECIAL.getCode()));
     for (Attribute attribute : attributeList){
       map.put(String.valueOf(attribute.getId()), attribute.getName());
     }
@@ -217,7 +217,7 @@ public class TemplateService {
     }
     response.reset();
     response.setContentType("multipart/form-data");
-    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("模板表.xlsx","UTF-8"));
+    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("模板表.xls","UTF-8"));
     OutputStream output = response.getOutputStream();
     ExcelUtil.exportExcel(map, dataList, output);
     output.close();

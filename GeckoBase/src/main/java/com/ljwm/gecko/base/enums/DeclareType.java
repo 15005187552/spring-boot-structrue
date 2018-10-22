@@ -9,8 +9,8 @@ import lombok.Getter;
  */
 @Getter
 public enum DeclareType implements CommonEnum {
-  MONTH(0, "月报"),
-  YEAR(1, "年报")
+  MONTH(0, "月度申报"),
+  YEAR(1, "年度汇缴申报")
   ;
 
   private Integer code;

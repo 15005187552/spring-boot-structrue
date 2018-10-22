@@ -61,7 +61,7 @@ public class AttendanceController {
   @PostMapping("/pushToEmployeeConfirm")
   @ApiOperation("推送给员工确认申报记录")
   @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
-  public Result pushToEmployeeConfirm(@RequestBody TaxConfirmForm taxConfirmForm) throws ParseException {
+  public Result pushToEmployeeConfirm(@RequestBody TaxConfirmForm taxConfirmForm){
     return attendanceService.pushToEmployeeConfirm(taxConfirmForm);
   }
 

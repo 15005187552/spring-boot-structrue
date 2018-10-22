@@ -8,7 +8,6 @@ import com.ljwm.gecko.admin.service.LocationRateService;
 import com.ljwm.gecko.admin.util.FileKit;
 import com.ljwm.gecko.base.model.vo.SimpleLocation;
 import com.ljwm.gecko.base.model.vo.SimpleProv;
-import com.sun.org.apache.regexp.internal.RE;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -74,7 +73,7 @@ public class LocationRateController extends BaseController {
   @GetMapping("downLoadModel")
   @ApiOperation("地区税率模板下载")
   public void downLoadModel(HttpServletResponse response) {
-    FileKit.downloadInClassPath("地区税率模板.xlsx", "excel/地区税率模板.xlsx", response);
+    FileKit.downloadInClassPath("地区税率模板.xls", "excel/地区税率模板.xls", response);
   }
 
   @GetMapping("downLoadByProv/{code}")

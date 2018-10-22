@@ -435,7 +435,7 @@ public class AttendanceService {
   }
 
   public Result pushToEmployeeConfirm(TaxConfirmForm taxConfirmForm) {
-    Company company = companyMapper.selectOne(new QueryWrapper<Company>().eq(Company.ID, taxConfirmForm.getCompanyId()));
+    Company company = companyMapper.selectById(taxConfirmForm.getCompanyId());
     Long[] ids = taxConfirmForm.getIds();
     if (ids == null){
       List<NaturalPerson> list = naturalPersonMapper.selectList(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.COMPANY_ID,taxConfirmForm.getCompanyId()));
@@ -462,7 +462,7 @@ public class AttendanceService {
       ;
       Map value = new HashedMap();
       value.put("companyAndTime", company.getName()+taxConfirmForm.getDeclareTime());
-      registerService.sendSMSCode(member.getRegMobile(), SMSTemplateEnum.REMIND_CONFIRM.getCode(), value);
+      //registerService.sendSMSCode(member.getRegMobile(), SMSTemplateEnum.REMIND_CONFIRM.getCode(), value);
       messageService.pushMessage(messageDto);
     }
     return Result.success("成功！");

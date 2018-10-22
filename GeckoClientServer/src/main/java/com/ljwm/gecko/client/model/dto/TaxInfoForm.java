@@ -17,7 +17,7 @@ public class TaxInfoForm {
   @ApiModelProperty(value = "会员ID")
   private Long memberId;
 
-  @ApiModelProperty(value = "申报类型 0-月报 1-年报")
+  @ApiModelProperty(value = "申报类型 0-月度申报 1-年度汇缴申报")
   private Integer declareType;
 
   @ApiModelProperty(value = "申报时段")

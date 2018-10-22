@@ -20,7 +20,7 @@ import java.util.List;
 public class TaxVo extends Tax {
 
   @JSONField(serializeUsing = StatusWithNameSerializer.DeclaretypeSerializer.class)
-  @ApiModelProperty(value = "申报类型 0-月报 1-年报")
+  @ApiModelProperty(value = "申报类型 0-月度申报 1-年度汇缴申报")
   private Integer declareType;
 
   List<TaxIncomeVo> incomeVoList;

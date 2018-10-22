@@ -17,6 +17,7 @@ import com.ljwm.gecko.base.enums.*;
 import com.ljwm.gecko.base.mapper.*;
 import com.ljwm.gecko.base.model.dto.EmployeeDto;
 import com.ljwm.gecko.base.model.dto.NaturalPersonDto;
+import com.ljwm.gecko.base.service.LocationService;
 import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.base.utils.TimeUtil;
 import com.ljwm.gecko.base.utils.ZipUtil;
@@ -91,6 +92,9 @@ public class ExcelService {
   @Autowired
   ApplicationInfo appInfo;
 
+  @Autowired
+  LocationService locationService;
+
   @Transactional
   public void importPersonInfo(MultipartFile file, Long companyId) throws Exception {
     isHasProperty(companyId);
@@ -126,8 +130,8 @@ public class ExcelService {
     ExcelLogs logs =new ExcelLogs();
     Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs , 0);
     Object name=null, certificate = null, certNum = null, socialBase = null, fundBase = null, fundPer = null;
-    NaturalPerson naturalPerson = null;
     for(Map m:importExcel){
+      NaturalPerson naturalPerson = null;
       for (Object key:m.keySet()) {
         if (key.equals("*姓名")) {
           name = m.get(key);
@@ -263,13 +267,27 @@ public class ExcelService {
       if(StrUtil.isNotBlank(personExportVo.getEmployee())){
         personExportVo.setEmployee(EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personExportVo.getEmployee())));
       }
+      personExportVo.setCertificate(StrUtil.isNotEmpty(personExportVo.getCountry())?EnumUtil.getNameBycode(CertificateType.class, Integer.valueOf(personExportVo.getCertificate())):null)
+        .setCountry(StrUtil.isNotEmpty(personExportVo.getCountry())?EnumUtil.getNameBycode(CountryType.class, Integer.valueOf(personExportVo.getCountry())):null)
+        .setGender(StrUtil.isNotEmpty(personExportVo.getGender())?EnumUtil.getNameBycode(GenderEnum.class, Integer.valueOf(personExportVo.getGender())):null)
+        .setIsInvestor(StrUtil.isNotEmpty(personExportVo.getIsInvestor())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personExportVo.getIsInvestor())):null)
+        .setEmployee(StrUtil.isNotEmpty(personExportVo.getEmployee())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personExportVo.getEmployee())):null)
+        .setSpecialIndustry(StrUtil.isNotEmpty(personExportVo.getSpecialIndustry())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personExportVo.getSpecialIndustry())):null)
+        .setPersonState(StrUtil.isNotEmpty(personExportVo.getPersonState())?EnumUtil.getNameBycode(PersonStateEnum.class, Integer.valueOf(personExportVo.getPersonState())):null)
+        .setProvince(locationService.getNameByCode(personExportVo.getProvince()))
+        .setCity(locationService.getNameByCode(personExportVo.getCity()))
+        .setArea(locationService.getNameByCode(personExportVo.getArea()))
+        .setBirthday(personExportVo.getBirthday()!=null?TimeUtil.parseDate(personExportVo.getBirthday()):null)
+        .setEducation(personExportVo.getEducation()!=null?EnumUtil.getNameBycode(EducationEnum.class, Integer.valueOf(personExportVo.getEducation())):null)
+        .setHireDate(personExportVo.getHireDate()!=null? TimeUtil.parseDate(personExportVo.getHireDate()):null)
+        .setTermDate(personExportVo.getTermDate()!=null?TimeUtil.parseDate(personExportVo.getTermDate()):null);
       objectList.add(personExportVo);
     }
     OutputStream output = null;
     if (uuid == null) {
       response.reset();
       response.setContentType("multipart/form-data");
-      response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("人员信息.xlsx","UTF-8"));
+      response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("人员信息.xls","UTF-8"));
       output = response.getOutputStream();
       ExcelUtil.exportExcel(map, objectList, output);
       output.close();
@@ -279,7 +297,7 @@ public class ExcelService {
       if (!filePath.exists()) {
         filePath.mkdirs();
       }
-      File file = new File(appInfo.getFilePath() + Constant.ZIP + uuid + "/人员信息.xlsx");
+      File file = new File(appInfo.getFilePath() + Constant.ZIP + uuid + "/人员信息.xls");
       output = new FileOutputStream(file);
       ExcelUtil.exportExcel(map, objectList, output);
       output.close();
@@ -345,9 +363,9 @@ public class ExcelService {
     }
     /*response.reset();
     response.setContentType("multipart/form-data");
-    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("人员信息.xlsx","UTF-8"));
+    response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode("人员信息.xls","UTF-8"));
     OutputStream output = response.getOutputStream();*/
-    File file = new File(appInfo.getFilePath()+ Constant.ZIP + uuid+"/正常工资薪金.xlsx");
+    File file = new File(appInfo.getFilePath()+ Constant.ZIP + uuid+"/正常工资薪金.xls");
     OutputStream output = new FileOutputStream(file);
     ExcelUtil.exportExcel(map, dataList, output);
     output.close();
