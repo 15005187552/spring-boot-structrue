@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
@@ -22,4 +24,7 @@ public class ProviderQueryDto extends CommonQuery {
 
   @ApiModelProperty("状态 0 待审核 1 审核通过 2 审核失败")
   private Integer infoValidateState;
+
+  @ApiModelProperty(value = "服务类型id及子节点",hidden = true)
+  private List<Integer> serviceIds;
 }

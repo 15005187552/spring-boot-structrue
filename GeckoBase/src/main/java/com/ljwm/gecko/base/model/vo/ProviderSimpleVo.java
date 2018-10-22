@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Accessors(chain = true)
@@ -39,9 +40,10 @@ public class ProviderSimpleVo {
   public Integer getStarAvg(){
     if (getId()!=null){
       ProviderService providerService =  SpringKit.getBean(ProviderService.class);
-      return providerService.starCount(getId());
+      Integer star = providerService.starCount(getId());
+      return Objects.equals(0,star)?5:star;
     }
-    return 0;
+    return 5;
   }
 
   @JSONField(serializeUsing = PathToUrlSerializer.UrlSeralizer.class)
@@ -51,6 +53,7 @@ public class ProviderSimpleVo {
   private String picPath;
 
   private String locationStr;
+
   private List<ProviderServicesSimpleVo> providerServicesVoList;
 
 }

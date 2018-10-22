@@ -388,6 +388,10 @@ public class ClientProviderService {
   }
 
   public Page<ProviderSimpleVo> findClientByPage(ProviderQueryDto query) {
+    //查询serviceId及子节点
+    if (query.getServiceId()!=null){
+
+    }
     Page<ProviderSimpleVo> page = commonService.find(query, (p, q) ->
       providerMapper.findClientByPage(p, BeanUtil.beanToMap(query)));
     page.setRecords(page.getRecords().stream().collect(Collectors.toList())
