@@ -212,7 +212,7 @@ public class ExcelService {
     }
     Map<String, String> map = new LinkedHashMap<>();
     int i = 0;
-    String[] str = {"工号", "*姓名", "*证照类型", "*证照号码", "*国籍(地区)", "性别", "出生年月", "*人员状态",
+    String[] str = {"工号", "*姓名", "*证照类型", "*证照号码", "*国籍(地区)", "*性别", "*出生日期", "*人员状态",
       "*是否雇员", "*手机号码", "是否残疾", "是否烈属", "是否孤老", "残疾证号", "烈属证号", "任职受雇日期", "离职日期", "电子邮箱", "学历",
       "职业", "开户银行", "银行账号", "是否特定行业", "是否股东、投资者", "个人股本（投资）额", "户籍所在省份", "户籍所在城市", "户籍所在区（县）",
       "户籍所在详细地址","居住省份", "居住城市", "居住所在区（县）", "居住详细地址", "备注", "是否境外人员", "姓名（中文）", "境内有无住所",
@@ -250,7 +250,7 @@ public class ExcelService {
       if(StrUtil.isNotBlank(personExportVo.getFamilyArea())){
         personExportVo.setFamilyArea(locationDao.getNameByCode(personExportVo.getFamilyArea()));
       }
-      List<EmployeeDto> employeeDtoList = companyUserMapper.selectEmployeeList(companyId, memberId);
+      List<EmployeeDto> employeeDtoList = companyUserMapper.selectEmployeeList(companyId, naturalPersonDto.getMemberId());
       if (CollectionUtil.isEmpty(employeeDtoList)){
         throw new LogicException("该公司下没有对应员工");
       }
@@ -262,9 +262,6 @@ public class ExcelService {
         .setEmployee(StrUtil.isNotEmpty(personExportVo.getEmployee())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personExportVo.getEmployee())):null)
         .setSpecialIndustry(StrUtil.isNotEmpty(personExportVo.getSpecialIndustry())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personExportVo.getSpecialIndustry())):null)
         .setPersonState(StrUtil.isNotEmpty(personExportVo.getPersonState())?EnumUtil.getNameBycode(PersonStateEnum.class, Integer.valueOf(personExportVo.getPersonState())):null)
-        .setProvince(locationService.getNameByCode(personExportVo.getProvince()))
-        .setCity(locationService.getNameByCode(personExportVo.getCity()))
-        .setArea(locationService.getNameByCode(personExportVo.getArea()))
         .setBirthday(StrUtil.isNotEmpty(personExportVo.getBirthday())?TimeUtil.parseDate(personExportVo.getBirthday()):null)
         .setEducation(StrUtil.isNotEmpty(personExportVo.getEducation())?EnumUtil.getNameBycode(EducationEnum.class, Integer.valueOf(personExportVo.getEducation())):null)
         .setHireDate(StrUtil.isNotEmpty(personExportVo.getHireDate())? TimeUtil.parseDate(personExportVo.getHireDate()):null)
