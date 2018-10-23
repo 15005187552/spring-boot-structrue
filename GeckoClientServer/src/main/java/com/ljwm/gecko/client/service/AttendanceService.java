@@ -451,7 +451,7 @@ public class AttendanceService {
       Member member = memberMapper.selectById(id);
       MessageDto messageDto = new MessageDto();
       JSONObject jsonObject = new JSONObject();
-      jsonObject.put("templateString",MPTemplateEnum.REMIND_CONFIRM.getName());
+      jsonObject.put("templateString",MPTemplateEnum.REMIND_CONFIRM.getTemplateId());
       jsonObject.put("wxParams",
         Kv.by("keyword1",company.getName()).set("keyword2", EnumUtil.getNameBycode(DeclareType.class, taxConfirmForm.getDeclareType()))
           .set("keyword3", taxConfirmForm.getDeclareTime())

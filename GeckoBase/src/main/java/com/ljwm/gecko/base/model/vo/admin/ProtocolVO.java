@@ -2,6 +2,11 @@ package com.ljwm.gecko.base.model.vo.admin;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.ljwm.gecko.base.entity.Protocol;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * Author: xixil
@@ -9,6 +14,9 @@ import com.ljwm.gecko.base.entity.Protocol;
  * RUA
  */
 
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
 public class ProtocolVO extends Protocol {
 
   public ProtocolVO(Protocol protocol) {

@@ -35,6 +35,6 @@ public class TestController {
       .set("keyword4","4.00")
       .set("keyword5","iphone8  *1")
       .set("keyword6","");
-    return Result.success(mpTemplateService.send(1l, MPTemplateEnum.ORDER_STATUS, kv));
+    return Result.success(mpTemplateService.send(27L, MPTemplateEnum.ORDER_STATUS, kv));
   }
 }

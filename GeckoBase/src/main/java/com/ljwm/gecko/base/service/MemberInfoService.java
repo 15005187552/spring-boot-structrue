@@ -336,7 +336,7 @@ public class MemberInfoService {
     MessageDto messageDto = new MessageDto();
     JSONObject message = new JSONObject();
     // 3.写入参数
-    message.put("templateString",MPTemplateEnum.AUDIT.getName());
+    message.put("templateString",MPTemplateEnum.AUDIT.getTemplateId());
     message.put("wxParams",
       Kv.by("keyword1",member.getName()).set("keyword2",InfoValidateStateEnum.getName(member.getInfoValidateState()))
         .set("keyword3",temp.toString())
@@ -359,7 +359,7 @@ public class MemberInfoService {
     MessageDto messageDto = new MessageDto();
     JSONObject message = new JSONObject();
     // 2.写入参数
-    message.put("templateString",MPTemplateEnum.AUDIT.getName());
+    message.put("templateString",MPTemplateEnum.AUDIT.getTemplateId());
     message.put("wxParams",
       Kv.by("keyword1",member.getName()).set("keyword2",ValidateStatEnum.getName(member.getInfoValidateState()))
         .set("keyword3",member.getValidateText()) // 这里的validateText 是基本信息审核失败的内容

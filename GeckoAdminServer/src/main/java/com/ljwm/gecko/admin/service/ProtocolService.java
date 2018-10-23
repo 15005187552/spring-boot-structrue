@@ -3,10 +3,13 @@ package com.ljwm.gecko.admin.service;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ljwm.bootbase.enums.ResultEnum;
+import com.ljwm.bootbase.exception.LogicException;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.admin.model.form.ProtocolForm;
 import com.ljwm.gecko.admin.model.form.ProtocolQuery;
 import com.ljwm.gecko.base.entity.Protocol;
+import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.ProtocolMapper;
 import com.ljwm.gecko.base.model.vo.admin.ProtocolVO;
 import lombok.extern.slf4j.Slf4j;
@@ -46,5 +49,14 @@ public class ProtocolService {
 
   public Page<ProtocolVO> find(ProtocolQuery query) {
     return commonService.find(query,(p,q) -> protocolMapper.find(p,BeanUtil.beanToMap(q)));
+  }
+
+  @Transactional
+  public Boolean disabled(Long id) {
+    Protocol protocol = protocolMapper.selectById(id);
+    if (protocol == null) throw new LogicException(ResultEnum.DATA_ERROR,"未找到id为:" + id + "的协议");
+    protocol.setDisabled(protocol.getDisabled() ? DisabledEnum.ENABLED.getInfo() : DisabledEnum.DISABLED.getInfo());
+    protocolMapper.updateById(protocol);
+    return protocol.getDisabled();
   }
 }

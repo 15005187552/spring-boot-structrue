@@ -88,7 +88,7 @@ public class CompanyService {
   public void pushMessage(Company company) {
     MessageDto messageDto = new MessageDto();
     JSONObject jsonObject = new JSONObject();
-    jsonObject.put("templateString",MPTemplateEnum.AUDIT.getName());
+    jsonObject.put("templateString",MPTemplateEnum.AUDIT.getTemplateId());
     jsonObject.put("wxParams",
       Kv.by("keyword1",company.getName()).set("keyword2",CompanyValidateEnum.getName(company.getValidateState()))
         .set("keyword3",company.getValidateText())
