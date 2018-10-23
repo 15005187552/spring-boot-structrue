@@ -127,12 +127,14 @@ public class ExcelService {
   public Result importAttendance(MultipartFile file, Long companyId, String declareTime, Integer declareType) throws IOException {
     isHasProperty(companyId);
     InputStream inputStream = file.getInputStream();
-    ExcelLogs logs =new ExcelLogs();
-    Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs , 0);
-    Object name=null, certificate = null, certNum = null, socialBase = null, fundBase = null, fundPer = null;
-    for(Map m:importExcel){
-      NaturalPerson naturalPerson = null;
-      for (Object key:m.keySet()) {
+    ExcelLogs logs = new ExcelLogs();
+    Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs, 0);
+    Object name = null, certificate = null, certNum = null, socialBase = null, fundBase = null, fundPer = null;
+    for (Map m : importExcel) {
+      int i = 0;
+      Tax tax = null;
+      for (Object key : m.keySet()) {
+        i++;
         if (key.equals("*姓名")) {
           name = m.get(key);
         }
@@ -151,31 +153,26 @@ public class ExcelService {
         if (key.equals("*公积金比例")) {
           fundPer = m.get(key);
         }
-        if (certificate != null && certNum != null) {
-          if(naturalPerson == null){
+        if (i >= 7) { //大于等于有*项
+          Long memberId = null;
+          Date date = new Date();
+          if (i == 7) { //等于*项
             Integer certificateType = EnumUtil.getEnumByName(CertificateType.class, certificate.toString()).getCode();
-            naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERT_NUM, certNum.toString()).eq(NaturalPerson.CERTIFICATE, certificateType));
-            if(naturalPerson ==null){
-                return Result.fail("员工"+name.toString()+"证件号码或者证照类型有误！");
+            NaturalPerson naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERT_NUM, certNum.toString()).eq(NaturalPerson.CERTIFICATE, certificateType));
+            if (naturalPerson == null) {
+              return Result.fail("员工" + name.toString() + "证件号码或者证照类型有误！");
             }
-          }else {
-            Long memberId = naturalPerson.getMemberId();
+            memberId = naturalPerson.getMemberId();
             CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, companyId).eq(CompanyUser.MEMBER_ID, memberId));
             CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUser.getId());
             if (companyUserInfo != null) {
-              if (fundBase != null) {
-                companyUserInfo.setFundBase(new BigDecimal(fundBase.toString()));
-              }
-              if (fundPer != null) {
-                companyUserInfo.setFundPer(new BigDecimal(fundPer.toString()));
-              }
-              if (socialBase != null) {
-                companyUserInfo.setSocialBase(new BigDecimal(socialBase.toString()));
-              }
+              companyUserInfo.setFundBase(new BigDecimal(fundBase.toString()));
+              companyUserInfo.setFundPer(new BigDecimal(fundPer.toString()));
+              companyUserInfo.setSocialBase(new BigDecimal(socialBase.toString()));
               companyUserInfoMapper.updateById(companyUserInfo);
             }
-            Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId));
-            Date date = new Date();
+
+            tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId));
             if (tax != null) {
               tax.setUpdateTime(date).setStatus(TaxStatus.NEED_CONFIRM.getCode()).setDeclareType(declareType);
               taxMapper.updateById(tax);
@@ -185,16 +182,16 @@ public class ExcelService {
                 .setStatus(TaxStatus.NEED_CONFIRM.getCode());
               taxMapper.insert(tax);
             }
-            if (!key.toString().contains("*")) {
-              Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.NAME, key.toString()));
-              Long itemId = attribute.getItemId();
-              Integer tableName = attribute.getTableName();
-              String value = Objects.isNull(m.get(key))? null: m.get(key).toString();
-              attendanceService.insertOrUpdate(tableName, itemId, date, value, tax);
-            }
-            if (socialBase != null && fundBase != null && fundPer != null) {
-              attendanceService.insertOrUpdate(new BigDecimal(socialBase.toString()), new BigDecimal(fundBase.toString()), new BigDecimal(fundPer.toString()), companyId, date, tax);
-            }
+          }
+          if (!key.toString().contains("*")) {
+            Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.NAME, key.toString()));
+            Long itemId = attribute.getItemId();
+            Integer tableName = attribute.getTableName();
+            String value = Objects.isNull(m.get(key)) ? null : m.get(key).toString();
+            attendanceService.insertOrUpdate(tableName, itemId, date, value, tax);
+          }
+          if (socialBase != null && fundBase != null && fundPer != null) {
+            attendanceService.insertOrUpdate(new BigDecimal(socialBase.toString()), new BigDecimal(fundBase.toString()), new BigDecimal(fundPer.toString()), companyId, date, tax);
           }
         }
       }

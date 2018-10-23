@@ -1,7 +1,6 @@
 package com.ljwm.gecko.base.service;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.aliyun.springboot.service.SmsService;
@@ -175,7 +174,7 @@ public class RegisterService {
       guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
       saveMobileAccount(memberId, phoneNum, password);
     }
-
+    log.debug("{}", memberId);
     // insert member acccout for weixin sp
     MemberAccount memberAccount = memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, null);
     log.debug("Saved weixin sp account: {}", memberAccount);
