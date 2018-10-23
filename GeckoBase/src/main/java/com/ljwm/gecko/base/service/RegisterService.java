@@ -165,7 +165,7 @@ public class RegisterService {
       } else { // inactive member
         member.setDisabled(DisabledEnum.ENABLED.getInfo());
         memberMapper.updateById(member);
-        saveMobileAccount(memberId, phoneNum, password);
+        saveMobileAccount(member.getId(), phoneNum, password);
       }
     } else { // new member
       member = memberInfoDao.insert(phoneNum);
