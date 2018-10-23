@@ -154,6 +154,24 @@ public class ExcelService {
           fundPer = m.get(key);
         }
         if (i >= 7) { //大于等于有*项
+          if(name == null){
+            throw new LogicException("*姓名为必填项！");
+          }
+          if(certificate == null){
+            throw new LogicException("*证照类型为必填项！");
+          }
+          if(certNum == null){
+            throw new LogicException("*证照号码为必填项！");
+          }
+          if(socialBase == null){
+            throw new LogicException("*社保基数为必填项！");
+          }
+          if(fundBase == null){
+            throw new LogicException("*公积金基数为必填项！");
+          }
+          if(fundPer == null){
+            throw new LogicException("*公积金比例为必填项！");
+          }
           Long memberId = null;
           Date date = new Date();
           if (i == 7) { //等于*项
