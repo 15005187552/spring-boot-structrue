@@ -148,42 +148,53 @@ public class RegisterService {
     String password = registerMemberForm.getPassword();
     MobileCode mobileCode = mobileCodeMapper.selectOne(new QueryWrapper<MobileCode>().eq(MobileCode.TYPE, SMSTemplateEnum.REGISTER.getCode())
       .eq(MobileCode.MOBILE, phoneNum).eq(MobileCode.CODE, code));
+
+    if (mobileCode == null) {
+      return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");
+    }
     //小程序只是绑定手机号的操作，其账号密码无实际意义
-    if(mobileCode != null){
-      Member member = memberInfoDao.select(phoneNum);
-      Long memberId = null;
-      if (member != null){
+    Member member = memberInfoDao.select(phoneNum);
+    Long memberId = null;
+    if (member != null){
+      log.debug("Use existed member :{}", member);
+      if (!member.getDisabled()) { // active member
         memberId = member.getId();
         List<MemberAccount> list = memberInfoDao.selectAccount(userName, memberId);
         if(CollectionUtil.isNotEmpty(list)) {
           return fail(ResultEnum.DATA_ERROR.getCode(), "该用户已注册！");
         }
+      } else { // inactive member
         member.setDisabled(DisabledEnum.ENABLED.getInfo());
         memberMapper.updateById(member);
-      } else {
-        member = memberInfoDao.insert(phoneNum);
-        memberId = member.getId();
+        saveMobileAccount(memberId, phoneNum, password);
       }
-      log.debug("Saved member :{}", member);
+    } else { // new member
+      member = memberInfoDao.insert(phoneNum);
+      memberId = member.getId();
+      log.debug("Saved a new member :{}", member);
       guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
-      String salt = StringUtil.salt();
-      password = SecurityKit.passwordMD5(password, salt);
-      MemberPassword memberPassword = memberInfoDao.insertPassword(salt, password, new Date());
-      log.debug("Saved password: {}", memberPassword);
-      MemberAccount memberAccount;
-      if(StrUtil.isBlank(password)) {
-       memberAccount = memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, null);
-      memberInfoDao.insertAccount(phoneNum, LoginType.MOBILE.getCode(), memberId, null);
-      } else {
-        memberAccount = memberInfoDao.insertAccount(userName, LoginType.MOBILE.getCode(), memberId, memberPassword.getId());
-      }
-      log.debug("Saved account: {}", memberAccount);
-      Map<String, Object> map = new HashedMap();
-      map.put("phoneNum", phoneNum);
-      return success(map);
+      saveMobileAccount(memberId, phoneNum, password);
     }
-    return fail(ResultEnum.DATA_ERROR.getCode(), "验证码错误！");
+
+    // insert member acccout for weixin sp
+    MemberAccount memberAccount = memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, null);
+    log.debug("Saved weixin sp account: {}", memberAccount);
+
+    Map<String, Object> map = new HashedMap();
+    map.put("phoneNum", phoneNum);
+    return success(map);
   }
+
+  private void saveMobileAccount(Long memberId, String phoneNum, String password) {
+    String salt = StringUtil.salt();
+    password = SecurityKit.passwordMD5(password, salt);
+    MemberPassword memberPassword = memberInfoDao.insertPassword(salt, password, new Date());
+    log.debug("Saved password: {}", memberPassword);
+
+    MemberAccount memberAccount = memberInfoDao.insertAccount(phoneNum, LoginType.MOBILE.getCode(), memberId, memberPassword.getId());
+    log.debug("Saved mobile account: {}", memberAccount);
+  }
+
 
   @Transactional
   public Result registerPC(RegisterPCForm registerPCForm) {
