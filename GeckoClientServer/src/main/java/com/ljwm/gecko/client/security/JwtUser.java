@@ -1,5 +1,8 @@
 package com.ljwm.gecko.client.security;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import com.ljwm.bootbase.dto.Kv;
 import com.ljwm.bootbase.security.IJwtAndSecurityAble;
 import com.ljwm.gecko.base.entity.Guest;
@@ -58,7 +61,7 @@ public class JwtUser implements IJwtAndSecurityAble {
   @Override
   public Date getLastModifyPasswordTime() {
     if (isGuest()) {
-      return guest.getCreateTime();
+      return DateUtil.offset(DateTime.now(), DateField.YEAR,-10);
     }
     return member.getAccount().getPassword().getLastModifyTime();
   }

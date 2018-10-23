@@ -38,8 +38,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    log.debug("load user with username: {} in userDetailsServiceImpl", username);
+
     LoginType loginType = LoginType.codeOf(LoginInfoHolder.getLoginType());
+
+    log.debug("load user with username: {}, loginType: {} in userDetailsServiceImpl", username, loginType);
+
     switch (loginType) {
       case GUEST:
         Guest guest = guestMapper.findByGuestId(username);
