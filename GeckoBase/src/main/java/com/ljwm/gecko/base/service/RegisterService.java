@@ -171,13 +171,13 @@ public class RegisterService {
       member = memberInfoDao.insert(phoneNum);
       memberId = member.getId();
       log.debug("Saved a new member :{}", member);
-      guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
       saveMobileAccount(memberId, phoneNum, password);
     }
     log.debug("{}", memberId);
     // insert member acccout for weixin sp
     MemberAccount memberAccount = memberInfoDao.insertAccount(userName, LoginType.WX_APP.getCode(), memberId, null);
     log.debug("Saved weixin sp account: {}", memberAccount);
+    guestMapper.updateByGuestId(registerMemberForm.getUserName(), memberId);
 
     Map<String, Object> map = new HashedMap();
     map.put("phoneNum", phoneNum);
