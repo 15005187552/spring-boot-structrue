@@ -7,13 +7,10 @@ spring:
     username: bhgs
     password: Bhgs_2018
 appInfo:
-  pic: "advertisement"
-  servicePic: "serviceType"
   webRoot: "/home/bhtest/upload/"
   filePath: "${appInfo.webRoot}"
   webPath: "http://static.bihugs.com/bhtest/"
   neditorEnv: "neditor/test.ueditor.config.json"
-  adminPath: "${appInfo.webPath}"
 logging:
   level:
     org.springframework:

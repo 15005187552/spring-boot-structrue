@@ -22,13 +22,16 @@ import javax.validation.Valid;
 @Api(tags = "上传接口 API")
 public class FileController extends BaseController {
 
+  public static final String AD_PIC = "advertisement";
+  public static final String SERVICE_PIC = "serviceType";
+
   @Autowired
   private AppInfo appInfo;
 
   @PostMapping("upload")
   @ApiOperation(value = "后台--广告上传接口，必传参数 file")
   public Result<String> upload(@RequestParam("file") MultipartFile file) {
-    String fileName = FileKit.saveUploadFile(file, appInfo.getFilePath(), appInfo.getPic());
+    String fileName = FileKit.saveUploadFile(file, appInfo.getFilePath(), AD_PIC);
     if (StrUtil.isEmpty(fileName))
       return fail(ResultEnum.FAIL_TO_SAVE_FILE);
     return success(fileName);
@@ -37,7 +40,7 @@ public class FileController extends BaseController {
   @PostMapping("uploadService")
   @ApiOperation(value = "后台--服务内容上传接口，必传参数 file")
   public Result<String> uploadService(@RequestParam("file") MultipartFile file) {
-    String fileName = FileKit.saveUploadFile(file, appInfo.getFilePath(), appInfo.getServicePic());
+    String fileName = FileKit.saveUploadFile(file, appInfo.getFilePath(), SERVICE_PIC);
     if (StrUtil.isEmpty(fileName))
       return fail(ResultEnum.FAIL_TO_SAVE_FILE);
     return success(fileName);
