@@ -20,11 +20,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        MemberVo memberVo = memberMapper.selectByUserName(username);
-        if (memberVo == null) {
-          throw new UsernameNotFoundException("用户不存在");
-        }
-        LoginInfoHolder.setSalt(memberVo.getAccount().getPassword().getSalt());
-        return new JwtUser(memberVo);
+    MemberVo memberVo = memberMapper.selectByUserName(username);
+    if (memberVo == null) {
+      throw new UsernameNotFoundException("用户不存在");
     }
+    LoginInfoHolder.setSalt(memberVo.getAccount().getPassword().getSalt());
+    return new JwtUser(memberVo);
+  }
 }
