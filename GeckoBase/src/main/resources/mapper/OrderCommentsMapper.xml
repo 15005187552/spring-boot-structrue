@@ -19,7 +19,7 @@
     </sql>
 
     <select id="starCount" parameterType="long" resultType="integer">
-      select sum(toc.STAR) as totalStar  from t_order_comments toc where toc.PROVIDER_ID=#{providerId}
+      select COALESCE(sum(toc.STAR),0) as totalStar  from t_order_comments toc where toc.PROVIDER_ID=#{providerId}
     </select>
 
 </mapper>
