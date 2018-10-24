@@ -96,6 +96,7 @@ public class OrderController extends BaseController {
   @RequestMapping("weixin/notify")
   @ApiOperation(hidden = true, value = "处理微信回调接口!")
   public void handlerWeixinNotify(HttpServletRequest request) {
+    log.info("处理微信回调接口  handlerWeixinNotify:{}");
     String xmlStr = HttpKit.readData(request);
     log.info("处理微信回调接口:{}",xmlStr);
     clientOrderService.handlerWeixinNotify(xmlStr);
@@ -104,6 +105,7 @@ public class OrderController extends BaseController {
   @RequestMapping("weixin/remainNotify")
   @ApiOperation(hidden = true, value = "处理微信回调接口!")
   public void handlerWeixinRemainNotify(HttpServletRequest request) {
+    log.info("处理微信回调接口  handlerWeixinRemainNotify:{}");
     String xmlStr = HttpKit.readData(request);
     log.info("处理微信回调接口:{}",xmlStr);
     clientOrderService.handlerWeixinRemainNotify(xmlStr);
