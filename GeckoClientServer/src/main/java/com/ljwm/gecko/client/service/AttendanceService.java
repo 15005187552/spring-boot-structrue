@@ -158,30 +158,31 @@ public class AttendanceService {
 
 
   public void insertOrUpdate(Integer tableName, Long itemId, Date date, String value, Tax tax){
-    if(tableName == TableNameEnum.T_INCOME_TYPE.getCode()){
-      TaxIncome taxIncome = taxIncomeMapper.selectOne(new QueryWrapper<TaxIncome>().eq(TaxIncome.TAX_ID, tax.getId())
-        .eq(TaxIncome.INCOME_TYPE_ID, itemId));
-      if (taxIncome != null){
-        taxIncome.setUpdateTime(date).setIncome(Objects.isNull(value)? null:new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setIncomeTypeId(itemId).setTaxId(tax.getId());
-        taxIncomeMapper.updateById(taxIncome);
-      } else {
-        taxIncome = new TaxIncome();
-        taxIncome.setUpdateTime(date).setIncome(Objects.isNull(value)? null:new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setCreateTime(date).setIncomeTypeId(itemId).setTaxId(tax.getId());
-        taxIncomeMapper.insert(taxIncome);
+    if (StrUtil.isNotEmpty(value)) {
+      if (tableName == TableNameEnum.T_INCOME_TYPE.getCode()) {
+        TaxIncome taxIncome = taxIncomeMapper.selectOne(new QueryWrapper<TaxIncome>().eq(TaxIncome.TAX_ID, tax.getId())
+          .eq(TaxIncome.INCOME_TYPE_ID, itemId));
+        if (taxIncome != null) {
+          taxIncome.setUpdateTime(date).setIncome(Objects.isNull(value) ? null : new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setIncomeTypeId(itemId).setTaxId(tax.getId());
+          taxIncomeMapper.updateById(taxIncome);
+        } else {
+          taxIncome = new TaxIncome();
+          taxIncome.setUpdateTime(date).setIncome(Objects.isNull(value) ? null : new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setCreateTime(date).setIncomeTypeId(itemId).setTaxId(tax.getId());
+          taxIncomeMapper.insert(taxIncome);
+        }
       }
-    }
-    if(tableName == TableNameEnum.T_OTHER_REDUCE.getCode()){
-      TaxOtherReduce taxOtherReduce = taxOtherReduceMapper.selectOne(new QueryWrapper<TaxOtherReduce>()
-        .eq(TaxOtherReduce.TAX_ID, tax.getId()).eq(TaxOtherReduce.OTHER_REDUCE_ID, itemId));
-      if (taxOtherReduce != null){
-        taxOtherReduce.setUpdateTime(date).setTaxMoney(Objects.isNull(value)? null:new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setOtherReduceId(itemId).setTaxId(tax.getId());
-        taxOtherReduceMapper.updateById(taxOtherReduce);
-      } else {
-        taxOtherReduce = new TaxOtherReduce();
-        taxOtherReduce.setUpdateTime(date).setTaxMoney(Objects.isNull(value)? null:new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setCreateTime(date).setOtherReduceId(itemId).setTaxId(tax.getId());
-        taxOtherReduceMapper.insert(taxOtherReduce);
+      if (tableName == TableNameEnum.T_OTHER_REDUCE.getCode()) {
+        TaxOtherReduce taxOtherReduce = taxOtherReduceMapper.selectOne(new QueryWrapper<TaxOtherReduce>()
+          .eq(TaxOtherReduce.TAX_ID, tax.getId()).eq(TaxOtherReduce.OTHER_REDUCE_ID, itemId));
+        if (taxOtherReduce != null) {
+          taxOtherReduce.setUpdateTime(date).setTaxMoney(Objects.isNull(value) ? null : new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setOtherReduceId(itemId).setTaxId(tax.getId());
+          taxOtherReduceMapper.updateById(taxOtherReduce);
+        } else {
+          taxOtherReduce = new TaxOtherReduce();
+          taxOtherReduce.setUpdateTime(date).setTaxMoney(Objects.isNull(value) ? null : new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setCreateTime(date).setOtherReduceId(itemId).setTaxId(tax.getId());
+          taxOtherReduceMapper.insert(taxOtherReduce);
+        }
       }
-    }
     /*List<CompanySpecial> companySpecialList = companySpecialMapper.selectList(new QueryWrapper<CompanySpecial>().eq(CompanySpecial.COMPANY_ID, companyId));
     for (CompanySpecial companySpecial : companySpecialList){
       SpecialDeduction specialDeduction = specialDeductionMapper.selectOne(new QueryWrapper<SpecialDeduction>().like(SpecialDeduction.NAME, "公积金"));
@@ -216,31 +217,32 @@ public class AttendanceService {
         }
       }
     }*/
-    if(tableName == TableNameEnum.T_ADD_SPECIAL.getCode()){
-      TaxSpecialAdd taxSpecialAdd = taxSpecialAddMapper.selectOne(new QueryWrapper<TaxSpecialAdd>()
-        .eq(TaxSpecialAdd.TAX_ID, tax.getId()).eq(TaxSpecialAdd.SPECIAL_ADD_ID, itemId));
-      if (taxSpecialAdd != null){
-        taxSpecialAdd.setUpdateTime(date).setTaxMoney(Objects.isNull(value)?null:new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setTaxId(tax.getId()).setSpecialAddId(itemId);
-        taxSpecialAddMapper.updateById(taxSpecialAdd);
-      } else {
-        taxSpecialAdd = new TaxSpecialAdd();
-        if(StrUtil.isNotEmpty(value)){
-          taxSpecialAdd.setTaxMoney(new BigDecimal(value));
+      if (tableName == TableNameEnum.T_ADD_SPECIAL.getCode()) {
+        TaxSpecialAdd taxSpecialAdd = taxSpecialAddMapper.selectOne(new QueryWrapper<TaxSpecialAdd>()
+          .eq(TaxSpecialAdd.TAX_ID, tax.getId()).eq(TaxSpecialAdd.SPECIAL_ADD_ID, itemId));
+        if (taxSpecialAdd != null) {
+          taxSpecialAdd.setUpdateTime(date).setTaxMoney(Objects.isNull(value) ? null : new BigDecimal(value)).setUpdater(SecurityKit.currentId()).setTaxId(tax.getId()).setSpecialAddId(itemId);
+          taxSpecialAddMapper.updateById(taxSpecialAdd);
+        } else {
+          taxSpecialAdd = new TaxSpecialAdd();
+          if (StrUtil.isNotEmpty(value)) {
+            taxSpecialAdd.setTaxMoney(new BigDecimal(value));
+          }
+          taxSpecialAdd.setUpdateTime(date).setUpdater(SecurityKit.currentId()).setCreateTime(date).setTaxId(tax.getId()).setSpecialAddId(itemId);
+          taxSpecialAddMapper.insert(taxSpecialAdd);
         }
-        taxSpecialAdd.setUpdateTime(date).setUpdater(SecurityKit.currentId()).setCreateTime(date).setTaxId(tax.getId()).setSpecialAddId(itemId);
-        taxSpecialAddMapper.insert(taxSpecialAdd);
       }
-    }
-    if(tableName == TableNameEnum.T_ATTENDANCE.getCode()){
-      Attendance attendance = attendanceMapper.selectOne(new QueryWrapper<Attendance>()
-        .eq(Attendance.TAX_ID, tax.getId()).eq(Attendance.ATTRIBUTE_ID, itemId));
-      if (attendance != null){
-        attendance.setValue(value);
-        attendanceMapper.updateById(attendance);
-      } else {
-        attendance = new Attendance();
-        attendance.setValue(value);
-        attendanceMapper.insert(attendance);
+      if (tableName == TableNameEnum.T_ATTENDANCE.getCode()) {
+        Attendance attendance = attendanceMapper.selectOne(new QueryWrapper<Attendance>()
+          .eq(Attendance.TAX_ID, tax.getId()).eq(Attendance.ATTRIBUTE_ID, itemId));
+        if (attendance != null) {
+          attendance.setValue(value);
+          attendanceMapper.updateById(attendance);
+        } else {
+          attendance = new Attendance();
+          attendance.setValue(value);
+          attendanceMapper.insert(attendance);
+        }
       }
     }
   }

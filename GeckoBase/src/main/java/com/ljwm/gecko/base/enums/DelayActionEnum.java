@@ -1,5 +1,6 @@
 package com.ljwm.gecko.base.enums;
 
+import com.ljwm.gecko.base.delay.DelayEvent;
 import com.ljwm.gecko.base.listener.CommonEnum;
 import lombok.Getter;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.Delayed;
  */
 @Getter
 public enum DelayActionEnum implements CommonEnum{
-  WWW(1, null, null, null);
+  REMIND_AN_HOUR(0, "remind", "报税数据确认剩余一小时提醒", DelayEvent.class);
 
   private Integer code;
 

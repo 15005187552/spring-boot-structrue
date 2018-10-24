@@ -173,6 +173,12 @@ public class ClientProviderService {
           providerServices.setVersion(provider.getVersion());
           providerServicesMapper.insert(providerServices);
         }
+        ProviderUser providerUserTemp = new ProviderUser();
+        providerUserTemp.setMemberId(providerDto.getMemberId());
+        providerUserTemp.setProviderId(provider.getId());
+        providerUserTemp.setCreateTime(DateUtil.date());
+        providerUserTemp.setRolesCode(ProviderRoleEnum.CREATOR.getCode()+","+ProviderRoleEnum.PREPARER.getCode());
+        providerUserMapper.insert(providerUserTemp);
       }
     }else {
       //申请企业

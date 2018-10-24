@@ -127,12 +127,14 @@ public class ExcelService {
   public Result importAttendance(MultipartFile file, Long companyId, String declareTime, Integer declareType) throws IOException {
     isHasProperty(companyId);
     InputStream inputStream = file.getInputStream();
-    ExcelLogs logs =new ExcelLogs();
-    Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs , 0);
-    Object name=null, certificate = null, certNum = null, socialBase = null, fundBase = null, fundPer = null;
-    for(Map m:importExcel){
-      NaturalPerson naturalPerson = null;
-      for (Object key:m.keySet()) {
+    ExcelLogs logs = new ExcelLogs();
+    Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs, 0);
+    Object name = null, certificate = null, certNum = null, socialBase = null, fundBase = null, fundPer = null;
+    for (Map m : importExcel) {
+      int i = 0;
+      Tax tax = null;
+      for (Object key : m.keySet()) {
+        i++;
         if (key.equals("*姓名")) {
           name = m.get(key);
         }
@@ -151,31 +153,44 @@ public class ExcelService {
         if (key.equals("*公积金比例")) {
           fundPer = m.get(key);
         }
-        if (certificate != null && certNum != null) {
-          if(naturalPerson == null){
+        if (i >= 7) { //大于等于有*项
+          if(name == null){
+            throw new LogicException("*姓名为必填项！");
+          }
+          if(certificate == null){
+            throw new LogicException("*证照类型为必填项！");
+          }
+          if(certNum == null){
+            throw new LogicException("*证照号码为必填项！");
+          }
+          if(socialBase == null){
+            throw new LogicException("*社保基数为必填项！");
+          }
+          if(fundBase == null){
+            throw new LogicException("*公积金基数为必填项！");
+          }
+          if(fundPer == null){
+            throw new LogicException("*公积金比例为必填项！");
+          }
+          Long memberId = null;
+          Date date = new Date();
+          if (i == 7) { //等于*项
             Integer certificateType = EnumUtil.getEnumByName(CertificateType.class, certificate.toString()).getCode();
-            naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERT_NUM, certNum.toString()).eq(NaturalPerson.CERTIFICATE, certificateType));
-            if(naturalPerson ==null){
-                return Result.fail("员工"+name.toString()+"证件号码或者证照类型有误！");
+            NaturalPerson naturalPerson = naturalPersonMapper.selectOne(new QueryWrapper<NaturalPerson>().eq(NaturalPerson.CERT_NUM, certNum.toString()).eq(NaturalPerson.CERTIFICATE, certificateType));
+            if (naturalPerson == null) {
+              return Result.fail("员工" + name.toString() + "证件号码或者证照类型有误！");
             }
-          }else {
-            Long memberId = naturalPerson.getMemberId();
+            memberId = naturalPerson.getMemberId();
             CompanyUser companyUser = companyUserMapper.selectOne(new QueryWrapper<CompanyUser>().eq(CompanyUser.COMPANY_ID, companyId).eq(CompanyUser.MEMBER_ID, memberId));
             CompanyUserInfo companyUserInfo = companyUserInfoMapper.selectById(companyUser.getId());
             if (companyUserInfo != null) {
-              if (fundBase != null) {
-                companyUserInfo.setFundBase(new BigDecimal(fundBase.toString()));
-              }
-              if (fundPer != null) {
-                companyUserInfo.setFundPer(new BigDecimal(fundPer.toString()));
-              }
-              if (socialBase != null) {
-                companyUserInfo.setSocialBase(new BigDecimal(socialBase.toString()));
-              }
+              companyUserInfo.setFundBase(new BigDecimal(fundBase.toString()));
+              companyUserInfo.setFundPer(new BigDecimal(fundPer.toString()));
+              companyUserInfo.setSocialBase(new BigDecimal(socialBase.toString()));
               companyUserInfoMapper.updateById(companyUserInfo);
             }
-            Tax tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId));
-            Date date = new Date();
+
+            tax = taxMapper.selectOne(new QueryWrapper<Tax>().eq(Tax.DECLARE_TIME, declareTime).eq(Tax.MEMBER_ID, memberId));
             if (tax != null) {
               tax.setUpdateTime(date).setStatus(TaxStatus.NEED_CONFIRM.getCode()).setDeclareType(declareType);
               taxMapper.updateById(tax);
@@ -185,16 +200,16 @@ public class ExcelService {
                 .setStatus(TaxStatus.NEED_CONFIRM.getCode());
               taxMapper.insert(tax);
             }
-            if (!key.toString().contains("*")) {
-              Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.NAME, key.toString()));
-              Long itemId = attribute.getItemId();
-              Integer tableName = attribute.getTableName();
-              String value = Objects.isNull(m.get(key))? null: m.get(key).toString();
-              attendanceService.insertOrUpdate(tableName, itemId, date, value, tax);
-            }
-            if (socialBase != null && fundBase != null && fundPer != null) {
-              attendanceService.insertOrUpdate(new BigDecimal(socialBase.toString()), new BigDecimal(fundBase.toString()), new BigDecimal(fundPer.toString()), companyId, date, tax);
-            }
+          }
+          if (!key.toString().contains("*")) {
+            Attribute attribute = attributeMapper.selectOne(new QueryWrapper<Attribute>().eq(Attribute.NAME, key.toString()));
+            Long itemId = attribute.getItemId();
+            Integer tableName = attribute.getTableName();
+            String value = Objects.isNull(m.get(key)) ? null : m.get(key).toString();
+            attendanceService.insertOrUpdate(tableName, itemId, date, value, tax);
+          }
+          if (socialBase != null && fundBase != null && fundPer != null) {
+            attendanceService.insertOrUpdate(new BigDecimal(socialBase.toString()), new BigDecimal(fundBase.toString()), new BigDecimal(fundPer.toString()), companyId, date, tax);
           }
         }
       }
@@ -212,7 +227,7 @@ public class ExcelService {
     }
     Map<String, String> map = new LinkedHashMap<>();
     int i = 0;
-    String[] str = {"工号", "*姓名", "*证照类型", "*证照号码", "*国籍(地区)", "性别", "出生年月", "*人员状态",
+    String[] str = {"工号", "*姓名", "*证照类型", "*证照号码", "*国籍(地区)", "*性别", "*出生日期", "*人员状态",
       "*是否雇员", "*手机号码", "是否残疾", "是否烈属", "是否孤老", "残疾证号", "烈属证号", "任职受雇日期", "离职日期", "电子邮箱", "学历",
       "职业", "开户银行", "银行账号", "是否特定行业", "是否股东、投资者", "个人股本（投资）额", "户籍所在省份", "户籍所在城市", "户籍所在区（县）",
       "户籍所在详细地址","居住省份", "居住城市", "居住所在区（县）", "居住详细地址", "备注", "是否境外人员", "姓名（中文）", "境内有无住所",
@@ -250,7 +265,7 @@ public class ExcelService {
       if(StrUtil.isNotBlank(personExportVo.getFamilyArea())){
         personExportVo.setFamilyArea(locationDao.getNameByCode(personExportVo.getFamilyArea()));
       }
-      List<EmployeeDto> employeeDtoList = companyUserMapper.selectEmployeeList(companyId, memberId);
+      List<EmployeeDto> employeeDtoList = companyUserMapper.selectEmployeeList(companyId, naturalPersonDto.getMemberId());
       if (CollectionUtil.isEmpty(employeeDtoList)){
         throw new LogicException("该公司下没有对应员工");
       }
@@ -262,9 +277,6 @@ public class ExcelService {
         .setEmployee(StrUtil.isNotEmpty(personExportVo.getEmployee())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personExportVo.getEmployee())):null)
         .setSpecialIndustry(StrUtil.isNotEmpty(personExportVo.getSpecialIndustry())?EnumUtil.getNameBycode(YesOrNoEnum.class, Integer.valueOf(personExportVo.getSpecialIndustry())):null)
         .setPersonState(StrUtil.isNotEmpty(personExportVo.getPersonState())?EnumUtil.getNameBycode(PersonStateEnum.class, Integer.valueOf(personExportVo.getPersonState())):null)
-        .setProvince(locationService.getNameByCode(personExportVo.getProvince()))
-        .setCity(locationService.getNameByCode(personExportVo.getCity()))
-        .setArea(locationService.getNameByCode(personExportVo.getArea()))
         .setBirthday(StrUtil.isNotEmpty(personExportVo.getBirthday())?TimeUtil.parseDate(personExportVo.getBirthday()):null)
         .setEducation(StrUtil.isNotEmpty(personExportVo.getEducation())?EnumUtil.getNameBycode(EducationEnum.class, Integer.valueOf(personExportVo.getEducation())):null)
         .setHireDate(StrUtil.isNotEmpty(personExportVo.getHireDate())? TimeUtil.parseDate(personExportVo.getHireDate()):null)
