@@ -1,7 +1,6 @@
 package com.ljwm.gecko.client.service;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.service.CommonService;
@@ -10,6 +9,7 @@ import com.ljwm.gecko.base.entity.*;
 import com.ljwm.gecko.base.enums.CertificateType;
 import com.ljwm.gecko.base.enums.TableNameEnum;
 import com.ljwm.gecko.base.mapper.*;
+import com.ljwm.gecko.base.model.vo.TemplateVo;
 import com.ljwm.gecko.base.utils.EnumUtil;
 import com.ljwm.gecko.base.utils.excelutil.ExcelUtil;
 import com.ljwm.gecko.client.model.dto.CompanyDto;
@@ -31,10 +31,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Janiffy
@@ -167,21 +164,27 @@ public class TemplateService {
     List<Template> list = templateMapper.selectList(new QueryWrapper<Template>()
       .eq(Template.COMPANY_ID, companyDto.getCompanyId())
       .orderByAsc(true,Template.SORT));
-    JSONObject map = new JSONObject(true);
-    int i = -1000;
+    List<TemplateVo> templateVoList = new LinkedList<>();
+    Integer i = -1000;
     for (String string : str){
-      map.put(String.valueOf(i), string);
+      TemplateVo templateVo = new TemplateVo();
+      templateVo.setName(string).setSort(i);
+      templateVoList.add(templateVo);
       i++;
     }
     List<Attribute> attributeList = attributeMapper.selectList(new QueryWrapper<Attribute>().eq(Attribute.TABLE_NAME, TableNameEnum.T_ADD_SPECIAL.getCode()));
     for (Attribute attribute : attributeList){
-      map.put(String.valueOf(attribute.getId()), attribute.getName());
+      TemplateVo templateVo = new TemplateVo();
+      templateVo.setId(attribute.getId()).setName(attribute.getName()).setSort(i);
+      templateVoList.add(templateVo);
+      i++;
     }
     for (Template template : list) {
-      map.put(String.valueOf(template.getAttributeId()), attributeMapper.selectById(template.getAttributeId()).getName());
+      TemplateVo templateVo = new TemplateVo();
+      templateVo.setId(template.getAttributeId()).setName(attributeMapper.selectById(template.getAttributeId()).getName()).setSort(template.getSort());
+      templateVoList.add(templateVo);
     }
-    log.info("map : {}", map.toJSONString());
-    return Result.success(map);
+    return Result.success(templateVoList);
   }
 
   public Result downloadAttendance(HttpServletResponse response, CompanyDto companyDto) throws IOException {

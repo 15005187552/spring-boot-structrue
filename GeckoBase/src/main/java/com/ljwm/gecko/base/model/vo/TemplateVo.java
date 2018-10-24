@@ -1,14 +1,20 @@
 package com.ljwm.gecko.base.model.vo;
 
-import com.ljwm.gecko.base.entity.Template;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * @author Janiffy
  * @date 2018/9/26 19:52
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class TemplateVo extends Template {
+@Accessors(chain = true)
+public class TemplateVo {
+
+  private Long id;
+
+  private Integer sort;
+
+  private String name;
+
 }
