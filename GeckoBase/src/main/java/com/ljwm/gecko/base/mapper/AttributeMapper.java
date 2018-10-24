@@ -31,4 +31,7 @@ public interface AttributeMapper extends BaseMapper<Attribute> {
     "ON a.COMPANY_ID = #{companyId} AND a.ATTRIBUTE_ID = b.ID")
   @ResultMap("AttendanceResultMap")
   List<AttributeAttendanceVo> selectAttendanceAttribute(Long companyId);
+
+  @Select("SELECT * FROM `t_attribute` ORDER BY `TABLE_NAME` DESC ,`SORT` ASC")
+  List<Attribute> sortTest();
 }

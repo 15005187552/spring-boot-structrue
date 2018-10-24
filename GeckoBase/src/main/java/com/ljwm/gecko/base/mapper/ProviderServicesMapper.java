@@ -6,6 +6,7 @@ import com.ljwm.gecko.base.model.vo.ProviderServicesSimpleVo;
 import com.ljwm.gecko.base.model.vo.ProviderServicesVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * @author xixil
  * @since 2018-09-13
  */
+@Repository
 public interface ProviderServicesMapper extends BaseMapper<ProviderServices> {
   List<ProviderServicesVo> findProviderServicesVoListByProviderId(@Param("providerId") Long providerId);
 

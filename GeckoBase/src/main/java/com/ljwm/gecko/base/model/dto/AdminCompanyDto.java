@@ -25,6 +25,6 @@ public class AdminCompanyDto extends Company {
 
   @JSONField(serializeUsing = CompanyEnumCodeToName.class)
   private Integer type;
-
-  private List<CompanyUserVo> companyUsers;
+//
+//  private List<CompanyUserVo> companyUsers;
 }

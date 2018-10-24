@@ -1,13 +1,12 @@
 package com.ljwm.gecko.base.mapper;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ljwm.bootbase.dto.Kv;
-import com.ljwm.gecko.base.entity.Provider;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ljwm.gecko.base.model.vo.MemberVo;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ljwm.gecko.base.entity.Provider;
 import com.ljwm.gecko.base.model.vo.ProviderSimpleVo;
 import com.ljwm.gecko.base.model.vo.ProviderVo;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +19,7 @@ import java.util.Map;
  * @author yuzhou
  * @since 2018-08-24
  */
+@Repository
 public interface ProviderMapper extends BaseMapper<Provider> {
 
 

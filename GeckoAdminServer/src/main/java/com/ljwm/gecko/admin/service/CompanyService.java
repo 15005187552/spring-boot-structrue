@@ -12,6 +12,7 @@ import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.admin.model.form.CompanyCheckForm;
 import com.ljwm.gecko.admin.model.form.CompanyQuery;
+import com.ljwm.gecko.admin.model.form.CompanyUserQuery;
 import com.ljwm.gecko.admin.model.vo.SimpleCompany;
 import com.ljwm.gecko.base.entity.Company;
 import com.ljwm.gecko.base.entity.CompanyUser;
@@ -24,6 +25,7 @@ import com.ljwm.gecko.base.mapper.CompanyUserMapper;
 import com.ljwm.gecko.base.model.dto.AdminCompanyDto;
 import com.ljwm.gecko.base.model.dto.im.MessageDto;
 import com.ljwm.gecko.base.model.vo.UnValidateCompanyVo;
+import com.ljwm.gecko.base.model.vo.admin.CUserQueryVO;
 import com.ljwm.gecko.base.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,4 +102,7 @@ public class CompanyService {
     messageService.pushMessage(messageDto);
   }
 
+  public Page<CUserQueryVO> findCompanyUser(CompanyUserQuery query){
+    return commonService.find(query,(p,q)->companyUserMapper.findPage(p,BeanUtil.beanToMap(q)));
+  }
 }

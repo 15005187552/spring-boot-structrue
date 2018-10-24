@@ -9,6 +9,7 @@ import com.ljwm.gecko.base.model.vo.ServiceVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import java.util.Map;
  * @author Levis
  * @since 2018-09-10
  */
+@Repository
 public interface ServiceTypeMapper extends BaseMapper<ServiceType> {
 
   List<ServiceVo> findTree();

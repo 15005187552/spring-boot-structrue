@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.gecko.admin.model.form.CompanyCheckForm;
 import com.ljwm.gecko.admin.model.form.CompanyQuery;
+import com.ljwm.gecko.admin.model.form.CompanyUserQuery;
 import com.ljwm.gecko.admin.service.CompanyService;
 import com.ljwm.gecko.base.enums.CompanyType;
 import com.ljwm.gecko.base.enums.CompanyValidateEnum;
@@ -67,5 +68,10 @@ public class CompanyController extends BaseController {
   @ApiOperation("获取所有认证通过的公司")
   public Result getOnlineCompany(){
     return success(companyService.getOnlineCompany());
+  }
+
+  @PostMapping("findCompanyUser")
+  public Result findCompanyUser(@RequestBody CompanyUserQuery query){
+    return success(companyService.findCompanyUser(query));
   }
 }

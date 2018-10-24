@@ -76,7 +76,7 @@ public class SessionDistributeService extends MessageService implements IDynamic
     String text = jsonObject.getString("text");
 
     // 2.创建获取更新会话
-    CustomerSession customerSession = sessionDistributeService.createOrUpdateSessiom(sessionId,providerId,memberId,guestId,null);
+    CustomerSession customerSession = sessionDistributeService.createOrUpdateSession(sessionId,providerId,memberId,guestId,null);
 
     // 3. 获取服务商下的所有用户
     List<ProviderUser> providerUsers = providerUserMapper.selectByMap(Kv.by("PROVIDER_ID",Optional.of(providerId).get()));
@@ -122,7 +122,7 @@ public class SessionDistributeService extends MessageService implements IDynamic
     assert !(sessionId != null && !Objects.equals(customerSessionMapper.selectById(sessionId).getReceptionistMemberId(),receiverId)) : "当前会话已有客户绑定请先获取权限";
 
     // 3.创建获取更新会话
-    CustomerSession customerSession = sessionDistributeService.createOrUpdateSessiom(sessionId,providerId,memberId,guestId,receiverId);
+    CustomerSession customerSession = sessionDistributeService.createOrUpdateSession(sessionId,providerId,memberId,guestId,receiverId);
 
     // 4.
     CustomerMessage customerMessage =
@@ -148,7 +148,7 @@ public class SessionDistributeService extends MessageService implements IDynamic
   }
 
   @Transactional
-  public CustomerSession createOrUpdateSessiom(Long sessionId,Long providerId,Long memberId,Long guestId,Long receiverId) {
+  public CustomerSession createOrUpdateSession(Long sessionId,Long providerId,Long memberId,Long guestId,Long receiverId) {
     CustomerSession customerSession = null;
     if (sessionId != null)
       customerSession = customerSessionMapper.selectById(sessionId);
@@ -184,8 +184,8 @@ public class SessionDistributeService extends MessageService implements IDynamic
     return socketInfoMapper.selectList(
       new QueryWrapper<SocketInfo>()
         .eq(SocketInfo.TARGET_ID,id)
-        .and(wrapper -> wrapper.eq(SocketInfo.CHANNEL,LoginType.WX_APP.getCode()))
-        .or().eq(SocketInfo.CHANNEL,LoginType.MOBILE.getCode())
+//        .and(wrapper -> wrapper.eq(SocketInfo.CHANNEL,LoginType.WX_APP.getCode()))
+//        .or().eq(SocketInfo.CHANNEL,LoginType.MOBILE.getCode())
     );
   }
 }

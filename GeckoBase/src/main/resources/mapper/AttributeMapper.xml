@@ -8,11 +8,12 @@
         <result column="TABLE_NAME" property="tableName" />
         <result column="ITEM_ID" property="itemId" />
         <result column="NAME" property="name" />
+        <result column="SORT" property="sort" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`TABLE_NAME`          ,`ITEM_ID`          ,`NAME`
+          `ID`          ,`TABLE_NAME`          ,`ITEM_ID`          ,`NAME`          ,`SORT`
     </sql>
 
   <resultMap id="ResultMap" type="com.ljwm.gecko.base.model.vo.AttributeEmployVo">

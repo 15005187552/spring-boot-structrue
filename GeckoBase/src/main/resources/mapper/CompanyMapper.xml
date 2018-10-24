@@ -64,8 +64,8 @@
                  select="com.ljwm.gecko.base.mapper.LocationMapper.getLocationByArea"/>
     <association property="creator" column="CREATER_ID" select="com.ljwm.gecko.base.mapper.MemberMapper.selectById"/>
     <association property="validator" column="VALIDATOR_ID" select="com.ljwm.gecko.base.mapper.AdminMapper.selectById"/>
-    <collection property="companyUsers" column="ID"
-                select="com.ljwm.gecko.base.mapper.CompanyUserMapper.findCompanyUser"/>
+    <!--<collection property="companyUsers" column="ID"-->
+                <!--select="com.ljwm.gecko.base.mapper.CompanyUserMapper.findCompanyUser"/>-->
   </resultMap>
 
   <select id="find" resultMap="AdminCompanyDto">

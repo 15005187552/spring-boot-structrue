@@ -161,6 +161,7 @@ public class ProviderService {
     } else {
       provider.setInfoValidateState(InfoValidateStateEnum.CONFIRM_FAILED.getCode());
       provider.setValidateText(confirmProviderInfoDto.getValidateText());
+      provider.setValidateState(ValidateStatEnum.CONFIRM_FAILED.getCode());
     }
     provider.setValidatorId(confirmProviderInfoDto.getValidatorId());
     providerMapper.updateById(provider);

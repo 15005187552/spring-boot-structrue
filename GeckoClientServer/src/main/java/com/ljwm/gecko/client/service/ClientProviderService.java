@@ -50,9 +50,6 @@ public class ClientProviderService {
   private MemberMapper memberMapper;
 
   @Autowired
-  private CommonMapper commonMapper;
-
-  @Autowired
   private MemberPaperMapper memberPaperMapper;
 
   @Autowired
@@ -64,17 +61,12 @@ public class ClientProviderService {
   @Autowired
   private AppInfo appInfo;
 
-  @Autowired
-  private ProviderPaperMapper providerPaperMapper;
 
   @Autowired
   private CommonService commonService;
 
   @Autowired
   private OrderMapper orderMapper;
-
-  @Autowired
-  private OrderCommentsMapper orderCommentsMapper;
 
   @Autowired
   private ServiceTypeMapper serviceTypeMapper;
@@ -157,6 +149,7 @@ public class ClientProviderService {
         provider.setUpdateTime(DateUtil.date());
         provider.setDisabled(DisabledEnum.ENABLED.getCode());
         provider.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
+        provider.setInfoValidateState(InfoValidateStateEnum.INIT.getCode());
         if (StringUtils.isNotEmpty(providerDto.getLogo())){
           if (!providerDto.getLogo().contains(Constant.PROVIDER)){
             File file = new File(appInfo.getFilePath() + Constant.PROVIDER + member.getId());
@@ -331,6 +324,7 @@ public class ClientProviderService {
         provider.setDisabled(DisabledEnum.ENABLED.getCode());
         provider.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
         provider.setVersion(1);
+        provider.setInfoValidateState(InfoValidateStateEnum.INIT.getCode());
         if (StringUtils.isNotEmpty(providerDto.getPicPath())) {
           if (!providerDto.getPicPath().contains(Constant.PROVIDER)){
             File file = new File(appInfo.getFilePath() + Constant.PROVIDER + member.getId());

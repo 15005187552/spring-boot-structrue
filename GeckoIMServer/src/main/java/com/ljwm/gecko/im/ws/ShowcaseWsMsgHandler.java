@@ -101,11 +101,6 @@ public class ShowcaseWsMsgHandler implements IWsMsgHandler {
    */
   @Override
   public Object onText(WsRequest wsRequest,String text,ChannelContext channelContext) throws Exception {
-//    WsSessionContext wsSessionContext = (WsSessionContext) channelContext.getAttribute();
-//    HttpRequest httpRequest = wsSessionContext.getHandshakeRequestPacket();//获取websocket握手包
-//    if (log.isDebugEnabled()) {
-//      log.debug("握手包:{}",httpRequest);
-//    }
     String message = JSONUtil.toJsonStr(text);
     if (!JSONUtil.isJson(message))
       throw new LogicException("数据传输格式错误");

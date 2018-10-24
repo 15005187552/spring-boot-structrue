@@ -3,6 +3,7 @@ package com.ljwm.gecko.base.mapper;
 import com.ljwm.gecko.base.entity.OrderComments;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -12,6 +13,7 @@ import org.apache.ibatis.annotations.Param;
  * @author Livis
  * @since 2018-09-18
  */
+@Repository
 public interface OrderCommentsMapper extends BaseMapper<OrderComments> {
     Integer starCount(@Param("providerId") Long providerId);
 }

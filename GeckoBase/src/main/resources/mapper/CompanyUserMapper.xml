@@ -87,4 +87,22 @@
     <result column="REMARK" property="remark" />
   </resultMap>
 
+
+  <resultMap id="CUserQueryVO" type="com.ljwm.gecko.base.model.vo.admin.CUserQueryVO" extends="BaseResultMap">
+    <association property="member" resultMap="AdminMemberVO"/>
+  </resultMap>
+
+  <resultMap id="AdminMemberVO" type="com.ljwm.gecko.base.model.vo.admin.AdminMemberVO" >
+    <id column="ID" property="id" />
+    <result column="REG_MOBILE" property="regMobile" />
+    <result column="NICK_NAME" property="nickName" />
+    <result column="NAME" property="name" />
+    <result column="AVATAR_PATH" property="avatarPath" />
+    <result column="MEMBER_IDCARD" property="memberIdcard" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="DISABLED" property="disabled" />
+    <result column="PIC_FRONT" property="picFront" />
+    <result column="PIC_BACK" property="picBack" />
+    <result column="PIC_PASSPORT" property="picPassport" />
+  </resultMap>
 </mapper>

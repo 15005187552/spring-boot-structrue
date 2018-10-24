@@ -7,12 +7,15 @@
         <id column="ID" property="id" />
         <result column="MESSAGE" property="message" />
         <result column="RECEVIER_ID" property="recevierId" />
+        <result column="RECEVIER_Type" property="recevierType" />
         <result column="CREATE_TIME" property="createTime" />
+        <result column="READ_TIME" property="readTime" />
+        <result column="STATUS" property="status" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          `ID`          ,`MESSAGE`          ,`RECEVIER_ID`          ,`CREATE_TIME`
+          `ID`          ,`MESSAGE`          ,`RECEVIER_ID`          ,`RECEVIER_Type`          ,`CREATE_TIME`          ,`READ_TIME`          ,`STATUS`
     </sql>
 
 </mapper>

@@ -45,43 +45,50 @@ public class HandleTio {
 
   @Transactional
   public void connectHandle(String code,String ip,SocketChannelEnum socketChannelEnum,String wsCode) {
-    String id = code.split("_")[0];
-    String loginType = code.split("_")[1];
+//    String id = code.split("_")[0];
+//    String loginType = code.split("_")[1];
 
     SocketInfo socketInfo = null;
-    socketInfo = socketInfoMapper.selectOne(new QueryWrapper<SocketInfo>().eq("TARGET_ID",id).eq("CHANNEL",loginType));
+    socketInfo = socketInfoMapper.selectOne(
+      new QueryWrapper<SocketInfo>().eq("TARGET_ID",code)
+//      .eq("CHANNEL",loginType)
+    );
 
-    //todo 当抛出选择出多个登陆的时候显示异常
+
     if (socketInfo == null)
       socketInfo = new SocketInfo();
     socketInfo
       .setTargetTable(socketChannelEnum.getTableCode())
-      .setChannel(Integer.valueOf(loginType))
+//      .setChannel(Integer.valueOf(loginType))
       .setConnectTime(DateUtil.date())
-      .setTargetId(Long.valueOf(id))
+      .setTargetId(Long.valueOf(code))
       .setConnectContenxtId(wsCode)
       .setStatus(0) //todo 枚举状态 获取删除该字段
       .setIp(ip);
 
-    commonService.insert(socketInfo,socketInfoMapper);
+    // todo: 改成加入 推出的时候删除一个
+    commonService.insertOrUpdate(socketInfo,socketInfoMapper);
 //    socketInfoMapper.insert(socketInfo);
 
-    log.info("customer online save:{}",id);
+    log.info("customer online save:{}",code);
   }
 
   @Transactional
   public void connetCloseHanle(String code,String wsCode) {
 //    List<SocketInfo> socketInfos = socketInfoMapper.selectByMap(Kv.by("TARGET_ID",id));
-    String id = code.split("_")[0];
-    String loginType = code.split("_")[1];
-    QueryWrapper<SocketInfo> queryWrapper = new QueryWrapper<SocketInfo>().eq("TARGET_ID",id).eq("CHANNEL",loginType);
+//    String id = code.split("_")[0];
+//    String loginType = code.split("_")[1];
+    QueryWrapper<SocketInfo> queryWrapper = new QueryWrapper<SocketInfo>()
+      .eq("TARGET_ID",code)
+//      .eq("CHANNEL",loginType)
+      ;
 
     SocketInfo socketInfo = socketInfoMapper.selectOne(queryWrapper);
 
     if (socketInfo == null) throw new LogicException(ResultEnum.DATA_ERROR,"无法获取到socketInfo");
 //    socketInfoMapper.deleteByMap(Kv.by("TARGET_ID",id));
     socketInfoMapper.delete(queryWrapper);
-    log.info("id:{}连接登出",id);
+    log.info("id:{}连接登出",code);
   }
 
   /**

@@ -18,8 +18,8 @@ import io.swagger.annotations.ApiModelProperty;
  * 公司人事模板定制项表
  * </p>
  *
- * @author Levis
- * @since 2018-09-20
+ * @author xixil
+ * @since 2018-10-24
  */
 @Data
 @SuppressWarnings("ALL")
@@ -48,6 +48,10 @@ public class Attribute implements Serializable {
     @TableField("`NAME`")
     private String name;
 
+    @ApiModelProperty(value = "排序")
+    @TableField("`SORT`")
+    private Integer sort;
+
 
     public static final String ID = "`ID`";
 
@@ -56,5 +60,7 @@ public class Attribute implements Serializable {
     public static final String ITEM_ID = "`ITEM_ID`";
 
     public static final String NAME = "`NAME`";
+
+    public static final String SORT = "`SORT`";
 
 }

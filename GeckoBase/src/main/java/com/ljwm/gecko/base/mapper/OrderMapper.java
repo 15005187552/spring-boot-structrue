@@ -8,6 +8,7 @@ import com.ljwm.gecko.base.model.vo.OrderSimpleVo;
 import com.ljwm.gecko.base.model.vo.OrderVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.Map;
  * @author Levis
  * @since 2018-09-10
  */
+@Repository
 public interface OrderMapper extends BaseMapper<Order> {
   List<OrderVo> findProviderPage(Page<OrderVo> page, @Param("params")Kv kv);
 

@@ -1,9 +1,12 @@
 package com.ljwm.gecko.base.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.gecko.base.entity.CompanyUser;
+import com.ljwm.gecko.base.entity.Member;
 import com.ljwm.gecko.base.model.dto.EmployeeDto;
 import com.ljwm.gecko.base.model.vo.EmployeeVo;
+import com.ljwm.gecko.base.model.vo.admin.CUserQueryVO;
 import com.ljwm.gecko.base.model.vo.admin.CompanyUserVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
@@ -11,6 +14,7 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -38,11 +42,33 @@ public interface CompanyUserMapper extends BaseMapper<CompanyUser> {
     "AND b.ACTIVATED = #{activateCode}\n" +
     "AND b.COMPANY_ID = #{companyId}")
   @ResultMap("EmployeeVo")
-  List<EmployeeVo> selectEmployee(@Param("companyId") Long companyId, @Param("disableCode")Integer disableCode, @Param("activateCode")Integer activateCode);
+  List<EmployeeVo> selectEmployee(@Param("companyId") Long companyId,@Param("disableCode") Integer disableCode,@Param("activateCode") Integer activateCode);
 
 
   @Select("SELECT * FROM t_company_user a RIGHT JOIN t_company_user_info b\n" +
     "ON a.COMPANY_ID =#{companyId} AND MEMBER_ID=#{memberId} AND a.ID = b.COMPANY_USER_ID")
   @ResultMap("EmployeeInfo")
-  List<EmployeeDto> selectEmployeeList(@Param("companyId") Long companyId, @Param("memberId") Long memberId);
+  List<EmployeeDto> selectEmployeeList(@Param("companyId") Long companyId,@Param("memberId") Long memberId);
+
+  @Select({
+    "<script>",
+    "SELECT * FROM `t_company_user` t ",
+    " LEFT JOIN `t_member` m ",
+    " ON t.`MEMBER_ID` = m.`ID` ",
+    "<where>",
+    " t." + CompanyUser.COMPANY_ID + " = #{params.companyId}",
+    "<if test=\"params.text != null and params.text != ''\">",
+    " AND(",
+    " m." + Member.NICK_NAME + " LIKE  CONCAT('%',#{params.text},'%') ",
+    " OR m." + Member.NAME + " LIKE  CONCAT('%',#{params.text},'%') ",
+    " )",
+    "</if>",
+    "<if test=\"params.disabled != null and params.disabled != ''\">",
+    " AND t." + CompanyUser.DISABLED + " = #{params.disabled}",
+    "</if>",
+    "</where>",
+    "</script>"
+  })
+  @ResultMap("CUserQueryVO")
+  List<CUserQueryVO> findPage(Page<CUserQueryVO> page,@Param("params") Map map);
 }

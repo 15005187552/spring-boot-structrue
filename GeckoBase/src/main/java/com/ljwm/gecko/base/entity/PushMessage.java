@@ -8,10 +8,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author xixil
- * @since 2018-10-11
+ * @since 2018-10-23
  */
 @Data
 @SuppressWarnings("ALL")
@@ -47,9 +45,21 @@ public class PushMessage implements Serializable {
     @TableField("`RECEVIER_ID`")
     private Long recevierId;
 
+    @ApiModelProperty(value = "接收者类型(MEMBER,ADMIN,GUEST)")
+    @TableField("`RECEVIER_Type`")
+    private Integer recevierType;
+
     @ApiModelProperty(value = "创建时间")
     @TableField("`CREATE_TIME`")
     private Date createTime;
+
+    @ApiModelProperty(value = "读取时间")
+    @TableField("`READ_TIME`")
+    private Date readTime;
+
+    @ApiModelProperty(value = "状态")
+    @TableField("`STATUS`")
+    private Integer status;
 
 
     public static final String ID = "`ID`";
@@ -58,6 +68,12 @@ public class PushMessage implements Serializable {
 
     public static final String RECEVIER_ID = "`RECEVIER_ID`";
 
+    public static final String RECEVIER_TYPE = "`RECEVIER_Type`";
+
     public static final String CREATE_TIME = "`CREATE_TIME`";
+
+    public static final String READ_TIME = "`READ_TIME`";
+
+    public static final String STATUS = "`STATUS`";
 
 }
