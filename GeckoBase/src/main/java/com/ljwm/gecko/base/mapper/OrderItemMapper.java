@@ -28,6 +28,6 @@ public interface OrderItemMapper extends BaseMapper<OrderItem> {
 
   List<OrderItemVo> findOrderItemList(Page<OrderItemVo> ret, @Param("params") Map params);
 
-  @Update("UPDATE t_order_item SET STATUS=#{status} WHERE ORDER_NO=#{orderNo}")
+  @Update("UPDATE t_order_item SET ORDER_ITEM_STATUS=#{status} WHERE ORDER_NO=#{orderNo}")
   int updateOrderItemStatus(@Param("orderNo") String orderNo,@Param("status") Integer status);
 }

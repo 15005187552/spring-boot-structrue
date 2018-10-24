@@ -371,7 +371,6 @@ public class ClientOrderService {
 
     // 3. 解析JSON
     String wxNum = UtilKit.getTargetByExpression("xml.out_trade_no", json);
-
     log.info("wxNum value:{}",wxNum);
     String success = UtilKit.getTargetByExpression("xml.result_code", json);
 
