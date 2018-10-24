@@ -1,6 +1,16 @@
 package com.ljwm.gecko.admin.service;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ljwm.bootbase.service.CommonService;
+import com.ljwm.gecko.admin.model.form.CompanyQuery;
+import com.ljwm.gecko.base.entity.FileTemplate;
+import com.ljwm.gecko.base.enums.DisabledEnum;
+import com.ljwm.gecko.base.mapper.FileTemplateMapper;
+import com.ljwm.gecko.base.model.dto.FileTemplateDto;
+
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,5 +21,27 @@ import org.springframework.stereotype.Service;
 @Service
 public class FileService {
 
+  @Autowired
+private FileTemplateMapper fileMapper;
 
+  @Autowired
+  private CommonService commonService;
+
+public void saveTemplateFile(FileTemplateDto fileTemplateDto){
+  FileTemplate fileTemplate = new FileTemplate();
+  BeanUtil.copyProperties(fileTemplateDto,fileTemplate);
+  fileTemplate.setDisable(DisabledEnum.ENABLED.getCode());
+  fileMapper.insert(fileTemplate);
+}
+
+  /**
+   * 分页显示上传文件
+   *
+   * @param query
+   * @return
+   */
+  public Page<FileTemplateDto> find(CompanyQuery query) {
+    return commonService.find(query,(p,q) -> fileMapper.find(p,BeanUtil.beanToMap(query)));
+
+  }
 }

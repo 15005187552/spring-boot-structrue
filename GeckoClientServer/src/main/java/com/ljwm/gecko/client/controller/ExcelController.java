@@ -1,6 +1,7 @@
 package com.ljwm.gecko.client.controller;
 
 import com.ljwm.bootbase.dto.Result;
+import com.ljwm.gecko.base.utils.FileKit;
 import com.ljwm.gecko.client.model.dto.AttendanceModel;
 import com.ljwm.gecko.client.model.dto.NormalSalaryForm;
 import com.ljwm.gecko.client.security.JwtUser;
@@ -8,13 +9,14 @@ import com.ljwm.gecko.client.service.ExcelService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.omg.CORBA.ULongLongSeqHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 
 /**
@@ -80,4 +82,28 @@ public class ExcelController {
     return Result.success(excelService.exportZip(response, normalSalaryForm));
   }
 
+  @PreAuthorize(JwtUser.HAS_MEMBER_ROLE)
+  @PostMapping("download")
+  @ApiOperation("下载模板文件")
+  public Result downLoadTemplate(HttpServletResponse response,@RequestParam String path) throws IOException, ParseException {
+    InputStream inputStream = null;
+    File file = null;
+    try {
+      inputStream = new BufferedInputStream(new FileInputStream(path));
+     // path是指欲下载的文件的路径。
+     file = new File(path);
+     // 取得文件名。
+     String filename = file.getName();
+     FileKit.downloadFile(response,inputStream,filename);
+      return   Result.success("文件下载成功");
+   }
+   catch (Exception e){
+     return  Result.fail("文件下载失败");
+   }
+   finally {
+      if (inputStream != null){
+        inputStream.close();
+      }
+   }
+  }
 }
