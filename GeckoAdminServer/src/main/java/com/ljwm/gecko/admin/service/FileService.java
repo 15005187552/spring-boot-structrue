@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.admin.model.form.CompanyQuery;
+import com.ljwm.gecko.admin.model.form.FileTemplateQuery;
 import com.ljwm.gecko.base.entity.FileTemplate;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.FileTemplateMapper;
@@ -40,7 +41,7 @@ public void saveTemplateFile(FileTemplateDto fileTemplateDto){
    * @param query
    * @return
    */
-  public Page<FileTemplateDto> find(CompanyQuery query) {
+  public Page<FileTemplateDto> find(FileTemplateQuery query) {
     return commonService.find(query,(p,q) -> fileMapper.find(p,BeanUtil.beanToMap(query)));
 
   }

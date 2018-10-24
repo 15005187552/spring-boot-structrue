@@ -37,7 +37,7 @@ public class ProviderSimpleVo {
 
   private Integer starAvg;
 
-  public Integer getStarAvg(){
+  public Integer getStarAvg() {
     if (getId()!=null){
       ProviderService providerService =  SpringKit.getBean(ProviderService.class);
       Integer star = providerService.starCount(getId());

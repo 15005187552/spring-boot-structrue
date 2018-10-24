@@ -6,6 +6,7 @@ import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.gecko.admin.model.form.CompanyQuery;
+import com.ljwm.gecko.admin.model.form.FileTemplateQuery;
 import com.ljwm.gecko.admin.service.FileService;
 import com.ljwm.gecko.base.model.bean.AppInfo;
 import com.ljwm.gecko.base.model.dto.FileTemplateDto;
@@ -41,17 +42,13 @@ public class FileTemplateController extends BaseController {
   @PostMapping("save")
   @ApiOperation("保存excel模板")
   public Result save(@RequestBody FileTemplateDto fileTemplateDto) {
-    try {
       fileService.saveTemplateFile(fileTemplateDto);
       return success();
-    } catch (Exception e) {
-      return Result.fail("文件属性信息保存失败");
-    }
   }
 
-  @GetMapping("showInfo")
+  @GetMapping("find")
   @ApiOperation("上传完成后显示上传文件信息")
-  public Result<Page<FileTemplateVo>> showInfo(@RequestBody CompanyQuery query) {
+  public Result<Page<FileTemplateVo>> find(@RequestBody FileTemplateQuery query) {
     return success(fileService.find(query)) ;
   }
 }
