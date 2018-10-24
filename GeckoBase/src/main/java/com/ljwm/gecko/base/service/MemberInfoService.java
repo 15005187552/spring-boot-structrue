@@ -178,7 +178,6 @@ public class MemberInfoService {
             PaperPath paperPath = new PaperPath();
             paperPath.setMemberPaperId(tempPaper.getId());
             paperPath.setPicPath(fileName);
-            paperPath.setMemberPaperId(memberPaper.getId());
             paperPath.setCreateTime(DateUtil.date());
             paperPath.setUpdateTime(DateUtil.date());
             paperPathMapper.insert(paperPath);
@@ -239,6 +238,9 @@ public class MemberInfoService {
     }
     member.setValidateState(validateStatus);
     member.setValidateText(StringUtils.EMPTY);
+    if (Objects.equals(member.getInfoValidateState(),InfoValidateStateEnum.CONFIRM_FAILED.getCode())){
+      member.setInfoValidateState(InfoValidateStateEnum.INIT.getCode());
+    }
     memberMapper.updateById(member);
   }
 
