@@ -28,7 +28,7 @@
     </sql>
 
   <resultMap id="BaseMap" type="com.ljwm.gecko.base.model.vo.MemberVo">
-    <id column="ID" property="id"/>
+    <id column="MEMBER_ID" property="id"/>
     <result column="REG_MOBILE" property="regMobile"/>
     <result column="NICK_NAME" property="nickName"/>
     <result column="CREATE_TIME" property="createTime"/>
