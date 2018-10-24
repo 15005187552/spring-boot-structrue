@@ -1,6 +1,7 @@
 package com.ljwm.gecko.admin.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.admin.model.form.CompanyQuery;
@@ -13,6 +14,8 @@ import com.ljwm.gecko.base.model.dto.FileTemplateDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * 文件操作服务
@@ -31,6 +34,7 @@ private FileTemplateMapper fileMapper;
 public void saveTemplateFile(FileTemplateDto fileTemplateDto){
   FileTemplate fileTemplate = new FileTemplate();
   BeanUtil.copyProperties(fileTemplateDto,fileTemplate);
+  fileTemplate.setCreateTime(DateUtil.date());
   fileTemplate.setDisable(DisabledEnum.ENABLED.getCode());
   fileMapper.insert(fileTemplate);
 }

@@ -39,7 +39,7 @@ public class FileTemplate implements Serializable {
 
     @ApiModelProperty(value = "用户名")
     @TableField("`CREATOR_ID`")
-    private String creatorId;
+    private Long creatorId;
 
     @ApiModelProperty(value = "文件下载所需费用")
     @TableField("`MONEY`")

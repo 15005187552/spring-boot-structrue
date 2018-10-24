@@ -12,7 +12,7 @@ public class FileTemplateDto {
   private Integer id;
 
   @ApiModelProperty(value = "用户名",hidden = true)
-  private String creatorId;
+  private Long creatorId;
 
   @ApiModelProperty(value = "文件下载所需费用")
   private Integer money;

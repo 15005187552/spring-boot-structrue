@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author Levis
- * @since 2018-10-19
+ * @since 2018-10-24
  */
 public interface DelayMapper extends BaseMapper<Delay> {
 
