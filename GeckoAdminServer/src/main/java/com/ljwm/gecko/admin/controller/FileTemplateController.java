@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("file")
+@RequestMapping("fileTemplate")
 @Api("文件上传和下载接口")
 public class FileTemplateController  extends BaseController {
   public static final String FILE_TEMPLATE = "excelTemplate";
 
   @Autowired
   private FileService fileService;
-  
+
   @Autowired
   private AppInfo appInfo;
 
