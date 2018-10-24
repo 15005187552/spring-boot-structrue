@@ -17,5 +17,5 @@ public interface OrderPayInfoMapper extends BaseMapper<OrderPayInfo> {
 
   OrderPayInfo findOrderPayByOrderNo(@Param("params") Kv kv);
 
-  OrderPayInfo findOrderPayByWxNum(@Param("params") String wxNum);
+  OrderPayInfo findOrderPayByWxNum(@Param("wxNum") String wxNum);
 }

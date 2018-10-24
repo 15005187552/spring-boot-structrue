@@ -26,7 +26,7 @@
     </select>
 
     <select id="findOrderPayByWxNum" parameterType="string" resultMap="BaseResultMap">
-      select t.*  from t_order_pay_info t where t.WX_ORDER_NUM=#{wxNum}
+      select t.*  from t_order_pay_info t where t.WX_ORDER_NUM=#{wxNum} limit 1
     </select>
 
 </mapper>
