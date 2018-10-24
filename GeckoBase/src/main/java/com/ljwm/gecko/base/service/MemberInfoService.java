@@ -239,6 +239,9 @@ public class MemberInfoService {
     }
     member.setValidateState(validateStatus);
     member.setValidateText(StringUtils.EMPTY);
+    if (Objects.equals(member.getInfoValidateState(),InfoValidateStateEnum.CONFIRM_FAILED.getCode())){
+      member.setInfoValidateState(InfoValidateStateEnum.INIT.getCode());
+    }
     memberMapper.updateById(member);
   }
 
