@@ -1,11 +1,11 @@
 package com.ljwm.gecko.base.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ljwm.gecko.admin.model.vo.FileTemplateVo;
 import com.ljwm.gecko.base.entity.FileTemplate;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ljwm.gecko.base.entity.Function;
 import com.ljwm.gecko.base.model.dto.FileTemplateDto;
+import com.ljwm.gecko.base.model.vo.FileTemplateVo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 
