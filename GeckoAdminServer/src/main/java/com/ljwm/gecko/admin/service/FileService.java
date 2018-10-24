@@ -23,17 +23,17 @@ import org.springframework.stereotype.Service;
 public class FileService {
 
   @Autowired
-private FileTemplateMapper fileMapper;
+  private FileTemplateMapper fileMapper;
 
   @Autowired
   private CommonService commonService;
 
-public void saveTemplateFile(FileTemplateDto fileTemplateDto){
-  FileTemplate fileTemplate = new FileTemplate();
-  BeanUtil.copyProperties(fileTemplateDto,fileTemplate);
-  fileTemplate.setDisable(DisabledEnum.ENABLED.getCode());
-  fileMapper.insert(fileTemplate);
-}
+  public void saveTemplateFile(FileTemplateDto fileTemplateDto) {
+    FileTemplate fileTemplate = new FileTemplate();
+    BeanUtil.copyProperties(fileTemplateDto, fileTemplate);
+    fileTemplate.setDisable(DisabledEnum.ENABLED.getCode());
+    fileMapper.insert(fileTemplate);
+  }
 
   /**
    * 分页显示上传文件
@@ -42,7 +42,7 @@ public void saveTemplateFile(FileTemplateDto fileTemplateDto){
    * @return
    */
   public Page<FileTemplateDto> find(FileTemplateQuery query) {
-    return commonService.find(query,(p,q) -> fileMapper.find(p,BeanUtil.beanToMap(query)));
+    return commonService.find(query, (p, q) -> fileMapper.find(p, BeanUtil.beanToMap(query)));
 
   }
 }
