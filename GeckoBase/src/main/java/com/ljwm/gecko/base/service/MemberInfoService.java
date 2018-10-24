@@ -147,7 +147,7 @@ public class MemberInfoService {
     }
     if (StringUtils.isNotEmpty(memberDto.getPicPassport())) {
       if (memberDto.getPicPassport().contains(Constant.MEMBER)) {
-        member.setPicPassport(memberDto.getPicBack());
+        member.setPicPassport(memberDto.getPicPassport());
       } else {
         String srcPath = appInfo.getFilePath() + Constant.CACHE + memberDto.getPicPassport();
         String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
