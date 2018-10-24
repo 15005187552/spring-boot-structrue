@@ -178,7 +178,6 @@ public class MemberInfoService {
             PaperPath paperPath = new PaperPath();
             paperPath.setMemberPaperId(tempPaper.getId());
             paperPath.setPicPath(fileName);
-            paperPath.setMemberPaperId(memberPaper.getId());
             paperPath.setCreateTime(DateUtil.date());
             paperPath.setUpdateTime(DateUtil.date());
             paperPathMapper.insert(paperPath);
