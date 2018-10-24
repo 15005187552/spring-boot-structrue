@@ -54,6 +54,9 @@
       <if test="params.status != null ">
         AND t.`STATUS` = #{params.status}
       </if>
+      <if test="params.memberId != null ">
+        AND t.`MEMBER_ID` = #{params.memberId}
+      </if>
     </where>
     ORDER BY t.CREATE_TIME
     <if test="params.asc">
