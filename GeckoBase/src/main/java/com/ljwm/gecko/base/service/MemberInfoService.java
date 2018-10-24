@@ -127,7 +127,9 @@ public class MemberInfoService {
         String destDir = appInfo.getFilePath() + Constant.MEMBER + member.getId() + "/";
         Fileutil.cutGeneralFile(srcPath,destDir);
         member.setPicFront(Constant.MEMBER + member.getId() + "/" + memberDto.getPicFront());
-        member.setInfoValidateState(0);
+        member.setInfoValidateState(InfoValidateStateEnum.INIT.getCode());
+        member.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
+        member.setValidateText(StringUtils.EMPTY);
       }
     }
     if (StringUtils.isNotEmpty(memberDto.getPicBack())) {
@@ -235,7 +237,8 @@ public class MemberInfoService {
         }
       }
     }
-    member.setValidateState(ValidateStatEnum.WAIT_CONFIRM.getCode());
+    member.setValidateState(validateStatus);
+    member.setValidateText(StringUtils.EMPTY);
     memberMapper.updateById(member);
   }
 
