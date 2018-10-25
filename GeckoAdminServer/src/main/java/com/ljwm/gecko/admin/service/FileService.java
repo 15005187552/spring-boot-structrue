@@ -5,9 +5,9 @@ import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.exception.LogicException;
+import com.ljwm.bootbase.security.SecurityKit;
 import com.ljwm.bootbase.service.CommonService;
 import com.ljwm.gecko.admin.model.form.FileTemplateQuery;
-import com.ljwm.gecko.base.entity.Advertisement;
 import com.ljwm.gecko.base.entity.FileTemplate;
 import com.ljwm.gecko.base.enums.DisabledEnum;
 import com.ljwm.gecko.base.mapper.FileTemplateMapper;
@@ -36,14 +36,30 @@ public class FileService {
   @Autowired
   private CommonService commonService;
 
+  @Transactional
 public void saveTemplateFile(FileTemplateDto fileTemplateDto){
-  FileTemplate fileTemplate = new FileTemplate();
-  BeanUtil.copyProperties(fileTemplateDto,fileTemplate);
-  fileTemplate.setCreateTime(DateUtil.date());
-  fileTemplate.setDisable(DisabledEnum.ENABLED.getCode());
-  fileMapper.insert(fileTemplate);
+    FileTemplate fileTemplate = null;
+    if (fileTemplateDto.getId() != null) {
+     fileTemplate = objNoTNull(fileTemplateDto.getId());
+     fileTemplate.setUpdateTime(new Date());
+    }
+    if (fileTemplate == null){
+       fileTemplate =  new FileTemplate()
+      .setCreateTime(DateUtil.date())
+      .setDisable(DisabledEnum.ENABLED.getCode());
+      fileTemplateDto.setCreatorId(SecurityKit.currentId());
+    }
+    BeanUtil.copyProperties(fileTemplateDto,fileTemplate);
+    commonService.insertOrUpdate(fileTemplate,fileMapper);
 }
 
+
+  @Transactional
+  public FileTemplate objNoTNull(Integer id) {
+    FileTemplate fileTemplate = fileMapper.selectById(id);
+    if (fileTemplate == null) throw new LogicException("不存在id为" + id + "的文件模板");
+    return fileTemplate;
+  }
   /**
    * 分页显示上传文件
    *
@@ -73,4 +89,5 @@ public void saveTemplateFile(FileTemplateDto fileTemplateDto){
     if (fileTemplate == null) throw new LogicException(ResultEnum.DATA_ERROR, "未找到id为" + id + "的文件模板");
     return fileTemplate;
   }
+
 }

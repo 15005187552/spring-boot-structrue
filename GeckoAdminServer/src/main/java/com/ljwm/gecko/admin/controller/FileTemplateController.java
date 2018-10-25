@@ -40,9 +40,8 @@ public class FileTemplateController  extends BaseController {
   }
 
   @PostMapping("save")
-  @ApiOperation("保存excel模板")
+  @ApiOperation("保存或保存excel模板")
   public Result save(@RequestBody FileTemplateDto fileTemplateDto) {
-    fileTemplateDto.setCreatorId(SecurityKit.currentId());
       fileService.saveTemplateFile(fileTemplateDto);
       return success();
   }
