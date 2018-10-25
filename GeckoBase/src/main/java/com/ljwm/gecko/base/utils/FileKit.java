@@ -102,6 +102,7 @@ public class FileKit {
    * 下载文件
    *
    * @param response
+   * @param name
    * @param inputStream
    */
   public static void downloadFile(HttpServletResponse response, InputStream inputStream, String name) {

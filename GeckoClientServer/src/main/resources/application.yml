@@ -20,3 +20,4 @@ appInfo:
   webRoot: "D://upload/"
   webPath: "https://mhs.1322.com/static/gecko/"
   filePath: "${appInfo.webRoot}gecko/"
+

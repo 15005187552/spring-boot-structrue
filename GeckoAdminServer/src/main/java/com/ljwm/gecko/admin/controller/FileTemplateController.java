@@ -52,4 +52,11 @@ public class FileTemplateController  extends BaseController {
   public Result<Page<FileTemplateVo>> find(@RequestBody FileTemplateQuery query) {
     return success(fileService.find(query)) ;
   }
+
+  @GetMapping("disableTemplate/{id}")
+  @ApiOperation("文件模板禁用启用")
+  public Result disableTemplate(@PathVariable Integer id) {
+    fileService.disableTemplate(id);
+    return success() ;
+  }
 }

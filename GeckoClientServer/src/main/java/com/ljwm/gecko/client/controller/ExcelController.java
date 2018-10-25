@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.service.ApiInfo;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -93,7 +94,7 @@ public class ExcelController {
      // path是指欲下载的文件的路径。
      file = new File(path);
      // 取得文件名。
-     String filename = file.getName();
+      String filename =  file.getAbsoluteFile().getName();
      FileKit.downloadFile(response,inputStream,filename);
       return   Result.success("文件下载成功");
    }
