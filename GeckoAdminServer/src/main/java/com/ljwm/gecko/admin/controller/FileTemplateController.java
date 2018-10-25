@@ -6,7 +6,6 @@ import com.ljwm.bootbase.controller.BaseController;
 import com.ljwm.bootbase.dto.Result;
 import com.ljwm.bootbase.enums.ResultEnum;
 import com.ljwm.bootbase.security.SecurityKit;
-import com.ljwm.gecko.admin.model.form.CompanyQuery;
 import com.ljwm.gecko.admin.model.form.FileTemplateQuery;
 import com.ljwm.gecko.admin.service.FileService;
 import com.ljwm.gecko.base.model.bean.AppInfo;
@@ -48,7 +47,7 @@ public class FileTemplateController  extends BaseController {
       return success();
   }
 
-  @GetMapping("find")
+  @PostMapping("find")
   @ApiOperation("上传完成后显示上传文件信息")
   public Result<Page<FileTemplateVo>> find(@RequestBody FileTemplateQuery query) {
     return success(fileService.find(query)) ;

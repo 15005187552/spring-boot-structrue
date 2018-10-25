@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljwm.gecko.base.entity.FileTemplate;
 import com.ljwm.gecko.base.model.vo.FileTemplateVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,5 +21,5 @@ import java.util.Map;
 
 @Repository
 public interface FileTemplateMapper extends BaseMapper<FileTemplate> {
-  List<FileTemplateVo> find(Page<FileTemplateVo> page, Map map);
+  List<FileTemplateVo> findByPage(Page<FileTemplateVo> page, @Param("params") Map map);
 }

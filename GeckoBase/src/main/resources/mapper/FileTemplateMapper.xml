@@ -18,9 +18,28 @@
     <sql id="Base_Column_List">
           `ID`          ,`CREATOR_ID`          ,`MONEY`          ,`FILE_NAME`          ,`FILE_PATH`          ,`CREATE_TIME`          ,`UPDATE_TIME`          ,`DISABLE`
     </sql>
-<insert id="insertAll" parameterType="com.ljwm.gecko.base.entity.FileTemplate">
-   insert into t_file_template(CREATOR_ID,MONEY,FILE_NAME,FILE_PATH,UPDATE_TIME,DISABLE) value (#{creatorId},#{money},#{fileName},#{filePath},#{updateTime},#{disable});
-</insert>
+
+   <resultMap id="fileTemplateVo" type="com.ljwm.gecko.base.model.vo.FileTemplateVo" extends="BaseResultMap">
+
+   </resultMap>
+
+   <select id="findByPage" parameterType="map" resultMap="fileTemplateVo">
+     select t.*  from t_file_template t
+     <where>
+       <if test="params.text != null and params.text!=''">
+         AND (
+          t.`NAME` LIKE CONCAT('%',#{params.text},'%')
+         )
+       </if>
+     </where>
+     ORDER BY t.CREATE_TIME
+     <if test="params.asc">
+       ASC
+     </if>
+     <if test="!params.asc">
+       DESC
+     </if>
+   </select>
 
 
 </mapper>
