@@ -17,7 +17,10 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+/**
+ * @author  kevin
+ * @date 2018-10-31
+ * */
 @RestController
 @RequestMapping("fileTemplate")
 @Api(tags = "文件上传和下载接口")
@@ -34,8 +37,9 @@ public class FileTemplateController  extends BaseController {
   @ApiOperation(value = "后台--模板文件上传接口，必传参数 file")
   public Result<String> upload(@RequestParam("file") MultipartFile file) {
     String fileName = FileKit.saveUploadFile(file, appInfo.getFilePath(), FILE_TEMPLATE);
-    if (StrUtil.isEmpty(fileName))
+    if (StrUtil.isEmpty(fileName)) {
       return fail(ResultEnum.FAIL_TO_SAVE_FILE);
+    }
     return success(fileName);
   }
 

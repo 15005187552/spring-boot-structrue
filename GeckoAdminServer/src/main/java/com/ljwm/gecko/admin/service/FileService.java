@@ -36,7 +36,7 @@ public class FileService {
   @Autowired
   private CommonService commonService;
 
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
 public void saveTemplateFile(FileTemplateDto fileTemplateDto){
     FileTemplate fileTemplate = null;
     if (fileTemplateDto.getId() != null) {
@@ -54,7 +54,7 @@ public void saveTemplateFile(FileTemplateDto fileTemplateDto){
 }
 
 
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public FileTemplate objNoTNull(Integer id) {
     FileTemplate fileTemplate = fileMapper.selectById(id);
     if (fileTemplate == null) throw new LogicException("不存在id为" + id + "的文件模板");
@@ -66,7 +66,7 @@ public void saveTemplateFile(FileTemplateDto fileTemplateDto){
    * @param query
    * @return
    */
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public Page<FileTemplateVo> find(FileTemplateQuery query) {
     return commonService.find(query, (p, q) -> fileMapper.findByPage(p, BeanUtil.beanToMap(query)));
 
@@ -75,7 +75,7 @@ public void saveTemplateFile(FileTemplateDto fileTemplateDto){
 * 文件模板启用和禁用
 * @param id    文件模板id
 */
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void disableTemplate(Integer id) {
     FileTemplate fileTemplate = temIsExist(id);
     fileTemplate.setDisable(Objects.equals(fileTemplate.getDisable(),DisabledEnum.ENABLED.getCode())?
